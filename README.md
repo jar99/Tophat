@@ -1,4 +1,0 @@
-# Tophat
-
-
-Super malicious text
