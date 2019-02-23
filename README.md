@@ -1,3 +1,5 @@
 # Tophat
 
-![alt text](https://github.com/jar99/Tophat/master/Code%20Structure%20Diagram.jpg "Logo Title Text 1")
+![alternate text](https://github.com/jar99/Tophat/blob/master/Code%20Structure%20Diagram.jpg "Program Diagram")
+
+
