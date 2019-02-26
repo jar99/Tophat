@@ -35,7 +35,7 @@ public class MBOSingleton {
 	public int getCount() {
 		return count;
 	}
-
+	// hi
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
