@@ -1,3 +1,0 @@
-interface Callback {
-    void invoke();
-}
