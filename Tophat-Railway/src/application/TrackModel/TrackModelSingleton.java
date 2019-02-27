@@ -54,12 +54,16 @@ public class TrackModelSingleton {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		//TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
+		TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
+		
+		
+		
 		//tckCtrlSin.getSwitchStates();
 		//tckCtrlSin.getAuthority();
 		//tckCtrlSin.getSpeed();
 		
 		//TODO: get speed
+		
 		//TODO: get authority
 		//TODO: get control authority
 		
@@ -189,26 +193,26 @@ public class TrackModelSingleton {
 		return t_TrainList;
 	}
 	
-	//TODO: Create a method to make a new train
+	//: Create a method to make a new train
 	public boolean dispatchTrain() {
 		TrackTrain train = new TrackTrain(1, 150, 60);
 		t_TrainList.add(train);
 		
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-		//trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
+		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
 		
 		return true;
 		
 	}
 	
-	//TODO: Create method to return occupancy list (arraylist of booleans)
-	public ArrayList<TrackBlock> getOccupancy(){
-		return null;
-	}
-	
-	//TODO: Return random ticket sales
+	//: Create method to return blocklist (arraylist of booleans)
+
+	//: Return random ticket sales
 	public ArrayList<Integer> getTickets(){
-		return null;
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(100);
+		list.add(200);
+		return list;
 	}
 }

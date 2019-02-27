@@ -32,6 +32,12 @@ public class TrackBlock {
 	private double endY;
 	
 	
+	//: Speed and Authority Values
+	private double speed;
+	private int authority;
+	private boolean controlAuthority;
+	
+	
 	public TrackBlock(char line, int ID, 
 						double length, double grade, double spdLmt, double elev, double totElev, 
 						double startX, double startY, double endX, double endY) {
@@ -157,5 +163,29 @@ public class TrackBlock {
 		return endY;
 	}
 	
+	
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+	
+	public void setAuthority(int authority) {
+		this.authority = authority;
+	}
+	
+	public void setControlAuthority(boolean controlAuthority) {
+		this.controlAuthority = controlAuthority;
+	}
+	
+	public double getSpeed() {
+		return speed;
+	}
+	
+	public int getAuthority() {
+		return authority;
+	}
+	
+	public boolean getControlAuthority() {
+		return controlAuthority;
+	}
 	
 }
