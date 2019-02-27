@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.fxml.Initializable;
 
@@ -41,7 +42,7 @@ public class TrackModelCtrl implements Initializable {
 	@FXML
 	private Circle iconFailPower;
 	@FXML
-	private ChoiceBox<?> choiceBoxFail;
+	private ChoiceBox<String> choiceBoxFail;
 
 	// Value Properties
 	@FXML
@@ -73,6 +74,10 @@ public class TrackModelCtrl implements Initializable {
 	@FXML
 	private Label connectedSwitch;
 
+	//: Link to anchor box for the map
+    @FXML
+    private AnchorPane trackMap;
+	
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
@@ -94,14 +99,18 @@ public class TrackModelCtrl implements Initializable {
 
 	@FXML
 	void toggleFailure() {
-
+		//: Activate Toggle Failure Method
+		String selFail = choiceBoxFail.getValue();
+		if (selFail.equals("Broken Rail")) mySin.toggleCBFailRail();
+		else if (selFail.equals("Track Circuit")) mySin.toggleCBFailCircuit();
+		else if (selFail.equals("Power")) mySin.toggleCBFailPower();
 	}
 
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		// TODO: Implement Selection Block
+		//: Implement Selection Block
 		ObservableList<String> list = FXCollections.observableArrayList();
 		ArrayList<String> blockList = mySin.getBlockList();
 		for (String blockName : blockList) {
@@ -118,6 +127,14 @@ public class TrackModelCtrl implements Initializable {
 				}
 			}
 		});
+		
+		//: Fill in choiceBoxFail
+		ObservableList<String> list2 = FXCollections.observableArrayList();
+		list2.addAll("Broken Rail","Track Circuit","Power");
+		choiceBoxFail.setItems(list2);
+		
+		
+		//TODO: Add 3 lines based on the start/ length of the TrackBlock Objects
 
 		updateAnimation = new AnimationTimer() {
 
@@ -176,6 +193,24 @@ public class TrackModelCtrl implements Initializable {
 			iconPropSwitch.setFill(javafx.scene.paint.Color.GREEN);
 		else
 			iconPropSwitch.setFill(javafx.scene.paint.Color.WHITE);
-
+		
+		//: Get Failure Status and display just like above
+		if (mySin.isCBFailRail())
+			iconFailRail.setFill(javafx.scene.paint.Color.RED);
+		else
+			iconFailRail.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.isCBFailCircuit())
+			iconFailCircuit.setFill(javafx.scene.paint.Color.RED);
+		else
+			iconFailCircuit.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.isCBFailPower())
+			iconFailPower.setFill(javafx.scene.paint.Color.RED);
+		else
+			iconFailPower.setFill(javafx.scene.paint.Color.WHITE);
+		
+		
+		//TODO: Get list of blocks and draw lines to the map anchor pane
 	}
 }

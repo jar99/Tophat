@@ -39,6 +39,8 @@ public class TrackModelSingleton {
 	private int CBID = 0;	// Current Block ID
 	private ArrayList<TrackBlock> t_BlockList = new ArrayList<TrackBlock>();
 	
+	//TODO: store list of trains and locations
+	
 	// NOTE: Put some functions here
 	
 
@@ -52,6 +54,10 @@ public class TrackModelSingleton {
 		//tckCtrlSin.getSwitchStates();
 		//tckCtrlSin.getAuthority();
 		//tckCtrlSin.getSpeed();
+		
+		//TODO: update switch states
+		//TODO: update train existence
+		//TODO: 
 
 	}
 
@@ -119,6 +125,35 @@ public class TrackModelSingleton {
 		return t_BlockList.get(CBID).isSwitch();
 	}
 
+	//: Create 3 methods for returning Failure status
+	public boolean isCBFailRail() {
+		return t_BlockList.get(CBID).isFailRail();
+	}
+
+	public boolean isCBFailCircuit() {
+		return t_BlockList.get(CBID).isFailCircuit();
+	}
+
+	public boolean isCBFailPower() {
+		return t_BlockList.get(CBID).isFailPower();
+	}
+	
+	
+	//: Create 3 methods for toggeling Failure status
+	public void toggleCBFailRail() {
+		t_BlockList.get(CBID).toggleFailRail();
+	}
+
+	public void toggleCBFailCircuit() {
+		t_BlockList.get(CBID).toggleFailCircuit();
+	}
+
+	public void toggleCBFailPower() {
+		t_BlockList.get(CBID).toggleFailPower();
+	}
+	
+	//TODO: Create method to return occupancy list (arraylist of booleans)
+	
 	public ArrayList<String> getBlockList() {
 		ArrayList<String> blockList = new ArrayList<String>();
 		for (TrackBlock block : t_BlockList) {
@@ -132,4 +167,15 @@ public class TrackModelSingleton {
 		CBID = newCB - 1;
 	}
 
+
+	//TODO: Create method to return list of blocks
+	
+	
+	//TODO: Create method to calculate train GPS coords and return the next block
+	
+	//TODO: Create a method to just calculate train GPS coords and return them
+	
+	//TODO: Create a method to return a list of trains
+	
+	//TODO: Return random ticket sales
 }

@@ -289,7 +289,7 @@
    <right>
       <AnchorPane prefHeight="547.0" prefWidth="360.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="14.0" layoutY="33.0" prefHeight="465.0" prefWidth="324.0" style="-fx-border-color: black; -fx-border-width: 5;" />
+            <AnchorPane fx:id="trackMap" layoutX="14.0" layoutY="33.0" prefHeight="465.0" prefWidth="324.0" style="-fx-border-color: black; -fx-border-width: 5;" />
             <Button layoutX="246.0" layoutY="509.0" mnemonicParsing="false" onAction="#importTrack" text="Import Track" />
          </children></AnchorPane>
    </right>

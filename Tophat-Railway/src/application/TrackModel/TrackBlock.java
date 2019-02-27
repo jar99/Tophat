@@ -19,6 +19,14 @@ public class TrackBlock {
 	private boolean isHeated = false;
 	private boolean isSwitch = false;
 	
+	//TODO: Create 3 booleans for failure status
+	private boolean failRail = false;
+	private boolean failCircuit = false;
+	private boolean failPower = false;
+	
+	
+	//TODO: Add start and end location for track
+	
 	
 	public TrackBlock(char line, int ID, double length, double grade, double spdLmt, double elev, double totElev) {
 		this.line = line;
@@ -92,5 +100,35 @@ public class TrackBlock {
 	public void unsetOccupied() {
 		isOccupied = false;
 	}
+
+
+	
+	//TODO: Create 3 get methods and 3 toggle methods for failure status
+	public boolean isFailRail() {
+		return failRail;
+	}
+
+	public boolean isFailCircuit() {
+		return failCircuit;
+	}
+
+	public boolean isFailPower() {
+		return failPower;
+	}
+
+	public void toggleFailRail() {
+		failRail = !failRail;
+	}
+
+	public void toggleFailCircuit() {
+		failCircuit = !failCircuit;
+	}
+
+	public void toggleFailPower() {
+		failPower = !failPower;
+	}
+	
+	
+	//TODO: Get method for endpoints
 	
 }
