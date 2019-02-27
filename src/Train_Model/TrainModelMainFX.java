@@ -1,3 +1,5 @@
+package Train_Model;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,7 +23,11 @@ public class TrainModelMainFX implements Initializable {
         try {
             TrainModel trainModel = trainSelectorModel.getSelectionModel().getSelectedItem();
             if(trainModel == null) return;
-            Parent root = FXMLLoader.load(getClass().getResource("train_model_FX.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("train_model_FX.fxml"));
+            Parent root = fxmlLoader.load();
+            TrainModelFX controller = fxmlLoader.getController();
+            controller.setTrain(trainModel);
+
             Stage stage = new Stage();
             stage.setTitle(trainModel.toString());
             stage.setScene(new Scene(root, 450, 450));

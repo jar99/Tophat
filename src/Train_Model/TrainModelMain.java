@@ -1,3 +1,5 @@
+package Train_Model;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,7 @@ public class TrainModelMain extends Application {
 
     public static void main(String[] args){
         trainSingleton = TrainModelSingleton.getInstance();
-        trainSingleton.dispatchTrain("Train_1");
+        trainSingleton.dispatchTrain("train_1");
         launch(args);
     }
 

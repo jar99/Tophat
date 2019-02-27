@@ -1,7 +1,9 @@
+package Train_Model;
+
 import java.util.Collection;
 import java.util.HashMap;
 
-public class TrainModelSingleton implements TrainModelInterface{
+public class TrainModelSingleton implements TrainModelInterface {
     private static TrainModelSingleton ourInstance = new TrainModelSingleton();
 
     public static TrainModelSingleton getInstance() {
