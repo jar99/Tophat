@@ -5,8 +5,10 @@ import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
+import javafx.fxml.Initializable;
 
 public class TrackModelCtrl implements Initializable {
 
@@ -19,16 +21,80 @@ public class TrackModelCtrl implements Initializable {
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
 	// Links to FXML elements
+
+	// Select Block
 	@FXML
-	private Label counter;
+    private Label currentBlock;
+    @FXML
+    private ChoiceBox<?> choiceBoxBlock;
+	
+	// Select Failure
+    @FXML
+    private Circle iconFailRail;
+    @FXML
+    private Circle iconFailCircuit;
+    @FXML
+    private Circle iconFailPower;
+    @FXML
+    private ChoiceBox<?> choiceBoxFail;
+	
+	// Value Properties
+    @FXML
+    private Label propLength;
+    @FXML
+    private Label propGrade;
+    @FXML
+    private Label propSpeedLimit;
+    @FXML
+    private Label propElevation;
+    @FXML
+    private Label propTotalElevation;
+	
+	// Boolean Properties
+    @FXML
+    private Circle iconPropOccupied;
+    @FXML
+    private Circle iconPropUnderground;
+    @FXML
+    private Circle iconPropStation;
+    @FXML
+    private Circle iconPropCrossing;
+    @FXML
+    private Circle iconPropBeacon;
+    @FXML
+    private Circle iconPropHeated;
+    @FXML
+    private Circle iconPropSwitch;
+    @FXML
+    private Label connectedSwitch;
+    
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
-	public void buttonClicked() {
-		// System.out.print("Click");
-		mySin.increment();
-	}
+
+    @FXML
+    void getLeftBlock() {
+
+    }
+
+    @FXML
+    void getRightBlock() {
+
+    }
+
+    @FXML
+    void importTrack() {
+
+    }
+
+    @FXML
+    void toggleFailure() {
+
+    }
+	
+	
+	
 
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
@@ -50,7 +116,7 @@ public class TrackModelCtrl implements Initializable {
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		int count = mySin.getCount();
-		counter.setText(Integer.toString(count));
+		//counter.setText(Integer.toString(count));
 
 	}
 }
