@@ -14,14 +14,18 @@ public class TrackModelSingleton {
 	private static TrackModelSingleton instance = null;
 
 	private TrackModelSingleton() {
-		//TODO: Initialize temporary block list
-		TrackBlock block1 = new TrackBlock('A', 1, 100.0, 0.1, 10.0, 21.0, 0.0);
-		TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0);
-		TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0);
+		//: Initialize temporary block list
+		TrackBlock block1 = new TrackBlock('A', 1, 100.0, 0.1, 10.0, 21.0, 00.0, 
+												150, 60, 150, 110);
+		TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 
+												150, 110, 150, 210);
+		TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 
+												150, 210, 150, 360);
 		//block2.setOccupied();
 		t_BlockList.add(block1);
 		t_BlockList.add(block2);
 		t_BlockList.add(block3);
+		
 	}
 
 	public static TrackModelSingleton getInstance() {
@@ -39,7 +43,8 @@ public class TrackModelSingleton {
 	private int CBID = 0;	// Current Block ID
 	private ArrayList<TrackBlock> t_BlockList = new ArrayList<TrackBlock>();
 	
-	//TODO: store list of trains and locations
+	//: store list of trains and locations
+	private ArrayList<TrackTrain> t_TrainList = new ArrayList<TrackTrain>();
 	
 	// NOTE: Put some functions here
 	
@@ -49,15 +54,19 @@ public class TrackModelSingleton {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		// Example: get the count from a singleton and replace yours with the largest
 		//TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
 		//tckCtrlSin.getSwitchStates();
 		//tckCtrlSin.getAuthority();
 		//tckCtrlSin.getSpeed();
 		
-		//TODO: update switch states
-		//TODO: update train existence
-		//TODO: 
+		//TODO: get speed
+		//TODO: get authority
+		//TODO: get control authority
+		
+		/*
+		 * TrackTrain train1 = t_TrainList.get(0); train1.changeCoord(train1.getX(),
+		 * train1.getY() + 5.0);
+		 */
 
 	}
 
@@ -152,9 +161,7 @@ public class TrackModelSingleton {
 		t_BlockList.get(CBID).toggleFailPower();
 	}
 	
-	//TODO: Create method to return occupancy list (arraylist of booleans)
-	
-	public ArrayList<String> getBlockList() {
+	public ArrayList<String> getBlockNameList() {
 		ArrayList<String> blockList = new ArrayList<String>();
 		for (TrackBlock block : t_BlockList) {
 			blockList.add(block.getName());
@@ -168,14 +175,40 @@ public class TrackModelSingleton {
 	}
 
 
-	//TODO: Create method to return list of blocks
-	
+	//: Create method to return list of blocks
+	public ArrayList<TrackBlock> getBlockList() {
+		return t_BlockList;
+	}
 	
 	//TODO: Create method to calculate train GPS coords and return the next block
 	
 	//TODO: Create a method to just calculate train GPS coords and return them
 	
-	//TODO: Create a method to return a list of trains
+	//: Create a method to return a list of trains
+	public ArrayList<TrackTrain> getTrainList() {
+		return t_TrainList;
+	}
+	
+	//TODO: Create a method to make a new train
+	public boolean dispatchTrain() {
+		TrackTrain train = new TrackTrain(1, 150, 60);
+		t_TrainList.add(train);
+		
+		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+		
+		//trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
+		
+		return true;
+		
+	}
+	
+	//TODO: Create method to return occupancy list (arraylist of booleans)
+	public ArrayList<TrackBlock> getOccupancy(){
+		return null;
+	}
 	
 	//TODO: Return random ticket sales
+	public ArrayList<Integer> getTickets(){
+		return null;
+	}
 }

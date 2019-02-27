@@ -2,6 +2,8 @@ package application.TrackModel;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
@@ -9,11 +11,15 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.LineBuilder;
 import javafx.fxml.Initializable;
 
 public class TrackModelCtrl implements Initializable {
@@ -77,6 +83,8 @@ public class TrackModelCtrl implements Initializable {
 	//: Link to anchor box for the map
     @FXML
     private AnchorPane trackMap;
+    
+    private Map<Integer, Circle> trainIcons = new Hashtable<Integer, Circle>();
 	
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
@@ -112,8 +120,8 @@ public class TrackModelCtrl implements Initializable {
 
 		//: Implement Selection Block
 		ObservableList<String> list = FXCollections.observableArrayList();
-		ArrayList<String> blockList = mySin.getBlockList();
-		for (String blockName : blockList) {
+		ArrayList<String> blockNameList = mySin.getBlockNameList();
+		for (String blockName : blockNameList) {
 			list.add(blockName);
 		}
 		choiceBoxBlock.setItems(list);
@@ -134,8 +142,18 @@ public class TrackModelCtrl implements Initializable {
 		choiceBoxFail.setItems(list2);
 		
 		
-		//TODO: Add 3 lines based on the start/ length of the TrackBlock Objects
+		//: Add 3 lines based on the start/ length of the TrackBlock Objects
+		ArrayList<TrackBlock> blockList = mySin.getBlockList();
+		for (TrackBlock trackBlock : blockList) {
+			Line line = new Line();
+			line.setStartX(trackBlock.getStartX()); 
+			line.setStartY(trackBlock.getStartY()); 
+			line.setEndX(trackBlock.getEndX()); 
+			line.setEndY(trackBlock.getEndY());
+			trackMap.getChildren().add(line);
+		}
 
+		
 		updateAnimation = new AnimationTimer() {
 
 			@Override
@@ -211,6 +229,56 @@ public class TrackModelCtrl implements Initializable {
 			iconFailPower.setFill(javafx.scene.paint.Color.WHITE);
 		
 		
+		//TODO: Get list of trains and coords, add dots to map. Make sure train has fx:id
+		ArrayList<TrackTrain> existingTrains = mySin.getTrainList(); //getX, Y, ID
+		ObservableList<Node> visibleTrains = trackMap.getChildren();
+		for (TrackTrain eTrain : existingTrains) {
+			if (eTrain.mustAdd()) {
+				
+				// Create new icon
+				Circle newTrain = new Circle();
+				newTrain.setCenterX(eTrain.getX());
+				newTrain.setCenterY(eTrain.getY());
+				newTrain.setRadius(5);
+				newTrain.setFill(javafx.scene.paint.Color.BLUE);
+				
+				// add icon to icon map
+				trainIcons.put(eTrain.getID(), newTrain);
+				
+				// add icon to visible list
+				visibleTrains.add(newTrain);
+				
+				// signify that the train has been added
+				eTrain.added();
+				
+			} else if (eTrain.mustDelete()) {
+				
+				// Get the icon from the icon map and remove it
+				Circle oldTrain = trainIcons.get(eTrain.getID());
+				trainIcons.remove(eTrain.getID());
+				
+				// Remove train from visible list
+				existingTrains.remove(eTrain);
+				
+				// Remove train from existing list
+				visibleTrains.remove(oldTrain);
+								
+			} else {
+				// Get the icon from the icon map and update it
+				Circle trainIcon = trainIcons.get(eTrain.getID());
+				visibleTrains.remove(trainIcon);
+				trainIcon.setCenterX(eTrain.getX());
+				trainIcon.setCenterY(eTrain.getY());
+				
+				visibleTrains.add(trainIcon);
+				
+			}
+			
+		}
+		
+		
 		//TODO: Get list of blocks and draw lines to the map anchor pane
 	}
+	
+	
 }

@@ -19,16 +19,22 @@ public class TrackBlock {
 	private boolean isHeated = false;
 	private boolean isSwitch = false;
 	
-	//TODO: Create 3 booleans for failure status
+	//: Create 3 booleans for failure status
 	private boolean failRail = false;
 	private boolean failCircuit = false;
 	private boolean failPower = false;
 	
 	
-	//TODO: Add start and end location for track
+	//: Add start and end location for track
+	private double startX;
+	private double startY;
+	private double endX;
+	private double endY;
 	
 	
-	public TrackBlock(char line, int ID, double length, double grade, double spdLmt, double elev, double totElev) {
+	public TrackBlock(char line, int ID, 
+						double length, double grade, double spdLmt, double elev, double totElev, 
+						double startX, double startY, double endX, double endY) {
 		this.line = line;
 		this.ID = ID;		
 		this.length = length;
@@ -36,6 +42,11 @@ public class TrackBlock {
 		this.spdLmt = spdLmt;
 		this.elev = elev;
 		this.totElev = totElev;
+		
+		this.startX = startX;
+		this.startY = startY;
+		this.endX = endX;
+		this.endY = endY;
 	}
 
 	public String getName() {
@@ -103,7 +114,7 @@ public class TrackBlock {
 
 
 	
-	//TODO: Create 3 get methods and 3 toggle methods for failure status
+	//: Create 3 get methods and 3 toggle methods for failure status
 	public boolean isFailRail() {
 		return failRail;
 	}
@@ -127,8 +138,24 @@ public class TrackBlock {
 	public void toggleFailPower() {
 		failPower = !failPower;
 	}
+
 	
+	//: Get method for endpoints
+	public double getStartX() {
+		return startX;
+	}
+
+	public double getStartY() {
+		return startY;
+	}
+
+	public double getEndX() {
+		return endX;
+	}
+
+	public double getEndY() {
+		return endY;
+	}
 	
-	//TODO: Get method for endpoints
 	
 }
