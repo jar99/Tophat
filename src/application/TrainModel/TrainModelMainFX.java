@@ -1,4 +1,4 @@
-package Train_Model;
+package application.TrainModel;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

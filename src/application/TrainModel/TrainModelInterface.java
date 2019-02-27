@@ -1,4 +1,4 @@
-package Train_Model;
+package application.TrainModel;
 
 public interface TrainModelInterface {
 
