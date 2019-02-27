@@ -1,5 +1,6 @@
 package application.CTC;
 import java.util.*;
+import java.util.stream.IntStream;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Map.Entry;
@@ -30,7 +31,19 @@ public class CTCSingleton {
 	// NOTE: Put your data objects here
 	private Map<Integer,Train> trains =new HashMap<Integer,Train>();
 	private ArrayList<Schedule> myschedule=new ArrayList<Schedule>();
+	private String[] Stations=TrackModelSingleton.getInstance().getStations();
+	private int[] blocks=TrackModelSingleton.getInstance().getBlocks();
+	private int[] distance=TrackModelSingleton.getInstance().getDistance();
 	// NOTE: Put some functions here
+	public String[] getStations(){
+		return Stations;
+	}
+	public int[] getBlocks(){
+		return blocks;
+	}
+	public int[] getDistance(){
+		return distance;
+	}
 	public boolean addTrain(String ID,String Speed){
 		Pattern pattern = Pattern.compile("[0-9]*");
 		Matcher isNum1 = pattern.matcher(ID);
@@ -47,8 +60,8 @@ public class CTCSingleton {
 		return true;
 		
 	}
-	public boolean addSchedule(int ID, String myLine, String[] myStation){
-		Schedule tmp=new Schedule(ID, myLine, myStation);
+	public boolean addSchedule(int ID, String myLine, String[] myStation, Integer[] mydistance, int myDeparturetime, int suggestedSpeed){
+		Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
 		myschedule.add(tmp);
 		return true;
 	}
@@ -79,6 +92,7 @@ public class CTCSingleton {
 	public ArrayList<Schedule> viewSchedule(){
 		return myschedule;
 	}
+
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
@@ -88,6 +102,7 @@ public class CTCSingleton {
 		MBOSingleton mboModSin=MBOSingleton.getInstance();
 		TrackModelSingleton tkmModSin=TrackModelSingleton.getInstance();
 		TrackControllerSingletom TkCtrlSin=TrackControllerSingletom.getInstance();
+
 		*/
 
 
@@ -140,19 +155,34 @@ class Schedule{
 	private int ID;
 	private String Line;
 	private String[] Station;
+	private int Departuretime;
 	private int[] ArrivalTime;
 	private int[] LeaveTime;
-	Schedule(int TrainID, String myLine, String[] myStation){
+	private int[] distance;
+	private int speed;
+	Schedule(int TrainID, String myLine, String[] myStation, Integer[] myDistance,int myDeparturetime,int suggestedSpeed){
 		ID=TrainID;
 		Line=myLine;
 		Station=myStation;
+		distance=Arrays.stream(myDistance).mapToInt(Integer::intValue).toArray();
+		Departuretime=myDeparturetime;
+		speed=suggestedSpeed;
+		ArrivalTime=new int[myDistance.length+1];
+		LeaveTime=new int[myDistance.length+1];
+		ArrivalTime[0]=Departuretime-30*60;
+		LeaveTime[0]=Departuretime;
+		for (int i=1;i<ArrivalTime.length;i++){
+			ArrivalTime[i]=LeaveTime[i-1]+distance[i-1]/speed;
+			LeaveTime[i]=ArrivalTime[i]+5*60;
+		}
 	}
 	public ArrayList<String> printschedule(){
+		
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
 		tmp.add("	"+Line);
-		for (String s:Station){
-			tmp.add("	"+s+" "+"time1 "+"time2");//TODO 
+		for (int i=0;i<Station.length;i++){
+			tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
 		}
 		return tmp;
 	}

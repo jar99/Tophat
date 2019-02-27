@@ -43,7 +43,7 @@ public class TrackControllerSingleton {
 	public void update() {
 		// Example: get the count from a singleton and replace yours with the largest
 		CTCSingleton ctcModSin = CTCSingleton.getInstance();
-		int t_count = ctcModSin.getCount();
+		int t_count = 233;
 		if (count < t_count)
 			count = t_count;
 

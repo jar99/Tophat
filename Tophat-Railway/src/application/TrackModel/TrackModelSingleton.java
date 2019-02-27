@@ -26,6 +26,10 @@ public class TrackModelSingleton {
 
 	// NOTE: Put your data objects here
 	private int count = 0;
+	private TrackTmp TmpTrack=new TrackTmp();
+	private String[] Stations=TmpTrack.getStations();
+	private int[] blocks=TmpTrack.getBlocks();
+	private int[] distance=TmpTrack.getDistance();
 
 	// NOTE: Put some functions here
 	public void increment() {
@@ -34,6 +38,18 @@ public class TrackModelSingleton {
 
 	public int getCount() {
 		return count;
+	}
+	public TrackTmp getTrack(){
+		return TmpTrack;
+	}
+	public String[] getStations(){
+		return Stations;
+	}
+	public int[] getBlocks(){
+		return blocks;
+	}
+	public int[] getDistance(){
+		return distance;
 	}
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
@@ -48,5 +64,20 @@ public class TrackModelSingleton {
 			count = t_count;
 
 	}
+}
 
+class TrackTmp{
+	private String[] Stations={"STATIONA","STATIONB","STATIONC","STATIOND","STATIONE","STATIONF"};
+	private int[] blocks={5,10,15,20,25,30};
+	private int[] distance={50,100,150,200,300};
+	TrackTmp(){}
+	public String[] getStations(){
+		return Stations;
+	}
+	public int[] getBlocks(){
+		return blocks;
+	}
+	public int[] getDistance(){
+		return distance;
+	}
 }

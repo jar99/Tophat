@@ -96,6 +96,7 @@
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                    <children>
                                                       <ListView fx:id="ManagementListView" prefHeight="435.0" prefWidth="389.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                      <Text layoutX="109.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Train Management" />
                                                    </children>
                                                 </AnchorPane>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -111,7 +112,6 @@
                                                 </AnchorPane>
                                             </items>
                                           </SplitPane>
-                                          <Text layoutX="113.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Train Management" />
                                        </children>
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
