@@ -51,7 +51,7 @@ public class TrainModel {
     		velocity = 0.0;
     	}
     	
-    	tainControllerSingleton.setSpeed(String.valueOf(velocity));
+//    	tainControllerSingleton.setSpeed(String.valueOf(velocity));
     	
     }
     

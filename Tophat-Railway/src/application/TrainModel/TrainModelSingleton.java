@@ -38,21 +38,8 @@ public class TrainModelSingleton {
         return trainModelHashMap.get(trainID);
     }
     
-    public TrainModel[] getAllTrain(){
-        return (TrainModel[]) trainModelHashMap.values().toArray();
-    }
-    
-    /**
-     * Returns an array list of all of the train ids
-     * @return
-     */
-    public int[] getAllIDsTrain(){
-    	Integer[] keys = (Integer[]) trainModelHashMap.keySet().toArray();
-    	int[] result = new int[keys.length];
-    	for (int i = 0; i < result.length; i++) {
-			result[i] = keys[i];		
-		}
-        return result;
+    public Collection<TrainModel> getAllTrain(){
+        return trainModelHashMap.values();
     }
     
 	public TrainModel removeTrain(int tranID) {
@@ -85,12 +72,12 @@ public class TrainModelSingleton {
     
     public String getSpeed() {
     	
-    	/*TrainModel[] train = getAllTrain();
-    	if(train.length > 0) {
-    		return train[0].getVelocity() + "";
+    	for(TrainModel train : getAllTrain()) {
+    		return train.getVelocity() + "mph";
     	}
-    	return "N/A";*/
-    	return speed;
+    	
+    	return "0mph";
+    	//return speed;
     }
 
 	public int getCount() {
@@ -103,7 +90,6 @@ public class TrainModelSingleton {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		
 		for(TrainModel trainModel : trainModelHashMap.values()) {
 			trainModel.update(10000);
 		}
