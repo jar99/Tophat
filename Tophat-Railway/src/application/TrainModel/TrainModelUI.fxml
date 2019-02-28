@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -10,9 +14,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.TableView?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelCtrl">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelCtrl">
    <children>
       <GridPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -24,10 +28,23 @@
           <RowConstraints maxHeight="335.0" minHeight="10.0" prefHeight="310.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView fx:id="trainInfo" prefHeight="276.0" prefWidth="313.0" GridPane.rowIndex="1" />
-            <ImageView fitHeight="86.0" fitWidth="313.0" pickOnBounds="true" preserveRatio="true" />
+            <Pane>
+               <children>
+                  <ImageView fitHeight="100.0" fitWidth="121.0" layoutX="90.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <image>
+                        <Image url="@../../../../Code%20Structure%20Diagram.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
             <ToggleButton mnemonicParsing="false" text="Emergency Brake" GridPane.columnIndex="1" />
-            <VBox prefHeight="276.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TableView fx:id="train_info" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn fx:id="information_item" prefWidth="91.0" text="Item" />
+                <TableColumn fx:id="information_value" prefWidth="208.0" text="Value" />
+              </columns>
+            </TableView>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label text="Faults" />
                   <CheckBox mnemonicParsing="false" text="Engine Failure" />
