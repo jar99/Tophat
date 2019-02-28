@@ -54,6 +54,15 @@ public class TrackControllerCtrl implements Initializable {
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
+	@FXML
+	void getLeftBlock() {
+		mySin.shiftBlockLeft();
+	}
+	
+	@FXML
+	void getRightBlock() {
+		mySin.shiftBlockRight();
+	}
 	
 
 	// Starts the automatic update (NO TOUCHY!!)
@@ -79,6 +88,11 @@ public class TrackControllerCtrl implements Initializable {
 		
 		blockSpeed.setText(mySin.getSpeed());
 		blockAuthority.setText(mySin.getAuthority());
+		
+		if (mySin.isCBOccupied())
+			iconOccupancy.setFill(javafx.scene.paint.Color.GREEN);
+		else
+			iconOccupancy.setFill(javafx.scene.paint.Color.WHITE);
 		
 		
 

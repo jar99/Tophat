@@ -22,8 +22,8 @@
       </AnchorPane>
       <AnchorPane layoutX="21.0" layoutY="50.0" prefHeight="213.0" prefWidth="235.0" style="-fx-border-color: green; -fx-border-width: 2;">
          <children>
-            <Button layoutX="27.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Left" />
-            <Button layoutX="163.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Right" />
+            <Button layoutX="27.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Left" onAction="#getLeftBlock" />
+            <Button layoutX="163.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Right" onAction="#getRightBlock" />
             <Label fx:id="currentBlock" layoutX="95.0" layoutY="26.0" prefHeight="45.0" prefWidth="46.0" text="A1">
                <font>
                   <Font size="37.0" />

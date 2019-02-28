@@ -1,5 +1,8 @@
 package application.TrainModel;
 
+import application.MBO.MBOSingleton;
+import application.TrackModel.TrackBlock;
+
 public class TrainModel {
 
 
@@ -7,22 +10,45 @@ public class TrainModel {
     private float temperature;
     private float weight;
     private String trainID;
-    private TrainControllerInterface trainController;
+    private double x, y;
 
-    private TrainControllerInterface trainInterface;
+    private TrackBlock currentBlock;
+
+//
+//    private TrainControllerInterface trainController;
+//
+//    private TrainControllerInterface trainInterface;
 
     public TrainModel(String trainID) {
         this.trainID = trainID;
     }
 
+    public TrainModel(String trainID, double x, double y, TrackBlock currentBlock) {
+        this(trainID);
+        this.x = x;
+        this.y = y;
+        this.currentBlock = currentBlock;
+    }
+
     public void update(long delaTime){
-        float power = trainInterface.getPower();
-        float brake = trainInterface.getBrake();
-        if(brake > 0){
-            velocity = 0.0f;
-        }else if(power > 0){
-            velocity = ((float) delaTime / 10000) * power;
-        }
+//        float power = trainInterface.getPower();
+//        float brake = trainInterface.getBrake();
+//        if(brake > 0){
+//            velocity = 0.0f;
+//        }else if(power > 0){
+//            velocity = ((float) delaTime / 10000) * power;
+//        }
+
+        callMBO();
+    }
+
+    public void sendSpeedLocation(){
+
+    }
+
+    private void callMBO(){
+        MBOSingleton mboSingleton = MBOSingleton.getInstance();
+      //  mboSingleton.sendLocation(trainID, x, y);
     }
 
     public float getWeight() {

@@ -117,48 +117,7 @@ public class CTCSingleton {
 	}
 
 }
-class Train{
-	private int ID;
-	private int SuggestedSpeed;
-	private int authority=0;
-	private double CurrentSpeed=0;
-	private double CurrentPosition=0;
-	Train(int anID,int aSpeed){
-		ID=anID;
-		SuggestedSpeed=aSpeed;
-	}
-	public void set(double aSpeed, double aPosition){
-		CurrentSpeed=aSpeed;
-		CurrentPosition=aPosition;
-	}
-	public void set2(int speed, int anauthority){
-		SuggestedSpeed=speed;
-		authority=anauthority;
-	}
-	public int getID(){
-		return ID;
-	}
-	public int getSuggestedSpeed(){
-		return SuggestedSpeed;
-	}
-	public double getCurrentSpeed(){
-		return CurrentSpeed;
-	}
-	public double getCurrentPosition(){
-		return CurrentPosition;
-	}
-	public int getAuthority(){
-		return authority;
-	}
-	public ArrayList<String> printTrain(){
-		ArrayList<String> tmp=new ArrayList<String>();
-		tmp.add(String.valueOf(ID));
-		tmp.add("	Current Speed:"+CurrentSpeed);
-		tmp.add("	Current Position:"+ CurrentPosition);
-		tmp.add("	Authority:"+authority);
-		return tmp;
-	}
-}
+
 class Schedule{
 	private int ID;
 	private String Line;
@@ -190,7 +149,8 @@ class Schedule{
 		tmp.add(String.valueOf(ID));
 		tmp.add("	"+Line);
 		for (int i=0;i<Station.length;i++){
-			tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
+			//tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
+			tmp.add("	"+Station[i]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
 		}
 		return tmp;
 	}

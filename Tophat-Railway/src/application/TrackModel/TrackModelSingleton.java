@@ -8,7 +8,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class TrackModelSingleton {
+public class TrackModelSingleton implements TrackModelInterface{
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrackModelSingleton instance = null;
@@ -17,14 +17,18 @@ public class TrackModelSingleton {
 		//: Initialize temporary block list
 		TrackBlock block1 = new TrackBlock('A', 1, 100.0, 0.1, 10.0, 21.0, 00.0, 
 												150, 60, 150, 110);
-		TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 
-												150, 110, 150, 210);
-		TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 
-												150, 210, 150, 360);
+		
+		  TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 150,
+		  110, 150, 210); 
+		/*
+		 * TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 150,
+		 * 210, 150, 360);
+		 */
+		 
 		//block2.setOccupied();
 		t_BlockList.add(block1);
 		t_BlockList.add(block2);
-		t_BlockList.add(block3);
+		//t_BlockList.add(block3);
 		
 	}
 
@@ -55,8 +59,17 @@ public class TrackModelSingleton {
 	// your UI controller
 	public void update() {
 		TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
+		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-		
+		TrackTrain train = t_TrainList.get(0);
+		if (train.getY() > 210) {
+			t_TrainList.remove(0);
+			trnModSin.removeTrain(0);
+			t_BlockList.get(1).unsetOccupied();
+		} else if (train.getY() > 110) {
+			t_BlockList.get(0).unsetOccupied();
+			t_BlockList.get(1).setOccupied();
+		}
 		
 		//tckCtrlSin.getSwitchStates();
 		//tckCtrlSin.getAuthority();
@@ -199,9 +212,11 @@ public class TrackModelSingleton {
 		TrackTrain train = new TrackTrain(1, 150, 60);
 		t_TrainList.add(train);
 		
+		t_BlockList.get(0).setOccupied();
+		
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-//		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
+		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
 		
 		return true;
 		
@@ -215,5 +230,12 @@ public class TrackModelSingleton {
 		list.add(100);
 		list.add(200);
 		return list;
+	}
+
+	@Override
+	public TrackTrain getTrainLocation(double distance_traveled) {
+		TrackTrain train = t_TrainList.get(0);
+		train.changeCoord(train.getX(), train.getY() + distance_traveled);
+		return train;
 	}
 }
