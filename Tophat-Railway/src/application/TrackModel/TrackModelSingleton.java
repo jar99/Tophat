@@ -8,7 +8,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class TrackModelSingleton {
+public class TrackModelSingleton implements TrackModelInterface{
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrackModelSingleton instance = null;
@@ -17,14 +17,18 @@ public class TrackModelSingleton {
 		//: Initialize temporary block list
 		TrackBlock block1 = new TrackBlock('A', 1, 100.0, 0.1, 10.0, 21.0, 00.0, 
 												150, 60, 150, 110);
-		TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 
-												150, 110, 150, 210);
-		TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 
-												150, 210, 150, 360);
+		
+		  TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 150,
+		  110, 150, 210); 
+		/*
+		 * TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 150,
+		 * 210, 150, 360);
+		 */
+		 
 		//block2.setOccupied();
 		t_BlockList.add(block1);
 		t_BlockList.add(block2);
-		t_BlockList.add(block3);
+		//t_BlockList.add(block3);
 		
 	}
 

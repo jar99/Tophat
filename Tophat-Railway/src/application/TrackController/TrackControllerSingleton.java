@@ -41,6 +41,7 @@ public class TrackControllerSingleton {
 	private double speedA1 = 0;
 	private int authorityA1 = 0;
 	private int authorityA2 = 0;
+
 	private int ID = 0;
 	// NOTE: Put some functions here
 	
@@ -78,6 +79,7 @@ public class TrackControllerSingleton {
 			authorityA1 = value.getAuthority()+1;
 			authorityA2 = value.getAuthority();
 			blockList.get(0).setAuthority(authorityA1);
+
 			blockList.get(0).setControlAuthority(true);
 			ID = value.getID();
 			
@@ -107,7 +109,9 @@ public class TrackControllerSingleton {
 	}
 
 	String getSpeed() {
+
 		return Double.toString(speedA1);
+
 	}
 
 	String getAuthority() {
