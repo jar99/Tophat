@@ -16,7 +16,7 @@ public class TrainModelMain extends Application {
 
     public static void main(String[] args){
         trainSingleton = TrainModelSingleton.getInstance();
-        trainSingleton.dispatchTrain("train_1");
+        //trainSingleton.dispatchTrain("train_1");
         launch(args);
     }
 
