@@ -32,6 +32,7 @@ public class TrainModelSingleton {
 	// =====================================
 
 	private HashMap<Integer, TrainModel> trainModelHashMap;
+	private String speed = "56mph";
 
     public TrainModel getTrain(int trainID){
         return trainModelHashMap.get(trainID);
@@ -84,11 +85,12 @@ public class TrainModelSingleton {
     
     public String getSpeed() {
     	
-    	TrainModel[] train = getAllTrain();
+    	/*TrainModel[] train = getAllTrain();
     	if(train.length > 0) {
     		return train[0].getVelocity() + "";
     	}
-    	return "N/A";
+    	return "N/A";*/
+    	return speed;
     }
 
 	public int getCount() {

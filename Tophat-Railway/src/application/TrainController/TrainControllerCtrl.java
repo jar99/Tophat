@@ -100,8 +100,9 @@ public class TrainControllerCtrl implements Initializable {
 	private void update() {
 	//	int count = mySin.getIncrement();
 	//	int decrease = mySin.getDecrease();
-		confirmSpeed.setOnAction(e -> Speed());
+		//confirmSpeed.setOnAction(e -> Speed());
 		confirmPower.setOnAction(e -> Power());
+		actualSpeed.setText(mySin.getSpeed());
 		confirmKi.setOnAction(e -> Ki());
 		confirmKp.setOnAction(e -> Kp());
 		confirmTemp.setOnAction(e -> Temperature());
