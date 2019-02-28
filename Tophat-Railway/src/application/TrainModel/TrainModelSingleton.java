@@ -41,11 +41,7 @@ public class TrainModelSingleton {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		// Example: get the count from a singleton and replace yours with the largest
-		TrackModelSingleton tckModSin = TrackModelSingleton.getInstance();
-		int t_count = tckModSin.getCount();
-		if (count < t_count)
-			count = t_count;
+		
 
 	}
 

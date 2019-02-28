@@ -186,6 +186,7 @@ public class TrackModelSingleton {
 	
 	//TODO: Create method to calculate train GPS coords and return the next block
 	
+	
 	//TODO: Create a method to just calculate train GPS coords and return them
 	
 	//: Create a method to return a list of trains
@@ -200,7 +201,7 @@ public class TrackModelSingleton {
 		
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
+//		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
 		
 		return true;
 		
