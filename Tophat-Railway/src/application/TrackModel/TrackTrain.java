@@ -22,15 +22,15 @@ public class TrackTrain {
 	}
 	
 	
-	int getID() {
+	public int getID() {
 		return ID;
 	}
 	
-	double getX() {
+	public double getX() {
 		return X;
 	}
 	
-	double getY() {
+	public double getY() {
 		return Y;
 	}
 	
