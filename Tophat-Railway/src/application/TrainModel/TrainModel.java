@@ -1,7 +1,5 @@
 package application.TrainModel;
 
-import application.TrackModel.TrackBlock;
-
 public class TrainModel {
 
 
@@ -9,24 +7,12 @@ public class TrainModel {
     private float temperature;
     private float weight;
     private String trainID;
-    private double x, y;
-
-    private TrackBlock currentBlock;
-
-
     private TrainControllerInterface trainController;
 
     private TrainControllerInterface trainInterface;
 
     public TrainModel(String trainID) {
         this.trainID = trainID;
-    }
-
-    public TrainModel(String trainID, double x, double y, TrackBlock currentBlock) {
-        this(trainID);
-        this.x = x;
-        this.y = y;
-        this.currentBlock = currentBlock;
     }
 
     public void update(long delaTime){

@@ -1,78 +1,48 @@
 package application.TrainModel;
 
-import application.TrackModel.TrackBlock;
+import application.CTC.CTCSingleton;
+import application.MBO.MBOSingleton;
+import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
+import application.TrainController.TrainControllerSingleton;
 
-import java.util.Collection;
-import java.util.HashMap;
+public class TrainModelSingleton {
 
-public class TrainModelSingleton implements TrainModelInterface {
-    private static TrainModelSingleton ourInstance = new TrainModelSingleton();
+	// Singleton Functions (NO TOUCHY!!)
+	private static TrainModelSingleton instance = null;
 
-    public static TrainModelSingleton getInstance() {
-        return ourInstance;
-    }
+	private TrainModelSingleton() {
+	}
 
-    private HashMap<String, TrainModel> trainModelHashMap;
+	public static TrainModelSingleton getInstance() {
+		if (instance == null) {
+			instance = new TrainModelSingleton();
+		}
 
+		return instance;
+	}
 
-    private TrainModelSingleton() {
-        trainModelHashMap = new HashMap<>();
-    }
+	// =====================================
 
-    public TrainModel getTrain(String trainID){
-        return trainModelHashMap.get(trainID);
-    }
+	// NOTE: Put your data objects here
+	private int count = 0;
 
-    @Override
-    public TrainModel createTrain(String trainID) {
-        TrainModel train = new TrainModel(trainID);
-        trainModelHashMap.put(trainID, train);
-        return train;
-    }
+	// NOTE: Put some functions here
+	public void increment() {
+		count++;
+	}
 
-    @Override
-    public boolean dispatchTrain(String trainID) {
-        return trainModelHashMap.put(trainID, new TrainModel(trainID)) != null;
-    }
+	public int getCount() {
+		return count;
+	}
 
-    @Override
-    public void makeTrain(int ID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
-        String trainID = String.valueOf(ID);
-        TrainModel train = new TrainModel(trainID, x, y, currentBlock);
-        trainModelHashMap.put(trainID, train);
-    }
+	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
+	// occur here)
+	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
+	// your UI controller
+	public void update() {
+		
 
+	}
 
-    Collection<TrainModel> getTrains() {
-        return trainModelHashMap.values();
-    }
-
-
-
-    //====================================================
-
-    // NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
-    // occur here)
-    // WARNING: This Only changes the singleton, not your UI. UI updates occur in
-    // your UI controller
-    public void update() {
-        // Example: get the count from a singleton and replace yours with the largest
-        TrackModelSingleton tckModSin = TrackModelSingleton.getInstance();
-
-        trainModelHashMap.values().forEach((trainModel)->{
-            trainModel.update(1000);
-        });
-
-
-    }
-
-    public int getCount() {
-        // System.err.println("Remove this call.");
-        return -1;
-    }
-
-    public void increment() {
-
-    }
 }

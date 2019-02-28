@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelMainFX">
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelCtrl">
    <children>
-      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <VBox BorderPane.alignment="CENTER">
-               <children>
-                  <Label text="Train Model Main" />
-                  <ChoiceBox id="trainSelector" fx:id="trainSelectorModel" onMouseClicked="#selectTrain" prefWidth="150.0" />
-                  <Button id="trainSelectButton" mnemonicParsing="false" onMouseClicked="#clickSelect" text="Select" />
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
+      <AnchorPane layoutX="18.0" layoutY="15.0" prefHeight="371.0" prefWidth="566.0">
+         <children>
+            <Button layoutX="181.0" layoutY="170.0" mnemonicParsing="false" onAction="#buttonClicked" text="Count" />
+            <Label fx:id="counter" layoutX="274.0" layoutY="175.0" text="0" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</Pane>
