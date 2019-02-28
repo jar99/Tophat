@@ -155,6 +155,7 @@ public class MBOCtrl implements Initializable {
 			}
 		};
 		updateAnimation.start();
+		
 
 	}
 
@@ -164,6 +165,7 @@ public class MBOCtrl implements Initializable {
 	private void update() {
 		//int count = mySin.getCount();
 		//counter.setText(Integer.toString(count));
+		locationLbl.setText(Double.toString(mySin.getLatitude()) + ", " +  Double.toString(mySin.getLongitude()));
 
 	}
 }

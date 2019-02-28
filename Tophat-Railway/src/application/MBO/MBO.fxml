@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MBO.MBOCtrl">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
@@ -104,9 +104,9 @@
                                             <menus>
                                               <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
                                                 <items>
-                                                      <MenuItem mnemonicParsing="false" text="Load Schedule" />
-                                                      <MenuItem mnemonicParsing="false" text="Save Schedule" />
-                                                  <MenuItem mnemonicParsing="false" text="Exit" />
+                                                      <MenuItem fx:id="loadScheduleMI" mnemonicParsing="false" text="Load Schedule" />
+                                                      <MenuItem fx:id="saveScheduleMI" mnemonicParsing="false" text="Save Schedule" />
+                                                  <MenuItem fx:id="exitMI" mnemonicParsing="false" text="Exit" />
                                                 </items>
                                               </Menu>
                                               <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
