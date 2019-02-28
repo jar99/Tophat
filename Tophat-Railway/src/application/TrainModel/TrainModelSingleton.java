@@ -73,6 +73,14 @@ public class TrainModelSingleton {
 			trainModel.update(10000);
 		}
 
+		//TODO Call getTrainLocation() method from TrackModel Singleton.
+			// use 5 or 0 as parameter. See my interface for description.
+		
+	}
+
+	public void removeTrain(int i) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
