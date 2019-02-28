@@ -76,6 +76,7 @@ public class TrackControllerSingleton {
 
 			if (!sent_train) {
 				trackModSin.dispatchTrain();
+				sent_train = !sent_train;
 			}
 
 		}
