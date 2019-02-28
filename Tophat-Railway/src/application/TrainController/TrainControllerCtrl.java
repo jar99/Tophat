@@ -57,6 +57,9 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	public void emergencyBrake() {
+		emgrBrake = emergencyBrake.isSelected();
+		mySin.setemergencyBrake(emgrBrake);
+		emergencyBrake.setText("EMERGENCY STOP!!");
 		
 	}
 	
@@ -102,6 +105,7 @@ public class TrainControllerCtrl implements Initializable {
 		confirmKi.setOnAction(e -> Ki());
 		confirmKp.setOnAction(e -> Kp());
 		confirmTemp.setOnAction(e -> Temperature());
+		emergencyBrake.setOnAction(e -> emergencyBrake());
 		
 		//counter.setText(Integer.toString(count));
 		//counter.setText(Integer.toString(decrease));

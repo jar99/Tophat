@@ -28,7 +28,9 @@ public class TrainControllerSingleton {
 	// NOTE: Put your data objects here
 	private String speed, power, temperature;
 	private int count = 0;
-	int numSpeed, numPower;
+	private int numSpeed, numPower;
+	private boolean emergencyBrake;
+	
 	// NOTE: Put some functions here
 	
 	//Send Speed as STRING
@@ -73,6 +75,15 @@ public class TrainControllerSingleton {
 	
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
+	}
+	
+	//Boolean EmergencyBrake 
+	public boolean getemergencyBrake() {
+		return emergencyBrake;
+	}
+	
+	public void setemergencyBrake(boolean emergencyBrake) {
+		this.emergencyBrake = emergencyBrake;
 	}
 	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
