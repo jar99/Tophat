@@ -11,7 +11,6 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
@@ -23,7 +22,7 @@
    <left>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="11.0" layoutY="10.0" prefHeight="21.0" prefWidth="63.0" text="Train ID" underline="true">
+            <Label layoutX="11.0" layoutY="9.0" prefHeight="21.0" prefWidth="63.0" text="Train ID" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
