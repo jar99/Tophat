@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TrainModelMainFX implements Initializable {
+public class TrainModelMainCtrl implements Initializable {
 
     @FXML
     private ChoiceBox<TrainModel> trainSelectorModel;
@@ -23,7 +23,7 @@ public class TrainModelMainFX implements Initializable {
         try {
             TrainModel trainModel = trainSelectorModel.getSelectionModel().getSelectedItem();
             if(trainModel == null) return;
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("train_model_FX.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TrainModelUI.fxml"));
             Parent root = fxmlLoader.load();
             TrainModelFX controller = fxmlLoader.getController();
             controller.setTrain(trainModel);
@@ -36,6 +36,7 @@ public class TrainModelMainFX implements Initializable {
             e.printStackTrace();
         }
     }
+    
     public void selectTrain(MouseEvent actionEvent) {
         loadTrains();
     }
