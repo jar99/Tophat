@@ -203,6 +203,8 @@ public class TrackModelSingleton implements TrackModelInterface{
 		TrackTrain train = new TrackTrain(1, 150, 60);
 		t_TrainList.add(train);
 		
+		t_BlockList.get(0).setOccupied();
+		
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
 //		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
