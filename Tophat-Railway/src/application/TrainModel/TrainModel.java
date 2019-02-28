@@ -16,11 +16,8 @@ public class TrainModel {
     private double x, y;
 
     private TrackBlock currentBlock;
-
-//
-//    private TrainControllerInterface trainController;
-//
-//    private TrainControllerInterface trainInterface;
+    
+    TrainControllerSingleton tainControllerSingleton = TrainControllerSingleton.getInstance();
 
     public TrainModel(int trainID) {
         this.trainID = trainID;
@@ -45,12 +42,16 @@ public class TrainModel {
     }
     
     private void callTrainController() {
-    	TrainControllerSingleton tainControllerSingleton = TrainControllerSingleton.getInstance();
-    	//if(tainControllerSingleton.getPower() <= 0) {
+    	
+    	if(tainControllerSingleton.getnumPower() >= 0) {
     		velocity = 5.0;
-    	//}else {
-    	//	velocity = 0.0;
-    	//}
+    	}
+    	else 
+    	{
+    		velocity = 0.0;
+    	}
+    	
+    	tainControllerSingleton.setSpeed(String.valueOf(velocity));
     	
     }
     
@@ -64,7 +65,8 @@ public class TrainModel {
 
     private void callMBO(){
         MBOSingleton mboSingleton = MBOSingleton.getInstance();
-//        mboSingleton.sendLocation(trainID, x, y);
+        //TODO This needs to change i dont know how it should work.
+        mboSingleton.getLocation(x, y);
     }
 
     public double getWeight() {
@@ -72,7 +74,10 @@ public class TrainModel {
     }
 
     public double getPower(){
-        return 0.0F;
+    	if(tainControllerSingleton.getPower() == null) {
+    		return 0.0;
+    	}
+        return Double.valueOf(tainControllerSingleton.getPower());
         // return trainController.getPower();
     }
 
