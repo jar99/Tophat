@@ -65,6 +65,10 @@ public class TrackModelSingleton implements TrackModelInterface{
 		if (train.getY() > 210) {
 			t_TrainList.remove(0);
 			trnModSin.removeTrain(0);
+			t_BlockList.get(1).unsetOccupied();
+		} else if (train.getY() > 110) {
+			t_BlockList.get(0).unsetOccupied();
+			t_BlockList.get(1).setOccupied();
 		}
 		
 		//tckCtrlSin.getSwitchStates();
