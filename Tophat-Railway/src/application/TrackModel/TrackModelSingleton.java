@@ -27,7 +27,7 @@ public class TrackModelSingleton {
 		 
 		//block2.setOccupied();
 		t_BlockList.add(block1);
-		//t_BlockList.add(block2);
+		t_BlockList.add(block2);
 		//t_BlockList.add(block3);
 		
 	}
