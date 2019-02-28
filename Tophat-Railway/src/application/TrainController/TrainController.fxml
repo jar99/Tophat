@@ -7,134 +7,165 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
-   <children>
-      <AnchorPane layoutX="17.0" layoutY="17.0" prefHeight="362.0" prefWidth="564.0">
+<BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
+   <top>
+      <AnchorPane style="-fx-background-color: green;" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutY="5.0" prefHeight="21.0" prefWidth="63.0" text="Train ID" underline="true">
+            <Separator layoutY="52.0" prefHeight="0.0" prefWidth="659.0" visible="false" />
+            <Label layoutX="14.0" layoutY="9.0" text="Train Controller" textFill="#fafafa">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="11.0" layoutY="9.0" prefHeight="21.0" prefWidth="63.0" text="Train ID" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutY="32.0" text="Where Train ID will go" />
-            <Separator layoutX="153.0" layoutY="4.0" orientation="VERTICAL" prefHeight="367.0" prefWidth="7.0" />
-            <Label layoutX="175.0" layoutY="9.0" prefHeight="21.0" prefWidth="48.0" text="Speed">
+            <Label layoutX="12.0" layoutY="36.0" text="Where Train ID will go" />
+            <Label layoutX="24.0" layoutY="66.0" prefHeight="17.0" prefWidth="140.0" text="Commanded (CTC)" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="270.0" layoutY="9.0" prefHeight="21.0" prefWidth="48.0" text="Power">
+            <Label layoutX="25.0" layoutY="100.0" text="Speed:" />
+            <Label layoutX="26.0" layoutY="125.0" text="Authority:" />
+            <Label layoutX="31.0" layoutY="154.0" text="Suggested (MBO)" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="188.0" layoutY="61.0" prefHeight="21.0" prefWidth="20.0" text="Ki">
+            <Label layoutX="35.0" layoutY="188.0" text="Speed:" />
+            <Label layoutX="32.0" layoutY="213.0" text="Authority:" />
+            <Label layoutX="32.0" layoutY="248.0" text="Driving Mode" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="283.0" layoutY="61.0" text="Kp">
+            <Label layoutX="22.0" layoutY="280.0" text="Manual:" />
+            <Label layoutX="14.0" layoutY="310.0" text="Automatic:" />
+            <ToggleButton layoutX="99.0" layoutY="276.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="99.0" layoutY="306.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Off" />
+            <Separator layoutX="197.0" orientation="VERTICAL" prefHeight="397.0" prefWidth="4.0" />
+            <Separator layoutX="2.0" layoutY="236.0" prefHeight="2.0" prefWidth="196.0" />
+            <Separator layoutX="-1.0" layoutY="63.0" prefWidth="200.0" />
+         </children>
+      </AnchorPane>
+   </left>
+   <right>
+      <AnchorPane prefHeight="455.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="61.0" layoutY="14.0" text="Train Status" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="178.0" layoutY="107.0" text="Actual Speed:">
+            <Label layoutX="13.0" layoutY="43.0" text="Engine:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <ScrollBar layoutX="167.0" layoutY="186.0" prefHeight="14.0" prefWidth="206.0" />
-            <Label layoutX="232.0" layoutY="163.0" prefHeight="21.0" prefWidth="90.0" text="Service Brake" textAlignment="CENTER">
+            <Label layoutX="14.0" layoutY="81.0" text="Brakes:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="speed" layoutX="177.0" layoutY="31.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmSpeed" layoutX="220.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
-            <Label fx:id="actualSpeed" layoutX="276.0" layoutY="109.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
-            <TextField fx:id="power" layoutX="271.0" layoutY="31.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmPower" layoutX="315.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
-            <Label layoutX="178.0" layoutY="130.0" text="Actual Power:">
+            <Label layoutX="15.0" layoutY="116.0" text="Signal:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="actualPower" layoutX="277.0" layoutY="134.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
-            <Separator layoutX="384.0" layoutY="7.0" orientation="VERTICAL" prefHeight="367.0" prefWidth="7.0" />
-            <Separator layoutX="156.0" layoutY="152.0" prefHeight="3.0" prefWidth="232.0" />
-            <TextField fx:id="ki" layoutX="177.0" layoutY="82.0" prefHeight="25.0" prefWidth="41.0" />
-            <TextField fx:id="kp" layoutX="271.0" layoutY="84.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmKi" layoutX="220.0" layoutY="82.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
-            <Button fx:id="confirmKp" layoutX="315.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
-            <Label layoutX="397.0" layoutY="51.0" text="Engine:">
+            <Circle fx:id="engineStatus" fill="#00e91f" layoutX="128.0" layoutY="54.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="brakeStatus" fill="#00e91f" layoutX="128.0" layoutY="92.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="signalStatus" fill="#00e91f" layoutX="128.0" layoutY="127.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label layoutX="20.0" layoutY="192.0" text="Lights:" />
+            <Label layoutX="18.0" layoutY="226.0" text="Right Doors:" />
+            <Label layoutX="17.0" layoutY="259.0" text="Left Doors:" />
+            <ToggleButton layoutX="134.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="135.0" layoutY="222.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="135.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <Label layoutX="15.0" layoutY="294.0" text="Temperature:" />
+            <TextField fx:id="temp" layoutX="106.0" layoutY="290.0" prefHeight="25.0" prefWidth="36.0" />
+            <Button fx:id="confirmTemp" layoutX="146.0" layoutY="290.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" text="Set" />
+            <Label layoutX="15.0" layoutY="326.0" text="Current Temperature:" />
+            <Label fx:id="currentTemp" layoutX="147.0" layoutY="326.0" prefHeight="17.0" prefWidth="18.0" text="0" />
+            <Separator layoutY="171.0" prefWidth="200.0" />
+            <Separator orientation="VERTICAL" prefHeight="396.0" prefWidth="5.0" />
+         </children>
+      </AnchorPane>
+   </right>
+   <bottom>
+      <AnchorPane prefHeight="58.0" prefWidth="768.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator layoutY="-2.0" prefHeight="4.0" prefWidth="659.0" />
+         </children>
+      </AnchorPane>
+   </bottom>
+   <center>
+      <AnchorPane prefHeight="331.0" prefWidth="362.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="15.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Speed">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="397.0" layoutY="82.0" text="Brakes:">
+            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="147.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Power">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="397.0" layoutY="114.0" text="Signal:">
+            <TextField fx:id="power" layoutX="150.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmPower" layoutX="194.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="22.0" layoutY="70.0" prefHeight="21.0" prefWidth="20.0" text="Ki">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Circle fx:id="engineStatus" fill="#00e91f" layoutX="501.0" layoutY="62.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fx:id="brakeStatus" fill="#00e91f" layoutX="501.0" layoutY="93.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Circle fx:id="signalStatus" fill="#00e91f" layoutX="501.0" layoutY="125.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label layoutX="433.0" layoutY="10.0" text="Train Status" underline="true">
+            <TextField fx:id="ki" layoutX="11.0" layoutY="90.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmKi" layoutX="55.0" layoutY="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="162.0" layoutY="70.0" text="Kp">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Separator layoutX="385.0" layoutY="152.0" prefHeight="3.0" prefWidth="184.0" />
-            <Label layoutX="21.0" layoutY="63.0" prefHeight="17.0" prefWidth="140.0" text="Commanded CTC)" underline="true">
+            <TextField fx:id="kp" layoutX="150.0" layoutY="93.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmKp" layoutX="194.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="10.0" layoutY="159.0" text="Actual Power:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="18.0" layoutY="94.0" text="Speed:" />
-            <Label layoutX="19.0" layoutY="119.0" text="Authority:" />
-            <Label layoutX="19.0" layoutY="144.0" text="Suggested (MBO)" underline="true">
+            <Label fx:id="actualPower" layoutX="133.0" layoutY="161.0" prefHeight="17.0" prefWidth="57.0" text="0" />
+            <Label layoutX="10.0" layoutY="134.0" text="Actual Speed:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="21.0" layoutY="176.0" text="Speed:" />
-            <Label layoutX="23.0" layoutY="198.0" text="Authority:" />
-            <Separator layoutY="218.0" prefHeight="0.0" prefWidth="155.0" />
-            <Label layoutX="30.0" layoutY="229.0" text="Driving Mode" underline="true">
+            <Label fx:id="actualSpeed" layoutX="133.0" layoutY="136.0" prefHeight="17.0" prefWidth="57.0" text="0" />
+            <Label layoutX="65.0" layoutY="199.0" prefHeight="21.0" prefWidth="90.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="256.0" text="Manual:" />
-            <Label layoutX="12.0" layoutY="289.0" text="Automatic:" />
-            <ToggleButton layoutX="81.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
-            <ToggleButton layoutX="80.0" layoutY="284.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Off" />
-            <Label layoutX="396.0" layoutY="164.0" text="Lights:" />
-            <Label layoutX="396.0" layoutY="198.0" text="Right Doors:" />
-            <Label layoutX="397.0" layoutY="231.0" text="Left Doors:" />
-            <Label layoutX="397.0" layoutY="267.0" text="Temperature:" />
-            <TextField fx:id="temp" layoutX="487.0" layoutY="265.0" prefHeight="25.0" prefWidth="36.0" />
-            <Button fx:id="confirmTemp" layoutX="526.0" layoutY="265.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" text="Set" />
-            <ToggleButton layoutX="494.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
-            <ToggleButton layoutX="495.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
-            <ToggleButton layoutX="496.0" layoutY="228.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
-            <ToggleButton fx:id="emergencyBrake" layoutX="166.0" layoutY="211.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="206.0" text="EMERGENCY BRAKE">
+            <ScrollBar layoutX="7.0" layoutY="220.0" prefHeight="14.0" prefWidth="238.0" />
+            <ToggleButton fx:id="emergencyBrake" layoutX="15.0" layoutY="246.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="206.0" text="EMERGENCY BRAKE" underline="true">
                <font>
                   <Font size="15.0" />
                </font>
             </ToggleButton>
-            <Label layoutX="396.0" layoutY="297.0" text="Current Temperature:" />
-            <Label fx:id="currentTemp" layoutX="521.0" layoutY="298.0" prefHeight="17.0" prefWidth="18.0" text="0" />
          </children>
       </AnchorPane>
-   </children>
-</Pane>
+   </center>
+</BorderPane>
