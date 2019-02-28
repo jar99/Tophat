@@ -6,7 +6,7 @@ import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class MBOSingleton {
+public class MBOSingleton implements MBOInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static MBOSingleton instance = null;
@@ -45,9 +45,9 @@ public class MBOSingleton {
 	// your UI controller
 	public void update() {
 		// Example: get the count from a singleton and replace yours with the largest
-		TrainControllerSingleton trnCtrlSin = TrainControllerSingleton.getInstance();
+		//TrainControllerSingleton trnCtrlSin = TrainControllerSingleton.getInstance();
+		TrainModelSingleton trainModelSingleton = TrainModelSingleton.getInstance();
 		
-
 	}
 
 }
