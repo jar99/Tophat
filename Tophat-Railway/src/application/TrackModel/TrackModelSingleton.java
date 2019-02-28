@@ -61,14 +61,17 @@ public class TrackModelSingleton implements TrackModelInterface{
 		TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-		TrackTrain train = t_TrainList.get(0);
-		if (train.getY() > 210) {
-			t_TrainList.remove(0);
-			trnModSin.removeTrain(0);
-			t_BlockList.get(1).unsetOccupied();
-		} else if (train.getY() > 110) {
-			t_BlockList.get(0).unsetOccupied();
-			t_BlockList.get(1).setOccupied();
+		
+		if (t_TrainList.size() > 0) {
+			TrackTrain train = t_TrainList.get(0);
+			if (train.getY() > 210) {
+				t_TrainList.remove(0);
+				trnModSin.removeTrain(0);
+				t_BlockList.get(1).unsetOccupied();
+			} else if (train.getY() > 110) {
+				t_BlockList.get(0).unsetOccupied();
+				t_BlockList.get(1).setOccupied();
+			}
 		}
 		
 		//tckCtrlSin.getSwitchStates();

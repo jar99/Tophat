@@ -22,7 +22,7 @@ public class UIApp extends Application {
 			// Root for CTC
 			Parent ctcRoot = FXMLLoader.load(getClass().getResource("./CTC/CTC.fxml"));
 			ctcStage.setTitle("CTC");
-			Scene ctcScene = new Scene(ctcRoot, 400, 400); // NOTE: Change last two ints to make window bigger
+			Scene ctcScene = new Scene(ctcRoot, 1200, 900); // NOTE: Change last two ints to make window bigger
 			ctcStage.setScene(ctcScene);
 			ctcStage.show();
 
@@ -30,7 +30,7 @@ public class UIApp extends Application {
 			Stage tckCtrlStage = new Stage();
 			Parent tckCtrlRoot = FXMLLoader.load(getClass().getResource("./TrackController/TrackController.fxml"));
 			tckCtrlStage.setTitle("Track Controller");
-			Scene tckCtrlScene = new Scene(tckCtrlRoot, 400, 400); // NOTE: Change last two ints to make window bigger
+			Scene tckCtrlScene = new Scene(tckCtrlRoot, 810, 600); // NOTE: Change last two ints to make window bigger
 			tckCtrlStage.setScene(tckCtrlScene);
 			tckCtrlStage.show();
 
@@ -62,7 +62,7 @@ public class UIApp extends Application {
 			Stage mboStage = new Stage();
 			Parent mboRoot = FXMLLoader.load(getClass().getResource("./MBO/MBO.fxml"));
 			mboStage.setTitle("MBO");
-			Scene mboScene = new Scene(mboRoot, 400, 400); // NOTE: Change last two ints to make window bigger
+			Scene mboScene = new Scene(mboRoot, 1000, 600); // NOTE: Change last two ints to make window bigger
 			mboStage.setScene(mboScene);
 			mboStage.show();
 
