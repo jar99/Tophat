@@ -15,6 +15,10 @@ import java.util.concurrent.TimeUnit;
 // 		otherwise the Singleton's won't talk to each other
 public class Main {
 
+	private static boolean DEBUG = true;	//Set True to Debug Update Methods
+	
+	private static boolean printedUpdateDebugs = false;	// ensures 1 print for update methods
+	
 	public static void main(String[] args) {
 		// Singleton References
 		CTCSingleton 				ctcSin = 		CTCSingleton.getInstance();
@@ -49,12 +53,20 @@ public class Main {
 	private static void update(CTCSingleton ctcSin, TrackControllerSingleton tckCtrlSin, TrackModelSingleton tckModSin,
 			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, MBOSingleton mboSin) {
 		// call singleton update methods
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 0 - Scheduler worked");
 		ctcSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 1 - CTC update worked");
 		tckCtrlSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 2 - Train Controller update worked");
 		tckModSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 3 - Track Model update worked");
 		trnModSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 4 - Train Model update worked");
 		trnCtrlSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 5 - Train Controller update worked");
 		mboSin.update();
+		if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 6 - MBO update worked");
 
+		printedUpdateDebugs = true;
 	}
 }
