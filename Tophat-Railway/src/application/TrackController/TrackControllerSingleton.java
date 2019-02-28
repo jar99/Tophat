@@ -68,7 +68,7 @@ public class TrackControllerSingleton {
 			speedA1 = value.getSuggestedSpeed();
 			blockList.get(0).setSpeed(speedA1);
 			authorityA1 = value.getAuthority();
-			authorityA2 = value.getAuthority();
+			authorityA2 = value.getAuthority()-1;
 			blockList.get(0).setAuthority(authorityA1);
 
 			blockList.get(0).setControlAuthority(true);

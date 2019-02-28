@@ -22,7 +22,7 @@ public class UIApp extends Application {
 			// Root for CTC
 			Parent ctcRoot = FXMLLoader.load(getClass().getResource("./CTC/CTC.fxml"));
 			ctcStage.setTitle("CTC");
-			Scene ctcScene = new Scene(ctcRoot, 400, 400); // NOTE: Change last two ints to make window bigger
+			Scene ctcScene = new Scene(ctcRoot, 1200, 900); // NOTE: Change last two ints to make window bigger
 			ctcStage.setScene(ctcScene);
 			ctcStage.show();
 
