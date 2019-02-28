@@ -81,6 +81,15 @@ public class TrainModelSingleton {
     Collection<TrainModel> getTrains() {
         return trainModelHashMap.values();
     }
+    
+    public String getSpeed() {
+    	
+    	TrainModel[] train = getAllTrain();
+    	if(train.length > 0) {
+    		return train[0].getVelocity() + "";
+    	}
+    	return "N/A";
+    }
 
 	public int getCount() {
 		return -1;
