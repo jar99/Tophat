@@ -17,7 +17,7 @@ public class TrainModelSingleton {
 
 	private TrainModelSingleton() {
 		 trainModelHashMap = new HashMap<>();
-//		 this.createTrain("Train_1");
+		 this.createTrain("Train_1");
 	}
 
 	public static TrainModelSingleton getInstance() {
