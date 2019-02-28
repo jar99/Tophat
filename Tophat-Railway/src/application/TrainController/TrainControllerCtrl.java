@@ -10,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 
 public class TrainControllerCtrl implements Initializable {
 
@@ -30,8 +31,12 @@ public class TrainControllerCtrl implements Initializable {
 	private Label actualSpeed, actualPower, currentTemp;
 	@FXML
 	private Button confirmSpeed, confirmPower, confirmKi, confirmKp, confirmTemp;
+	@FXML
+	private ToggleButton emergencyBrake;
 
 	String inputSpeed, inputPower, inputKi, inputKp, inputTemp;
+	int numSpeed, numPower;
+	boolean emgrBrake;
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
@@ -39,14 +44,20 @@ public class TrainControllerCtrl implements Initializable {
 	public void Speed() {
 		// System.out.print("Click");
 		inputSpeed = speed.getText();
-		mySin.setSpeed(inputSpeed);
-		actualSpeed.setText(inputSpeed);
+		numSpeed = Integer.parseInt(inputSpeed);
+		mySin.setnumSpeed(numSpeed);
+		actualSpeed.setText(inputSpeed + "mph");
 	}
 	
 	public void Power() {
 		inputPower = power.getText();
-		mySin.setPower(inputPower);
-		actualPower.setText(inputPower);
+		numPower = Integer.parseInt(inputPower);
+		mySin.setnumPower(numPower);
+		actualPower.setText(inputPower + "Kwatts");
+	}
+	
+	public void emergencyBrake() {
+		
 	}
 	
 	public void Ki() {

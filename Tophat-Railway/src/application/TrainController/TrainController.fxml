@@ -13,9 +13,14 @@
 
 <BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane style="-fx-background-color: green;" BorderPane.alignment="CENTER">
          <children>
-            <Separator layoutY="43.0" prefHeight="0.0" prefWidth="659.0" />
+            <Separator layoutY="52.0" prefHeight="0.0" prefWidth="659.0" visible="false" />
+            <Label layoutX="14.0" layoutY="9.0" text="Train Controller" textFill="#fafafa">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </top>
@@ -51,8 +56,9 @@
             <Label layoutX="14.0" layoutY="310.0" text="Automatic:" />
             <ToggleButton layoutX="99.0" layoutY="276.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
             <ToggleButton layoutX="99.0" layoutY="306.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Off" />
-            <Separator layoutX="197.0" layoutY="-3.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="4.0" />
+            <Separator layoutX="197.0" orientation="VERTICAL" prefHeight="397.0" prefWidth="4.0" />
             <Separator layoutX="2.0" layoutY="236.0" prefHeight="2.0" prefWidth="196.0" />
+            <Separator layoutX="-1.0" layoutY="63.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
    </left>
@@ -94,7 +100,7 @@
             <Label layoutX="15.0" layoutY="326.0" text="Current Temperature:" />
             <Label fx:id="currentTemp" layoutX="147.0" layoutY="326.0" prefHeight="17.0" prefWidth="18.0" text="0" />
             <Separator layoutY="171.0" prefWidth="200.0" />
-            <Separator layoutY="-3.0" orientation="VERTICAL" prefHeight="399.0" prefWidth="6.0" />
+            <Separator orientation="VERTICAL" prefHeight="396.0" prefWidth="5.0" />
          </children>
       </AnchorPane>
    </right>
@@ -141,13 +147,13 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="actualPower" layoutX="133.0" layoutY="161.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
+            <Label fx:id="actualPower" layoutX="133.0" layoutY="161.0" prefHeight="17.0" prefWidth="57.0" text="0" />
             <Label layoutX="10.0" layoutY="134.0" text="Actual Speed:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="actualSpeed" layoutX="133.0" layoutY="136.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
+            <Label fx:id="actualSpeed" layoutX="133.0" layoutY="136.0" prefHeight="17.0" prefWidth="57.0" text="0" />
             <Label layoutX="65.0" layoutY="199.0" prefHeight="21.0" prefWidth="90.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />

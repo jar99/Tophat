@@ -22,15 +22,17 @@ public class TrainControllerSingleton {
 		return instance;
 	}
 
+	
 	// =====================================
 
 	// NOTE: Put your data objects here
 	private String speed, power, temperature;
 	private int count = 0;
+	int numSpeed, numPower;
 	// NOTE: Put some functions here
 	
-	
-	public String getSpeed() {
+	//Send Speed as STRING
+	public String getSpeed(){
 		return speed;
 	}
 	
@@ -38,12 +40,31 @@ public class TrainControllerSingleton {
 		this.speed = speed;
 	}
 	
+	//Send Speed as INTEGER 
+	public int getnumSpeed() {
+		return numSpeed;
+	}
+	
+	public void setnumSpeed(int numSpeed) {
+		this.numSpeed = numSpeed;
+	}
+	
+	//Send Power as STRING
 	public String getPower() {
 		return power;
 	}
 	
 	public void setPower(String power) {
 		this.power = power;
+	}	
+	
+	//Send Power as INTEGER
+	public int getnumPower() {
+		return numPower;
+	}
+	
+	public void setnumPower(int numPower) {
+		this.numPower = numPower;
 	}
 	
 	public String getTemperature() {
