@@ -17,6 +17,7 @@ public class TrainModelSingleton {
 
 	private TrainModelSingleton() {
 		 trainModelHashMap = new HashMap<>();
+		 this.createTrain("Train_1");
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -55,27 +56,22 @@ public class TrainModelSingleton {
     Collection<TrainModel> getTrains() {
         return trainModelHashMap.values();
     }
-    
-	// NOTE: Put your data objects here
-	private int count = 0;
-
-	// NOTE: Put some functions here
-	public void increment() {
-		count++;
-	}
+  
 
 	public int getCount() {
-		return count;
+		return -1;
 	}
 	
 	
-	// Death to the Stormcloakss
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
 		
+		for(TrainModel trainModel : trainModelHashMap.values()) {
+			trainModel.update(10000);
+		}
 
 	}
 
