@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
+   <children>
+      <AnchorPane layoutX="17.0" layoutY="17.0" prefHeight="362.0" prefWidth="564.0">
+         <children>
+            <Label layoutY="5.0" prefHeight="21.0" prefWidth="63.0" text="Train ID" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutY="32.0" text="Where Train ID will go" />
+            <Separator layoutX="153.0" layoutY="4.0" orientation="VERTICAL" prefHeight="367.0" prefWidth="7.0" />
+            <Label layoutX="175.0" layoutY="9.0" prefHeight="21.0" prefWidth="48.0" text="Speed">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="270.0" layoutY="9.0" prefHeight="21.0" prefWidth="48.0" text="Power">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="188.0" layoutY="61.0" prefHeight="21.0" prefWidth="20.0" text="Ki">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="283.0" layoutY="61.0" text="Kp">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="178.0" layoutY="107.0" text="Actual Speed:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ScrollBar layoutX="167.0" layoutY="186.0" prefHeight="14.0" prefWidth="206.0" />
+            <Label layoutX="232.0" layoutY="163.0" prefHeight="21.0" prefWidth="90.0" text="Service Brake" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="speed" layoutX="177.0" layoutY="31.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmSpeed" layoutX="220.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label fx:id="actualSpeed" layoutX="276.0" layoutY="109.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
+            <TextField fx:id="power" layoutX="271.0" layoutY="31.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmPower" layoutX="315.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="178.0" layoutY="130.0" text="Actual Power:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="actualPower" layoutX="277.0" layoutY="134.0" prefHeight="17.0" prefWidth="57.0" text="TEXT!!!" />
+            <Separator layoutX="384.0" layoutY="7.0" orientation="VERTICAL" prefHeight="367.0" prefWidth="7.0" />
+            <Separator layoutX="156.0" layoutY="152.0" prefHeight="3.0" prefWidth="232.0" />
+            <TextField fx:id="ki" layoutX="177.0" layoutY="82.0" prefHeight="25.0" prefWidth="41.0" />
+            <TextField fx:id="kp" layoutX="271.0" layoutY="84.0" prefHeight="25.0" prefWidth="41.0" />
+            <Button fx:id="confirmKi" layoutX="220.0" layoutY="82.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Button fx:id="confirmKp" layoutX="315.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Label layoutX="397.0" layoutY="51.0" text="Engine:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="397.0" layoutY="82.0" text="Brakes:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="397.0" layoutY="114.0" text="Signal:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Circle fx:id="engineStatus" fill="#00e91f" layoutX="501.0" layoutY="62.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="brakeStatus" fill="#00e91f" layoutX="501.0" layoutY="93.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="signalStatus" fill="#00e91f" layoutX="501.0" layoutY="125.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
+            <Label layoutX="433.0" layoutY="10.0" text="Train Status" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Separator layoutX="385.0" layoutY="152.0" prefHeight="3.0" prefWidth="184.0" />
+            <Label layoutX="21.0" layoutY="63.0" prefHeight="17.0" prefWidth="140.0" text="Commanded CTC)" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="18.0" layoutY="94.0" text="Speed:" />
+            <Label layoutX="19.0" layoutY="119.0" text="Authority:" />
+            <Label layoutX="19.0" layoutY="144.0" text="Suggested (MBO)" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="21.0" layoutY="176.0" text="Speed:" />
+            <Label layoutX="23.0" layoutY="198.0" text="Authority:" />
+            <Separator layoutY="218.0" prefHeight="0.0" prefWidth="155.0" />
+            <Label layoutX="30.0" layoutY="229.0" text="Driving Mode" underline="true">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="256.0" text="Manual:" />
+            <Label layoutX="12.0" layoutY="289.0" text="Automatic:" />
+            <ToggleButton layoutX="81.0" layoutY="253.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="80.0" layoutY="284.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="Off" />
+            <Label layoutX="396.0" layoutY="164.0" text="Lights:" />
+            <Label layoutX="396.0" layoutY="198.0" text="Right Doors:" />
+            <Label layoutX="397.0" layoutY="231.0" text="Left Doors:" />
+            <Label layoutX="397.0" layoutY="267.0" text="Temperature:" />
+            <TextField fx:id="temp" layoutX="487.0" layoutY="265.0" prefHeight="25.0" prefWidth="36.0" />
+            <Button fx:id="confirmTemp" layoutX="526.0" layoutY="265.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" text="Set" />
+            <ToggleButton layoutX="494.0" layoutY="159.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="495.0" layoutY="193.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton layoutX="496.0" layoutY="228.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="41.0" text="On" />
+            <ToggleButton fx:id="emergencyBrake" layoutX="166.0" layoutY="211.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="206.0" text="EMERGENCY BRAKE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </ToggleButton>
+            <Label layoutX="396.0" layoutY="297.0" text="Current Temperature:" />
+            <Label fx:id="currentTemp" layoutX="521.0" layoutY="298.0" prefHeight="17.0" prefWidth="18.0" text="0" />
+         </children>
+      </AnchorPane>
+   </children>
+</Pane>
