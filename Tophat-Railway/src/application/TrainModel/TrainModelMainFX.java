@@ -45,12 +45,12 @@ public class TrainModelMainFX implements Initializable {
     }
 
     private void loadTrains(){
-        TrainModelSingleton trainSingleton = TrainModelSingleton.getInstance();
-        for (TrainModel trainModel : trainSingleton.getTrains()) {
-            if(!trainSelectorModel.getItems().contains(trainModel)){
-                trainSelectorModel.getItems().add(trainModel);
-            }
-        }
+		/*
+		 * TrainModelSingleton trainSingleton = TrainModelSingleton.getInstance(); for
+		 * (TrainModel trainModel : trainSingleton.getTrains()) {
+		 * if(!trainSelectorModel.getItems().contains(trainModel)){
+		 * trainSelectorModel.getItems().add(trainModel); } }
+		 */
     }
 
 
