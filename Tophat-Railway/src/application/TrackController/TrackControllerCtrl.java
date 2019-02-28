@@ -6,7 +6,10 @@ import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
+
 
 public class TrackControllerCtrl implements Initializable {
 
@@ -18,17 +21,40 @@ public class TrackControllerCtrl implements Initializable {
 	// NOTE: This is where you link to elements in your FXML file
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
-	// Links to FXML elements
+	
+	//Block Anchor
 	@FXML
-	private Label counter;
+	private Label currentBlock;
+	@FXML
+	private ChoiceBox<String> choiceBoxBlock;
+	@FXML
+	private Label blockSpeed;
+	@FXML
+	private Label blockAuthority;
+	
+	//Block Info Anchor
+	@FXML
+	private Circle iconOccupancy;
+	@FXML
+	private Circle iconOperational;
+	
+	//Track Controller Function Anchor
+	@FXML
+	private Circle iconLightsOn;
+	@FXML
+	private Circle iconLightsOff;
+	@FXML
+	private Circle iconCrossingOn;
+	@FXML
+	private Circle iconCrossingOff;
+	@FXML
+	private Label nextBlock;
+	
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
-	public void buttonClicked() {
-		// System.out.print("Click");
-		mySin.increment();
-	}
+	
 
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
@@ -49,8 +75,12 @@ public class TrackControllerCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
-		int count = mySin.getCount();
-		counter.setText(Integer.toString(count));
+		currentBlock.setText(mySin.getCBName());
+		
+		blockSpeed.setText(mySin.getSpeed());
+		blockAuthority.setText(mySin.getAuthority());
+		
+		
 
 	}
 }
