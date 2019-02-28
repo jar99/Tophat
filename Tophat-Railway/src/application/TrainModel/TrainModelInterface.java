@@ -11,4 +11,6 @@ public interface TrainModelInterface {
     boolean dispatchTrain(String trainID);
 
     void makeTrain(int ID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock);
+    
+    void removeTrain(int trainID);
 }

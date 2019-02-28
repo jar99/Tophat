@@ -59,8 +59,13 @@ public class TrackModelSingleton implements TrackModelInterface{
 	// your UI controller
 	public void update() {
 		TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
+		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-		
+		TrackTrain train = t_TrainList.get(0);
+		if (train.getY() > 210) {
+			t_TrainList.remove(0);
+			trnModSin.removeTrain(0);
+		}
 		
 		//tckCtrlSin.getSwitchStates();
 		//tckCtrlSin.getAuthority();
@@ -207,7 +212,7 @@ public class TrackModelSingleton implements TrackModelInterface{
 		
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 		
-//		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
+		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
 		
 		return true;
 		
@@ -221,5 +226,12 @@ public class TrackModelSingleton implements TrackModelInterface{
 		list.add(100);
 		list.add(200);
 		return list;
+	}
+
+	@Override
+	public TrackTrain getTrainLocation(double distance_traveled) {
+		TrackTrain train = t_TrainList.get(0);
+		train.changeCoord(train.getX(), train.getY() + distance_traveled);
+		return train;
 	}
 }
