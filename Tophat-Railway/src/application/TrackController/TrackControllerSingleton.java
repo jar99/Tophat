@@ -1,6 +1,10 @@
 package application.TrackController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import application.TrackModel.*;
 import application.CTC.*;
 
@@ -9,6 +13,7 @@ import application.MBO.MBOSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
+
 
 public class TrackControllerSingleton {
 
@@ -33,8 +38,9 @@ public class TrackControllerSingleton {
 
 	// NOTE: Put your data objects here
 	private int CBID = 0;
-	private int speed = 0;
-	private int authority = 0;
+	private double speedA1 = 0;
+	private int authorityA1 = 0;
+	private int authorityA2 = 0;
 	private int ID = 0;
 	// NOTE: Put some functions here
 	
@@ -47,6 +53,9 @@ public class TrackControllerSingleton {
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
+	
+	boolean sent_train = false;
+	
 	public void update() {
 		// Example: get the count from a singleton and replace yours with the largest
 		CTCSingleton ctcModSin = CTCSingleton.getInstance();
@@ -57,16 +66,26 @@ public class TrackControllerSingleton {
 			blockList = trackModSin.getBlockList();
 		
 		//get map<Integer,Train>
-		/*ctcModSin.viewtrains();
+		Map<Integer, Train> trains = ctcModSin.viewtrains();
+	
 		
 		Iterator<Entry<Integer, Train>> iterator = trains.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<Integer, Train> entry = iterator.next();
 			Train value = entry.getValue();
-			speed = value.getSuggestedSpeed();
-			authority = value.getAuthority();
+			speedA1 = value.getSuggestedSpeed();
+			blockList.get(0).setSpeed(speedA1);
+			authorityA1 = value.getAuthority()+1;
+			authorityA2 = value.getAuthority();
+			blockList.get(0).setAuthority(authorityA1);
+			blockList.get(0).setControlAuthority(true);
 			ID = value.getID();
-		}*/
+			
+			if (!sent_train) {
+				trackModSin.dispatchTrain();
+			}
+			
+		}
 		
 
 	}
@@ -88,11 +107,17 @@ public class TrackControllerSingleton {
 	}
 
 	String getSpeed() {
-		return Integer.toString(speed);
+		return Double.toString(speedA1);
 	}
 
 	String getAuthority() {
-		return Integer.toString(authority);
+		if(CBID == 0) {
+		return Integer.toString(authorityA1);
+		}
+		return Integer.toString(authorityA2);
 	}
 	
+	boolean isCBOccupied() {
+		return blockList.get(CBID).isOccupied();
+}
 }
