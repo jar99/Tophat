@@ -2,6 +2,7 @@ package application.TrainModel;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 import application.CTC.CTCSingleton;
 import application.MBO.MBOSingleton;
@@ -17,7 +18,7 @@ public class TrainModelSingleton {
 
 	private TrainModelSingleton() {
 		 trainModelHashMap = new HashMap<>();
-//		 this.createTrain("Train_1");
+//		 this.createTrain(1);
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -30,24 +31,48 @@ public class TrainModelSingleton {
 
 	// =====================================
 
-	private HashMap<String, TrainModel> trainModelHashMap;
+	private HashMap<Integer, TrainModel> trainModelHashMap;
 
-    public TrainModel getTrain(String trainID){
+    public TrainModel getTrain(int trainID){
         return trainModelHashMap.get(trainID);
     }
+    
+    public TrainModel[] getAllTrain(){
+        return (TrainModel[]) trainModelHashMap.values().toArray();
+    }
+    
+    /**
+     * Returns an array list of all of the train ids
+     * @return
+     */
+    public int[] getAllIDsTrain(){
+    	Integer[] keys = (Integer[]) trainModelHashMap.keySet().toArray();
+    	int[] result = new int[keys.length];
+    	for (int i = 0; i < result.length; i++) {
+			result[i] = keys[i];		
+		}
+        return result;
+    }
+    
+	public TrainModel removeTrain(int tranID) {
+		TrainModel train = trainModelHashMap.remove(Integer.valueOf(tranID));
+		System.out.println("Train removed: " + train.getCord());
+		return train;
+	}
 
-    public TrainModel createTrain(String trainID) {
+    public TrainModel createTrain(int trainID) {
+    	if(trainModelHashMap.containsKey(trainID)) return null;
+    	
         TrainModel train = new TrainModel(trainID);
         trainModelHashMap.put(trainID, train);
         return train;
     }
 
-    public boolean dispatchTrain(String trainID) {
+    public boolean dispatchTrain(int trainID) {
         return trainModelHashMap.put(trainID, new TrainModel(trainID)) != null;
     }
 
-    public void makeTrain(int ID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
-        String trainID = String.valueOf(ID);
+    public void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
         TrainModel train = new TrainModel(trainID, x, y, currentBlock);
         trainModelHashMap.put(trainID, train);
     }
@@ -56,7 +81,6 @@ public class TrainModelSingleton {
     Collection<TrainModel> getTrains() {
         return trainModelHashMap.values();
     }
-  
 
 	public int getCount() {
 		return -1;
@@ -77,10 +101,4 @@ public class TrainModelSingleton {
 			// use 5 or 0 as parameter. See my interface for description.
 		
 	}
-
-	public void removeTrain(int i) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

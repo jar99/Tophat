@@ -4,13 +4,17 @@ import application.TrackModel.TrackBlock;
 
 public interface TrainModelInterface {
 
-    TrainModel getTrain(String trainID);
-
-    TrainModel createTrain(String trainID);
-
-    boolean dispatchTrain(String trainID);
-
-    void makeTrain(int ID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock);
+    TrainModel getTrain(int trainID);
     
-    void removeTrain(int trainID);
+    TrainModel[] getAllTrains();
+
+    TrainModel createTrain(int trainID);
+    
+    
+    void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock);
+    
+    TrainModel removeTrain(int trainID);
+
+    boolean dispatchTrain(int trainID);
+ 
 }
