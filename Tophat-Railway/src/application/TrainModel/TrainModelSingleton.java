@@ -36,6 +36,8 @@ public class TrainModelSingleton {
 		return count;
 	}
 
+	
+	// Death to the Stormcloakss
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
