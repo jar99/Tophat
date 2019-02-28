@@ -38,8 +38,10 @@ public class TrackControllerSingleton {
 
 	// NOTE: Put your data objects here
 	private int CBID = 0;
-	private double speed = 0;
-	private int authority = 0;
+	private double speedA1 = 0;
+	private int authorityA1 = 0;
+	private int authorityA2 = 0;
+
 	private int ID = 0;
 	// NOTE: Put some functions here
 	
@@ -72,10 +74,12 @@ public class TrackControllerSingleton {
 		while (iterator.hasNext()) {
 			Entry<Integer, Train> entry = iterator.next();
 			Train value = entry.getValue();
-			speed = value.getSuggestedSpeed();
-			blockList.get(0).setSpeed(speed);
-			authority = value.getAuthority()+1;
-			blockList.get(0).setAuthority(authority);
+			speedA1 = value.getSuggestedSpeed();
+			blockList.get(0).setSpeed(speedA1);
+			authorityA1 = value.getAuthority()+1;
+			authorityA2 = value.getAuthority();
+			blockList.get(0).setAuthority(authorityA1);
+
 			blockList.get(0).setControlAuthority(true);
 			ID = value.getID();
 			
@@ -105,11 +109,19 @@ public class TrackControllerSingleton {
 	}
 
 	String getSpeed() {
-		return Double.toString(speed);
+
+		return Double.toString(speedA1);
+
 	}
 
 	String getAuthority() {
-		return Integer.toString(authority);
+		if(CBID == 0) {
+		return Integer.toString(authorityA1);
+		}
+		return Integer.toString(authorityA2);
 	}
 	
+	boolean isCBOccupied() {
+		return blockList.get(CBID).isOccupied();
+}
 }
