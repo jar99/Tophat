@@ -94,8 +94,9 @@ public class TrainControllerSingleton {
 		
 		// Example: get the count from a singleton and replace yours with the largest
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
-		int t_count = trnModSin.getCount();
-			count = t_count;
+		speed = trnModSin.getSpeed();
+		//int t_count = trnModSin.getCount();
+		//	count = t_count;
 		/*if (count < t_count)
 			count = t_count;
 		else
