@@ -97,7 +97,7 @@ public class CTCCtrl implements Initializable {
 		Integer[] myBlocks=Arrays.copyOf(objectList2,objectList2.length,Integer[].class);
 		Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
 		//int[] intArray = Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray();
-		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum(),Integer.parseInt(SpeedTextField.getCharacters().toString()));
+		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum()+1,Integer.parseInt(SpeedTextField.getCharacters().toString()));
 		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,0,Integer.parseInt(SpeedTextField.getCharacters().toString()));//TODO convert time String (here is 0) into an Int
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
