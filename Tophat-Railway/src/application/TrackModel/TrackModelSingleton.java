@@ -65,7 +65,7 @@ public class TrackModelSingleton implements TrackModelInterface{
 		if (t_TrainList.size() > 0) {
 			TrackTrain train = t_TrainList.get(0);
 			if (train.getY() > 210) {
-				t_TrainList.remove(0);
+				t_TrainList.get(0).delete();
 				trnModSin.removeTrain(0);
 				t_BlockList.get(1).unsetOccupied();
 			} else if (train.getY() > 110) {
