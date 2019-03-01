@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import application.CTC.CTCSingleton;
 import application.MBO.MBOSingleton;
+import application.TrackController.TrackControllerInterface;
 import application.TrackController.TrackControllerSingleton;
 import application.TrainController.TrainControllerSingleton;
+import application.TrainModel.TrainModelInterface;
 import application.TrainModel.TrainModelSingleton;
 
 public class TrackModelSingleton implements TrackModelInterface{
@@ -58,8 +60,8 @@ public class TrackModelSingleton implements TrackModelInterface{
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		TrackControllerSingleton tckCtrlSin = TrackControllerSingleton.getInstance();
-		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+		TrackControllerInterface tckCtrlSin = TrackControllerSingleton.getInstance();
+		TrainModelInterface trnModSin = TrainModelSingleton.getInstance();
 		
 		
 		if (t_TrainList.size() > 0) {
@@ -217,7 +219,7 @@ public class TrackModelSingleton implements TrackModelInterface{
 		
 		t_BlockList.get(0).setOccupied();
 		
-		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+		TrainModelInterface trnModSin = TrainModelSingleton.getInstance();
 		
 		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
 		
