@@ -11,7 +11,7 @@ import application.TrackModel.TrackBlock;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 
-public class TrainModelSingleton {
+public class TrainModelSingleton implements TrainModelInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainModelSingleton instance = null;
@@ -111,5 +111,11 @@ public class TrainModelSingleton {
 		//TODO Call getTrainLocation() method from TrackModel Singleton.
 			// use 5 or 0 as parameter. See my interface for description.
 		
+	}
+
+	@Override
+	public TrainModel[] getAllTrains() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
