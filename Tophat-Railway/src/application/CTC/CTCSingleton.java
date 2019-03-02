@@ -11,7 +11,7 @@ import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class CTCSingleton {
+public class CTCSingleton implements CTCInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static CTCSingleton instance = null;
