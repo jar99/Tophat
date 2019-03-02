@@ -1,4 +1,13 @@
 package application.TrainModel;
+/**
+ * This is the TrainModel object class this contains all the data and functions
+ * to simulate the train.
+ * 
+ * @author jar254
+ * @version 1.0
+ *
+ */
+
 
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackBlock;

@@ -106,10 +106,4 @@ public class TrainModelSingleton implements TrainModelInterface {
 			trainModel.update(0);
 		}
 	}
-
-	@Override
-	public TrainModel[] getAllTrains() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
