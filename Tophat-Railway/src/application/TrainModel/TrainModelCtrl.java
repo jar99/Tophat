@@ -1,19 +1,26 @@
 package application.TrainModel;
+/**
+ * This is the TrainModelCtrl this class is used to run the UI of the train model.
+ * 
+ * @author jar254
+ * @version 1.0
+ *
+ */
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
-import application.TrainModel.TrainModelCtrl.TableRow;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
@@ -33,9 +40,27 @@ public class TrainModelCtrl implements Initializable {
     
     @FXML
     TableColumn<TableRow, String> information_value;
-
-    public void setTrain(TrainModel trainModel) {
-        runSetup(trainModel);
+    
+    @FXML
+    ToggleButton emergencyButton;
+    
+    //TODO fix the emergency brake button
+    @FXML
+    public void clickEmergencyButton(ActionEvent event) {
+    	if(trainModel != null && !trainModel.getEmergancyBrakeState()) {
+    		toggleEmergencyBrake();
+    		System.out.println("Emergency button pressed");
+    		
+    	}
+    }
+    
+    private void toggleEmergencyBrake() {
+    	if(trainModel.getEmergancyBrakeState()) {
+    		emergencyButton.setStyle("-fx-background-color: #688bed; ");
+    		//trainModel.setEmergancyBrake(true);
+    	}else {
+    		emergencyButton.setStyle("-fx-background-color: #ed412a; ");
+    	}
     }
 
     // Starts the automatic update (NO TOUCHY!!)
@@ -47,6 +72,7 @@ public class TrainModelCtrl implements Initializable {
  		        return c.getValue().getValue();
  		    }
  		});
+ 		setupTable();
  		
  		updateAnimation = new AnimationTimer() {
 
@@ -64,34 +90,107 @@ public class TrainModelCtrl implements Initializable {
  	// WARNING: This assumes your singleton is updating its information
  	private void update() {
  		if(trainModel != null) {
- 			power.update(String.valueOf(trainModel.getPower()));
- 			velcity.update(String.valueOf(trainModel.getVelocity()));
- 			cord.update(String.valueOf(trainModel.getCord()));
+ 			toggleEmergencyBrake(); // NOTE this could be better
+ 			//Update table
+ 			trackAuthority.update(trainModel.getTrackAuthority());
+ 			trackSpeed.update(trainModel.getTrackSpeed());
+ 			
+ 			mboAuthority.update(trainModel.getMBOAuthority());
+ 			mboSpeed.update(trainModel.getMBOSpeed());
+ 			
+ 			emergancyBrake.update(trainModel.getEmergancyBrakeState());
+ 			serviceBrake.update(trainModel.getServiceBrake());
+ 			power.update(trainModel.getPower());
+ 			speed.update(trainModel.getSpeed());
+ 			waight.update(trainModel.getWeight());
+ 			cord.update(trainModel.getCordinets());
+ 			
+ 			leftDoor.update(trainModel.getLeftDoorState());
+ 			rightDoor.update(trainModel.getRightDoorState());
+ 			
+ 			passangers.update(trainModel.getPassangers());
+ 			temprature.update(trainModel.getTemperature());
  		}
  	}
  	
- 	public TableRow power, velcity, cord;
+ 	public TableRow<Double> power, trackSpeed, mboSpeed, speed, temprature, waight;
+ 	public TableRow<String> trainid, cord;
  	
- 	private void runSetup(TrainModel trainModel) {
- 		this.trainModel = trainModel;
- 		power = new TableRow("Power", String.valueOf(trainModel.getPower()));
- 		velcity = new TableRow("Velocity", String.valueOf(trainModel.getVelocity()));
- 		cord = new TableRow("Cord", String.valueOf(trainModel.getCord()));
- 		train_info.getItems().addAll(power, velcity, cord);
+ 	public TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor;
+ 	public TableRow<Integer> trackAuthority, mboAuthority, passangers;
+ 	
+ 	
+ 	void setTrain(TrainModel trainModel) {
+ 		this.trainModel = trainModel;		
  	}
  	
+ 	private void setupTable() {
+ 		//TODO add more unit formatting
+ 		trainid = new TableRow<String>("Train ID", "N/A"); 
+ 		
+ 		trackAuthority = new TableRow<Integer>("Track Authority", 0);
+ 		trackSpeed = new TableRow<Double>("Track Suggested Speed", 0.0,  (a) -> a + " MPH");
+ 		
+ 		mboAuthority = new TableRow<Integer>("MBO Authority", 0);
+ 		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0,  (a) -> a + " MPH");
+ 		
+ 		power = new TableRow<Double>("Power", 0.0,  (a) -> a + " KW");
+ 		speed = new TableRow<Double>("Speed", 0.0, (a) -> a + " MPH");
+ 		temprature = new TableRow<Double>("Temprature", 68.0, (a)-> tempratureConverter(a));
+ 		waight = new TableRow<Double>("Waight", 0.0, (a) -> a + " LBS");
+ 		cord = new TableRow<String>("Cord", "N/A");
+ 		passangers = new TableRow<Integer>("Passangers", 0, (a) -> passangerFormat(a));
+ 		
+ 		leftDoor = new TableRow<Boolean>("Left Door", true, (a)-> doorState(a));
+ 		rightDoor = new TableRow<Boolean>("Right Door", true, (a)-> doorState(a));
+ 		
+ 		serviceBrake = new TableRow<Boolean>("Service Brake", true, (a)-> onOrOff(a));
+ 		emergancyBrake = new TableRow<Boolean>("Emergency Brake", true, (a)-> onOrOff(a));
+ 		
+ 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, mboAuthority, mboSpeed, power, speed, serviceBrake, emergancyBrake, waight, cord, leftDoor, rightDoor, passangers, temprature);
+ 	}
  	
- 	public class TableRow{
+ 	private String doorState(boolean doorState) {
+ 		if(doorState) return "Open";
+ 		return "Closed";
+ 	}
+ 	
+ 	private String onOrOff(boolean itemState) {
+ 		if(itemState) return "On";
+ 		return "Off";
+ 	}
+ 	
+ 	private String passangerFormat(int passangers) {
+ 		if(passangers == 0) return "None";
+ 		if(passangers > 1) return passangers + " passanger";
+ 		return passangers + " passangers";
+ 	}
+ 	
+ 	private String tempratureConverter(double tempC) {
+ 		return tempC + "°F";
+ 	}
+ 	
+ 	public class TableRow<T>{
  		private String name;
+ 		private Function<T, String> formater;
  		private SimpleStringProperty value;
  		
- 		protected TableRow(String name, String value) {
+ 		
+ 		protected TableRow(String name, T value, Function<T, String> formater) {
  			this.name = name;
- 			this.value = new SimpleStringProperty(value);
+ 			this.formater = formater;
+ 			this.value = new SimpleStringProperty(formater.apply(value));
  		}
  		
- 		protected void update(String value) {
- 			this.value.setValue(value);
+ 		protected TableRow(String name, T value) {
+ 			this.name = name;
+ 			this.value = new SimpleStringProperty(value.toString());
+ 		}
+ 		
+ 		protected void update(T value) {
+ 			String result = formater != null ? formater.apply(value) : value.toString();
+ 			if(this.value.getValue().equals(value)) return;
+ 			this.value.setValue(result); 
  		}
  		
  		public String getName() {
@@ -104,8 +203,6 @@ public class TrainModelCtrl implements Initializable {
  		
  		public String getValueS() {
  			return value.getValue();
- 		}
- 		
- 		
+ 		}	
  	}
 }
