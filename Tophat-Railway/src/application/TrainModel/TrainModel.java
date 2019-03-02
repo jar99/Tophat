@@ -1,7 +1,8 @@
 package application.TrainModel;
 /**
  * This is the TrainModel object class this contains all the data and functions
- * to simulate the train.
+ * to simulate the train. This should not be called directly since it contains 
+ * some unsafe function to display information better.
  * 
  * @author jar254
  * @version 1.0
