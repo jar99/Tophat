@@ -54,7 +54,7 @@ public class TrainModelMainCtrl implements Initializable {
     	for(TrainModel train : trainTabTable.keySet()) {
     		// Remove all unused trains
     		if(!mySin.trainExists(train.getTrainID())) {
-    			System.out.println("Removed " + train.getTrainID());
+//    			System.out.println("Removed " + train.getTrainID());
     			trainTabs.getTabs().remove(trainTabTable.get(train));
     			trainTabTable.remove(train);
     		}
@@ -63,7 +63,7 @@ public class TrainModelMainCtrl implements Initializable {
     	// Add new trains
 		for(TrainModel trainModel : mySin.getTrains()) {
 			if(!trainTabTable.containsKey(trainModel)) {
-				System.out.println("Adding a new train " + trainModel);
+//				System.out.println("Adding a new train " + trainModel);
 				createTrainTab(trainModel);
 			}
 		}

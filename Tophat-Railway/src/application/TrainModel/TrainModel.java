@@ -63,7 +63,7 @@ class TrainModel implements TrainInterface {
      * This function is called when the train should be removed.
      */
     public void remove() {
-    	System.out.println(this + " train was removed at " + System.nanoTime());
+//    	System.out.println(this + " train was removed at " + System.nanoTime());
     }
     
     public boolean dispatch() {
@@ -74,7 +74,7 @@ class TrainModel implements TrainInterface {
      * @param delaTime
      */
     public void update(int delaTime){
-    	System.out.println(this + " train runs at " + System.nanoTime());
+//    	System.out.println(this + " train runs at " + System.nanoTime());
         callTrainController();
         double distance = speed;
     	callTrackModel(speed);
@@ -131,7 +131,7 @@ class TrainModel implements TrainInterface {
 	}
 	
 	void setEmergancyBrake(boolean emergencyBrake) {
-		System.out.println("Set the emergancy brake");
+//		System.out.println("Set the emergancy brake");
 		tainControllerSingleton.setemergencyBrake(emergencyBrake);
 	}
 	

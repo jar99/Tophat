@@ -49,7 +49,7 @@ public class TrainModelCtrl implements Initializable {
     public void clickEmergencyButton(ActionEvent event) {
     	if(trainModel != null && !trainModel.getEmergancyBrakeState()) {
     		toggleEmergencyBrake();
-    		System.out.println("Emergency button pressed");
+//    		System.out.println("Emergency button pressed");
     		
     	}
     }
