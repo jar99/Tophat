@@ -10,6 +10,8 @@ public class MBOSingleton implements MBOInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static MBOSingleton instance = null;
+	private double latitude = 0;
+	private double longitude = 0;
 
 	private MBOSingleton() {
 	}
@@ -39,7 +41,19 @@ public class MBOSingleton implements MBOInterface {
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	public int getLocation(double latitude, double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
 		return 0;
+	}
+	
+	public double getLatitude()
+	{
+		return latitude;
+	}
+	
+	public double getLongitude()
+	{
+		return longitude;
 	}
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller

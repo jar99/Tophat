@@ -14,7 +14,7 @@ import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class TrackControllerSingleton {
+public class TrackControllerSingleton implements TrackControllerInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrackControllerSingleton instance = null;
