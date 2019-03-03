@@ -1,5 +1,7 @@
 package application.TrainController;
 
+import java.util.Hashtable;
+
 import application.CTC.CTCSingleton;
 import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
@@ -27,11 +29,26 @@ public class TrainControllerSingleton {
 
 	// NOTE: Put your data objects here
 	private String speed, power, temperature;
-	private int count = 0;
+	private int trainID;
 	private int numSpeed, numPower;
-	private boolean emergencyBrake;
+	private boolean emergencyBrake, serviceBrake;
 	
+	//create hashtable for each individual train
+	// public void makeTrain(put information in){ 
+	
+	private Hashtable <Integer, Train> trainCtrlHashTable;
+	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+
 	// NOTE: Put some functions here
+	
+	//TrainID HashTable
+	public Hashtable <Integer, Train> getTrain() {
+		for(int i = 0; i < trnModSin.getCount(); i++) {
+			trainCtrlHashTable.put(i,);
+		}
+		return trainCtrlHashTable;
+	}
+	
 	
 	//Send Speed as STRING
 	public String getSpeed(){
@@ -77,6 +94,15 @@ public class TrainControllerSingleton {
 		this.temperature = temperature;
 	}
 	
+	//Boolean SeriveBrake
+	public boolean getServiceBrake() {
+		return serviceBrake;
+	}
+	
+	public void setServiceBrake(boolean serviceBrake) {
+		this.serviceBrake = serviceBrake;
+	}
+	
 	//Boolean EmergencyBrake 
 	public boolean getemergencyBrake() {
 		return emergencyBrake;
@@ -91,18 +117,9 @@ public class TrainControllerSingleton {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
-		
 		// Example: get the count from a singleton and replace yours with the largest
-		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
-		speed = trnModSin.getSpeed();
-		//int t_count = trnModSin.getCount();
-		//	count = t_count;
-		/*if (count < t_count)
-			count = t_count;
-		else
-			count = t_count;*/
 		
-
+		speed = trnModSin.getSpeed();
 	}
 
 }
