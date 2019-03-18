@@ -4,6 +4,7 @@ import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
+import application.TrainControllerHardware.TrainControllerHardwareSingleton;
 import application.TrainModel.TrainModelSingleton;
 import application.CTC.CTCSingleton;
 
@@ -17,12 +18,13 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Singleton References
-		CTCSingleton 				ctcSin = 		CTCSingleton.getInstance();
-		TrackControllerSingleton 	tckCtrlSin = 	TrackControllerSingleton.getInstance();
-		TrackModelSingleton 		tckModSin = 	TrackModelSingleton.getInstance();
-		TrainModelSingleton 		trnModSin = 	TrainModelSingleton.getInstance();
-		TrainControllerSingleton 	trnCtrlSin = 	TrainControllerSingleton.getInstance();
-		MBOSingleton 				mboSin = 		MBOSingleton.getInstance();
+		CTCSingleton 				     ctcSin = 		CTCSingleton.getInstance();
+		TrackControllerSingleton 	     tckCtrlSin = 	TrackControllerSingleton.getInstance();
+		TrackModelSingleton 		     tckModSin = 	TrackModelSingleton.getInstance();
+		TrainModelSingleton 		     trnModSin = 	TrainModelSingleton.getInstance();
+		TrainControllerSingleton 	     trnCtrlSin = 	TrainControllerSingleton.getInstance();
+		TrainControllerHardwareSingleton trnHwSin = TrainControllerHardwareSingleton.getInstance();
+		MBOSingleton 				     mboSin = 		MBOSingleton.getInstance();
 
 		// Calling Thread which starts the FX UI
 		new Thread() {

@@ -1,22 +1,23 @@
-package application.TrainController;
+package application.TrainControllerHardware;
 
 import com.fazecast.jSerialComm.*;
 
+import application.TrainController.TrainControllerSingleton;
 
-public class TrainCtrlDataListener implements SerialPortDataListener {
+public class TrainControllerDataListener implements SerialPortDataListener{
 	private SerialPort port;
 	
-	public TrainCtrlDataListener(SerialPort port) {
+	public TrainControllerDataListener(SerialPort port) {
 		this.port = port;
 	}
 	
 	@Override
-	public int getListeningEvents() {
+	public int getListeningEvents(){
 		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 	}
 	
 	@Override
-	public void serialEvent(SerialPortEvent ev) {
+	public void serialEvent(SerialPortEvent ev){
 		if(ev.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) return;
 		
 		// send Singleton data over serial b/c this is simple for iteration 2
