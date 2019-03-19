@@ -6,7 +6,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainModel.TrainModelSingleton;
 
-public class TrainControllerSingleton {
+public class TrainControllerSingleton implements TrainControllerInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainControllerSingleton instance = null;
@@ -22,15 +22,19 @@ public class TrainControllerSingleton {
 		return instance;
 	}
 
+	
 	// =====================================
 
 	// NOTE: Put your data objects here
 	private String speed, power, temperature;
 	private int count = 0;
+	private int numSpeed, numPower;
+	private boolean emergencyBrake;
+	
 	// NOTE: Put some functions here
 	
-	
-	public String getSpeed() {
+	//Send Speed as STRING
+	public String getSpeed(){
 		return speed;
 	}
 	
@@ -38,12 +42,31 @@ public class TrainControllerSingleton {
 		this.speed = speed;
 	}
 	
+	//Send Speed as INTEGER 
+	public int getnumSpeed() {
+		return numSpeed;
+	}
+	
+	public void setnumSpeed(int numSpeed) {
+		this.numSpeed = numSpeed;
+	}
+	
+	//Send Power as STRING
 	public String getPower() {
 		return power;
 	}
 	
 	public void setPower(String power) {
 		this.power = power;
+	}	
+	
+	//Send Power as INTEGER
+	public int getnumPower() {
+		return numPower;
+	}
+	
+	public void setnumPower(int numPower) {
+		this.numPower = numPower;
 	}
 	
 	public String getTemperature() {
@@ -54,6 +77,15 @@ public class TrainControllerSingleton {
 		this.temperature = temperature;
 	}
 	
+	//Boolean EmergencyBrake 
+	public boolean getemergencyBrake() {
+		return emergencyBrake;
+	}
+	
+	public void setemergencyBrake(boolean emergencyBrake) {
+		this.emergencyBrake = emergencyBrake;
+	}
+	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
@@ -62,8 +94,9 @@ public class TrainControllerSingleton {
 		
 		// Example: get the count from a singleton and replace yours with the largest
 		TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
-		int t_count = trnModSin.getCount();
-			count = t_count;
+		speed = trnModSin.getSpeed();
+		//int t_count = trnModSin.getCount();
+		//	count = t_count;
 		/*if (count < t_count)
 			count = t_count;
 		else
