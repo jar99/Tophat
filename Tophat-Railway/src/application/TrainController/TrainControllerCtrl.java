@@ -44,7 +44,6 @@ public class TrainControllerCtrl implements Initializable {
 	// Control Functions
 	
 	public void Speed() {
-		// System.out.print("Click");
 		inputSpeed = speed.getText();
 		numSpeed = Integer.parseInt(inputSpeed);
 		mySin.setnumSpeed(numSpeed);
@@ -54,7 +53,7 @@ public class TrainControllerCtrl implements Initializable {
 	public void Power() {
 		inputPower = power.getText();
 		numPower = Integer.parseInt(inputPower);
-		mySin.setnumPower(numPower);
+		//mySin.setnumPower(numPower);
 		actualPower.setText(inputPower + "Kwatts");
 	}
 	
@@ -152,7 +151,7 @@ public class TrainControllerCtrl implements Initializable {
 		//confirmSpeed.setOnAction(e -> Speed());
 		confirmPower.setOnAction(e -> Power());
 		
-		actualSpeed.setText(mySin.getSpeed());
+		//actualSpeed.setText(mySin.getSpeed());
 		driveStatus.setText(driveStatus());
 		confirmKi.setOnAction(e -> Ki());
 		confirmKp.setOnAction(e -> Kp());

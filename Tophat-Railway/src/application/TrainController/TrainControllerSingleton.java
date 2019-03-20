@@ -6,6 +6,7 @@ import application.CTC.CTCSingleton;
 import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
+import application.TrainModel.TrainInterface;
 import application.TrainModel.TrainModelSingleton;
 
 public class TrainControllerSingleton implements TrainControllerInterface {
@@ -30,30 +31,57 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 	// NOTE: Put your data objects here
 	private String speed, power, temperature;
 	private int trainID;
-	private int numSpeed, numPower;
+	private int numSpeed, numPower, numTemperature;
 	private boolean emergencyBrake, serviceBrake;
 	
 	//create hashtable for each individual train
 	// public void makeTrain(put information in){ 
 	
-	private Hashtable <Integer, Train> trainCtrlHashTable;
+	private Hashtable <Integer, TrainCtrlInterface> trainCtrlHashTable;
+	
 	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+	Train train;
+	
 
 	// NOTE: Put some functions here
 	
-	//TrainID HashTable
-	public Hashtable <Integer, Train> getTrain() {
-		for(int i = 0; i < trnModSin.getCount(); i++) {
-			trainCtrlHashTable.put(i,);
+	//Check TrainID and remove HashTable
+	public void getTrains(){
+		for(Integer trainID: trnModSin.getAllTrainIDs()) {
+			if(!trainCtrlHashTable.contains(trainID)) {
+				TrainCtrlInterface trainCtrlInterface = new Train(trainID);
+				trainCtrlHashTable.put(trainID, trainCtrlInterface);
+			}
 		}
-		return trainCtrlHashTable;
+		for(Integer trainID: trainCtrlHashTable.keySet()) {
+			if(!trnModSin.getAllTrainIDs().contains(trainID)) {
+				trainCtrlHashTable.remove(trainID);
+			}
+		}
 	}
 	
+	//Sends TrainID as INTEGER 
+	public int getTrainID() {
+		return trainID;
+	}
+	
+	public void setTrainID(int trainID) {
+		this.trainID = trainID;
+	}
+	
+	public void getSpeed() {
+		for(Integer speed: trnModSin.getAllTrainIDs()) {
+			if(!trainCtrlHashTable.contains(speed)) {
+				TrainCtrlInterface trainCtrlInterface = new Train(speed);
+				trainCtrlHashTable.put(speed, trainCtrlInterface);
+			}
+		}
+	}
 	
 	//Send Speed as STRING
-	public String getSpeed(){
+	/*public String getSpeed(){
 		return speed;
-	}
+	}*/
 	
 	public void setSpeed(String speed) {
 		this.speed = speed;
@@ -86,12 +114,22 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		this.numPower = numPower;
 	}
 	
+	//Sends Temperature as STRING
 	public String getTemperature() {
 		return temperature;
 	}
 	
 	public void setTemperature(String temperature) {
 		this.temperature = temperature;
+	}
+	
+	public int getnumTemperature() {
+		return numTemperature;
+	}
+	
+	//Set Temperature as INTEGER
+	public void setnumTemperature(int numTemperature) {
+		this.numTemperature = numTemperature;
 	}
 	
 	//Boolean SeriveBrake
@@ -111,6 +149,8 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 	public void setemergencyBrake(boolean emergencyBrake) {
 		this.emergencyBrake = emergencyBrake;
 	}
+	
+	//Drive Mode
 	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
