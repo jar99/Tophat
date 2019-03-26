@@ -35,8 +35,9 @@ public interface TrainModelInterface {
     /**
      * Removes the train from the update loop and calls the closing function
      * @param trainID the unique id of the train.
+     * @return true if the remove was successful.
      */
-    void removeTrain(int trainID);
+    boolean removeTrain(int trainID);
 
     /**
      * Sets a train flag to go
@@ -61,7 +62,7 @@ public interface TrainModelInterface {
     
 	/**
 	 * Returns the count of how many train models there are
-	 * @return train model cound.
+	 * @return train model count.
 	 */
     int trainCount();
 	
