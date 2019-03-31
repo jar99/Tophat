@@ -6,18 +6,20 @@ public interface TrackModelInterface {
 	/**
 	 * Get number of passengers scheduled to board at a specified station today.
 	 * 
+	 * @param line - the name of the station's line
 	 * @param stationName - specified station
 	 * @return the number of scheduled boarders
 	 */
-	public int getScheduledBoarding(String station_name);
+	public int getScheduledBoarding(String line, String station_name);
 
 	/**
 	 * Get number of passengers scheduled to alight at a specified station today.
 	 * 
+	 * @param line - the name of the station's line
 	 * @param stationName - specified station
 	 * @return the number of scheduled alighters
 	 */
-	public int getScheduledAlighting(String station_name);
+	public int getScheduledAlighting(String line, String station_name);
 
 	// =========Track Controller Methods==========
 	/**
