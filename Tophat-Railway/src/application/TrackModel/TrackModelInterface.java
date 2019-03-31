@@ -37,7 +37,7 @@ public interface TrackModelInterface {
 	 * @param blockID  - the id for the block
 	 * @return the owner/Controller ID
 	 */
-	public int getBlockOwnership(String lineName, int blockID);
+	// public int getBlockOwnership(String lineName, int blockID);
 
 	/**
 	 * Get ID for Track Controller which owns a Switch
@@ -46,7 +46,7 @@ public interface TrackModelInterface {
 	 * @param switchID - the id for the switch
 	 * @return the owner/Controller ID
 	 */
-	public int getSwitchOwnership(String lineName, int switchID);
+	// public int getSwitchOwnership(String lineName, int switchID);
 
 	/**
 	 * Sets a switch state
