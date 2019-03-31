@@ -31,85 +31,95 @@ public interface TrackModelInterface {
 	/**
 	 * Check that a Track Controller owns a Block
 	 * 
-	 * @param controllerID - the id for the controller
+	 * @param line - the name of the block's line
 	 * @param blockID      - the id for the block
+	 * @param controllerID - the id for the controller
 	 * @return true, if owned; false, otherwise
 	 */
-	public boolean checkBlockOwnership(int controllerID, int blockID);
+	public boolean checkBlockOwnership(String line, int blockID, int controllerID);
 
 	/**
 	 * Check that a Track Controller owns a Switch
 	 * 
-	 * @param controllerID - the id for the controller
+	 * @param line - the name of the switch's line
 	 * @param switchID     - the id for the switch
+	 * @param controllerID - the id for the controller
 	 * @return true, if owned; false, otherwise
 	 */
-	public boolean checkSwitchOwnership(int controllerID, int switchID);
+	public boolean checkSwitchOwnership(String line, int switchID, int controllerID);
 
 	/**
 	 * Sets a switch state
 	 * 
+	 * @param line - the name of the switch's line
 	 * @param switchID - the id for the switch
 	 * @param straight - tells whether to set switch straight or diverging
 	 */
-	public void setSwitch(int switchID, boolean straight);
+	public void setSwitch(String line, int switchID, boolean straight);
 
 	/**
 	 * Sets suggested speed (meters/sec) for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID        - the id for the block
 	 * @param suggestedSpeed - the suggested speed
 	 */
-	public void setSuggestedSpeed(int blockID, double suggestedSpeed);
+	public void setSuggestedSpeed(String line, int blockID, double suggestedSpeed);
 
 	/**
 	 * Sets authority (# of blocks) for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID   - the id for the block
 	 * @param authority - the authority
 	 */
-	public void setAuthority(int blockID, int authority);
+	public void setAuthority(String line, int blockID, int authority);
 
 	/**
 	 * Sets control authority for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID       - the id for the block
 	 * @param ctrlAuthority - the control authority
 	 */
-	public void setControlAuthority(int blockID, boolean ctrlAuthority);
+	public void setControlAuthority(String line, int blockID, boolean ctrlAuthority);
 
 	/**
 	 * Sets Light status for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID - the id for the block
 	 * @param green   - true for green; false for red
 	 * @return false, if the block doesn't have a light
 	 */
-	public boolean setLightStatus(int blockID, boolean green);
+	public boolean setLightStatus(String line, int blockID, boolean green);
 
 	/**
 	 * Get occupancy for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID - the id for the block
 	 * @return true, if occupied or broken; false if unoccupied
 	 */
-	public boolean getOccupancy(int blockID);
+	public boolean getOccupancy(String line, int blockID);
 
 	/**
 	 * Check if block is broken
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID - the id for the block
 	 * @return true, if broken; false if not
 	 */
-	public boolean isBroken(int blockID);
+	public boolean isBroken(String line, int blockID);
 
 	/**
 	 * Sets heating status for a block
 	 * 
+	 * @param line - the name of the block's line
 	 * @param blockID - the id for the block
 	 * @param heated  - true for heated; false for not
 	 */
-	public void setHeating(int blockID, boolean heated);
+	public void setHeating(String line, int blockID, boolean heated);
 
 	// =========Train Model Methods==========
 	/**
@@ -269,8 +279,9 @@ public interface TrackModelInterface {
 	/**
 	 * Get state of a switch
 	 * 
+	 * @param line - the name of the switch's line
 	 * @param trainID - the id for the switch
 	 * @return true, if straight; false, if diverging
 	 */
-	public boolean getSwitchState(int switchID);
+	public boolean getSwitchState(String line, int switchID);
 }
