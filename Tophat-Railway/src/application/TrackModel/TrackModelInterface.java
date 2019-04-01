@@ -82,7 +82,7 @@ public interface TrackModelInterface {
 	 * 
 	 * @param lineName      - the name of the block's line
 	 * @param blockID       - the id for the block
-	 * @param ctrlAuthority - the control authority
+	 * @param ctrlAuthority - True = continue. False = stop/no authority
 	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
 	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority) throws TrackCircuitFailureException;
@@ -254,7 +254,7 @@ public interface TrackModelInterface {
 	 * @return Suggested Speed for block
 	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public double getTrainSuggestedSpeed(int trainID);
+	public double getTrainSuggestedSpeed(int trainID) throws TrackCircuitFailureException;
 
 	/**
 	 * Get block authority (# blocks) for for train
@@ -263,7 +263,7 @@ public interface TrackModelInterface {
 	 * @return block authority for train
 	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public int getTrainBlockAuthority(int trainID);
+	public int getTrainBlockAuthority(int trainID) throws TrackCircuitFailureException;
 
 	/**
 	 * Get whether a train has power
@@ -279,7 +279,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if crashed, false if not
 	 */
-	public boolean trainHasCrashed(int trainID);
+	//public boolean trainHasCrashed(int trainID);
 
 	// =========MBO Methods==========
 	/**
