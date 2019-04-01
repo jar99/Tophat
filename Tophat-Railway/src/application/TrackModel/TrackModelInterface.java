@@ -272,7 +272,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if crashed, false if not
 	 */
-	public double trainHasCrashed(int trainID);
+	public boolean trainHasCrashed(int trainID);
 
 	// =========MBO Methods==========
 	/**
