@@ -6,110 +6,125 @@ public interface TrackModelInterface {
 	/**
 	 * Get number of passengers scheduled to board at a specified station today.
 	 * 
+	 * @param lineName    - the name of the station's line
 	 * @param stationName - specified station
 	 * @return the number of scheduled boarders
 	 */
-	public int getScheduledBoarding(String station_name);
+	public int getScheduledBoarding(String lineName, String stationName);
 
 	/**
 	 * Get number of passengers scheduled to alight at a specified station today.
 	 * 
+	 * @param lineName    - the name of the station's line
 	 * @param stationName - specified station
 	 * @return the number of scheduled alighters
 	 */
-	public int getScheduledAlighting(String station_name);
+	public int getScheduledAlighting(String lineName, String stationName);
 
 	// =========Track Controller Methods==========
 	/**
 	 * Tells Track Model to Dispatch Train
 	 * 
-	 * @param line    - the line a train is dispatched on
-	 * @param trainID - ID assigned to train
+	 * @param lineName - the line a train is dispatched on
+	 * @param trainID  - ID assigned to train
 	 */
-	public void createTrain(String line, int trainID);
+	public void createTrain(String lineName, int trainID);
 
 	/**
-	 * Check that a Track Controller owns a Block
+	 * Get ID for Track Controller which owns a Block
 	 * 
-	 * @param controllerID - the id for the controller
-	 * @param blockID      - the id for the block
-	 * @return true, if owned; false, otherwise
+	 * @param lineName - the name of the block's line
+	 * @param blockID  - the id for the block
+	 * @return the owner/Controller ID
 	 */
-	public boolean checkBlockOwnership(int controllerID, int blockID);
+	// public int getBlockOwnership(String lineName, int blockID);
 
 	/**
-	 * Check that a Track Controller owns a Switch
+	 * Get ID for Track Controller which owns a Switch
 	 * 
-	 * @param controllerID - the id for the controller
-	 * @param switchID     - the id for the switch
-	 * @return true, if owned; false, otherwise
+	 * @param lineName - the name of the switch's line
+	 * @param switchID - the id for the switch
+	 * @return the owner/Controller ID
 	 */
-	public boolean checkSwitchOwnership(int controllerID, int switchID);
+	// public int getSwitchOwnership(String lineName, int switchID);
 
 	/**
 	 * Sets a switch state
 	 * 
+	 * @param lineName - the name of the switch's line
 	 * @param switchID - the id for the switch
 	 * @param straight - tells whether to set switch straight or diverging
 	 */
-	public void setSwitch(int switchID, boolean straight);
+	public void setSwitch(String lineName, int switchID, boolean straight);
 
 	/**
 	 * Sets suggested speed (meters/sec) for a block
 	 * 
+	 * @param lineName       - the name of the block's line
 	 * @param blockID        - the id for the block
 	 * @param suggestedSpeed - the suggested speed
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setSuggestedSpeed(int blockID, double suggestedSpeed);
+	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed)
+			throws TrackCircuitFailureException;
 
 	/**
 	 * Sets authority (# of blocks) for a block
 	 * 
+	 * @param lineName  - the name of the block's line
 	 * @param blockID   - the id for the block
 	 * @param authority - the authority
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setAuthority(int blockID, int authority);
+	public void setAuthority(String lineName, int blockID, int authority) throws TrackCircuitFailureException;
 
 	/**
 	 * Sets control authority for a block
 	 * 
+	 * @param lineName      - the name of the block's line
 	 * @param blockID       - the id for the block
-	 * @param ctrlAuthority - the control authority
+	 * @param ctrlAuthority - True = continue. False = stop/no authority
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setControlAuthority(int blockID, boolean ctrlAuthority);
+	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority)
+			throws TrackCircuitFailureException;
 
 	/**
 	 * Sets Light status for a block
 	 * 
-	 * @param blockID - the id for the block
-	 * @param green   - true for green; false for red
-	 * @return false, if the block doesn't have a light
+	 * @param lineName - the name of the block's line
+	 * @param blockID  - the id for the block
+	 * @param green    - true for green; false for red
 	 */
-	public boolean setLightStatus(int blockID, boolean green);
+	public void setLightStatus(String lineName, int blockID, boolean green);
 
 	/**
 	 * Get occupancy for a block
 	 * 
-	 * @param blockID - the id for the block
+	 * @param lineName - the name of the block's line
+	 * @param blockID  - the id for the block
 	 * @return true, if occupied or broken; false if unoccupied
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public boolean getOccupancy(int blockID);
+	public boolean getOccupancy(String lineName, int blockID) throws TrackCircuitFailureException;
 
 	/**
 	 * Check if block is broken
 	 * 
-	 * @param blockID - the id for the block
+	 * @param lineName - the name of the block's line
+	 * @param blockID  - the id for the block
 	 * @return true, if broken; false if not
 	 */
-	public boolean isBroken(int blockID);
+	// public boolean isBroken(String lineName, int blockID);
 
 	/**
 	 * Sets heating status for a block
 	 * 
-	 * @param blockID - the id for the block
-	 * @param heated  - true for heated; false for not
+	 * @param lineName - the name of the block's line
+	 * @param blockID  - the id for the block
+	 * @param heated   - true for heated; false for not
 	 */
-	public void setHeating(int blockID, boolean heated);
+	public void setHeating(String lineName, int blockID, boolean heated);
 
 	// =========Train Model Methods==========
 	/**
@@ -117,8 +132,9 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID      - the id for the train
 	 * @param displacement - the distance traveled forward
+	 * @throws TrainCrashedException - if this train has crashed
 	 */
-	public void updateTrainDisplacement(int trainID, double displacement);
+	public void updateTrainDisplacement(int trainID, double displacement) throws TrainCrashedException;
 
 	/**
 	 * Get X Coordinate of Train
@@ -141,9 +157,10 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID           - the id for the train
 	 * @param currentPassengers - current number of passengers on the train
+	 * @param capcity           - maximum number of passengers for that train
 	 * @return (+) if more board; (-) if more alight
 	 */
-	public int getTrainPassengerChange(int trainID, int currentPassengers);
+	public int getTrainPassengerChange(int trainID, int currentPassengers, int capacity);
 
 	/**
 	 * Get block Length (meters) for train
@@ -237,17 +254,19 @@ public interface TrackModelInterface {
 	 * Get block suggested speed (meters/second) for train
 	 * 
 	 * @param trainID - the id for the train
-	 * @return Suggested Speed for block, (-1 if broken circuit)
+	 * @return Suggested Speed for block
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public double getTrainSuggestedSpeed(int trainID);
+	public double getTrainSuggestedSpeed(int trainID) throws TrackCircuitFailureException;
 
 	/**
 	 * Get block authority (# blocks) for for train
 	 * 
 	 * @param trainID - the id for the train
-	 * @return block authority for train, (-1 if broken circuit)
+	 * @return block authority for train
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public double getTrainBlockAuthority(int trainID);
+	public int getTrainBlockAuthority(int trainID) throws TrackCircuitFailureException;
 
 	/**
 	 * Get whether a train has power
@@ -255,7 +274,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if powered, false if not
 	 */
-	public double trainHasPower(int trainID);
+	public boolean trainHasPower(int trainID);
 
 	/**
 	 * Get whether a train has crashed
@@ -263,14 +282,15 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if crashed, false if not
 	 */
-	public double trainHasCrashed(int trainID);
+	// public boolean trainHasCrashed(int trainID);
 
 	// =========MBO Methods==========
 	/**
 	 * Get state of a switch
 	 * 
-	 * @param trainID - the id for the switch
+	 * @param lineName - the name of the switch's line
+	 * @param trainID  - the id for the switch
 	 * @return true, if straight; false, if diverging
 	 */
-	public boolean getSwitchState(int switchID);
+	public boolean getSwitchState(String lineName, int switchID);
 }
