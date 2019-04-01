@@ -256,7 +256,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return block authority for train, (-1 if broken circuit)
 	 */
-	public double getTrainBlockAuthority(int trainID);
+	public int getTrainBlockAuthority(int trainID);
 
 	/**
 	 * Get whether a train has power
@@ -264,7 +264,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if powered, false if not
 	 */
-	public double trainHasPower(int trainID);
+	public boolean trainHasPower(int trainID);
 
 	/**
 	 * Get whether a train has crashed
