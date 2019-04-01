@@ -132,7 +132,7 @@ public interface TrackModelInterface {
 	 * @param displacement - the distance traveled forward
 	 * @throws TrainCrashedException - if this train has crashed
 	 */
-	public void updateTrainDisplacement(int trainID, double displacement);
+	public void updateTrainDisplacement(int trainID, double displacement) throws TrainCrashedException;
 
 	/**
 	 * Get X Coordinate of Train
