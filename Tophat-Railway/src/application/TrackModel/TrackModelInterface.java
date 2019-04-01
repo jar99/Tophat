@@ -63,8 +63,9 @@ public interface TrackModelInterface {
 	 * @param lineName       - the name of the block's line
 	 * @param blockID        - the id for the block
 	 * @param suggestedSpeed - the suggested speed
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed);
+	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed) throws TrackCircuitFailureException;
 
 	/**
 	 * Sets authority (# of blocks) for a block
@@ -72,8 +73,9 @@ public interface TrackModelInterface {
 	 * @param lineName  - the name of the block's line
 	 * @param blockID   - the id for the block
 	 * @param authority - the authority
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setAuthority(String lineName, int blockID, int authority);
+	public void setAuthority(String lineName, int blockID, int authority) throws TrackCircuitFailureException;
 
 	/**
 	 * Sets control authority for a block
@@ -81,8 +83,9 @@ public interface TrackModelInterface {
 	 * @param lineName      - the name of the block's line
 	 * @param blockID       - the id for the block
 	 * @param ctrlAuthority - the control authority
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority);
+	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority) throws TrackCircuitFailureException;
 
 	/**
 	 * Sets Light status for a block
@@ -99,8 +102,9 @@ public interface TrackModelInterface {
 	 * @param lineName - the name of the block's line
 	 * @param blockID  - the id for the block
 	 * @return true, if occupied or broken; false if unoccupied
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public boolean getOccupancy(String lineName, int blockID);
+	public boolean getOccupancy(String lineName, int blockID) throws TrackCircuitFailureException;
 
 	/**
 	 * Check if block is broken
@@ -109,7 +113,7 @@ public interface TrackModelInterface {
 	 * @param blockID  - the id for the block
 	 * @return true, if broken; false if not
 	 */
-	public boolean isBroken(String lineName, int blockID);
+	//public boolean isBroken(String lineName, int blockID);
 
 	/**
 	 * Sets heating status for a block
@@ -126,6 +130,7 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID      - the id for the train
 	 * @param displacement - the distance traveled forward
+	 * @throws TrainCrashedException - if this train has crashed
 	 */
 	public void updateTrainDisplacement(int trainID, double displacement);
 
@@ -246,7 +251,8 @@ public interface TrackModelInterface {
 	 * Get block suggested speed (meters/second) for train
 	 * 
 	 * @param trainID - the id for the train
-	 * @return Suggested Speed for block, (-1 if broken circuit)
+	 * @return Suggested Speed for block
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
 	public double getTrainSuggestedSpeed(int trainID);
 
@@ -254,7 +260,8 @@ public interface TrackModelInterface {
 	 * Get block authority (# blocks) for for train
 	 * 
 	 * @param trainID - the id for the train
-	 * @return block authority for train, (-1 if broken circuit)
+	 * @return block authority for train
+	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
 	public int getTrainBlockAuthority(int trainID);
 
