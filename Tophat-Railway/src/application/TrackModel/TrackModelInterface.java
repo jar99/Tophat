@@ -90,9 +90,8 @@ public interface TrackModelInterface {
 	 * @param lineName - the name of the block's line
 	 * @param blockID  - the id for the block
 	 * @param green    - true for green; false for red
-	 * @return false, if the block doesn't have a light
 	 */
-	public boolean setLightStatus(String lineName, int blockID, boolean green);
+	public void setLightStatus(String lineName, int blockID, boolean green);
 
 	/**
 	 * Get occupancy for a block
