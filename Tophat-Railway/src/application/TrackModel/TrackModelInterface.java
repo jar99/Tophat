@@ -65,7 +65,8 @@ public interface TrackModelInterface {
 	 * @param suggestedSpeed - the suggested speed
 	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed) throws TrackCircuitFailureException;
+	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed)
+			throws TrackCircuitFailureException;
 
 	/**
 	 * Sets authority (# of blocks) for a block
@@ -85,7 +86,8 @@ public interface TrackModelInterface {
 	 * @param ctrlAuthority - True = continue. False = stop/no authority
 	 * @throws TrackCircuitFailureException - if this block circuit is failing
 	 */
-	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority) throws TrackCircuitFailureException;
+	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority)
+			throws TrackCircuitFailureException;
 
 	/**
 	 * Sets Light status for a block
@@ -113,7 +115,7 @@ public interface TrackModelInterface {
 	 * @param blockID  - the id for the block
 	 * @return true, if broken; false if not
 	 */
-	//public boolean isBroken(String lineName, int blockID);
+	// public boolean isBroken(String lineName, int blockID);
 
 	/**
 	 * Sets heating status for a block
@@ -155,9 +157,10 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID           - the id for the train
 	 * @param currentPassengers - current number of passengers on the train
+	 * @param capcity           - maximum number of passengers for that train
 	 * @return (+) if more board; (-) if more alight
 	 */
-	public int getTrainPassengerChange(int trainID, int currentPassengers);
+	public int getTrainPassengerChange(int trainID, int currentPassengers, int capacity);
 
 	/**
 	 * Get block Length (meters) for train
@@ -279,7 +282,7 @@ public interface TrackModelInterface {
 	 * @param trainID - the id for the train
 	 * @return true, if crashed, false if not
 	 */
-	//public boolean trainHasCrashed(int trainID);
+	// public boolean trainHasCrashed(int trainID);
 
 	// =========MBO Methods==========
 	/**
