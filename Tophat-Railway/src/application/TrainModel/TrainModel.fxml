@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -13,17 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelMainCtrl">
-   <center>
-      <TabPane fx:id="trainTabs" prefHeight="500.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-         <tabs>
-            <Tab closable="false" text="Default">
-               <content>
-                 <fx:include source="TrainModelUI.fxml" />
-               </content>
-            </Tab>
-         </tabs>
-     </TabPane>
-   </center>
    <top>
       <AnchorPane prefHeight="41.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
          <children>
@@ -35,4 +25,18 @@
          </children>
       </AnchorPane>
    </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <ChoiceBox fx:id="trainSelector" prefWidth="150.0">
+               <VBox.margin>
+                  <Insets bottom="2.5" />
+               </VBox.margin></ChoiceBox>
+            <Button fx:id="trainButton" mnemonicParsing="false" onAction="#trainSelectWindow" text="Open Train">
+               <VBox.margin>
+                  <Insets top="2.5" />
+               </VBox.margin></Button>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>
