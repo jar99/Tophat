@@ -1,37 +1,22 @@
 package application.TrackModel;
 
-import java.util.ArrayList;
-
+import java.util.HashMap;
+import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
-import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerInterface;
 import application.TrackController.TrackControllerSingleton;
-import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelInterface;
 import application.TrainModel.TrainModelSingleton;
+import application.MBO.MBOInterface;
+import application.MBO.MBOSingleton;
 
-public class TrackModelSingleton implements TrackModelInterface{
+public class TrackModelSingleton implements TrackModelInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrackModelSingleton instance = null;
 
 	private TrackModelSingleton() {
-		//: Initialize temporary block list
-		TrackBlock block1 = new TrackBlock('A', 1, 100.0, 0.1, 10.0, 21.0, 00.0, 
-												150, 60, 150, 110);
-		
-		  TrackBlock block2 = new TrackBlock('A', 2, 200.0, 0.2, 20.0, 22.0, 21.0, 150,
-		  110, 150, 210); 
-		/*
-		 * TrackBlock block3 = new TrackBlock('A', 3, 300.0, 0.3, 30.0, 23.0, 43.0, 150,
-		 * 210, 150, 360);
-		 */
-		 
-		//block2.setOccupied();
-		t_BlockList.add(block1);
-		t_BlockList.add(block2);
-		//t_BlockList.add(block3);
-		
+
 	}
 
 	public static TrackModelSingleton getInstance() {
@@ -42,205 +27,385 @@ public class TrackModelSingleton implements TrackModelInterface{
 		return instance;
 	}
 
-	// =====================================
-	
-	// NOTE: Put your data objects here
-	//private ArrayList<TrackLine> track = new ArrayList<TrackLine>();
-	private int CBID = 0;	// Current Block ID
-	private ArrayList<TrackBlock> t_BlockList = new ArrayList<TrackBlock>();
-	
-	//: store list of trains and locations
-	private ArrayList<TrackTrain> t_TrainList = new ArrayList<TrackTrain>();
-	
-	// NOTE: Put some functions here
-	
+	// ===============DATA / VARIABLES======================
 
-	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
-	// occur here)
-	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
-	// your UI controller
+	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
+	final private HashMap<Integer, TrainLocation> trainLocations = new HashMap<Integer, TrainLocation>();
+
+	// ===============UPDATE METHOD======================
 	public void update() {
-		TrackControllerInterface tckCtrlSin = TrackControllerSingleton.getInstance();
-		TrainModelInterface trnModSin = TrainModelSingleton.getInstance();
-		
-		
-		if (t_TrainList.size() > 0) {
-			TrackTrain train = t_TrainList.get(0);
-			if (train.getY() > 210) {
-				t_TrainList.get(0).delete();
-				trnModSin.removeTrain(0);
-				t_BlockList.get(1).unsetOccupied();
-			} else if (train.getY() > 110) {
-				t_BlockList.get(0).unsetOccupied();
-				t_BlockList.get(1).setOccupied();
-			}
-		}
-		
-		//tckCtrlSin.getSwitchStates();
-		//tckCtrlSin.getAuthority();
-		//tckCtrlSin.getSpeed();
-		
-		//TODO: get speed
-		
-		//TODO: get authority
-		//TODO: get control authority
-		
-		/*
-		 * TrackTrain train1 = t_TrainList.get(0); train1.changeCoord(train1.getX(),
-		 * train1.getY() + 5.0);
-		 */
+		// TODO: generate a ticket randomly each second (chance of no ticket - 1/10)
+		// increment
+		// alighting/boarding on two different Stations
 
 	}
 
-	
-	//===UI Controller Methods======================================
-	void shiftBlockLeft() {
-		if (CBID == 0) CBID = t_BlockList.size() - 1;
-		else CBID = CBID - 1;
-	}
+	// ===============INTERFACE METHODS======================
 
-	void shiftBlockRight() {
-		if (CBID == t_BlockList.size() - 1) CBID = 0;
-		else CBID = CBID + 1;
-	}
-
-	String getCBName() {
-		return t_BlockList.get(CBID).getName();
-	}
-
-	String getCBLength() {
-		return Double.toString(t_BlockList.get(CBID).getLength());
-	}
-
-	String getCBGrade() {
-		return Double.toString(t_BlockList.get(CBID).getGrade());
-	}
-
-	String getCBSpdLmt() {
-		return Double.toString(t_BlockList.get(CBID).getSpdLmt());
-	}
-
-	String getCBElev() {
-		return Double.toString(t_BlockList.get(CBID).getElev());
-	}
-
-	String getCBTotElev() {
-		return Double.toString(t_BlockList.get(CBID).getTotElev());
-	}
-
-	boolean isCBOccupied() {
-		return t_BlockList.get(CBID).isOccupied();
-	}
-
-	boolean isCBUnderground() {
-		return t_BlockList.get(CBID).isUnderground();
-	}
-
-	boolean isCBStation() {
-		return t_BlockList.get(CBID).isStation();
-	}
-
-	boolean isCBCrossing() {
-		return t_BlockList.get(CBID).isCrossing();
-	}
-
-	boolean isCBBeacon() {
-		return t_BlockList.get(CBID).isBeacon();
-	}
-
-	boolean isCBHeated() {
-		return t_BlockList.get(CBID).isHeated();
-	}
-
-	boolean isCBSwitch() {
-		return t_BlockList.get(CBID).isSwitch();
-	}
-
-	//: Create 3 methods for returning Failure status
-	public boolean isCBFailRail() {
-		return t_BlockList.get(CBID).isFailRail();
-	}
-
-	public boolean isCBFailCircuit() {
-		return t_BlockList.get(CBID).isFailCircuit();
-	}
-
-	public boolean isCBFailPower() {
-		return t_BlockList.get(CBID).isFailPower();
-	}
-	
-	
-	//: Create 3 methods for toggeling Failure status
-	public void toggleCBFailRail() {
-		t_BlockList.get(CBID).toggleFailRail();
-	}
-
-	public void toggleCBFailCircuit() {
-		t_BlockList.get(CBID).toggleFailCircuit();
-	}
-
-	public void toggleCBFailPower() {
-		t_BlockList.get(CBID).toggleFailPower();
-	}
-	
-	public ArrayList<String> getBlockNameList() {
-		ArrayList<String> blockList = new ArrayList<String>();
-		for (TrackBlock block : t_BlockList) {
-			blockList.add(block.getName());
-		}
-		return blockList;
-	}
-
-	//NOTE: This method assumes the block id is based on block number
-	public void setCB(int newCB) {
-		CBID = newCB - 1;
-	}
-
-
-	//: Create method to return list of blocks
-	public ArrayList<TrackBlock> getBlockList() {
-		return t_BlockList;
-	}
-	
-	//TODO: Create method to calculate train GPS coords and return the next block
-	
-	
-	//TODO: Create a method to just calculate train GPS coords and return them
-	
-	//: Create a method to return a list of trains
-	public ArrayList<TrackTrain> getTrainList() {
-		return t_TrainList;
-	}
-	
-	//: Create a method to make a new train
-	public boolean dispatchTrain() {
-		TrackTrain train = new TrackTrain(1, 150, 60);
-		t_TrainList.add(train);
-		
-		t_BlockList.get(0).setOccupied();
-		
-		TrainModelInterface trnModSin = TrainModelSingleton.getInstance();
-		
-		trnModSin.makeTrain(1, 150, 60, t_BlockList.get(0), t_BlockList.get(1));
-		
-		return true;
-		
-	}
-	
-	//: Create method to return blocklist (arraylist of booleans)
-
-	//: Return random ticket sales
-	public ArrayList<Integer> getTickets(){
-		ArrayList<Integer> list = new ArrayList<Integer>();
-		list.add(100);
-		list.add(200);
-		return list;
+	// ====CTC Methods====
+	@Override
+	public int getScheduledBoarding(String lineName, String stationName) {
+		if (track.containsKey(lineName)) {
+			return track.get(lineName).getStation(stationName).getBoarding();
+		} else
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 	}
 
 	@Override
-	public TrackTrain getTrainLocation(double distance_traveled) {
-		TrackTrain train = t_TrainList.get(0);
-		train.changeCoord(train.getX(), train.getY() + distance_traveled);
-		return train;
+	public int getScheduledAlighting(String lineName, String stationName) {
+		if (track.containsKey(lineName)) {
+			return track.get(lineName).getStation(stationName).getAlighting();
+		} else
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 	}
+
+	// ====Track Controller Methods====
+	@Override
+	public void createTrain(String lineName, int trainID) {
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (trainLocations.containsKey(trainID))
+			throw new IllegalArgumentException("Train: " + trainID + " already exists");
+		else {
+			TrackSection yard = track.get(lineName).getRailYard();
+			TrainLocation newTrain = new TrainLocation(trainID, lineName, yard.getSectionID(), yard.getFirstBlockID(),
+					yard.getStartX(), yard.getStartY());
+			trainLocations.put(trainID, newTrain);
+			yard.getBlock(yard.getFirstBlockID()).setOccupied(true);
+
+			// TODO: call the Train Model create train method
+		}
+	}
+
+	@Override
+	public void setSwitch(String lineName, int switchID, boolean straight) {
+		if (track.containsKey(lineName)) {
+			track.get(lineName).getSwitch(switchID).setSwitchStraight(straight);
+		} else
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+	}
+
+	@Override
+	public void setSuggestedSpeed(String lineName, int blockID, double suggestedSpeed)
+			throws TrackCircuitFailureException {
+		if (suggestedSpeed < 0.0)
+			throw new IllegalArgumentException("Suggested Speed cannot be negative");
+		else if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else
+			track.get(lineName).getBlock(blockID).setSuggestedSpeed(suggestedSpeed);
+
+	}
+
+	@Override
+	public void setAuthority(String lineName, int blockID, int authority) throws TrackCircuitFailureException {
+		if (authority < 0)
+			throw new IllegalArgumentException("Authority cannot be negative");
+		else if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else
+			track.get(lineName).getBlock(blockID).setAuthority(authority);
+
+	}
+
+	@Override
+	public void setControlAuthority(String lineName, int blockID, boolean ctrlAuthority)
+			throws TrackCircuitFailureException {
+
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else
+			track.get(lineName).getBlock(blockID).setControlAuthority(ctrlAuthority);
+	}
+
+	@Override
+	public void setLightStatus(String lineName, int blockID, boolean green) {
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (!track.get(lineName).getBlock(blockID).hasLight())
+			throw new IllegalArgumentException("Block: " + blockID + " does not have a light");
+		else if (green)
+			track.get(lineName).getBlock(blockID).setGreen();
+		else
+			track.get(lineName).getBlock(blockID).setRed();
+
+	}
+
+	@Override
+	public boolean getOccupancy(String lineName, int blockID) throws TrackCircuitFailureException {
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+		else if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else if (track.get(lineName).getBlock(blockID).isFailRail())
+			return true;
+		else
+			return track.get(lineName).getBlock(blockID).isOccupied();
+
+	}
+
+	@Override
+	public void setHeating(String lineName, int blockID, boolean heated) {
+		if (track.containsKey(lineName)) {
+			track.get(lineName).getBlock(blockID).setHeated(heated);
+		} else
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+	}
+
+	// ====Train Model Methods====
+	@Override
+	public void updateTrainDisplacement(int trainID, double displacement) throws TrainCrashedException {
+		if (displacement < 0.0)
+			throw new IllegalArgumentException("Displacement cannot be negative");
+		else if (!trainLocations.containsKey(trainID))
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+		else if (trainLocations.get(trainID).hasCrashed())
+			throw new TrainCrashedException("Train: " + trainID + " has crashed");
+		else {
+			
+			// TODO: calculate train's new block and displacement
+			// TODO: update occupancy
+			// TODO: check that train does not hit another train
+			// TODO: check that train does not run over broken rail (block)
+			// TODO: stop train and say it crashed
+			// TODO: calculate train's new coordinates
+			// TODO: call Train Model & Track Controller remove function if train hits end
+			// of yard
+		}
+
+	}
+
+	@Override
+	public double getTrainXCoordinate(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			return trainLocations.get(trainID).getCoordX();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainYCoordinate(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			return trainLocations.get(trainID).getCoordY();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public int stationPassengerExchange(int trainID, int currentPassengers, int capacity) {
+		if (currentPassengers < 0)
+			throw new IllegalArgumentException("Current Passengers cannot be negative");
+		else if (capacity < 0)
+			throw new IllegalArgumentException("Capacity cannot be negative");
+		if (currentPassengers > capacity)
+			throw new IllegalArgumentException("Current Passengers cannot exceed Capacity");
+		else if (!trainLocations.containsKey(trainID))
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+		else if (!track.get(trainLocations.get(trainID).getLineName())
+				.getBlock(trainLocations.get(trainID).getBlockID()).isStation())
+			throw new IllegalStateException("Train: " + trainID + " is not at a station");
+		else {
+			TrainLocation dockedTrain = trainLocations.get(trainID);
+			TrackLine stationLine = track.get(dockedTrain.getLineName());
+			TrackBlock stationBlock = stationLine.getBlock(dockedTrain.getBlockID());
+			TrackStation station = stationLine.getStation(stationBlock.getStationName());
+
+			int alighting = station.getAlighting();
+			int boarding = station.getBoarding();
+
+			// Alight them
+			if (currentPassengers >= alighting) {
+				currentPassengers -= alighting;
+				station.alighted(alighting);
+			} else {
+				currentPassengers -= currentPassengers;
+				station.alighted(currentPassengers);
+			}
+
+			// Board them
+			if (currentPassengers < capacity) {
+				if (currentPassengers + boarding <= capacity) {
+					currentPassengers += boarding;
+					station.boarded(boarding);
+				} else {
+					currentPassengers = capacity;
+					station.boarded(capacity - currentPassengers);
+				}
+			}
+
+			return currentPassengers;
+		}
+
+	}
+
+	@Override
+	public double getTrainBlockLength(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getLength();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainBlockGrade(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getGrade();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainBlockSpeedLimit(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getSpdLmt();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainBlockElevation(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getElev();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainBlockTotalElevation(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getTotElev();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public boolean trainBlockHasBeacon(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).hasBeacon();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public String getTrainBlockBeaconData(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).getBeaconData();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public boolean trainBlockIsStation(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).isStation();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public boolean trainBlockIsUnderground(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).isUnderground();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public boolean trainBlockHasLight(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).hasLight();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public boolean trainBlockLightIsGreen(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return track.get(lineName).getBlock(blockID).isLightGreen();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	@Override
+	public double getTrainSuggestedSpeed(int trainID) throws TrackCircuitFailureException {
+		if (trainLocations.containsKey(trainID))
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+
+		String lineName = trainLocations.get(trainID).getLineName();
+		int blockID = trainLocations.get(trainID).getBlockID();
+		if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else if (!track.get(lineName).getBlock(blockID).hasControlAuthority())
+			return 0.0;
+		else
+			return track.get(lineName).getBlock(blockID).getSuggestedSpeed();
+
+	}
+
+	@Override
+	public int getTrainBlockAuthority(int trainID) throws TrackCircuitFailureException {
+		if (trainLocations.containsKey(trainID))
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+
+		String lineName = trainLocations.get(trainID).getLineName();
+		int blockID = trainLocations.get(trainID).getBlockID();
+		if (track.get(lineName).getBlock(blockID).isFailCircuit())
+			throw new TrackCircuitFailureException("Track Circuit is Failing for Block: " + blockID);
+		else if (!track.get(lineName).getBlock(blockID).hasControlAuthority())
+			return 0;
+		else
+			return track.get(lineName).getBlock(blockID).getAuthority();
+	}
+
+	@Override
+	public boolean trainHasPower(int trainID) {
+		if (trainLocations.containsKey(trainID)) {
+			String lineName = trainLocations.get(trainID).getLineName();
+			int blockID = trainLocations.get(trainID).getBlockID();
+			return !track.get(lineName).getBlock(blockID).isFailPower();
+		} else
+			throw new IllegalArgumentException("Train: " + trainID + " not found");
+	}
+
+	// ====MBO Methods====
+	@Override
+	public boolean getSwitchState(String lineName, int switchID) {
+		if (track.containsKey(lineName)) {
+			return track.get(lineName).getSwitch(switchID).isSwitchStraight();
+		} else
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+	}
+
+	// ===============UI CONTROLLER METHODS======================
+
 }
