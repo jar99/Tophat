@@ -123,6 +123,6 @@ public abstract class TrackSection {
 	}
 
 	// ========CALCULATIONS============================
-	abstract void calculateCoordinates(TrainLocation trainlocation);
+	abstract void calculateCoordinates(TrainLocation trainLocation);
 
 }
