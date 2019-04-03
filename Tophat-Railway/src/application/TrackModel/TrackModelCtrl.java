@@ -262,7 +262,7 @@ public class TrackModelCtrl implements Initializable {
 				trainIcons.remove(eTrain.getTrainID());
 
 				// Remove train from visible list
-				existingTrains.remove(eTrain);
+				existingTrains.remove(eTrain.getTrainID());
 
 				// Remove train from existing list
 				visibleTrains.remove(oldTrain);

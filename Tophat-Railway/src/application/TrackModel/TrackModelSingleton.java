@@ -171,11 +171,14 @@ public class TrackModelSingleton implements TrackModelInterface {
 			throw new IllegalArgumentException("Displacement cannot be negative");
 		else if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
-		else if (trainLocations.get(trainID).hasCrashed())
-			throw new TrainCrashedException("Train: " + trainID + " has crashed");
 
 		TrainLocation train = trainLocations.get(trainID);
 		TrackLine line = track.get(train.getLineName());
+
+		if (trainLocations.get(trainID).hasCrashed()) {
+			line.calculateCoordinates(train);
+			throw new TrainCrashedException("Train: " + trainID + " has crashed");
+		}
 
 		// Keep going until train has moved full distance
 		while (displacement > 0.0) {
