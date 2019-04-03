@@ -1,6 +1,6 @@
 package application.TrackModel;
 
-class TrackStation {
+public class TrackStation {
 
 	// Ticket sale information
 	final private String stationName;

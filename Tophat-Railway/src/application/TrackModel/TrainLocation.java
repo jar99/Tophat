@@ -1,6 +1,6 @@
 package application.TrackModel;
 
-class TrainLocation {
+public class TrainLocation {
 
 	// Train Information
 	final private int trainID;
