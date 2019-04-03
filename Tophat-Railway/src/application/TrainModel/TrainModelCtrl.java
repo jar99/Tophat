@@ -9,14 +9,13 @@ package application.TrainModel;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.function.Function;
-
-import javafx.animation.AnimationTimer;
-import javafx.beans.property.SimpleStringProperty;
+import application.TrainModel.UI.Converters;
+import application.TrainModel.UI.TableRow;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
@@ -25,12 +24,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 
 public class TrainModelCtrl implements Initializable {
-
-	// Links to your Singleton (NO TOUCHY!!)
-	private TrainModelSingleton mySin = TrainModelSingleton.getInstance();
-
+	
     TrainModel trainModel;
-    private AnimationTimer updateAnimation;
 
     @FXML
     TableView<TableRow> train_info;
@@ -44,23 +39,37 @@ public class TrainModelCtrl implements Initializable {
     @FXML
     ToggleButton emergencyButton;
     
+    @FXML
+    ListView<String> train_log;
+
+	private boolean shouldRun = false;
+    
     //TODO fix the emergency brake button
     @FXML
     public void clickEmergencyButton(ActionEvent event) {
-    	if(trainModel != null && !trainModel.getEmergancyBrakeState()) {
+    	if(trainModel != null && !trainModel.getEmergencyBrake()) {
     		toggleEmergencyBrake();
-//    		System.out.println("Emergency button pressed");
+    		trainModel.addTrainInformation("Test Emergency Button.");
+    		System.out.println("Emergency button pressed");
     		
     	}
     }
     
     private void toggleEmergencyBrake() {
-    	if(trainModel.getEmergancyBrakeState()) {
+    	if(trainModel.getEmergencyBrake()) {
     		emergencyButton.setStyle("-fx-background-color: #688bed; ");
     		//trainModel.setEmergancyBrake(true);
     	}else {
     		emergencyButton.setStyle("-fx-background-color: #ed412a; ");
     	}
+    }
+    
+    /**
+     * This method is called when the tab should be removed.
+     */
+    void shutdown() {
+        System.out.println("Stoped " + trainModel + " model window.");
+        pause();
     }
 
     // Starts the automatic update (NO TOUCHY!!)
@@ -73,24 +82,25 @@ public class TrainModelCtrl implements Initializable {
  		    }
  		});
  		setupTable();
- 		
- 		updateAnimation = new AnimationTimer() {
-
- 			@Override
- 			public void handle(long now) {
- 				update();
- 			}
- 		};
- 		updateAnimation.start();
-
+ 		run();
  	}
     
     // NOTE: This is where you get new information from your singleton
  	// You can read/change fx elements linked above
  	// WARNING: This assumes your singleton is updating its information
- 	private void update() {
- 		if(trainModel != null) {
+ 	void update() {
+ 		if(!shouldRun || trainModel == null) return;
+ 		if(train_log.isVisible()) {
+ 			while(!trainModel.trainLogEmpty()) {
+ 				String log = trainModel.poptrainInformation();
+ 				train_log.getItems().add(log);
+ 			}
+ 		}
+ 		
+ 		if(train_info.isVisible()) {
+// 			System.out.println("Updating: " + trainModel);
  			toggleEmergencyBrake(); // NOTE this could be better
+ 					
  			//Update table
  			trackAuthority.update(trainModel.getTrackAuthority());
  			trackSpeed.update(trainModel.getTrackSpeed());
@@ -98,111 +108,65 @@ public class TrainModelCtrl implements Initializable {
  			mboAuthority.update(trainModel.getMBOAuthority());
  			mboSpeed.update(trainModel.getMBOSpeed());
  			
- 			emergancyBrake.update(trainModel.getEmergancyBrakeState());
+ 			emergancyBrake.update(trainModel.getEmergencyBrake());
  			serviceBrake.update(trainModel.getServiceBrake());
  			power.update(trainModel.getPower());
  			speed.update(trainModel.getSpeed());
- 			waight.update(trainModel.getWeight());
- 			cord.update(trainModel.getCordinets());
+ 			weight.update(trainModel.getWeight());
+ 			cord.update(trainModel.getCoordinates());
  			
  			leftDoor.update(trainModel.getLeftDoorState());
  			rightDoor.update(trainModel.getRightDoorState());
  			
- 			passangers.update(trainModel.getPassangers());
+ 			passangers.update(trainModel.getPassengers());
  			temprature.update(trainModel.getTemperature());
  		}
  	}
  	
- 	public TableRow<Double> power, trackSpeed, mboSpeed, speed, temprature, waight;
- 	public TableRow<String> trainid, cord;
- 	
- 	public TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor;
- 	public TableRow<Integer> trackAuthority, mboAuthority, passangers;
- 	
- 	
  	void setTrain(TrainModel trainModel) {
- 		this.trainModel = trainModel;		
+ 		this.trainModel = trainModel;
+ 		trainid.update(trainModel.toString());
  	}
+ 	
+ 	private TableRow<Double> power, trackSpeed, mboSpeed, speed, temprature, weight;
+ 	private TableRow<String> trainid, cord;
+ 	
+ 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor;
+ 	private TableRow<Integer> trackAuthority, mboAuthority, passangers;
  	
  	private void setupTable() {
  		//TODO add more unit formatting
  		trainid = new TableRow<String>("Train ID", "N/A"); 
  		
  		trackAuthority = new TableRow<Integer>("Track Authority", 0);
- 		trackSpeed = new TableRow<Double>("Track Suggested Speed", 0.0,  (a) -> a + " MPH");
+ 		trackSpeed = new TableRow<Double>("Track Suggested Speed", 0.0,  (a) -> Converters.SpeedConverter(a));
  		
  		mboAuthority = new TableRow<Integer>("MBO Authority", 0);
- 		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0,  (a) -> a + " MPH");
+ 		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0,  (a) ->  Converters.SpeedConverter(a));
  		
- 		power = new TableRow<Double>("Power", 0.0,  (a) -> a + " KW");
- 		speed = new TableRow<Double>("Speed", 0.0, (a) -> a + " MPH");
- 		temprature = new TableRow<Double>("Temprature", 68.0, (a)-> tempratureConverter(a));
- 		waight = new TableRow<Double>("Waight", 0.0, (a) -> a + " LBS");
+ 		Converters<Double> energy = new Converters<>(" KW");
+ 		power = new TableRow<Double>("Power", 0.0,  (a) -> energy.concat(a));
+ 		speed = new TableRow<Double>("Speed", 0.0, (a) -> Converters.SpeedConverter(a));
+ 		temprature = new TableRow<Double>("Temprature", 68.0, (a)-> Converters.TempratureConverter(a));
+ 		weight = new TableRow<Double>("Weight", 0.0, (a) -> Converters.Waight(a));
  		cord = new TableRow<String>("Cord", "N/A");
- 		passangers = new TableRow<Integer>("Passangers", 0, (a) -> passangerFormat(a));
+ 		passangers = new TableRow<Integer>("Passangers", 0, (a) -> Converters.PassangerFormat(a));
  		
- 		leftDoor = new TableRow<Boolean>("Left Door", true, (a)-> doorState(a));
- 		rightDoor = new TableRow<Boolean>("Right Door", true, (a)-> doorState(a));
+ 		leftDoor = new TableRow<Boolean>("Left Door", true, (a)-> Converters.OpenOrClosed(a));
+ 		rightDoor = new TableRow<Boolean>("Right Door", true, (a)-> Converters.OpenOrClosed(a));
  		
- 		serviceBrake = new TableRow<Boolean>("Service Brake", true, (a)-> onOrOff(a));
- 		emergancyBrake = new TableRow<Boolean>("Emergency Brake", true, (a)-> onOrOff(a));
+ 		serviceBrake = new TableRow<Boolean>("Service Brake", true, (a)-> Converters.OnOrOff(a));
+ 		emergancyBrake = new TableRow<Boolean>("Emergency Brake", true, (a)-> Converters.OnOrOff(a));
  		
- 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, mboAuthority, mboSpeed, power, speed, serviceBrake, emergancyBrake, waight, cord, leftDoor, rightDoor, passangers, temprature);
+ 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, mboAuthority, mboSpeed, power, speed, serviceBrake, emergancyBrake, weight, cord, leftDoor, rightDoor, passangers, temprature);
  	}
+
+ 	void run() {
+		shouldRun = true;
+	}
  	
- 	private String doorState(boolean doorState) {
- 		if(doorState) return "Open";
- 		return "Closed";
- 	}
+	void pause() {
+		shouldRun = false;
+	}
  	
- 	private String onOrOff(boolean itemState) {
- 		if(itemState) return "On";
- 		return "Off";
- 	}
- 	
- 	private String passangerFormat(int passangers) {
- 		if(passangers == 0) return "None";
- 		if(passangers > 1) return passangers + " passanger";
- 		return passangers + " passangers";
- 	}
- 	
- 	private String tempratureConverter(double tempC) {
- 		return tempC + "°F";
- 	}
- 	
- 	public class TableRow<T>{
- 		private String name;
- 		private Function<T, String> formater;
- 		private SimpleStringProperty value;
- 		
- 		
- 		protected TableRow(String name, T value, Function<T, String> formater) {
- 			this.name = name;
- 			this.formater = formater;
- 			this.value = new SimpleStringProperty(formater.apply(value));
- 		}
- 		
- 		protected TableRow(String name, T value) {
- 			this.name = name;
- 			this.value = new SimpleStringProperty(value.toString());
- 		}
- 		
- 		protected void update(T value) {
- 			String result = formater != null ? formater.apply(value) : value.toString();
- 			if(this.value.getValue().equals(value)) return;
- 			this.value.setValue(result); 
- 		}
- 		
- 		public String getName() {
- 			return name;
- 		}
- 		
- 		public SimpleStringProperty getValue() {
- 			return value;
- 		}
- 		
- 		public String getValueS() {
- 			return value.getValue();
- 		}	
- 	}
 }
