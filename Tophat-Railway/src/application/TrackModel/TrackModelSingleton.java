@@ -169,18 +169,168 @@ public class TrackModelSingleton implements TrackModelInterface {
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
 		else if (trainLocations.get(trainID).hasCrashed())
 			throw new TrainCrashedException("Train: " + trainID + " has crashed");
-		else {
-			
-			// TODO: calculate train's new block and displacement
-			// TODO: update occupancy
-			// TODO: check that train does not hit another train
-			// TODO: check that train does not run over broken rail (block)
-			// TODO: stop train and say it crashed
-			// TODO: calculate train's new coordinates
-			// TODO: call Train Model & Track Controller remove function if train hits end
-			// of yard
+
+		TrainLocation train = trainLocations.get(trainID);
+		TrackLine line = track.get(train.getLineName());
+
+		// Keep going until train has moved full distance
+		while (displacement > 0.0) {
+
+			// Periodically refresh train / block data
+			int currentBlockID = train.getBlockID();
+			double currentBlockDisplacement = train.getBlockDisplacement();
+			boolean isDirectionAB = train.isDirectionAB();
+
+			double currentBlockLength = line.getBlock(currentBlockID).getLength();
+
+			// check that train does not run over broken rail (block)
+			if (line.getBlock(currentBlockID).isFailRail()) {
+				train.setCrashed();
+				throw new TrainCrashedException("Train: " + trainID + " has crashed on a broken rail");
+			}
+
+			// Direction on a block affects calculations
+			if (isDirectionAB) { // Train is going from A to B
+
+				// Check to see if we stay on this block
+				if (currentBlockLength > currentBlockDisplacement + displacement) {
+
+					// Check that a train isn't blocking us
+					if (trainIsBlocking(train, displacement))
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID);
+
+					// END CASE: Staying on this block requires a simple displacement update
+					train.setBlockDisplacement(currentBlockDisplacement + displacement);
+					displacement -= displacement;
+
+				}
+
+				// If we are going to the next block
+				else {
+
+					// Calculate the difference
+					double blockDifference = currentBlockLength - currentBlockDisplacement;
+
+					// Check that a train isn't blocking us
+					if (trainIsBlocking(train, blockDifference))
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID);
+
+					// Need to remove the difference before going to next block
+					displacement -= blockDifference;
+
+					// Get next block ID
+					try {
+						TrackJunction nextBlockJunction = line.getNextBlockJunction(isDirectionAB, currentBlockID);
+						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
+							// TODO: Call Track Controller Remove Train option
+							// TODO: Call Train Model Remove Train option
+							train.delete();
+							checkIfBlockStillOccupied(currentBlockID);
+						} else {
+							placeTrainOnNextBlock(train, nextBlockJunction);
+						}
+					} catch (SwitchStateException e) {
+						// Train Crashed at end of current block due to switch issue
+						train.setCrashed();
+						train.setBlockDisplacement(currentBlockLength);
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID + " at it's switch");
+					}
+
+				}
+
+			}
+
+			// TODO: the other direction (B to A) method
+			else {
+				// Check to see if we stay on this block
+				if (currentBlockDisplacement - displacement > 0.0) {
+
+					// Check that a train isn't blocking us
+					if (trainIsBlocking(train, displacement))
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID);
+
+					// END CASE: Staying on this block requires a simple displacement update
+					train.setBlockDisplacement(currentBlockDisplacement - displacement);
+					displacement -= displacement;
+
+				}
+
+				// If we are going to the next block
+				else {
+
+					// Calculate the difference
+					double blockDifference = currentBlockDisplacement;
+
+					// Check that a train isn't blocking us
+					if (trainIsBlocking(train, blockDifference))
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID);
+
+					// Need to remove the difference before going to next block
+					displacement -= blockDifference;
+
+					// Get next block ID
+					try {
+						TrackJunction nextBlockJunction = line.getNextBlockJunction(isDirectionAB, currentBlockID);
+						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
+							// TODO: Call Track Controller Remove Train option
+							// TODO: Call Train Model Remove Train option
+							train.delete();
+							checkIfBlockStillOccupied(currentBlockID);
+						} else {
+							placeTrainOnNextBlock(train, nextBlockJunction);
+						}
+					} catch (SwitchStateException e) {
+						// Train Crashed at end of current block due to switch issue
+						train.setCrashed();
+						train.setBlockDisplacement(0.0);
+						throw new TrainCrashedException(
+								"Train: " + trainID + " has crashed on Block: " + currentBlockID + " at it's switch");
+					}
+
+				}
+			}
 		}
 
+		// calculate train's new coordinates
+		line.calculateCoordinates(train);
+
+		// TODO: update occupancy
+
+		// TODO: stop train and say it crashed
+
+	}
+
+	private void placeTrainOnNextBlock(TrainLocation train, TrackJunction nextBlockJunction) {
+		// TODO set the following according to the junction and block data
+		// directionAB
+		// sectionID
+		// blockID
+		// blockDisplacement
+		
+		//TODO: update occupancy (current and next)
+
+	}
+
+	private void checkIfBlockStillOccupied(int currentBlockID) {
+		// TODO Check to see if any trains on this block
+		// If there are set it to Occupied, otherwise, set it to unoccupied.
+		// Ignore 'deleted' trains
+
+	}
+
+	private boolean trainIsBlocking(TrainLocation train, double displacement) {
+		// NOTE: depends on direction
+		// TODO Check to see if any OTHER train is on the same block
+		// TODO If so, check that that train is not between the displacement and an end
+		// point
+		// TODO If so, set both trains locations to that of the OTHER train, mark them
+		// as crashed, and return true
+		return false;
 	}
 
 	@Override

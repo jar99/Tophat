@@ -82,7 +82,7 @@ class TrainLocation {
 	}
 
 	public void setBlockID(int blockID) {
-		if (blockID < 0)
+		if (blockID < -1)
 			throw new IllegalArgumentException("Block ID cannot be less than 0");
 		this.blockID = blockID;
 	}

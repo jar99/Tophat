@@ -25,14 +25,14 @@ public class TrackLine {
 	}
 
 	// ===============GET METHODS=======================
-	
+
 	public TrackSection getSection(char sectionID) {
 		if (sections.containsKey(sectionID)) {
 			return sections.get(sectionID);
 		} else
 			throw new IllegalArgumentException(lineName + " line does not contain Section: " + sectionID);
 	}
-	
+
 	public TrackStation getStation(String stationName) {
 		if (stations.containsKey(stationName)) {
 			return stations.get(stationName);
@@ -57,7 +57,30 @@ public class TrackLine {
 	}
 
 	public TrackSection getRailYard() {
-		// TODO Auto-generated method stub
-		return null;
+		return getSection('0'); // NOTE: 0 will represent both the yard section and block
 	}
+
+	public TrackJunction getNextBlockJunction(boolean isDirectionAB, int currentBlockID) throws SwitchStateException {
+		// return the next BLOCK junction. use switch first if necessary
+		TrackJunction nextJunction;
+		if (isDirectionAB) { // B if going A to B
+			nextJunction = blocks.get(currentBlockID).getJunctionB();
+		}
+
+		else { // A if going B to A
+			nextJunction = blocks.get(currentBlockID).getJunctionA();
+		}
+
+		while (nextJunction.isSwitch()) { // Need to get next junction if this one is a switch
+			nextJunction = switches.get(nextJunction.getID()).getNextJunction(nextJunction.getEntryPoint());
+		}
+
+		return nextJunction;
+	}
+
+	public void calculateCoordinates(TrainLocation train) {
+		// TODO Just call the section calculation method associated with the blockid
+
+	}
+
 }
