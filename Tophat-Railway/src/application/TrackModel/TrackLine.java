@@ -79,8 +79,14 @@ public class TrackLine {
 	}
 
 	public void calculateCoordinates(TrainLocation train) {
-		// TODO Just call the section calculation method associated with the blockid
+		// Just call the section calculation method
+		char sectionID = train.getSectionID();
+		getSection(sectionID).calculateCoordinates(train);
 
+	}
+
+	public String getLineName() {
+		return lineName;
 	}
 
 }

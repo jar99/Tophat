@@ -93,7 +93,7 @@ public class TrackBlock {
 		return lineName;
 	}
 
-	public char getsectionID() {
+	public char getSectionID() {
 		return sectionID;
 	}
 
