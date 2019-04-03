@@ -29,30 +29,38 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 	// =====================================
 
 	// NOTE: Put your data objects here
-	private String speed, power, temperature;
+	private String power;
+	Double temperature;
 	private int trainID;
-	private int numSpeed, numPower, numTemperature;
-	private boolean emergencyBrake, serviceBrake;
+	double numSpeed;
+	private int numPower, numTemperature, numOfTrains, trainStatus;
+	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode;
+	private double speed;
 	
 	//create hashtable for each individual train
 	// public void makeTrain(put information in){ 
 	
-	private Hashtable <Integer, TrainCtrlInterface> trainCtrlHashTable;
+	private Hashtable <Integer, Train> trainCtrlHashTable;
 	
 	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 	Train train;
 	
 
 	// NOTE: Put some functions here
+	//Hardware will use signalton and get information
+	//Need to be able to depict different train
+	//switch between software or hardware..hardware needs approved
+	
 	
 	//Check TrainID and remove HashTable
-	public void getTrains(){
+	public void createTrain(){
 		for(Integer trainID: trnModSin.getAllTrainIDs()) {
 			if(!trainCtrlHashTable.contains(trainID)) {
-				TrainCtrlInterface trainCtrlInterface = new Train(trainID);
-				trainCtrlHashTable.put(trainID, trainCtrlInterface);
+				Train train = new Train(trainID);
+				trainCtrlHashTable.put(trainID, train);
 			}
 		}
+		
 		for(Integer trainID: trainCtrlHashTable.keySet()) {
 			if(!trnModSin.getAllTrainIDs().contains(trainID)) {
 				trainCtrlHashTable.remove(trainID);
@@ -61,39 +69,25 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 	}
 	
 	//Sends TrainID as INTEGER 
-	public int getTrainID() {
-		return trainID;
+	public Train getTrainID(int trainID) {
+		return trainCtrlHashTable.get(trainID);
 	}
 	
 	public void setTrainID(int trainID) {
 		this.trainID = trainID;
 	}
 	
-	public void getSpeed() {
-		for(Integer speed: trnModSin.getAllTrainIDs()) {
-			if(!trainCtrlHashTable.contains(speed)) {
-				TrainCtrlInterface trainCtrlInterface = new Train(speed);
-				trainCtrlHashTable.put(speed, trainCtrlInterface);
-			}
+	//Send Speed as DOUBLE 
+	public double getSpeed() {
+		if(speed >= 0) {
+			return speed;
 		}
-	}
-	
-	//Send Speed as STRING
-	/*public String getSpeed(){
+		
 		return speed;
-	}*/
+	}
 	
-	public void setSpeed(String speed) {
+	public void setSpeed(double speed) {
 		this.speed = speed;
-	}
-	
-	//Send Speed as INTEGER 
-	public int getnumSpeed() {
-		return numSpeed;
-	}
-	
-	public void setnumSpeed(int numSpeed) {
-		this.numSpeed = numSpeed;
 	}
 	
 	//Send Power as STRING
@@ -114,22 +108,13 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		this.numPower = numPower;
 	}
 	
-	//Sends Temperature as STRING
-	public String getTemperature() {
+	//Sends Temperature as DOUBLE
+	public double getTemperature() {
 		return temperature;
 	}
 	
-	public void setTemperature(String temperature) {
+	public void setTemperature(double temperature) {
 		this.temperature = temperature;
-	}
-	
-	public int getnumTemperature() {
-		return numTemperature;
-	}
-	
-	//Set Temperature as INTEGER
-	public void setnumTemperature(int numTemperature) {
-		this.numTemperature = numTemperature;
 	}
 	
 	//Boolean SeriveBrake
@@ -150,16 +135,64 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		this.emergencyBrake = emergencyBrake;
 	}
 	
+	/**
+	 * 1 = Engine Failure,
+	 * 2 = Brake Failure,
+	 * 3 = Signal Lost
+	 * @return
+	 */
+	public int getTrainStatus() {
+		return trainStatus;
+	}
+	
+	public void setTrainStatus(int trainStatus) {
+		this.trainStatus = trainStatus;
+	}
+	
+	
+	public boolean getLeftDoor() {
+		return leftDoor;
+	}
+	
+	public void setLeftDoor(boolean leftDoor) {
+		this.leftDoor = leftDoor;
+	}
+	
+	public boolean getRightDoor() {
+		return rightDoor;
+	}
+	
+	public void setRightDoor(boolean rightDoor) {
+		this.rightDoor = rightDoor;
+	}
+	
 	//Drive Mode
+	public boolean getDriveMode() {
+		return driveMode;
+	}
+	
+	public void setDriveMode(boolean driveMode) {
+		this.driveMode = driveMode;
+	}
 	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
+	
+	private TrainInterface trainMod; //Train Model Interface
 	public void update() {
-		// Example: get the count from a singleton and replace yours with the largest
 		
-		speed = trnModSin.getSpeed();
+		//check for NULL
+		speed = trainMod.getSpeed();
+		
+		leftDoor = trainMod.getLeftDoorState();
+		
+		rightDoor = trainMod.getRightDoorState();
+		
+		
+		
+		
 	}
 
 }

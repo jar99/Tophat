@@ -6,30 +6,34 @@ public class Train implements TrainCtrlInterface {
 	
 	private TrainControllerSingleton mySin = TrainControllerSingleton.getInstance();
 
+	//do power calculation in here
 	
-	private int speed, power, temperture, trainID;
-	private boolean serviceBrake, emergencyBrake, lights, rightDoor, leftDoor;
-	private boolean manual = false, automatic = true, engineStatus, brakeStatus, signalStatus;
+	private int speed, power, trainID;
+	private boolean serviceBrake, emergencyBrake, lights, rightDoor, leftDoor, driveStatus;
+	private boolean manual = false, automatic = true, engineStatus = false, brakeStatus = false, signalStatus = false;
 	
-	
-	public Train(int trainID) {
+
+	public Train(Integer trainID) {
 		this.trainID = trainID;
 	}
-	
+
 	public void trianID(int trainID) {
-		mySin.getTrainID();
+		mySin.getTrainID(trainID);
 		
 	}
-	public void Speed(int speed) {
-		 mySin.getnumSpeed();
+	public void Speed(double speed) {
+		if(speed == 0) {
+			mySin.setSpeed(0);
+		}else
+			mySin.setSpeed(speed);
 	}
 	
 	public void Power(int Power) {
 		mySin.getnumPower();
 	}
 	
-	public void temperture(int temperture) {
-		mySin.getnumTemperature();
+	public void temperature(double temperature) {
+		mySin.getTemperature();
 	}
 	
 	public void serviceBrake(boolean serviceBrake) {
@@ -40,12 +44,33 @@ public class Train implements TrainCtrlInterface {
 		mySin.getemergencyBrake();
 	}
 	
-	public void driveMode(boolean driveMode) {
-		//driveMode = mySin.
-		if(driveMode == true) {
-			manual = true;
-		}else
-			automatic = true;
+	/**
+	 * true = Manual
+	 * False = Automatic
+	 * @param drvieStatus
+	 */
+	public void driveMode(boolean drvieMode) {
+			mySin.getDriveMode();
+	}
+	
+	public void trainStatus(int trainStatus) {
+		trainStatus = mySin.getTrainStatus();
+		switch(trainStatus) {
+			case 1:
+				engineStatus = true;
+			case 2:
+				brakeStatus = true;
+			case 3:
+				signalStatus = true;
+		}
+	}
+	
+	public void leftDoor(boolean leftDoor) {
+		leftDoor = mySin.getLeftDoor();
+	}
+	
+	public void rightDoor(boolean rightDoor) {
+		rightDoor = mySin.getRightDoor();
 	}
 	
 }
