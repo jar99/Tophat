@@ -1,6 +1,8 @@
 package application.TrackModel;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -31,6 +33,8 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 	final private HashMap<Integer, TrainLocation> trainLocations = new HashMap<Integer, TrainLocation>();
+	private int currentBlockID = -1;
+	private String currentLineName = null;
 
 	// ===============UPDATE METHOD======================
 	public void update() {
@@ -308,18 +312,18 @@ public class TrackModelSingleton implements TrackModelInterface {
 		String lineName = train.getLineName();
 		TrackBlock currentBlock = track.get(lineName).getBlock(train.getBlockID());
 		TrackBlock nextBlock = track.get(lineName).getBlock(nextBlockJunction.getID());
-		
+
 		// Set the following according to the junction and block data directionAB
 		if (nextBlockJunction.getEntryPoint() == 0)
 			train.setDirectionAB(true);
 		else
 			train.setDirectionAB(false);
-		
+
 		// blockID
 		train.setBlockID(nextBlock.getBlockID());
 		// sectionID
 		train.setSectionID(nextBlock.getSectionID());
-		
+
 		// blockDisplacement
 		if (nextBlockJunction.getEntryPoint() == 0)
 			train.setBlockDisplacement(0.0);
@@ -614,5 +618,41 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	// ===============UI CONTROLLER METHODS======================
+	public void shiftBlockLeft() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void shiftBlockRight() {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void toggleCBFailRail() {
+		track.get(currentLineName).getBlock(currentBlockID).toggleFailRail();
+
+	}
+
+	public void toggleCBFailCircuit() {
+		track.get(currentLineName).getBlock(currentBlockID).toggleFailCircuit();
+
+	}
+
+	public void toggleCBFailPower() {
+		track.get(currentLineName).getBlock(currentBlockID).toggleFailPower();
+
+	}
+
+	public boolean hasALine() {
+		return currentBlockID != -1 && currentLineName != null;
+	}
+
+	public TrackBlock getCurrentBlock() {
+		return track.get(currentLineName).getBlock(currentBlockID);
+	}
+
+	public Map<Integer, TrainLocation> getTrainMap() {
+		return trainLocations;
+	}
 
 }
