@@ -153,14 +153,14 @@ public interface TrackModelInterface {
 	public double getTrainYCoordinate(int trainID);
 
 	/**
-	 * Get change in number of passengers for a train
+	 * Allow Passengers to Board and Alight at Station
 	 * 
 	 * @param trainID           - the id for the train
 	 * @param currentPassengers - current number of passengers on the train
-	 * @param capcity           - maximum number of passengers for that train
-	 * @return (+) if more board; (-) if more alight
+	 * @param capacity           - maximum number of passengers for that train
+	 * @return new number of Passengers
 	 */
-	public int getTrainPassengerChange(int trainID, int currentPassengers, int capacity);
+	public int stationPassengerExchange(int trainID, int currentPassengers, int capacity);
 
 	/**
 	 * Get block Length (meters) for train
