@@ -10,8 +10,8 @@ package application.TrainModel;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
-
 import application.TrackModel.TrackBlock;
+import application.TrainController.TrainControllerSingleton;
 
 public class TrainModelSingleton implements TrainModelInterface {
 
@@ -30,17 +30,33 @@ public class TrainModelSingleton implements TrainModelInterface {
 		return instance;
 	}
 
+	private boolean disabled = false;
+	
+	private TrainControllerSingleton trainControllerSingleton = TrainControllerSingleton.getInstance();
+	
+	public boolean toggleDisable() {
+		return disabled = !disabled;
+	}
+
 	// =====================================
 
 	private Hashtable<Integer, TrainModel> trainModelHashTable;
 	
-    public TrainInterface createTrain(int trainID) {  	    
-        return trainModelHashTable.putIfAbsent(trainID, new TrainModel(trainID));
+    public TrainInterface createTrain(int trainID) {  	
+    	if(trainExists(trainID)) return null;
+    	TrainModel train = new TrainModel(trainID);
+//    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
+    	
+        return trainModelHashTable.putIfAbsent(trainID, train);
     }
 
     public void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
-        TrainModel train = new TrainModel(trainID, x, y, currentBlock);
-        trainModelHashTable.put(trainID, train);
+    	if(trainExists(trainID));
+    	System.out.println("Created a new train " + trainID);
+    	TrainModel train = new TrainModel(trainID, x, y, currentBlock);
+//    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
+    	
+    	trainModelHashTable.put(trainID, train);
     }
     
     public boolean trainExists(int trainID) {
@@ -51,9 +67,10 @@ public class TrainModelSingleton implements TrainModelInterface {
         return trainModelHashTable.get(trainID);
     }
     
-	public void removeTrain(int tranID) {
+	public boolean removeTrain(int tranID) {	
 		TrainModel train = trainModelHashTable.remove(tranID);
 		if(train != null) train.remove();
+		return train != null;
 	}
 	
 	public boolean dispatchTrain(int trainID) {
@@ -72,7 +89,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	}
 
 	@Override
-	public Set<Integer> getAllTrainIDs() {
+	public final Set<Integer> getAllTrainIDs() {
 		return trainModelHashTable.keySet();
 	}
 
@@ -81,11 +98,11 @@ public class TrainModelSingleton implements TrainModelInterface {
         return trainModelHashTable.values();
     }
     
-    @Deprecated
     /**
      * Gets the speed of the first train.
      * @return
      */
+    @Deprecated
     public String getSpeed() {
     	
     	for(TrainModel train : trainModelHashTable.values()) {
@@ -100,6 +117,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 	public void update() {
+		if(disabled) return;
 		
 		for(TrainModel trainModel : trainModelHashTable.values()) {
 			//Any code to call for each train model update.
