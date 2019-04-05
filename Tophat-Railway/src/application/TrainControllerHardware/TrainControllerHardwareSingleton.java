@@ -1,6 +1,9 @@
 package application.TrainControllerHardware;
 
 import com.fazecast.jSerialComm.*;
+import application.TrainModel.TrainModelSingleton;
+import application.TrainModel.TrainInterface;
+
 
 public class TrainControllerHardwareSingleton{
 
@@ -15,14 +18,14 @@ public class TrainControllerHardwareSingleton{
 	}
 	
 	// getters and setters
-	private String drivingMode;
-	private String gpsLocation;
-	private String trainID;
-	private String ctcSpeed, ctcAuth, mboSpeed, mboAuth;
-	private String speed, power, ki, kp;
-	private String brake, eBrake;
-	private String engineStatus, brakeStatus, signalStatus;
-	private String lights, lDoor, rDoor, temp;
+	private boolean drivingMode;
+	private double x, y;
+	private int trainID;
+	private double ctcSpeed, ctcAuth, mboSpeed, mboAuth;
+	private double speed, power, ki, kp;
+	private boolean brake, eBrake;
+	private boolean engineStatus, brakeStatus, signalStatus;
+	private boolean lights, lDoor, rDoor, temp;
 	
 	/**
 	 * Controls Singleton connections, doesn't update UI
