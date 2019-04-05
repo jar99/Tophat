@@ -1,6 +1,7 @@
 package application.TrainController;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
@@ -18,7 +19,7 @@ public class TrainControllerCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
 	private TrainControllerSingleton mySin = TrainControllerSingleton.getInstance();
-	private Train train;
+
 
 	private AnimationTimer updateAnimation;
 
@@ -41,9 +42,10 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	private Circle engineStatus, brakeStatus, signalStatus;
 	String inputSpeed, inputPower, inputKi, inputKp, inputTemp, setDriveStatus;
-	double numSpeed, temperature;
+	double temperature, modelSpeed = 0, ctrlSpeed;
+	DecimalFormat mdlSpeed = new DecimalFormat("#.##");
 	int numPower, trainStatus;
-	boolean srvBrake, emgrBrake, driveManual, driveAutomatic, lightStatus, driveMode;
+	boolean srvBrake, emgrBrake, driveManual, driveAutomatic, lightStatus, driveMode, engineFail, brakeFail, signalFail;
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
@@ -51,9 +53,15 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	public void Speed() {
 		inputSpeed = speed.getText();
-		numSpeed = Double.parseDouble(inputSpeed);
-		mySin.setSpeed(numSpeed);
-		actualSpeed.setText(inputSpeed + "mph");
+		if(modelSpeed == 0) {
+			//mySin.setSpeed(ctrlSpeed);
+			ctrlSpeed = Double.parseDouble(inputSpeed);
+			actualSpeed.setText(inputSpeed + "mph");
+		}else if(modelSpeed > 0) {
+			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
+		}else
+			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
+		//mySin.setSpeed(ctrlSpeed);
 	}
 	
 	
@@ -67,10 +75,12 @@ public class TrainControllerCtrl implements Initializable {
 	
 	@FXML
 	public void serviceBrake() {
+		//breaking distance 
+		//calculate a safe braking distance
 		if(serviceBrake.isSelected()) {
 			mySin.setServiceBrake(true);
 			serviceBrake.setText("Slowing down Train.");
-			for(double i = numSpeed; i >= 0; i--) {
+			for(double i = ctrlSpeed; i >= 0; i--) {
 				actualSpeed.setText(i + "mph");
 			}
 		}else
@@ -155,20 +165,22 @@ public class TrainControllerCtrl implements Initializable {
 		
 	}
 	
-	public void trainStatus() {
-		trainStatus = mySin.getTrainStatus();
-		if(trainStatus == 1) {
-			engineStatus.setFill(javafx.scene.paint.Color.RED);
-			mySin.setTrainStatus(1);
-		}else if(trainStatus == 2) {
-			brakeStatus.setFill(javafx.scene.paint.Color.RED);
-			mySin.setTrainStatus(2);
-		}else if(trainStatus == 3) {
-			signalStatus.setFill(javafx.scene.paint.Color.RED);
-			mySin.setTrainStatus(3);
-		}
+	
+	public void engineStatus() {
+		mySin.setSpeed(0);
+		engineStatus.setFill(javafx.scene.paint.Color.RED);
+		
 	}
 	
+	public void brakeStatus() {
+		mySin.setSpeed(0);
+		brakeStatus.setFill(javafx.scene.paint.Color.RED);
+	}
+	
+	public void signalStatus() {
+		mySin.setSpeed(0);
+		signalStatus.setFill(javafx.scene.paint.Color.RED);
+	}	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -194,8 +206,30 @@ public class TrainControllerCtrl implements Initializable {
 	//	int count = mySin.getIncrement();
 	//	int decrease = mySin.getDecrease();
 		confirmPower.setOnAction(e -> Power());
-		trainStatus();
-		Speed();
+		
+		modelSpeed = mySin.getSpeed();
+		if(modelSpeed == 0) {
+			mySin.setSpeed(ctrlSpeed);
+			Speed();
+		}else if(modelSpeed > 0) {
+			mySin.setSpeed(modelSpeed);
+			ctrlSpeed = mySin.getSpeed();
+
+		}
+		
+		engineFail = mySin.getEngineStatus();
+		brakeFail = mySin.getBrakeStatus();
+		signalFail = mySin.getSignalStatus();
+		if(engineFail == true) {
+			engineStatus();
+		}
+		if(brakeFail == true) {
+			brakeStatus();
+		}
+		if(signalFail == true) {
+			signalStatus();
+		}
+		
 		//actualSpeed.setText(mySin.getSpeed());
 		//driveStatus.setOnAction(e -> driveStatus());
 		

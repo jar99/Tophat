@@ -21,6 +21,7 @@ public interface TrainCtrlInterface {
 	public void leftDoor(boolean leftDoor);
 	
 	public void rightDoor(boolean rightDoor);
+///new branch
 	
 	/**
 	 * true = Manual
@@ -35,7 +36,25 @@ public interface TrainCtrlInterface {
 	 * 3 = Signal Lost
 	 * @param trainStatus
 	 */
-	public void trainStatus(int trainStatus);
+	//public void trainStatus(int trainStatus);
+	
+	/**
+	 * Engine has failed:(
+	 * @param engineFailure
+	 */
+	public void engineStatus(boolean engineFailure);
+	
+	/**
+	 * The brakes went bad:'(
+	 * @param brakeFailure
+	 */
+	public void brakeStatus(boolean brakeFailure);
+	
+	/**
+	 * What's the fucking wifi password?!
+	 * @param signalFailure
+	 */
+	public void signalStatus(boolean signalFailure);
 	
 	
 }

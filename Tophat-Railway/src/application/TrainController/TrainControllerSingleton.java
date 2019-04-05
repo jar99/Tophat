@@ -34,7 +34,7 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 	private int trainID;
 	double numSpeed;
 	private int numPower, numTemperature, numOfTrains, trainStatus;
-	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode;
+	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode, engineFail, brakeFail, signalFail;
 	private double speed;
 	
 	//create hashtable for each individual train
@@ -149,6 +149,44 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		this.trainStatus = trainStatus;
 	}
 	
+	///////////////////TRAIN FAILURES//////////////////////
+	/**
+	 * Engine Failure
+	 * @return
+	 */
+	public boolean getEngineStatus(){
+		return engineFail;
+	}
+	
+	public void setEngineStatus(boolean engineFail) {
+		this.engineFail = engineFail;
+	}
+	
+	/**
+	 * Brake Failure
+	 * @return
+	 */
+	public boolean getBrakeStatus(){
+		return brakeFail;
+	}
+	
+	public void setBrakeStatus(boolean brakeFail) {
+		this.brakeFail = brakeFail;
+	}
+	
+	/**
+	 * Signal Failure
+	 * @return
+	 */
+	public boolean getSignalStatus(){
+		return signalFail;
+	}
+	
+	public void setSignalStatus(boolean signalFail) {
+		this.signalFail = signalFail;
+	}
+	
+//////////////////////END OF TRAIN SHIT/////////////////////////////////////////	
 	
 	public boolean getLeftDoor() {
 		return leftDoor;
@@ -190,6 +228,10 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		
 		rightDoor = trainMod.getRightDoorState();
 		
+		engineFail = trainMod.engineState();
+		//sadf
+		
+		//trainStatus = trainMod.
 		
 		
 		
