@@ -1,67 +1,116 @@
 package application.TrackModel;
 
 public class TrackBlock {
+	// Block Identification
+	final private String lineName;
+	final private char sectionID;
+	final private int blockID;
 
-	private char line;
-	private int ID;
-	
-	private double length;
-	private double grade;
-	private double spdLmt;
-	private double elev;
-	private double totElev;
-	
+	// Junctions
+	final private TrackJunction junctionA;
+	final private TrackJunction junctionB;
+
+	// Measurable Attributes
+	final private double length;
+	final private double grade;
+	final private double spdLmt;
+	final private double elev;
+	final private double totElev;
+
+	// String Attributes
+	final private String stationName;
+	final private String beaconData;
+
+	// Boolean Attributes
+	final private boolean isStation;
+	final private boolean hasBeacon;
+	final private boolean isUnderground;
+	final private boolean isCrossing;
+	final private boolean hasLight;
+	final private boolean isBidirectional; //Note: A -> B is default
+
+	// Boolean Controls
 	private boolean isOccupied = false;
-	private boolean isUnderground = false;
-	private boolean isStation = false;
-	private boolean isCrossing = false;
-	private boolean isBeacon = false;
 	private boolean isHeated = false;
-	private boolean isSwitch = false;
-	
-	//: Create 3 booleans for failure status
+	private boolean isLightGreen = true;
+
+	// Speed, Authority, and Control Values
+	private double suggestedSpeed = 0.0;
+	private int authority = 0;
+	private boolean controlAuthority = false;
+
+	// Active Failure Booleans
 	private boolean failRail = false;
 	private boolean failCircuit = false;
 	private boolean failPower = false;
-	
-	
-	//: Add start and end location for track
-	private double startX;
-	private double startY;
-	private double endX;
-	private double endY;
-	
-	
-	//: Speed and Authority Values
-	private double speed;
-	private int authority;
-	private boolean controlAuthority;
-	
-	
-	public TrackBlock(char line, int ID, 
-						double length, double grade, double spdLmt, double elev, double totElev, 
-						double startX, double startY, double endX, double endY) {
-		this.line = line;
-		this.ID = ID;		
+
+	// ===========CONSTRUCTORS============================
+
+	//TODO: MEH - check arguments (construction)
+	public TrackBlock(String lineName, char sectionID, int blockID, TrackJunction junctionA, TrackJunction junctionB,
+			double length, double grade, double spdLmt, double elev, double totElev, String stationName,
+			String beaconData, boolean isUnderground, boolean isCrossing, boolean hasLight, boolean isBidirectional) {
+		
+		this.lineName = lineName;
+		this.sectionID = sectionID;
+		this.blockID = blockID;
+		this.junctionA = junctionA;
+		this.junctionB = junctionB;
 		this.length = length;
 		this.grade = grade;
 		this.spdLmt = spdLmt;
 		this.elev = elev;
 		this.totElev = totElev;
-		
-		this.startX = startX;
-		this.startY = startY;
-		this.endX = endX;
-		this.endY = endY;
+
+		if (stationName == null && beaconData == null) {
+			this.isStation = false;
+			this.hasBeacon = false;
+		} else if (stationName != null && beaconData != null) {
+			this.isStation = true;
+			this.hasBeacon = true;
+		} else
+			throw new IllegalArgumentException("Only a Station can have a Beacon");
+
+		this.stationName = stationName;
+		this.beaconData = beaconData;
+		this.isUnderground = isUnderground;
+		this.isCrossing = isCrossing;
+		this.hasLight = hasLight;
+		this.isBidirectional = isBidirectional;
 	}
 
+	// ==========GET METHODS=========================
+
+	// Naming
 	public String getName() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(line);
-		sb.append(ID);
+		sb.append(sectionID);
+		sb.append(blockID);
 		return sb.toString();
 	}
 
+	public String getLineName() {
+		return lineName;
+	}
+
+	public char getSectionID() {
+		return sectionID;
+	}
+
+	public int getBlockID() {
+		return blockID;
+	}
+
+	// Junctions
+	public TrackJunction getJunctionA() {
+		return junctionA;
+	}
+
+	public TrackJunction getJunctionB() {
+		return junctionB;
+	}
+
+	// Measurable Attributes
 	public double getLength() {
 		return length;
 	}
@@ -82,45 +131,67 @@ public class TrackBlock {
 		return totElev;
 	}
 
-	public boolean isOccupied() {
-		return isOccupied;
+	// String Attributes
+	public String getStationName() {
+		return stationName;
+	}
+
+	public String getBeaconData() {
+		return beaconData;
+	}
+
+	// Boolean Attributes
+	public boolean isStation() {
+		return isStation;
+	}
+
+	public boolean hasBeacon() {
+		return hasBeacon;
 	}
 
 	public boolean isUnderground() {
 		return isUnderground;
 	}
 
-	public boolean isStation() {
-		return isStation;
-	}
-
 	public boolean isCrossing() {
 		return isCrossing;
 	}
 
-	public boolean isBeacon() {
-		return isBeacon;
+	public boolean hasLight() {
+		return hasLight;
+	}
+	
+	public boolean isBidirectional() {
+		return isBidirectional;
+	}
+
+	// Boolean Controls
+	public boolean isOccupied() {
+		return isOccupied;
 	}
 
 	public boolean isHeated() {
 		return isHeated;
 	}
 
-	public boolean isSwitch() {
-		return isSwitch;
+	public boolean isLightGreen() {
+		return isLightGreen;
 	}
 
-	public void setOccupied() {
-		isOccupied = true;
-	}
-	
-	public void unsetOccupied() {
-		isOccupied = false;
+	// Speed, Authority, and Control Values
+	public double getSuggestedSpeed() {
+		return suggestedSpeed;
 	}
 
+	public int getAuthority() {
+		return authority;
+	}
 
-	
-	//: Create 3 get methods and 3 toggle methods for failure status
+	public boolean hasControlAuthority() {
+		return controlAuthority;
+	}
+
+	// Active Failure Booleans
 	public boolean isFailRail() {
 		return failRail;
 	}
@@ -133,6 +204,45 @@ public class TrackBlock {
 		return failPower;
 	}
 
+	// ============SET METHODS==============================
+
+	// Boolean Controls
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;
+	}
+
+	public void setHeated(boolean isHeated) {
+		this.isHeated = isHeated;
+	}
+
+	public void setGreen() {
+		isLightGreen = true;
+	}
+
+	public void setRed() {
+		isLightGreen = false;
+	}
+
+	// Speed, Authority, and Control Values
+	public void setSuggestedSpeed(double suggestedSpeed) {
+		if (suggestedSpeed < 0.0)
+			throw new IllegalArgumentException("Suggested Speed cannot be negative");
+		else
+			this.suggestedSpeed = suggestedSpeed;
+	}
+
+	public void setAuthority(int authority) {
+		if (authority < 0)
+			throw new IllegalArgumentException("Authority cannot be negative");
+		else
+			this.authority = authority;
+	}
+
+	public void setControlAuthority(boolean controlAuthority) {
+		this.controlAuthority = controlAuthority;
+	}
+
+	// Active Failure Booleans
 	public void toggleFailRail() {
 		failRail = !failRail;
 	}
@@ -144,48 +254,4 @@ public class TrackBlock {
 	public void toggleFailPower() {
 		failPower = !failPower;
 	}
-
-	
-	//: Get method for endpoints
-	public double getStartX() {
-		return startX;
-	}
-
-	public double getStartY() {
-		return startY;
-	}
-
-	public double getEndX() {
-		return endX;
-	}
-
-	public double getEndY() {
-		return endY;
-	}
-	
-	
-	public void setSpeed(double speed) {
-		this.speed = speed;
-	}
-	
-	public void setAuthority(int authority) {
-		this.authority = authority;
-	}
-	
-	public void setControlAuthority(boolean controlAuthority) {
-		this.controlAuthority = controlAuthority;
-	}
-	
-	public double getSpeed() {
-		return speed;
-	}
-	
-	public int getAuthority() {
-		return authority;
-	}
-	
-	public boolean getControlAuthority() {
-		return controlAuthority;
-	}
-	
 }

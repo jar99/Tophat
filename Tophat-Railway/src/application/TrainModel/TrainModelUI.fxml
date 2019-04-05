@@ -35,9 +35,17 @@
             <CheckBox mnemonicParsing="false" text="Brake Failure" />
             <CheckBox mnemonicParsing="false" text="Door Failure" />
             <CheckBox mnemonicParsing="false" text="Signal Pickup Failure" />
+            <ListView fx:id="train_log" prefHeight="200.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets left="2.0" right="2.0" />
+               </padding>
+            </ListView>
          </children>
          <BorderPane.margin>
-            <Insets left="5.0" />
+            <Insets left="5.0" right="5.0" />
          </BorderPane.margin>
       </VBox>
    </right>

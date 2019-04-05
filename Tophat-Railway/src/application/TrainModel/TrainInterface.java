@@ -10,6 +10,13 @@ package application.TrainModel;
 
 public interface TrainInterface {
 	
+	
+	void setPower(double power);
+	
+	double getPower();
+	
+	boolean hasPower();
+	
 	/**
 	 * Function returns the speed of the train.
 	 * @return double of speed in kph
@@ -26,21 +33,21 @@ public interface TrainInterface {
 	 * Function to get the number passengers on the train.
 	 * @return int number of passengers
 	 */
-	int getPassangers();
+	int getPassengers();
 	
 	/**
 	 * This function can be used to board the passengers.
 	 * @param numPassangers the number of passengers who board the train.
 	 * @return the amount of people that could not board.
 	 */
-	int boardPassangers(int numPassangers);
+	int boardPassengers(int numPassengers);
 	
 	/**
 	 * This function sets how many passengers are getting off
 	 * @param numPassangers the amount of passengers that should leave the train
 	 * @return the amount of passengers that actually got off
 	 */
-	int alightPassangers(int numPassangers);
+	int alightPassengers(int numPassengers);
 	
 	/**
 	 * Returns the current track segment authority
@@ -65,6 +72,10 @@ public interface TrainInterface {
 	 * @return
 	 */
 	double getMBOSpeed();
+	
+	void setBeacon(String beaconData);
+	
+	String getBeacon();
 	
 	/**
 	 * Gets the state of the left door
@@ -98,6 +109,21 @@ public interface TrainInterface {
 	
 	boolean toggleInterierLight();
 	
+	boolean getEmergencyBrake();
+	
+	boolean resetEmergencyBrake();
+	
+	boolean triggerEmergencyBrake();
+	
+	boolean getServiceBrake();
+	
+	boolean setServiceBrake();
+	
+	boolean unsetServiceBrake();
+	
+	boolean toggleServiceBrake();
+	
+	
 	/**
 	 * Reports the state of the trains engine.
 	 * @return true if the train engine is working.
@@ -110,6 +136,6 @@ public interface TrainInterface {
 
 	boolean doorOperationState();
 	
+	void trainDerails();
 	
-
 }

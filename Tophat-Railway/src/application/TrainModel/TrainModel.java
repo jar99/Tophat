@@ -2,13 +2,16 @@ package application.TrainModel;
 /**
  * This is the TrainModel object class this contains all the data and functions
  * to simulate the train. This should not be called directly since it contains 
- * some unsafe function to display information better.
+ * some unsafe function to display information better. 
  * 
  * @author jar254
  * @version 1.0
  *
  */
 
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackBlock;
@@ -17,48 +20,62 @@ import application.TrackModel.TrackTrain;
 import application.TrainController.TrainControllerSingleton;
 
 class TrainModel implements TrainInterface {
+
 	//These are some constants that should change
-	private final double AVGMASS = 75; // Mass of a passenger
+	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
+	private static final int BEACONSIZE = 126;
 	
 	//These are basic information on the train
 	private int trainID;
-	private int passangers = 0;
+	private boolean isActive = false;
+	
+	private int passengers = 0;
 	private int crewCount = 1;
 	
+	private double power;
     private double speed;
+    
+    //These are the actual position read from the block this should change at some point
     private double x, y;
     
     private double temperature;
     private boolean lights = false;
-    private boolean interierLights = false;
+    private boolean interiorLights = false;
     private boolean leftDoorState = false;
     private boolean rightDoorState = false;
+    
+    private String beaconData = "";
+    
+    private boolean emergencyBrake = false;
+    private boolean serviceBrake = true;
     
     //These are fault variables
     private boolean mboConnection = true;
     private boolean railSignalConnection = true;
     private boolean doorOperationState = true;
-    private boolean engineOperatioState = true;
+    private boolean engineOperationState = true;
     
     //These are the train simulation metrics
-    private int passangerCap = 200;
+    private int passengerCap = 200;
     
     private double mass = 10000.0;
-    private double length = 100.05; //Need to load in
+    private double length = 100.05; //Need to load in from database
     private double width = 10.0;
     private double height = 15.0;
     
     
-    
-    
+    private Queue<String> trainLog = new LinkedList<>();
     
 
     private TrackBlock currentBlock;
     
-    private TrainControllerSingleton tainControllerSingleton = TrainControllerSingleton.getInstance();
-
+    private TrackModelSingleton trackModelSingleton = TrackModelSingleton.getInstance();
+    private TrainControllerSingleton trainControllerSingleton = TrainControllerSingleton.getInstance();
+	private MBOSingleton mboSingleton = MBOSingleton.getInstance();
+    
     public TrainModel(int trainID) {
         this.trainID = trainID;
+        isActive = true;
     }
 
     public TrainModel(int trainID, double x, double y, TrackBlock currentBlock) {
@@ -72,28 +89,35 @@ class TrainModel implements TrainInterface {
     /**
      * This function is called when the train should be removed.
      */
-    public void remove() {
-//    	System.out.println(this + " train was removed at " + System.nanoTime());
+    void remove() {
+    	System.out.println(this + " train was removed at " + System.nanoTime());
+    	isActive = false;
     }
     
     public boolean dispatch() {
-		return true;
+    	isActive = true;
+		return isActive;
 	}
+    
+    boolean isActive() {
+    	return isActive;
+    }
     /**
      * To update the train model this function is called.
      * @param delaTime
      */
-    public void update(int delaTime){
+    void update(int delaTime){
 //    	System.out.println(this + " train runs at " + System.nanoTime());
         callTrainController();
         double distance = speed;
     	callTrackModel(speed);
         callMBO();
+        
     }
     
     private void callTrainController() {
-    	
-    	if(tainControllerSingleton.getnumPower() >= 0) {
+    	// TODO fix the train controller program
+    	if(!emergencyBrake && trainControllerSingleton.getnumPower() >= 0) {
     		speed = 5.0;
     	}
     	else 
@@ -104,49 +128,45 @@ class TrainModel implements TrainInterface {
     }
     
     private void callTrackModel(double distance) {
-    	TrackModelSingleton trackModelSingleton = TrackModelSingleton.getInstance();
     	// TODO This needs to be fixed so it works on it's own
     	TrackTrain trackTrain = trackModelSingleton.getTrainLocation(distance);
+    	if(trackTrain == null) return;
     	x = trackTrain.getX();
     	y = trackTrain.getY();
     	
     }
 
     private void callMBO(){
-        MBOSingleton mboSingleton = MBOSingleton.getInstance();
         //TODO This needs to change i don't know how it should work.
         mboSingleton.getLocation(x, y);
     }
     
-    //==================================================
-   // Code to talk with other UIs
-    
-    //This is a hack to get the UIs to work.
-    //TODO remove this
-    double getPower(){
-    	if(tainControllerSingleton.getnumPower() <= 0) {
-    		return 0.0;
-    	}
-        return tainControllerSingleton.getnumPower();
-    }
-    
-	boolean getServiceBrake() {
-		//TODO add service brake
-		return false;
+   
+	String poptrainInformation() {
+		if(trainLog.isEmpty()) return null;
+		return trainLog.remove();
 	}
 	
-
-	boolean getEmergancyBrakeState() {
-		return tainControllerSingleton.getemergencyBrake();
+	boolean trainLogEmpty() {
+		return trainLog.isEmpty();
 	}
 	
-	void setEmergancyBrake(boolean emergencyBrake) {
-//		System.out.println("Set the emergancy brake");
-		tainControllerSingleton.setemergencyBrake(emergencyBrake);
-	}
-	
-	//==============================================
 	//Getters and setters
+	
+	public double getPower(){
+		return power;
+    }
+	
+	public void setPower(double power){
+		this.power = power;
+    }
+	
+	
+	public boolean hasPower() {
+		return true; //TODO add block power
+//		return currentBlock.hasPower();
+	}
+
     
     public double getWeight() {
         return mass;
@@ -169,27 +189,28 @@ class TrainModel implements TrainInterface {
      * Simple function to get a string value of location
      * @return
      */
-    public String getCordinets() {
+    public String getCoordinates() {
     	return "[" + x + ", " + y + "]";
     }
 
-	public int getPassangers() {
-		return passangers;
+    @Override
+	public int getPassengers() {
+		return passengers;
 	}
 
 
 	@Override
-	public int boardPassangers(int numPassangers) {
+	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
-		mass += AVGMASS*numPassangers;
-		return passangers+=numPassangers;
+		mass += AVERAGEPASSENGERMASS*numPassengers;
+		return passengers+=numPassengers;
 	}
 	
 	@Override
-	public int alightPassangers(int numPassangers) {
+	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
-		mass -= AVGMASS*numPassangers;
-		return passangers-=numPassangers;
+		mass -= AVERAGEPASSENGERMASS*numPassengers;
+		return passengers-=numPassengers;
 	}
 	
 	@Override
@@ -255,18 +276,62 @@ class TrainModel implements TrainInterface {
 
 	@Override
 	public boolean getInterierLightState() {
-		return interierLights;
+		return interiorLights;
 	}
 
 	@Override
 	public boolean toggleInterierLight() {
-		interierLights = !interierLights;
+		interiorLights = !interiorLights;
+		return true;
+	}
+	
+	@Override
+	public boolean getEmergencyBrake() {
+		return emergencyBrake;
+	}
+
+	@Override
+	public boolean resetEmergencyBrake() {
+		if(!emergencyBrake) return false;
+		emergencyBrake = false;
+		return true;
+		
+	}
+
+	@Override
+	public boolean triggerEmergencyBrake() {
+		if(emergencyBrake) return false;
+		emergencyBrake = true;
 		return true;
 	}
 
 	@Override
+	public boolean getServiceBrake() {
+		return serviceBrake;
+	}
+	
+	@Override
+	public boolean setServiceBrake() {
+		if(serviceBrake) return false;
+		serviceBrake = true;
+		return true;
+	}
+
+	@Override
+	public boolean unsetServiceBrake() {
+		if(!serviceBrake) return false;
+		serviceBrake = false;
+		return true;
+	}
+
+	@Override
+	public boolean toggleServiceBrake() {
+		return serviceBrake = !serviceBrake;
+	}
+
+	@Override
 	public boolean engineState() {
-		return engineOperatioState;
+		return engineOperationState;
 	}
 
 	@Override
@@ -284,12 +349,35 @@ class TrainModel implements TrainInterface {
 		return doorOperationState;
 	}
 	
+	/**
+	 * This might be removed later.
+	 */
+	@Override
+	public void setBeacon(String beaconData) {   	
+		this.beaconData = beaconData.substring(0, BEACONSIZE); 	
+	}
+
+	@Override
+	public String getBeacon() {
+		return beaconData;
+	}
+	
+	public void addTrainInformation(String message) {
+		trainLog.add(System.nanoTime() + ": " + message);
+	}
+	
+	@Override
+	public void trainDerails() {
+		addTrainInformation("Train has crashed.");
+	}
+	
+	
 	public int getTrainID() {
 		return trainID;
 	}
 	
     public String toString(){
-        return String.valueOf(getTrainID());
+        return "Train_" + getTrainID();
     }
 
 }
