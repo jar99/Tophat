@@ -229,6 +229,7 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		rightDoor = trainMod.getRightDoorState();
 		
 		engineFail = trainMod.engineState();
+		//sadf
 		
 		//trainStatus = trainMod.
 		

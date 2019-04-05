@@ -21,6 +21,7 @@ public interface TrainCtrlInterface {
 	public void leftDoor(boolean leftDoor);
 	
 	public void rightDoor(boolean rightDoor);
+///new branch
 	
 	/**
 	 * true = Manual

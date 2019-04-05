@@ -59,7 +59,8 @@ public class TrainControllerCtrl implements Initializable {
 			actualSpeed.setText(inputSpeed + "mph");
 		}else if(modelSpeed > 0) {
 			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
-		}
+		}else
+			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
 		//mySin.setSpeed(ctrlSpeed);
 	}
 	
