@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 
 
-public class TrackControllerCtrl implements Initializable {
+ class TrackControllerCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
 	private TrackControllerSingleton mySin = TrackControllerSingleton.getInstance();
@@ -31,6 +31,11 @@ public class TrackControllerCtrl implements Initializable {
 	private Label blockSpeed;
 	@FXML
 	private Label blockAuthority;
+	@FXML
+	private Label speedUnits;
+	@FXML
+	private Label authorityUnits;
+	
 	
 	//Block Info Anchor
 	@FXML
@@ -50,6 +55,13 @@ public class TrackControllerCtrl implements Initializable {
 	@FXML
 	private Label nextBlock;
 	
+	@FXML
+	private Label selectButton;
+	@FXML
+	private Label runButton;
+	@FXML
+	private Label stopButton;
+	
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
@@ -62,6 +74,26 @@ public class TrackControllerCtrl implements Initializable {
 	@FXML
 	void getRightBlock() {
 		mySin.shiftBlockRight();
+	}
+	
+	@FXML
+	void getBlocklist() {
+		
+	}
+	
+	@FXML
+	void selectPLC() {
+		
+	}
+	
+	@FXML
+	void runPLC() {
+		
+	}
+	
+	@FXML
+	void stopPLC() {
+		
 	}
 	
 

@@ -22,8 +22,8 @@
       </AnchorPane>
       <AnchorPane layoutX="21.0" layoutY="50.0" prefHeight="213.0" prefWidth="235.0" style="-fx-border-color: green; -fx-border-width: 2;">
          <children>
-            <Button layoutX="27.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Left" onAction="#getLeftBlock" />
-            <Button layoutX="163.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Right" onAction="#getRightBlock" />
+            <Button layoutX="27.0" layoutY="40.0" mnemonicParsing="false" onAction="#getLeftBlock" prefHeight="25.0" prefWidth="46.0" text="Left" />
+            <Button layoutX="163.0" layoutY="40.0" mnemonicParsing="false" onAction="#getRightBlock" prefHeight="25.0" prefWidth="46.0" text="Right" />
             <Label fx:id="currentBlock" layoutX="95.0" layoutY="26.0" prefHeight="45.0" prefWidth="46.0" text="A1">
                <font>
                   <Font size="37.0" />
@@ -45,12 +45,22 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="blockSpeed" layoutX="38.0" layoutY="164.0" text="10">
+            <Label fx:id="blockSpeed" layoutX="27.0" layoutY="164.0" text="10">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="blockAuthority" layoutX="165.0" layoutY="164.0" text="10">
+            <Label fx:id="blockAuthority" layoutX="141.0" layoutY="164.0" text="10">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="speedUnits" layoutX="58.0" layoutY="164.0" text="m/h">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="authorityUnits" layoutX="174.0" layoutY="164.0" text="mi">
                <font>
                   <Font size="22.0" />
                </font>
@@ -76,9 +86,9 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="79.0" layoutY="175.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Select" />
-            <Button layoutX="28.0" layoutY="221.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Run" />
-            <Button layoutX="116.0" layoutY="221.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Stop" />
+            <Button fx:id="selectButton" layoutX="79.0" layoutY="175.0" mnemonicParsing="false" onAction="#selectPLC" prefHeight="25.0" prefWidth="74.0" text="Select" />
+            <Button fx:id="runButton" layoutX="28.0" layoutY="221.0" mnemonicParsing="false" onAction="#runPLC" prefHeight="25.0" prefWidth="74.0" text="Run" />
+            <Button fx:id="stopButton" layoutX="116.0" layoutY="221.0" mnemonicParsing="false" onAction="#stopPLC" prefHeight="25.0" prefWidth="74.0" text="Stop" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="289.0" layoutY="50.0" prefHeight="96.0" prefWidth="507.0" style="-fx-border-color: green; -fx-border-width: 2;">
@@ -106,8 +116,8 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="318.0" layoutY="57.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Left" />
-            <Button layoutX="369.0" layoutY="57.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Right" />
+            <Button layoutX="305.0" layoutY="57.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Straight" />
+            <Button layoutX="379.0" layoutY="57.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="46.0" text="Right" />
             <Label layoutX="418.0" layoutY="18.0" text="Next Block">
                <font>
                   <Font size="19.0" />
