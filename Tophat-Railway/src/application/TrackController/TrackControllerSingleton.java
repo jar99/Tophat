@@ -1,6 +1,7 @@
 package application.TrackController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,8 +10,8 @@ import application.TrackModel.*;
 import application.CTC.*;
 
 import application.CTC.CTCSingleton;
+import application.CTC.CTCInterface;
 import application.MBO.MBOSingleton;
-import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 
@@ -20,6 +21,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	private static TrackControllerSingleton instance = null;
 
 	private ArrayList<TrackBlock> blockList = null;
+	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 
 	private TrackControllerSingleton() {
 	}
@@ -40,7 +42,6 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	private int authorityA1 = 0;
 	private int authorityA2 = 0;
 
-	private int ID = 0;
 	// NOTE: Put some functions here
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
@@ -55,8 +56,6 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		CTCSingleton ctcModSin = CTCSingleton.getInstance();
 		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
 
-		if (blockList == null)
-			blockList = trackModSin.getBlockList();
 
 		// get map<Integer,Train>
 		Map<Integer, Train> trains = ctcModSin.viewtrains();
@@ -66,16 +65,16 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			Entry<Integer, Train> entry = iterator.next();
 			Train value = entry.getValue();
 			speedA1 = value.getSuggestedSpeed();
-			blockList.get(0).setSpeed(speedA1);
+			//blockList.get(0).setSpeed(speedA1);
 			authorityA1 = value.getAuthority();
 			authorityA2 = value.getAuthority()-1;
 			blockList.get(0).setAuthority(authorityA1);
 
 			blockList.get(0).setControlAuthority(true);
-			ID = value.getID();
+			//ID = value.getID();
 
 			if (!sent_train) {
-				trackModSin.dispatchTrain();
+				//trackModSin.dispatchTrain();
 				sent_train = !sent_train;
 			}
 
@@ -97,11 +96,11 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			CBID = CBID + 1;
 	}
 
-	String getCBName() {
+	 String getCBName() {
 		if (blockList == null)
-			return "A1";
+			return "1";
 		else
-			return blockList.get(CBID).getName();
+			return Integer.toString(track.get("greenLine").getBlock(CBID).getBlockID());
 
 	}
 
@@ -123,5 +122,22 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			return false;
 		else
 			return blockList.get(CBID).isOccupied();
+	}
+
+	@Override
+	public double setSuggestedSpeed(String lineName, int blockID) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int setAuthority(String lineName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void importLine(TrackLine trackLine) {
+		track.put(trackLine.getLineName(), trackLine);
 	}
 }
