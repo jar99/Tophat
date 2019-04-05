@@ -13,14 +13,6 @@ import java.util.Set;
 import application.TrackModel.TrackBlock;
 
 public interface TrainModelInterface {
-
-	/**
-	 * This calls returns the train models singleton function 
-	 * @return a TrainModelInterface to interact with the TrainModel Module
-	 */
-	static TrainModelInterface getInstance() {
-		return TrainModelSingleton.getInstance();
-	}
 	
 	/**
 	 * Method to create a train just by ID
