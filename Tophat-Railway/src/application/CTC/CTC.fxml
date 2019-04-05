@@ -18,8 +18,6 @@
         <menus>
           <Menu mnemonicParsing="false" text="CTC Office">
             <items>
-                  <MenuItem mnemonicParsing="false" text="Home" />
-                  <MenuItem mnemonicParsing="false" text="Import Schedule" />
               <MenuItem mnemonicParsing="false" text="Reset" />
             </items>
           </Menu>
@@ -116,7 +114,22 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <Text layoutX="142.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maintenance" />
+                                          <SplitPane dividerPositions="0.6890130353817505" layoutX="76.0" layoutY="109.0" orientation="VERTICAL" prefHeight="539.0" prefWidth="342.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <items>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="307.0" prefWidth="340.0">
+                                                   <children>
+                                                      <Text layoutX="127.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maintenance" />
+                                                   </children>
+                                                </AnchorPane>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                                   <children>
+                                                      <Text layoutX="116.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="import schedule" />
+                                                      <ChoiceBox fx:id="ImportScheduleChioceBox" layoutX="32.0" layoutY="67.0" prefWidth="150.0" />
+                                                      <Button layoutX="254.0" layoutY="69.0" mnemonicParsing="false" onAction="#ImportClicked" text="import" />
+                                                   </children>
+                                                </AnchorPane>
+                                            </items>
+                                          </SplitPane>
                                        </children>
                                     </AnchorPane>
                                 </items>
