@@ -91,12 +91,12 @@
             <Label layoutX="20.0" layoutY="192.0" text="Lights:" />
             <Label layoutX="18.0" layoutY="226.0" text="Right Doors:" />
             <Label layoutX="17.0" layoutY="259.0" text="Left Doors:" />
-            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="54.0" text="On" />
-            <ToggleButton fx:id="rightDoor" layoutX="124.0" layoutY="222.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Closed" />
-            <ToggleButton fx:id="leftDoor" layoutX="126.0" layoutY="256.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="56.0" text="Closed" />
+            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="On" />
+            <ToggleButton fx:id="rightDoor" layoutX="124.0" layoutY="222.0" mnemonicParsing="false" onAction="#rightDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
+            <ToggleButton fx:id="leftDoor" layoutX="126.0" layoutY="256.0" mnemonicParsing="false" onAction="#leftDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <Label layoutX="15.0" layoutY="294.0" text="Temperature:" />
             <TextField fx:id="temp" layoutX="106.0" layoutY="290.0" prefHeight="25.0" prefWidth="36.0" />
-            <Button fx:id="confirmTemp" layoutX="146.0" layoutY="290.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="34.0" text="Set" />
+            <Button fx:id="confirmTemp" layoutX="146.0" layoutY="290.0" mnemonicParsing="false" onAction="#Temperature" prefHeight="25.0" prefWidth="34.0" text="Set" />
             <Label layoutX="15.0" layoutY="326.0" text="Current Temperature:" />
             <Label fx:id="currentTemp" layoutX="147.0" layoutY="326.0" prefHeight="17.0" prefWidth="18.0" text="0" />
             <Separator layoutY="171.0" prefWidth="200.0" />
@@ -120,7 +120,7 @@
                </font>
             </Label>
             <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" onAction="#Speed" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="147.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Power">
                <font>
                   <Font size="15.0" />
