@@ -16,7 +16,7 @@ import application.TrainController.TrainControllerSingleton;
 public class TrainModelSingleton implements TrainModelInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
-	private static TrainModelSingleton instance = null;
+	private static TrainModelSingleton instance;
 
 	private TrainModelSingleton() {
 		 trainModelHashTable = new Hashtable<>();
@@ -32,7 +32,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 	private boolean disabled = false;
 	
-	private TrainControllerSingleton trainControllerSingleton = TrainControllerSingleton.getInstance();
 	
 	public boolean toggleDisable() {
 		return disabled = !disabled;
@@ -96,20 +95,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 
     Collection<TrainModel> getTrains() {
         return trainModelHashTable.values();
-    }
-    
-    /**
-     * Gets the speed of the first train.
-     * @return
-     */
-    @Deprecated
-    public String getSpeed() {
-    	
-    	for(TrainModel train : trainModelHashTable.values()) {
-    		return train.getSpeed() + "mph";
-    	}
-    	
-    	return "0mph";
     }
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
