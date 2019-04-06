@@ -1,5 +1,8 @@
 package application.TrackModel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,6 +168,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	// ====Train Model Methods====
+	//TODO: NOTE: could the train deletion method impair ID checks?
 	@Override
 	public void updateTrainDisplacement(int trainID, double displacement) throws TrainCrashedException {
 		if (displacement < 0.0)
@@ -656,6 +660,22 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	public Map<Integer, TrainLocation> getTrainMap() {
 		return trainLocations;
+	}
+
+	public void importLine(String fileName) {
+		File excelFile = new File(fileName);
+		
+		FileInputStream fis;
+		
+		try {
+			fis = new FileInputStream(excelFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//XSSFWorkbook workbook = new XSSFWorkbook(fis);
+		
 	}
 
 }
