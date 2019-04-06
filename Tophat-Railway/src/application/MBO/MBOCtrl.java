@@ -1,9 +1,13 @@
 package application.MBO;
 
+import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -73,7 +77,7 @@ public class MBOCtrl implements Initializable {
     private Button createScheduleBtn;
 
     @FXML
-    private ChoiceBox<?> lineCB;
+    private ChoiceBox<String> lineCB;
 
     @FXML
     private TextField throughputTF;
@@ -135,8 +139,13 @@ public class MBOCtrl implements Initializable {
     @FXML
     private Label suggestedAuthorityLbl;
 
+    private int greenThroughput = 0;
+    private int redThroughput = 0;
+    
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
+    
+    
 	// Control Functions
 	public void buttonClicked() {
 		// System.out.print("Click");
@@ -146,7 +155,13 @@ public class MBOCtrl implements Initializable {
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		
+		//Throughput 
+		lineCB.getItems().addAll("Red", "Green");
+		lineCB.setValue("Green");
+		
+		setThroughputBtn.setOnAction(e -> setGreenThroughput());
+		
 		updateAnimation = new AnimationTimer() {
 
 			@Override
@@ -156,16 +171,22 @@ public class MBOCtrl implements Initializable {
 		};
 		updateAnimation.start();
 		
+		
+	}
 
+	private void setGreenThroughput() {
+		greenThroughput = Integer.valueOf(throughputTF.getText());
 	}
 
 	// NOTE: This is where you get new information from your singleton
 	// You can read/change fx elements linked above
+	
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		//int count = mySin.getCount();
 		//counter.setText(Integer.toString(count));
 		locationLbl.setText(Double.toString(mySin.getLatitude()) + ", " +  Double.toString(mySin.getLongitude()));
-
+		
+		
 	}
 }
