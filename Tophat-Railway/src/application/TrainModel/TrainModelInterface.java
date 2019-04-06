@@ -21,9 +21,6 @@ public interface TrainModelInterface {
 	 */
 	TrainInterface createTrain(int trainID);
     
-	
-    void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock);
-    
     /**
      * Removes the train from the update loop and calls the closing function
      * @param trainID the unique id of the train.
@@ -63,5 +60,10 @@ public interface TrainModelInterface {
      * @return the set of trainIDs
      */
     Set<Integer> getAllTrainIDs();
+    
+    
+    void setTrainAuthority(int trainID, int authority);
+    void setTrainSuggestedSpeed(int trainID, double speed);
+    
  
 }

@@ -14,10 +14,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import application.MBO.MBOSingleton;
-import application.TrackModel.TrackBlock;
+import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelSingleton;
-import application.TrackModel.TrackTrain;
-import application.TrainController.TrainControllerSingleton;
 
 class TrainModel implements TrainInterface {
 
@@ -49,6 +47,9 @@ class TrainModel implements TrainInterface {
     private boolean emergencyBrake = false;
     private boolean serviceBrake = true;
     
+    private int mboAuthority = 0;
+    private double mboSuggestedSpeed = 0;
+    
     //These are fault variables
     private boolean mboConnection = true;
     private boolean railSignalConnection = true;
@@ -63,14 +64,11 @@ class TrainModel implements TrainInterface {
     private double width = 10.0;
     private double height = 15.0;
     
+    private double maxPower = 120e3; // 120kw
     
     private Queue<String> trainLog = new LinkedList<>();
     
-
-    private TrackBlock currentBlock;
-    
-    private TrackModelSingleton trackModelSingleton = TrackModelSingleton.getInstance();
-    private TrainControllerSingleton trainControllerSingleton = TrainControllerSingleton.getInstance();
+    private TrackModelSingleton trModSin = TrackModelSingleton.getInstance();
 	private MBOSingleton mboSingleton = MBOSingleton.getInstance();
     
     public TrainModel(int trainID) {
@@ -78,14 +76,6 @@ class TrainModel implements TrainInterface {
         isActive = true;
     }
 
-    public TrainModel(int trainID, double x, double y, TrackBlock currentBlock) {
-        this(trainID);
-        this.x = x;
-        this.y = y;
-        this.currentBlock = currentBlock;
-        this.currentBlock.getAuthority();
-    }
-    
     /**
      * This function is called when the train should be removed.
      */
@@ -107,32 +97,21 @@ class TrainModel implements TrainInterface {
      * @param delaTime
      */
     void update(int delaTime){
-//    	System.out.println(this + " train runs at " + System.nanoTime());
-        callTrainController();
-        double distance = speed;
-    	callTrackModel(speed);
-        callMBO();
-        
-    }
-    
-    private void callTrainController() {
-    	// TODO fix the train controller program
-    	if(!emergencyBrake && trainControllerSingleton.getnumPower() >= 0) {
-    		speed = 5.0;
-    	}
-    	else 
-    	{
-    		speed = 0.0;
-    	}
+    	System.out.println(this + " train runs at " + System.nanoTime());
     	
+    	if(trModSin.trainHasPower(trainID) && power > 0) { // The train should have power
+    		// Calculate the applied force
+    		
+    	}
+        
     }
     
     private void callTrackModel(double distance) {
     	// TODO This needs to be fixed so it works on it's own
-    	TrackTrain trackTrain = trackModelSingleton.getTrainLocation(distance);
-    	if(trackTrain == null) return;
-    	x = trackTrain.getX();
-    	y = trackTrain.getY();
+//    	TrackTrain trackTrain = trackModelSingleton.getCurrentBlock();
+//    	if(trackTrain == null) return;
+//    	x = trackTrain.getX();
+//    	y = trackTrain.getY();
     	
     }
 
@@ -154,7 +133,7 @@ class TrainModel implements TrainInterface {
 	//Getters and setters
 	
 	public double getPower(){
-		return power;
+		return Math.min(power, maxPower); // Caps the power setting
     }
 	
 	public void setPower(double power){
@@ -215,14 +194,20 @@ class TrainModel implements TrainInterface {
 	
 	@Override
 	public int getTrackAuthority() {
-		if(currentBlock == null) return Integer.MIN_VALUE;
-		return currentBlock.getAuthority();
+		try {
+			return trModSin.getTrainBlockAuthority(trainID);
+		} catch (TrackCircuitFailureException e) {
+			return Integer.MIN_VALUE;
+		}
 	}
 
 	@Override
 	public double getTrackSpeed() {
-		if(currentBlock == null) return Double.NaN;
-		return currentBlock.getSpeed();
+		try {
+			return trModSin.getTrainSuggestedSpeed(trainID);
+		} catch (TrackCircuitFailureException e) {
+			return Double.NaN;
+		}
 	}
 	
 	@Override
@@ -231,7 +216,18 @@ class TrainModel implements TrainInterface {
 		if(null == null) return Integer.MIN_VALUE;
 		return 0;
 	}
+	
+	void setMBOAuthority(int authority) {
+		mboAuthority = authority;
+		
+	}
+	
+	void setMBOSuggestedSpeed(double speed) {
+		mboSuggestedSpeed = speed;
+		
+	}
 
+	
 	@Override
 	public double getMBOSpeed() {
 		// TODO add the mbo connection
