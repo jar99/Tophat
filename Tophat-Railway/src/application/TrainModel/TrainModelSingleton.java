@@ -48,15 +48,6 @@ public class TrainModelSingleton implements TrainModelInterface {
     	
         return trainModelHashTable.putIfAbsent(trainID, train);
     }
-
-    public void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
-    	if(trainExists(trainID));
-    	System.out.println("Created a new train " + trainID);
-    	TrainModel train = new TrainModel(trainID, x, y, currentBlock);
-//    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
-    	
-    	trainModelHashTable.put(trainID, train);
-    }
     
     public boolean trainExists(int trainID) {
         return trainModelHashTable.containsKey(trainID);
@@ -108,5 +99,21 @@ public class TrainModelSingleton implements TrainModelInterface {
 			//Any code to call for each train model update.
 			trainModel.update(0);
 		}
+	}
+
+	@Override
+	public void setTrainAuthority(int trainID, int authority) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return;
+		train.setMBOAuthority(authority);
+		
+	}
+	
+	@Override
+	public void setTrainSuggestedSpeed(int trainID, double speed) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return;
+		train.setMBOSuggestedSpeed(speed);
+		
 	}
 }
