@@ -1,21 +1,21 @@
 package application.TrackModel;
 
-public class TrackStation {
+public class TrackStation extends TrackBlock {
 
 	// Ticket sale information
-	final private String stationName;
 	private int boarding = 0;
 	private int alighting = 0;
 
 	// ================CONSTRUCTOR===================
-	public TrackStation(String stationName) {
-		this.stationName = stationName;
+	public TrackStation(String lineName, char sectionID, int blockID, TrackJunction junctionA, TrackJunction junctionB,
+			double length, double grade, double spdLmt, double elev, double totElev, String stationName,
+			String beaconData, String cardinalDirection, boolean isUnderground, boolean isCrossing, boolean hasLight,
+			boolean isBidirectional) {
+		super(lineName, sectionID, blockID, junctionA, junctionB, length, grade, spdLmt, elev, totElev, stationName,
+				beaconData, cardinalDirection, isUnderground, isCrossing, hasLight, isBidirectional);
 	}
 
 	// ================GET METHODS===================
-	public String getStationName() {
-		return stationName;
-	}
 
 	public int getBoarding() {
 		return boarding;

@@ -20,6 +20,7 @@ public class TrackBlock {
 	// String Attributes
 	final private String stationName;
 	final private String beaconData;
+	final private String cardinalDirection;
 
 	// Boolean Attributes
 	final private boolean isStation;
@@ -49,7 +50,7 @@ public class TrackBlock {
 	//TODO: MEH - check arguments (construction)
 	public TrackBlock(String lineName, char sectionID, int blockID, TrackJunction junctionA, TrackJunction junctionB,
 			double length, double grade, double spdLmt, double elev, double totElev, String stationName,
-			String beaconData, boolean isUnderground, boolean isCrossing, boolean hasLight, boolean isBidirectional) {
+			String beaconData, String cardinalDirection, boolean isUnderground, boolean isCrossing, boolean hasLight, boolean isBidirectional) {
 		
 		this.lineName = lineName;
 		this.sectionID = sectionID;
@@ -73,6 +74,7 @@ public class TrackBlock {
 
 		this.stationName = stationName;
 		this.beaconData = beaconData;
+		this.cardinalDirection = cardinalDirection;
 		this.isUnderground = isUnderground;
 		this.isCrossing = isCrossing;
 		this.hasLight = hasLight;
@@ -138,6 +140,10 @@ public class TrackBlock {
 
 	public String getBeaconData() {
 		return beaconData;
+	}
+	
+	public String getCardinalDirection() {
+		return cardinalDirection;
 	}
 
 	// Boolean Attributes
@@ -254,4 +260,5 @@ public class TrackBlock {
 	public void toggleFailPower() {
 		failPower = !failPower;
 	}
+
 }
