@@ -711,7 +711,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 				double length = blockRow.getCell(11).getNumericCellValue();
 				double grade = blockRow.getCell(12).getNumericCellValue();
-				double speedLimit = blockRow.getCell(13).getNumericCellValue();
+				double speedLimit = 0.277778 * blockRow.getCell(13).getNumericCellValue();
 				double elevation = blockRow.getCell(14).getNumericCellValue();
 				double cmElev = blockRow.getCell(15).getNumericCellValue();
 
