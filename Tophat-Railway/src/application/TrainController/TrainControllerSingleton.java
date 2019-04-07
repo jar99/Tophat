@@ -9,7 +9,7 @@ import application.TrackModel.TrackModelSingleton;
 import application.TrainModel.TrainInterface;
 import application.TrainModel.TrainModelSingleton;
 
-public class TrainControllerSingleton implements TrainControllerInterface {
+public class TrainControllerSingleton {
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainControllerSingleton instance = null;
@@ -229,12 +229,12 @@ public class TrainControllerSingleton implements TrainControllerInterface {
 		rightDoor = trainMod.getRightDoorState();
 		
 		engineFail = trainMod.engineState();
-		//sadf
 		
 		//trainStatus = trainMod.
 		
 		
 		
 	}
+
 
 }
