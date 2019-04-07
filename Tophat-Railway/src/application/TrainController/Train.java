@@ -86,3 +86,5 @@ public class Train implements TrainCtrlInterface {
 	}
 	
 }
+
+//new edits
