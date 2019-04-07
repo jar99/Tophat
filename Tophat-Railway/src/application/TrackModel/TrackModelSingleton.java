@@ -678,157 +678,27 @@ public class TrackModelSingleton implements TrackModelInterface {
 		try {
 			fis = new FileInputStream(excelFile);
 			workbook = new XSSFWorkbook(fis);
-
-			String lineName = null;
 			
-			// Import Block Sheet
-			XSSFSheet blockSheet = workbook.getSheetAt(0);
-
-			Iterator<Row> blockRowIt = blockSheet.iterator();
-			Hashtable<Integer, TrackBlock> blocks = new Hashtable<Integer, TrackBlock>();
-			Hashtable<String, TrackStation> stations = new Hashtable<String, TrackStation>();
-			Hashtable<Character, Hashtable<Integer, TrackBlock>> sectionBlocksTable = new Hashtable<Character, Hashtable<Integer, TrackBlock>>();
-
-			blockRowIt.next();
-
-			while (blockRowIt.hasNext()) {
-
-				Row blockRow = blockRowIt.next();
-
-				lineName = blockRow.getCell(0).getStringCellValue();
-				char sectionID = blockRow.getCell(1).getStringCellValue().charAt(0);
-				int blockID = (int) blockRow.getCell(2).getNumericCellValue();
-
-				boolean AisSwitch = blockRow.getCell(4).getBooleanCellValue();
-				int AID = (int) blockRow.getCell(5).getNumericCellValue();
-				int Aentry = (int) blockRow.getCell(6).getNumericCellValue();
-				boolean BisSwitch = blockRow.getCell(7).getBooleanCellValue();
-				int BID = (int) blockRow.getCell(8).getNumericCellValue();
-				int Bentry = (int) blockRow.getCell(9).getNumericCellValue();
-
-				TrackJunction junctionA = new TrackJunction(AisSwitch, AID, Aentry);
-				TrackJunction junctionB = new TrackJunction(BisSwitch, BID, Bentry);
-
-				double length = blockRow.getCell(11).getNumericCellValue();
-				double grade = blockRow.getCell(12).getNumericCellValue();
-				double speedLimit = 0.277778 * blockRow.getCell(13).getNumericCellValue();
-				double elevation = blockRow.getCell(14).getNumericCellValue();
-				double cmElev = blockRow.getCell(15).getNumericCellValue();
-
-				String cardinalDirection = blockRow.getCell(19).getStringCellValue();
-
-				boolean isStation = blockRow.getCell(21).getBooleanCellValue();
-				boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
-				boolean isUnderground = blockRow.getCell(23).getBooleanCellValue();
-				boolean isCrossing = blockRow.getCell(24).getBooleanCellValue();
-				boolean hasLight = blockRow.getCell(25).getBooleanCellValue();
-				boolean isBidirectional = blockRow.getCell(26).getBooleanCellValue();
-
-				if (!sectionBlocksTable.containsKey(sectionID)) {
-					Hashtable<Integer, TrackBlock> sectionBlocks = new Hashtable<Integer, TrackBlock>();
-					sectionBlocksTable.put(sectionID, sectionBlocks);
-				}
-
-				if (isStation) {
-
-					String stationName = blockRow.getCell(17).getStringCellValue();
-					String beaconData = blockRow.getCell(18).getStringCellValue();
-
-					TrackStation station = new TrackStation(lineName, sectionID, blockID, junctionA, junctionB, length,
-							grade, speedLimit, elevation, cmElev, stationName, beaconData, cardinalDirection,
-							isUnderground, isCrossing, hasLight, isBidirectional);
-					blocks.put(blockID, station);
-					stations.put(stationName, station);
-					sectionBlocksTable.get(sectionID).put(blockID, station);
-				} else {
-					TrackBlock block = new TrackBlock(lineName, sectionID, blockID, junctionA, junctionB, length, grade,
-							speedLimit, elevation, cmElev, null, null, cardinalDirection, isUnderground, isCrossing,
-							hasLight, isBidirectional);
-					blocks.put(blockID, block);
-					sectionBlocksTable.get(sectionID).put(blockID, block);
-				}
-
-			}
-
-			// Import Switch Sheet
-			XSSFSheet switchSheet = workbook.getSheetAt(1);
-			Iterator<Row> switchRowIt = switchSheet.iterator();
-			Hashtable<Integer, TrackSwitch> switches = new Hashtable<Integer, TrackSwitch>();
-
-			switchRowIt.next();
-
-			while (switchRowIt.hasNext()) {
-
-				Row switchRow = switchRowIt.next();
-
-				int switchID = (int) switchRow.getCell(0).getNumericCellValue();
-
-				boolean MisSwitch = switchRow.getCell(2).getBooleanCellValue();
-				int MID = (int) switchRow.getCell(3).getNumericCellValue();
-				int Mentry = (int) switchRow.getCell(4).getNumericCellValue();
-
-				TrackJunction mainJunction = new TrackJunction(MisSwitch, MID, Mentry);
-
-				boolean SisSwitch = switchRow.getCell(6).getBooleanCellValue();
-				int SID = (int) switchRow.getCell(7).getNumericCellValue();
-				int Sentry = (int) switchRow.getCell(8).getNumericCellValue();
-
-				TrackJunction straightJunction = new TrackJunction(SisSwitch, SID, Sentry);
-
-				boolean DisSwitch = switchRow.getCell(10).getBooleanCellValue();
-				int DID = (int) switchRow.getCell(11).getNumericCellValue();
-				int Dentry = (int) switchRow.getCell(12).getNumericCellValue();
-
-				TrackJunction divergingJunction = new TrackJunction(DisSwitch, DID, Dentry);
-
-				TrackSwitch switchy = new TrackSwitch(switchID, mainJunction, straightJunction, divergingJunction);
-
-				switches.put(switchID, switchy);
-			}
-
-			// Import Section Sheet
-			XSSFSheet sectionSheet = workbook.getSheetAt(2);
-			Iterator<Row> sectionRowIt = sectionSheet.iterator();
-			Hashtable<Character, TrackSection> sections = new Hashtable<Character, TrackSection>();
-
-			sectionRowIt.next();
+			TrackLine myLine = readLineFile(workbook);
 			
-			while (sectionRowIt.hasNext()) {
-				Row sectionRow = sectionRowIt.next();
-
-				lineName = sectionRow.getCell(0).getStringCellValue();
-				char sectionID = sectionRow.getCell(1).getStringCellValue().charAt(0);
-
-				int firstBlockID = (int) sectionRow.getCell(3).getNumericCellValue();
-				int lastBlockID = (int) sectionRow.getCell(4).getNumericCellValue();
-
-				double startX = sectionRow.getCell(6).getNumericCellValue();
-				double startY = sectionRow.getCell(7).getNumericCellValue();
-				double endX = sectionRow.getCell(8).getNumericCellValue();
-				double endY = sectionRow.getCell(9).getNumericCellValue();
-
-				boolean isCurved = sectionRow.getCell(11).getBooleanCellValue();
-
-				if (isCurved) {
-					double centerX = sectionRow.getCell(12).getNumericCellValue();
-					double centerY = sectionRow.getCell(13).getNumericCellValue();
-					double radius = sectionRow.getCell(14).getNumericCellValue();
-					boolean isClockwise = sectionRow.getCell(15).getBooleanCellValue();
-					
-					TrackSectionCurve sectionCurve = new TrackSectionCurve(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID), centerX, centerY, radius, isClockwise);
-					sections.put(sectionID, sectionCurve);
-				} else {
-					TrackSectionStraight sectionStraight = new TrackSectionStraight(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID));
-					sections.put(sectionID, sectionStraight);
-				}
-
-			}
-			
-			// Create Line
-			TrackLine line = new TrackLine(lineName, sections, blocks, stations, switches);
-			track.put(lineName, line);
+			track.put(myLine.getLineName(), myLine);
 			currentBlockID = 1;
-			currentLineName = lineName;
+			currentLineName = myLine.getLineName();
+			
+			//TODO: Call CTC importLine Method
+			TrackLine ctcLine = readLineFile(workbook);
+			CTCInterface ctcInt = CTCSingleton.getInstance();
+			//TODO: ctcInt.importLine(ctcLine);
+			
+			//TODO: Call Track Controller importLine Method
+			TrackLine tckCtrlLine = readLineFile(workbook);
+			TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+			tckCtrlInt.importLine(tckCtrlLine);
+			
+			//TODO: Call MBO importLine Method
+			TrackLine mboLine = readLineFile(workbook);
+			MBOInterface mboInt = MBOSingleton.getInstance();
+			mboInt.importLine(mboLine);
 			
 
 		} catch (IOException e) {
@@ -836,6 +706,156 @@ public class TrackModelSingleton implements TrackModelInterface {
 			e.printStackTrace();
 		}
 
+	}
+
+	private TrackLine readLineFile(XSSFWorkbook workbook) {
+		String lineName = null;
+		
+		// Import Block Sheet
+		XSSFSheet blockSheet = workbook.getSheetAt(0);
+
+		Iterator<Row> blockRowIt = blockSheet.iterator();
+		Hashtable<Integer, TrackBlock> blocks = new Hashtable<Integer, TrackBlock>();
+		Hashtable<String, TrackStation> stations = new Hashtable<String, TrackStation>();
+		Hashtable<Character, Hashtable<Integer, TrackBlock>> sectionBlocksTable = new Hashtable<Character, Hashtable<Integer, TrackBlock>>();
+
+		blockRowIt.next();
+
+		while (blockRowIt.hasNext()) {
+
+			Row blockRow = blockRowIt.next();
+
+			lineName = blockRow.getCell(0).getStringCellValue();
+			char sectionID = blockRow.getCell(1).getStringCellValue().charAt(0);
+			int blockID = (int) blockRow.getCell(2).getNumericCellValue();
+
+			boolean AisSwitch = blockRow.getCell(4).getBooleanCellValue();
+			int AID = (int) blockRow.getCell(5).getNumericCellValue();
+			int Aentry = (int) blockRow.getCell(6).getNumericCellValue();
+			boolean BisSwitch = blockRow.getCell(7).getBooleanCellValue();
+			int BID = (int) blockRow.getCell(8).getNumericCellValue();
+			int Bentry = (int) blockRow.getCell(9).getNumericCellValue();
+
+			TrackJunction junctionA = new TrackJunction(AisSwitch, AID, Aentry);
+			TrackJunction junctionB = new TrackJunction(BisSwitch, BID, Bentry);
+
+			double length = blockRow.getCell(11).getNumericCellValue();
+			double grade = blockRow.getCell(12).getNumericCellValue();
+			double speedLimit = 0.277778 * blockRow.getCell(13).getNumericCellValue();
+			double elevation = blockRow.getCell(14).getNumericCellValue();
+			double cmElev = blockRow.getCell(15).getNumericCellValue();
+
+			String cardinalDirection = blockRow.getCell(19).getStringCellValue();
+
+			boolean isStation = blockRow.getCell(21).getBooleanCellValue();
+			boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
+			boolean isUnderground = blockRow.getCell(23).getBooleanCellValue();
+			boolean isCrossing = blockRow.getCell(24).getBooleanCellValue();
+			boolean hasLight = blockRow.getCell(25).getBooleanCellValue();
+			boolean isBidirectional = blockRow.getCell(26).getBooleanCellValue();
+
+			if (!sectionBlocksTable.containsKey(sectionID)) {
+				Hashtable<Integer, TrackBlock> sectionBlocks = new Hashtable<Integer, TrackBlock>();
+				sectionBlocksTable.put(sectionID, sectionBlocks);
+			}
+
+			if (isStation) {
+
+				String stationName = blockRow.getCell(17).getStringCellValue();
+				String beaconData = blockRow.getCell(18).getStringCellValue();
+
+				TrackStation station = new TrackStation(lineName, sectionID, blockID, junctionA, junctionB, length,
+						grade, speedLimit, elevation, cmElev, stationName, beaconData, cardinalDirection,
+						isUnderground, isCrossing, hasLight, isBidirectional);
+				blocks.put(blockID, station);
+				stations.put(stationName, station);
+				sectionBlocksTable.get(sectionID).put(blockID, station);
+			} else {
+				TrackBlock block = new TrackBlock(lineName, sectionID, blockID, junctionA, junctionB, length, grade,
+						speedLimit, elevation, cmElev, null, null, cardinalDirection, isUnderground, isCrossing,
+						hasLight, isBidirectional);
+				blocks.put(blockID, block);
+				sectionBlocksTable.get(sectionID).put(blockID, block);
+			}
+
+		}
+
+		// Import Switch Sheet
+		XSSFSheet switchSheet = workbook.getSheetAt(1);
+		Iterator<Row> switchRowIt = switchSheet.iterator();
+		Hashtable<Integer, TrackSwitch> switches = new Hashtable<Integer, TrackSwitch>();
+
+		switchRowIt.next();
+
+		while (switchRowIt.hasNext()) {
+
+			Row switchRow = switchRowIt.next();
+
+			int switchID = (int) switchRow.getCell(0).getNumericCellValue();
+
+			boolean MisSwitch = switchRow.getCell(2).getBooleanCellValue();
+			int MID = (int) switchRow.getCell(3).getNumericCellValue();
+			int Mentry = (int) switchRow.getCell(4).getNumericCellValue();
+
+			TrackJunction mainJunction = new TrackJunction(MisSwitch, MID, Mentry);
+
+			boolean SisSwitch = switchRow.getCell(6).getBooleanCellValue();
+			int SID = (int) switchRow.getCell(7).getNumericCellValue();
+			int Sentry = (int) switchRow.getCell(8).getNumericCellValue();
+
+			TrackJunction straightJunction = new TrackJunction(SisSwitch, SID, Sentry);
+
+			boolean DisSwitch = switchRow.getCell(10).getBooleanCellValue();
+			int DID = (int) switchRow.getCell(11).getNumericCellValue();
+			int Dentry = (int) switchRow.getCell(12).getNumericCellValue();
+
+			TrackJunction divergingJunction = new TrackJunction(DisSwitch, DID, Dentry);
+
+			TrackSwitch switchy = new TrackSwitch(switchID, mainJunction, straightJunction, divergingJunction);
+
+			switches.put(switchID, switchy);
+		}
+
+		// Import Section Sheet
+		XSSFSheet sectionSheet = workbook.getSheetAt(2);
+		Iterator<Row> sectionRowIt = sectionSheet.iterator();
+		Hashtable<Character, TrackSection> sections = new Hashtable<Character, TrackSection>();
+
+		sectionRowIt.next();
+		
+		while (sectionRowIt.hasNext()) {
+			Row sectionRow = sectionRowIt.next();
+
+			lineName = sectionRow.getCell(0).getStringCellValue();
+			char sectionID = sectionRow.getCell(1).getStringCellValue().charAt(0);
+
+			int firstBlockID = (int) sectionRow.getCell(3).getNumericCellValue();
+			int lastBlockID = (int) sectionRow.getCell(4).getNumericCellValue();
+
+			double startX = sectionRow.getCell(6).getNumericCellValue();
+			double startY = sectionRow.getCell(7).getNumericCellValue();
+			double endX = sectionRow.getCell(8).getNumericCellValue();
+			double endY = sectionRow.getCell(9).getNumericCellValue();
+
+			boolean isCurved = sectionRow.getCell(11).getBooleanCellValue();
+
+			if (isCurved) {
+				double centerX = sectionRow.getCell(12).getNumericCellValue();
+				double centerY = sectionRow.getCell(13).getNumericCellValue();
+				double radius = sectionRow.getCell(14).getNumericCellValue();
+				boolean isClockwise = sectionRow.getCell(15).getBooleanCellValue();
+				
+				TrackSectionCurve sectionCurve = new TrackSectionCurve(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID), centerX, centerY, radius, isClockwise);
+				sections.put(sectionID, sectionCurve);
+			} else {
+				TrackSectionStraight sectionStraight = new TrackSectionStraight(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID));
+				sections.put(sectionID, sectionStraight);
+			}
+
+		}
+		
+		// Create Line
+		return new TrackLine(lineName, sections, blocks, stations, switches);
 	}
 
 }
