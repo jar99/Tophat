@@ -1,5 +1,7 @@
 package application.CTC;
 
+import application.TrackModel.TrackLine;
+
 public interface CTCInterface {
     /**
 	 * Gives CTC a new Line
