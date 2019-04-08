@@ -38,7 +38,7 @@ public class Train{
 	public ArrayList<String> printTrain(){
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
-		tmp.add("	Current Speed:"+CurrentSpeed);
+		//tmp.add("	Current Speed:"+CurrentSpeed);
 		tmp.add("	Current Position:"+ CurrentPosition);
 		tmp.add("	Authority:"+authority);
 		return tmp;
