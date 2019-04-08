@@ -70,7 +70,6 @@ public class CTCSingleton implements CTCInterface {
 		}
 		if (trains.containsKey(Integer.valueOf(ID))){
 			System.out.println("Duplicated train ID!!");//TODO change this into UI
-			return false;
 		}
 		trains.put(Integer.valueOf(ID), new Train(Integer.parseInt(ID), Integer.parseInt(Speed)));
 		return true;
@@ -86,6 +85,7 @@ public class CTCSingleton implements CTCInterface {
 			Schedule tmp1=myschedule.get(ID);
 			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
 			tmp1.mergeSchedule(tmp2);
+			return true;
 		}
 		
 	}
