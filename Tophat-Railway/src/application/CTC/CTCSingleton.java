@@ -32,6 +32,7 @@ public class CTCSingleton implements CTCInterface {
 	// NOTE: Put your data objects here
 	private HashMap<Integer,Train> trains =new HashMap<Integer,Train>();
 	private ArrayList<Schedule> myschedule=new ArrayList<Schedule>();
+	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 	//private String[] Stations=TrackModelSingleton.getInstance().getBlockNameList().stream().toArray(String[]::new);
 	//TODO: need a function, getBlockName, return array/list of strings of all block names and stations
 	private String[] Stations={"B0","B1 FIXME","B2 StationA"};
@@ -130,6 +131,10 @@ public class CTCSingleton implements CTCInterface {
 		*/
 
 
+	}
+	@Override
+	public void importLine(TrackLine trackLine) {
+		track.put(trackLine.getLineName(), trackLine);
 	}
 
 }
