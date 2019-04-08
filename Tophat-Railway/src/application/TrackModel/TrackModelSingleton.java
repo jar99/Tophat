@@ -688,7 +688,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 			//: Call CTC importLine Method
 			TrackLine ctcLine = readLineFile(workbook);
 			CTCInterface ctcInt = CTCSingleton.getInstance();
-			//TODO: ctcInt.importLine(ctcLine);
+			ctcInt.importLine(ctcLine);
 			
 			//: Call Track Controller importLine Method
 			TrackLine tckCtrlLine = readLineFile(workbook);
