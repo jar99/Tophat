@@ -50,7 +50,7 @@ public class TrainControllerCtrl implements Initializable {
 	// functions can be linked through FX Builder or manually
 	// Control Functions
 
-	@FXML
+	@FXML //change to the button 
 	public void Speed() { //inputSpeed.isEmpty();
 		inputSpeed = speed.getText();
 		if(modelSpeed == 0) {
