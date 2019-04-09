@@ -293,7 +293,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
 							tckCtrlInt.removeTrain(trainID);
 							
-							// TODO:  Call Train Model Remove Train option
+							// TODO: Call Train Model Remove Train option
 							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
 							trnModInt.removeTrain(trainID);
 							
