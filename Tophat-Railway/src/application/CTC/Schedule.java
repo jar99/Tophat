@@ -52,10 +52,9 @@ public class Schedule{
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
 		tmp.add("	"+Line);
-		for (int i=0;i<Station.length;i++){
-			//tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
-			tmp.add("	"+Station[i]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
-		}
+		//tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
+		tmp.add("	"+Station[0]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
+		tmp.add("	"+Station[Station.length-1]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
 		return tmp;
 	}
 	public int getID(){
