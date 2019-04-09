@@ -36,6 +36,7 @@
                <VBox.margin>
                   <Insets top="2.5" />
                </VBox.margin></Button>
+            <Button fx:id="test" mnemonicParsing="false" onAction="#testTrain" text="Test" />
          </children>
       </VBox>
    </center>

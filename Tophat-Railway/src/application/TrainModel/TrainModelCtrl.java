@@ -48,14 +48,13 @@ public class TrainModelCtrl implements Initializable {
     @FXML
     public void clickEmergencyButton(ActionEvent event) {
     	if(trainModel != null && !trainModel.getEmergencyBrake()) {
-    		toggleEmergencyBrake();
+    		trainModel.triggerEmergencyBrake();
     		trainModel.addTrainInformation("Test Emergency Button.");
-    		System.out.println("Emergency button pressed");
     		
     	}
     }
     
-    private void toggleEmergencyBrake() {
+    private void updateEmergencyBrake() {
     	if(trainModel.getEmergencyBrake()) {
     		emergencyButton.setStyle("-fx-background-color: #688bed; ");
     		//trainModel.setEmergancyBrake(true);
@@ -99,7 +98,7 @@ public class TrainModelCtrl implements Initializable {
  		
  		if(train_info.isVisible()) {
 // 			System.out.println("Updating: " + trainModel);
- 			toggleEmergencyBrake(); // NOTE this could be better
+ 			updateEmergencyBrake(); // NOTE this could be better
  					
  			//Update table
  			trackAuthority.update(trainModel.getTrackAuthority());

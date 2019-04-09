@@ -13,8 +13,10 @@ package application.TrainModel;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import application.MBO.MBOInterface;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackCircuitFailureException;
+import application.TrackModel.TrackModelInterface;
 import application.TrackModel.TrackModelSingleton;
 import application.TrackModel.TrainCrashedException;
 
@@ -23,12 +25,12 @@ class TrainModel implements TrainInterface {
 	//These are some constants that should change
 	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
+	
 	private static final double GRAVITY = 9.8;
 	
 	private static final double STDFRICTION = 0.002;
 	private static final double TIMESCALE = 1e9;
 	
-	//The minimum force to have acelleration
 	private static final double MINFORCE = 10.0;
 	
 	
@@ -58,7 +60,7 @@ class TrainModel implements TrainInterface {
     private String beaconData = "";
     
     private boolean emergencyBrake = false;
-    private boolean serviceBrake = true;
+    private boolean serviceBrake = false;
     
     private int mboAuthority = 0;
     private double mboSuggestedSpeed = 0;
@@ -80,26 +82,39 @@ class TrainModel implements TrainInterface {
     private double speedLimit = 70; // 70 kmh
     private double acelerationLimit = 0.5; // 0.5 m/s^2
     
-    private double trainWaight = 100000;
+    private double trainWaight = 40900.0;
     private double length = 100.05; //Need to load in from database
     private double width = 10.0;
     private double height = 15.0;
     private int axelCount = 6;
     private int carCount = 5;
     
+    private double serviceBrakeForce = 6307.724082; 
+    private double emergencyBrakeForce = 12089.80449; 
+    
     private double crf = 0.0020; // The rolling resistance of the train
     
     private Queue<String> trainLog = new LinkedList<>();
     
-    private TrackModelSingleton trModSin = TrackModelSingleton.getInstance();
-	private MBOSingleton mboSingleton = MBOSingleton.getInstance();
+    private TrackModelInterface trModSin;
+	private MBOInterface mboSin;
     
-    public TrainModel(int trainID) {
+    public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
+    	this.mboSin = mboSin;
+    	this.trModSin = trModSin;
         this.trainID = trainID;
         isActive = false;
     }
 
-    /**
+    public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSingleton, int passangers, double speed) {
+		this(trainID, trModSin, mboSingleton);
+		this.speed = speed;
+		boardPassengers(passangers);
+		
+		
+	}
+
+	/**
      * This function is called when the train should be removed.
      */
     void remove() {
@@ -117,31 +132,42 @@ class TrainModel implements TrainInterface {
     }
     /**
      * To update the train model this function is called.
-     * @param delaTime
+     * @param deltaTime
      */
-    void update(int delaTime){
+    void update(long deltaTime){
     	if(!isActive || hasCrashed) return;
     	
     	System.out.println(this + " train runs at " + System.nanoTime());
-    	double dt = delaTime/TIMESCALE;
+    	double dt = deltaTime/TIMESCALE;
     	
-    	double angle = Math.atan(trModSin.getTrainBlockGrade(trainID));
+    	double grade = trModSin.getTrainBlockGrade(trainID);
+    	double angle = 0.0;
+    	if(grade != 0) {
+    		angle = Math.atan(grade);
+    	}
     	
-    	double f = force(angle);
+    	
+    	double f = force(angle) - brakeF();
     	if(trModSin.trainHasPower(trainID)) { // The train should have power
 //    		Calculate how much force is applied by power
     		f+=powerF();
     	}
     	
+    	System.out.printf("angle= %f\tgravity= %f\tfriction= %fbrakeforce= %f\n",angle, gravity(angle), staticF(angle), brakeF());
+    	
 //    	Calculate the acceleration
     	double an = 0;
-    	if (f > MINFORCE) {
+    	if (Math.abs(f) > MINFORCE) {
     		an = f/mass();
     	}
     	
+    	//TODO add clamps to range
+    	
     	double vn = laplace(dt, acceleration, an, speed);
+    	
 		double xn = laplace(dt, speed, vn, possition);
     	
+		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
 		
 		possition = xn;
 		speed = vn;
@@ -157,12 +183,12 @@ class TrainModel implements TrainInterface {
 		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
-		
-		
-    	
-//    	Update everyone else
-		callMBO();
-        
+//		
+//		
+//    	
+////    	Update everyone else
+//		callMBO();
+//        
     }
     
     private void trainCrashed() {
@@ -176,6 +202,21 @@ class TrainModel implements TrainInterface {
 
 	private double force(double angle) {
     	return gravity(angle) - staticF(angle);
+	}
+	
+	private double brakeF() {
+		if(emergencyBrake) return emergencyBrakeF();
+		return serviceBrakeF();
+	}
+	
+	private double serviceBrakeF() {
+		if(!serviceBrake) return 0.0;
+		return serviceBrakeForce;
+	}
+	
+	private double emergencyBrakeF() {
+		if(!emergencyBrake) return 0.0;
+		return emergencyBrakeForce;
 	}
     
     private double staticF(double angle) {
@@ -200,7 +241,7 @@ class TrainModel implements TrainInterface {
 
     private void callMBO(){
         //TODO This needs to change i don't know how it should work.
-        mboSingleton.getLocation(x, y);
+//        mboSin.getLocation(x, y);
     }
     
    
@@ -268,6 +309,7 @@ class TrainModel implements TrainInterface {
 	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
 		passengerWeight += AVERAGEPASSENGERMASS*numPassengers;
+		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded.");
 		return passengers+=numPassengers;
 	}
 	

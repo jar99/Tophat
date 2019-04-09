@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import application.TrackModel.TrackModelSingleton;
+
 public class TrainModelMainCtrl implements Initializable {
 	
 	//TODO display multiple trains at the same time.
@@ -40,6 +42,8 @@ public class TrainModelMainCtrl implements Initializable {
 	
 	@FXML
 	Button trainButton;
+	@FXML
+	Button train;
 	
 	List<TrainModelCtrl> windowCtrls; 
 	
@@ -74,13 +78,19 @@ public class TrainModelMainCtrl implements Initializable {
     	TrainModel train = trainSelector.getSelectionModel().getSelectedItem();
     	createTrainWindow(train);
     }
+    
+    @FXML
+    private void testTrain(ActionEvent e){
+    	TrackModelSingleton.getInstance().createTrain("green", 1);
 
+    }
 
     @Override
     // Starts the automatic update (NO TOUCHY!!)
     public void initialize(URL url, ResourceBundle resourceBundle) {
     	windowCtrls = new ArrayList<>();
-    	trainSelector.getItems().add(new TrainModel(-1)); //This is just test code to have a default train.
+    	mySin.createTrain(-1, 7, 70.0);
+//    	trainSelector.getItems().add(); //This is just test code to have a default train.
         updateAnimation = new AnimationTimer() {
         	
  			@Override
