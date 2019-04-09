@@ -8,10 +8,13 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
@@ -43,24 +46,51 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	final private Hashtable<String, TrackLine> track = new Hashtable<String, TrackLine>();
 	final private Hashtable<Integer, TrainLocation> trainLocations = new Hashtable<Integer, TrainLocation>();
+
 	private int currentBlockID = -1;
 	private String currentLineName = null;
 
+	private double temperature = 70.00;
+	
+	private int chanceTicket = 0;
+	private Random rand = new Random();
+
 	// ===============UPDATE METHOD======================
 	public void update() {
-		// TODO: generate a ticket randomly each second (chance of no ticket - 1/10)
-		// increment
-		// alighting/boarding on two different Stations
+
+		if(hasALine()) {
+			generateTicket(1.0); //TODO: get time ratio
+		}
 
 	}
 
+	private void generateTicket(double timeRatio) {
+		if(rand.nextInt(100) < chanceTicket) {
+			chanceTicket = 0;
+			for(TrackLine line : track.values()) {
+				Object[] stations = line.getStations().toArray();
+				TrackStation boardStation = (TrackStation) stations[rand.nextInt(stations.length)];
+				TrackStation alightStation;
+				do {
+					alightStation = (TrackStation) stations[rand.nextInt(stations.length)];
+				}while(alightStation.getBlockID() == boardStation.getBlockID());
+				boardStation.addScheduledBoarders(1);
+				alightStation.addScheduledAlighters(1);
+			
+			}
+		}else {
+			chanceTicket += 2 * timeRatio;
+		}
+		
+	}
+	
 	// ===============INTERFACE METHODS======================
 
 	// ====CTC Methods====
 	@Override
 	public int getScheduledBoarding(String lineName, String stationName) {
 		if (track.containsKey(lineName)) {
-			return track.get(lineName).getStation(stationName).getBoarding();
+			return track.get(lineName).getStation(stationName).getScheduledBoarders();
 		} else
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 	}
@@ -68,24 +98,28 @@ public class TrackModelSingleton implements TrackModelInterface {
 	@Override
 	public int getScheduledAlighting(String lineName, String stationName) {
 		if (track.containsKey(lineName)) {
-			return track.get(lineName).getStation(stationName).getAlighting();
+			return track.get(lineName).getStation(stationName).getScheduledAlighters();
 		} else
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 	}
 
 	// ====Track Controller Methods====
 	@Override
-	public void createTrain(String lineName, int trainID) {
+	public void createTrain(String lineName, int trainID) throws SwitchStateException {
 		if (!track.containsKey(lineName))
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 		else if (trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " already exists");
 		else {
-			TrackSection yard = track.get(lineName).getRailYard();
-			TrainLocation newTrain = new TrainLocation(trainID, lineName, yard.getSectionID(), yard.getFirstBlockID(),
-					yard.getStartX(), yard.getStartY());
+
+			TrackBlock firstBlock = track.get(lineName).getEntrance();
+			TrackSection firstSection = track.get(lineName).getSection(firstBlock.getSectionID());
+			
+			TrainLocation newTrain = new TrainLocation(trainID, lineName, firstSection.getSectionID(), firstSection.getFirstBlockID(),
+					firstSection.getStartX(), firstSection.getStartY());
+			
 			trainLocations.put(trainID, newTrain);
-			yard.getBlock(yard.getFirstBlockID()).setOccupied(true);
+			firstSection.getBlock(firstSection.getFirstBlockID()).setOccupied(true);
 
 			// TODO: call the Train Model create train method
 		}
@@ -191,11 +225,22 @@ public class TrackModelSingleton implements TrackModelInterface {
 			throw new TrainCrashedException("Train: " + trainID + " has crashed");
 		}
 
+		//: Consider this to be the depart function from stations (update block
+		// boarding values)
+		int currentBlockID = train.getBlockID();
+		TrackBlock currentBlock = line.getBlock(currentBlockID);
+		if(currentBlock.isStation()) {
+			TrackStation station = line.getStation(currentBlock.getStationName());
+			if(station.isDocked() && displacement > 0) {
+				station.departure();
+			}
+		}
+
 		// Keep going until train has moved full distance
 		while (displacement > 0.0) {
 
 			// Periodically refresh train / block data
-			int currentBlockID = train.getBlockID();
+			currentBlockID = train.getBlockID();
 			double currentBlockDisplacement = train.getBlockDisplacement();
 			boolean isDirectionAB = train.isDirectionAB();
 
@@ -438,35 +483,17 @@ public class TrackModelSingleton implements TrackModelInterface {
 				.getBlock(trainLocations.get(trainID).getBlockID()).isStation())
 			throw new IllegalStateException("Train: " + trainID + " is not at a station");
 		else {
+
+			//: Consider this to be the dock function from stations (update block
+			// boarding values)
+
 			TrainLocation dockedTrain = trainLocations.get(trainID);
 			TrackLine stationLine = track.get(dockedTrain.getLineName());
 			TrackBlock stationBlock = stationLine.getBlock(dockedTrain.getBlockID());
 			TrackStation station = stationLine.getStation(stationBlock.getStationName());
 
-			int alighting = station.getAlighting();
-			int boarding = station.getBoarding();
+			return station.arrival(currentPassengers, capacity);
 
-			// Alight them
-			if (currentPassengers >= alighting) {
-				currentPassengers -= alighting;
-				station.alighted(alighting);
-			} else {
-				currentPassengers -= currentPassengers;
-				station.alighted(currentPassengers);
-			}
-
-			// Board them
-			if (currentPassengers < capacity) {
-				if (currentPassengers + boarding <= capacity) {
-					currentPassengers += boarding;
-					station.boarded(boarding);
-				} else {
-					currentPassengers = capacity;
-					station.boarded(capacity - currentPassengers);
-				}
-			}
-
-			return currentPassengers;
 		}
 
 	}
@@ -483,12 +510,19 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public double getTrainBlockGrade(int trainID) {
-		if (trainLocations.containsKey(trainID)) {
-			String lineName = trainLocations.get(trainID).getLineName();
-			int blockID = trainLocations.get(trainID).getBlockID();
-			return track.get(lineName).getBlock(blockID).getGrade();
-		} else
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
+
+		TrainLocation train = trainLocations.get(trainID);
+		String lineName = train.getLineName();
+		int blockID = train.getBlockID();
+		double grade = track.get(lineName).getBlock(blockID).getGrade();
+
+		if (train.isDirectionAB())
+			return grade;
+		else
+			return grade * (-1);
+
 	}
 
 	@Override
@@ -503,12 +537,19 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public double getTrainBlockElevation(int trainID) {
-		if (trainLocations.containsKey(trainID)) {
-			String lineName = trainLocations.get(trainID).getLineName();
-			int blockID = trainLocations.get(trainID).getBlockID();
-			return track.get(lineName).getBlock(blockID).getElev();
-		} else
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
+
+		TrainLocation train = trainLocations.get(trainID);
+		String lineName = train.getLineName();
+		int blockID = train.getBlockID();
+		double elevationChange = track.get(lineName).getBlock(blockID).getElev();
+
+		if (train.isDirectionAB())
+			return elevationChange;
+		else
+			return elevationChange * (-1);
+
 	}
 
 	@Override
@@ -633,27 +674,39 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	// ===============UI CONTROLLER METHODS======================
 	public void shiftBlockLeft() {
-		// TODO Auto-generated method stub
+		if (hasALine()) {
+			if (currentBlockID == 1)
+				currentBlockID = track.get(currentLineName).getNumBlocks();
+			else
+				currentBlockID = currentBlockID - 1;
+		}
 
 	}
 
 	public void shiftBlockRight() {
-		// TODO Auto-generated method stub
-
+		if (hasALine()) {
+			if (currentBlockID == track.get(currentLineName).getNumBlocks())
+				currentBlockID = 1;
+			else
+				currentBlockID = currentBlockID + 1;
+		}
 	}
 
 	public void toggleCBFailRail() {
-		track.get(currentLineName).getBlock(currentBlockID).toggleFailRail();
+		if (hasALine())
+			track.get(currentLineName).getBlock(currentBlockID).toggleFailRail();
 
 	}
 
 	public void toggleCBFailCircuit() {
-		track.get(currentLineName).getBlock(currentBlockID).toggleFailCircuit();
+		if (hasALine())
+			track.get(currentLineName).getBlock(currentBlockID).toggleFailCircuit();
 
 	}
 
 	public void toggleCBFailPower() {
-		track.get(currentLineName).getBlock(currentBlockID).toggleFailPower();
+		if (hasALine())
+			track.get(currentLineName).getBlock(currentBlockID).toggleFailPower();
 
 	}
 
@@ -665,6 +718,13 @@ public class TrackModelSingleton implements TrackModelInterface {
 		return track.get(currentLineName).getBlock(currentBlockID);
 	}
 
+	public TrackStation getCurrentStation() {
+		TrackLine currentLine = track.get(currentLineName);
+		TrackBlock currentBlock = currentLine.getBlock(currentBlockID);
+		String stationName = currentBlock.getStationName();
+		return currentLine.getStation(stationName);
+	}
+	
 	public Map<Integer, TrainLocation> getTrainMap() {
 		return trainLocations;
 	}
@@ -678,28 +738,28 @@ public class TrackModelSingleton implements TrackModelInterface {
 		try {
 			fis = new FileInputStream(excelFile);
 			workbook = new XSSFWorkbook(fis);
-			
+
+			// Add Track Model Line
 			TrackLine myLine = readLineFile(workbook);
-			
+
 			track.put(myLine.getLineName(), myLine);
 			currentBlockID = 1;
 			currentLineName = myLine.getLineName();
-			
-			//: Call CTC importLine Method
+
+			// Call CTC importLine Method
 			TrackLine ctcLine = readLineFile(workbook);
 			CTCInterface ctcInt = CTCSingleton.getInstance();
 			ctcInt.importLine(ctcLine);
-			
-			//: Call Track Controller importLine Method
+
+			// Call Track Controller importLine Method
 			TrackLine tckCtrlLine = readLineFile(workbook);
 			TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
 			tckCtrlInt.importLine(tckCtrlLine);
-			
-			//: Call MBO importLine Method
+
+			// Call MBO importLine Method
 			TrackLine mboLine = readLineFile(workbook);
 			MBOInterface mboInt = MBOSingleton.getInstance();
 			mboInt.importLine(mboLine);
-			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -710,7 +770,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	private TrackLine readLineFile(XSSFWorkbook workbook) {
 		String lineName = null;
-		
+
 		// Import Block Sheet
 		XSSFSheet blockSheet = workbook.getSheetAt(0);
 
@@ -765,8 +825,8 @@ public class TrackModelSingleton implements TrackModelInterface {
 				String beaconData = blockRow.getCell(18).getStringCellValue();
 
 				TrackStation station = new TrackStation(lineName, sectionID, blockID, junctionA, junctionB, length,
-						grade, speedLimit, elevation, cmElev, stationName, beaconData, cardinalDirection,
-						isUnderground, isCrossing, hasLight, isBidirectional);
+						grade, speedLimit, elevation, cmElev, stationName, beaconData, cardinalDirection, isUnderground,
+						isCrossing, hasLight, isBidirectional);
 				blocks.put(blockID, station);
 				stations.put(stationName, station);
 				sectionBlocksTable.get(sectionID).put(blockID, station);
@@ -822,7 +882,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 		Hashtable<Character, TrackSection> sections = new Hashtable<Character, TrackSection>();
 
 		sectionRowIt.next();
-		
+
 		while (sectionRowIt.hasNext()) {
 			Row sectionRow = sectionRowIt.next();
 
@@ -844,18 +904,69 @@ public class TrackModelSingleton implements TrackModelInterface {
 				double centerY = sectionRow.getCell(13).getNumericCellValue();
 				double radius = sectionRow.getCell(14).getNumericCellValue();
 				boolean isClockwise = sectionRow.getCell(15).getBooleanCellValue();
-				
-				TrackSectionCurve sectionCurve = new TrackSectionCurve(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID), centerX, centerY, radius, isClockwise);
+
+				TrackSectionCurve sectionCurve = new TrackSectionCurve(lineName, sectionID, firstBlockID, lastBlockID,
+						startX, startY, endX, endY, sectionBlocksTable.get(sectionID), centerX, centerY, radius,
+						isClockwise);
 				sections.put(sectionID, sectionCurve);
 			} else {
-				TrackSectionStraight sectionStraight = new TrackSectionStraight(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID));
+				TrackSectionStraight sectionStraight = new TrackSectionStraight(lineName, sectionID, firstBlockID,
+						lastBlockID, startX, startY, endX, endY, sectionBlocksTable.get(sectionID));
 				sections.put(sectionID, sectionStraight);
 			}
 
 		}
-		
+
 		// Create Line
 		return new TrackLine(lineName, sections, blocks, stations, switches);
 	}
+
+	public String getSwitchConnection(TrackJunction switchJunction) {
+		if (!switchJunction.isSwitch())
+			throw new IllegalArgumentException("Junction with ID: " + switchJunction.getID() + " is not a switch");
+		try {
+			TrackJunction blockJunction = track.get(currentLineName).getSwitch(switchJunction.getID())
+					.getNextJunction(switchJunction.getEntryPoint());
+
+			if (blockJunction.getID() == -1)
+				return "Rail Yard";
+			else
+				return track.get(currentLineName).getBlock(blockJunction.getID()).getName();
+
+		} catch (SwitchStateException e) {
+			return "Disconnected";
+		}
+	}
+
+	public double getTemperature() {
+		return temperature;
+	}
+
+	public void setTemperature(double newTemperature) {
+		if (newTemperature <= 39.00) {
+			setHeatersOn(true);
+		} else {
+			setHeatersOn(false);
+		}
+		temperature = newTemperature;
+
+	}
+
+	private void setHeatersOn(boolean heaterOn) {
+		for (TrackLine line : track.values()) {
+			for (TrackBlock block : line.getBlocks()) {
+				block.setHeated(heaterOn);
+			}
+		}
+
+	}
+
+	// ===============DEBUG METHODS======================
+	public void debugJunction(TrackJunction junction) {
+		System.out.println("ID: " + junction.getID() + " Entry: " + junction.getEntryPoint() + " isSwitch: "
+				+ junction.isSwitch());
+	}
+
+
 
 }
