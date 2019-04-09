@@ -122,6 +122,8 @@ public class TrackModelSingleton implements TrackModelInterface {
 			firstSection.getBlock(firstSection.getFirstBlockID()).setOccupied(true);
 
 			// TODO: call the Train Model create train method
+			TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+			trnModInt.createTrain(trainID);
 		}
 	}
 
@@ -288,7 +290,14 @@ public class TrackModelSingleton implements TrackModelInterface {
 						TrackJunction nextBlockJunction = line.getNextBlockJunction(isDirectionAB, currentBlockID);
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 							// TODO: Call Track Controller Remove Train option
+							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+							tckCtrlInt.removeTrain(trainID);
+							
 							// TODO: Call Train Model Remove Train option
+							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							trnModInt.removeTrain(trainID);
+							
+							
 							train.delete();
 							checkBlockOccupancy(line.getLineName(), currentBlockID);
 						} else {
@@ -341,7 +350,14 @@ public class TrackModelSingleton implements TrackModelInterface {
 						TrackJunction nextBlockJunction = line.getNextBlockJunction(isDirectionAB, currentBlockID);
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 							// TODO: Call Track Controller Remove Train option
+							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+							tckCtrlInt.removeTrain(trainID);
+							
 							// TODO: Call Train Model Remove Train option
+							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							trnModInt.removeTrain(trainID);
+							
+							
 							train.delete();
 							checkBlockOccupancy(line.getLineName(), currentBlockID);
 						} else {
