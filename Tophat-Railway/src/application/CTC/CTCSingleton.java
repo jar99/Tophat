@@ -30,8 +30,9 @@ public class CTCSingleton implements CTCInterface {
 	// =====================================
 
 	// NOTE: Put your data objects here
-	private Map<Integer,Train> trains =new HashMap<Integer,Train>();
+	private HashMap<Integer,Train> trains =new HashMap<Integer,Train>();
 	private ArrayList<Schedule> myschedule=new ArrayList<Schedule>();
+	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 	//private String[] Stations=TrackModelSingleton.getInstance().getBlockNameList().stream().toArray(String[]::new);
 	//TODO: need a function, getBlockName, return array/list of strings of all block names and stations
 	private String[] Stations={"B0","B1 FIXME","B2 StationA"};
@@ -70,16 +71,24 @@ public class CTCSingleton implements CTCInterface {
 		}
 		if (trains.containsKey(Integer.valueOf(ID))){
 			System.out.println("Duplicated train ID!!");//TODO change this into UI
-			return false;
 		}
 		trains.put(Integer.valueOf(ID), new Train(Integer.parseInt(ID), Integer.parseInt(Speed)));
 		return true;
 		
 	}
 	public boolean addSchedule(int ID, String myLine, String[] myStation, Integer[] mydistance, int myDeparturetime, int suggestedSpeed){
-		Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
-		myschedule.add(tmp);
-		return true;
+		if (!trains.containsKey(ID)){
+			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
+			myschedule.add(tmp);
+			return true;
+		}
+		else{
+			Schedule tmp1=myschedule.get(ID);
+			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
+			tmp1.mergeSchedule(tmp2);
+			return true;
+		}
+		
 	}
 	public ArrayList<String> tolist(){
 		ArrayList<String> tmp=new ArrayList<String>();
@@ -122,6 +131,10 @@ public class CTCSingleton implements CTCInterface {
 		*/
 
 
+	}
+	@Override
+	public void importLine(TrackLine trackLine) {
+		track.put(trackLine.getLineName(), trackLine);
 	}
 
 }

@@ -2,6 +2,7 @@ package application.MBO;
 
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerSingleton;
+import application.TrackModel.TrackLine;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
@@ -61,6 +62,12 @@ public class MBOSingleton implements MBOInterface {
 		// Example: get the count from a singleton and replace yours with the largest
 		//TrainControllerSingleton trnCtrlSin = TrainControllerSingleton.getInstance();
 		TrainModelSingleton trainModelSingleton = TrainModelSingleton.getInstance();
+		
+	}
+
+	@Override
+	public void importLine(TrackLine trackLine) {
+		// TODO Auto-generated method stub
 		
 	}
 

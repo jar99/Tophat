@@ -9,10 +9,10 @@ public class TrackSectionCurve extends TrackSection {
 	final private double centerY;
 	final private boolean isClockwise;
 
-	public TrackSectionCurve(String lineName, char sectionID, int firstBlockID, double startX, double startY,
-			double endX, double endY, TrackJunction junctionA, TrackJunction junctionB, Map<Integer, TrackBlock> blocks,
+	public TrackSectionCurve(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX, double startY,
+			double endX, double endY, Map<Integer, TrackBlock> blocks,
 			double radius, double centerX, double centerY, boolean isClockwise) {
-		super(lineName, sectionID, firstBlockID, startX, startY, endX, endY, junctionA, junctionB, blocks);
+		super(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, blocks);
 		this.radius = radius;
 		this.centerX = centerX;
 		this.centerY = centerY;

@@ -106,6 +106,7 @@ public class TrackModelCtrl implements Initializable {
 	void importLine() {
 		// TODO: Import Line Block by Block, Switch by Switch, Section by Section
 
+		mySin.importLine("green.xlsx");
 		/*
 		 * //: Add 3 lines based on the start/ length of the TrackBlock Objects
 		 * ArrayList<TrackBlock> blockList = mySin.getBlockList(); for (TrackBlock

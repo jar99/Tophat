@@ -53,7 +53,7 @@ public class Train implements TrainCtrlInterface {
 			mySin.getDriveMode();
 	}
 	
-	public void trainStatus(int trainStatus) {
+	/*public void trainStatus(int trainStatus) {
 		trainStatus = mySin.getTrainStatus();
 		switch(trainStatus) {
 			case 1:
@@ -63,6 +63,18 @@ public class Train implements TrainCtrlInterface {
 			case 3:
 				signalStatus = true;
 		}
+	}*/
+	
+	public void engineStatus(boolean engineFail) {
+		engineFail = mySin.getEngineStatus();
+	}
+	
+	public void brakeStatus(boolean brakeFailure) {
+		brakeFailure = mySin.getBrakeStatus();
+	}
+	
+	public void signalStatus(boolean signalFailure) {
+		signalFailure = mySin.getSignalStatus();
 	}
 	
 	public void leftDoor(boolean leftDoor) {
@@ -74,3 +86,5 @@ public class Train implements TrainCtrlInterface {
 	}
 	
 }
+
+//new edits
