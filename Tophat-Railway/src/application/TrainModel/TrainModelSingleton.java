@@ -16,7 +16,7 @@ import application.TrainController.TrainControllerSingleton;
 public class TrainModelSingleton implements TrainModelInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
-	private static TrainModelSingleton instance = null;
+	private static TrainModelSingleton instance;
 
 	private TrainModelSingleton() {
 		 trainModelHashTable = new Hashtable<>();
@@ -32,7 +32,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 	private boolean disabled = false;
 	
-	private TrainControllerSingleton trainControllerSingleton = TrainControllerSingleton.getInstance();
 	
 	public boolean toggleDisable() {
 		return disabled = !disabled;
@@ -48,15 +47,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 //    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
     	
         return trainModelHashTable.putIfAbsent(trainID, train);
-    }
-
-    public void makeTrain(int trainID, double x, double y, TrackBlock currentBlock, TrackBlock nextBlock) {
-    	if(trainExists(trainID));
-    	System.out.println("Created a new train " + trainID);
-    	TrainModel train = new TrainModel(trainID, x, y, currentBlock);
-//    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
-    	
-    	trainModelHashTable.put(trainID, train);
     }
     
     public boolean trainExists(int trainID) {
@@ -97,20 +87,6 @@ public class TrainModelSingleton implements TrainModelInterface {
     Collection<TrainModel> getTrains() {
         return trainModelHashTable.values();
     }
-    
-    /**
-     * Gets the speed of the first train.
-     * @return
-     */
-    @Deprecated
-    public String getSpeed() {
-    	
-    	for(TrainModel train : trainModelHashTable.values()) {
-    		return train.getSpeed() + "mph";
-    	}
-    	
-    	return "0mph";
-    }
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
@@ -123,5 +99,21 @@ public class TrainModelSingleton implements TrainModelInterface {
 			//Any code to call for each train model update.
 			trainModel.update(0);
 		}
+	}
+
+	@Override
+	public void setTrainAuthority(int trainID, int authority) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return;
+		train.setMBOAuthority(authority);
+		
+	}
+	
+	@Override
+	public void setTrainSuggestedSpeed(int trainID, double speed) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return;
+		train.setMBOSuggestedSpeed(speed);
+		
 	}
 }

@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-examples-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-excelant-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-ooxml-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-ooxml-schemas-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/poi-scratchpad-4.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/ooxml-lib/curvesapi-1.05.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/ooxml-lib/xmlbeans-3.0.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/activation-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/commons-codec-1.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/commons-collections4-4.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/commons-compress-1.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/commons-math3-3.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/jaxb-api-2.3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/jaxb-core-2.3.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/jaxb-impl-2.3.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/junit-4.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="poi/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX11"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jSerialComm"/>
 	<classpathentry kind="output" path="bin"/>

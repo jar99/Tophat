@@ -25,6 +25,28 @@ public class Schedule{
 			LeaveTime[i]=ArrivalTime[i]+5*60;
 		}
 	}
+	public void mergeSchedule(Schedule tmp2){
+		int tmpsize=this.getStation().length+tmp2.getStation().length-1;
+		int[] distancetmp=new int[tmpsize];
+		String[] stationtmp=new String[tmpsize];
+		int[] arrivaltmp=new int[tmpsize];
+		int[] leavetmp=new int[tmpsize];
+		for (int i=0;i<this.getStation().length;i++){
+			distancetmp[i]=distance[i];
+			stationtmp[i]=Station[i];
+			arrivaltmp[i]=ArrivalTime[i];
+			leavetmp[i]=LeaveTime[i];
+			stationtmp[i]=Station[i];
+		}
+		distancetmp[this.getStation().length-1]=tmp2.getDistance()[0];
+		leavetmp[this.getStation().length-1]=tmp2.getDepartureTime();
+		for (int i=this.getStation().length;i<tmpsize;i++){
+			arrivaltmp[i]=leavetmp[i-1]+distance[i-1]/tmp2.getSpeed();
+			leavetmp[i]=ArrivalTime[i]+5*60;
+			distancetmp[i]=tmp2.getDistance()[i-this.getStation().length];
+			stationtmp[i]=tmp2.getStation()[i-this.getStation().length];
+		}
+	}
 	public ArrayList<String> printschedule(){
 		
 		ArrayList<String> tmp=new ArrayList<String>();
@@ -50,5 +72,14 @@ public class Schedule{
 	}
 	public int[] getLeaveTime(){
 		return LeaveTime;
-    }
+	}
+	public int[] getDistance(){
+		return distance;
+	}
+	public int getDepartureTime(){
+		return Departuretime;
+	}
+	public int getSpeed(){
+		return speed;
+	}
 }
