@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.AnimationTimer;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -12,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 
 
- class TrackControllerCtrl implements Initializable {
+public class TrackControllerCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
 	private TrackControllerSingleton mySin = TrackControllerSingleton.getInstance();
@@ -24,38 +23,44 @@ import javafx.scene.shape.Circle;
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
 	
-	//Block Anchor
 	@FXML
-	private Label currentBlockG1;
+    private Label currentBlockG1;
+
 	@FXML
-	private ChoiceBox<Integer> choiceBoxBlockG1;
+    private ChoiceBox<?> choiceBoxBlockG1;
+
 	@FXML
-	private Label blockSpeed;
+    private Label blockSpeed;
+
 	@FXML
-	private Label blockAuthority;
+    private Label blockAuthority;
+
 	@FXML
-	private Label speedUnits;
+    private Label speedUnits;
+
 	@FXML
-	private Label authorityUnits;
-	
-	
-	//Block Info Anchor
+    private Label authorityUnits;
+
 	@FXML
-	private Circle iconOccupancyG1;
+    private Circle iconOccupancyG1;
+
 	@FXML
-	private Circle iconOperationalG1;
-	
-	//Track Controller Function Anchor
+    private Circle iconOperationalG1;
+
 	@FXML
-	private Circle iconLightsOnG1;
+    private Circle iconLightsOnG1;
+
 	@FXML
-	private Circle iconLightsOffG1;
+    private Circle iconLightsOffG1;
+
 	@FXML
-	private Circle iconCrossingOnG1;
+    private Circle iconCrossingOnG1;
+
 	@FXML
-	private Circle iconCrossingOffG1;
+    private Circle iconCrossingOffG1;
+
 	@FXML
-	private Label nextBlockG1;
+    private Label nextBlockG1;
 	
 
 	// NOTE: This is where you build UI functionality
@@ -119,9 +124,6 @@ import javafx.scene.shape.Circle;
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		//choiceBoxBlockG1.setItems(FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20));
-		//CBIDG1 = choiceBoxBlockG1.getValue();
 		
 		updateAnimation = new AnimationTimer() {
 
