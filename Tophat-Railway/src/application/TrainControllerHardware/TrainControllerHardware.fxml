@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <AnchorPane prefHeight="75.0" prefWidth="600.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Label layoutX="122.0" layoutY="29.0" text="Train Controller Hardware">
+               <font>
+                  <Font name="Comic Sans MS" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <left>
+      <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
+         <children>
+            <Label layoutX="72.0" layoutY="14.0" text="Train ID" />
+            <Separator layoutY="38.0" prefWidth="200.0" />
+            <Label layoutX="21.0" layoutY="53.0" text="CTC" underline="true" />
+            <Label layoutX="21.0" layoutY="70.0" text="Speed" />
+            <Label layoutX="21.0" layoutY="87.0" text="Authority" />
+            <Label layoutX="21.0" layoutY="124.0" text="MBO" underline="true" />
+            <Label layoutX="21.0" layoutY="142.0" text="Speed" />
+            <Label layoutX="21.0" layoutY="159.0" text="Authority" />
+            <Separator layoutY="194.0" prefWidth="200.0" />
+            <Label layoutX="21.0" layoutY="197.0" text="Train Status" underline="true" />
+            <Label layoutX="21.0" layoutY="221.0" text="Engine" />
+            <Label layoutX="24.0" layoutY="238.0" text="Brake" />
+            <Label layoutX="18.0" layoutY="255.0" text="Signal" />
+         </children>
+      </AnchorPane>
+   </left>
+   <bottom>
+      <AnchorPane prefHeight="25.0" prefWidth="600.0" BorderPane.alignment="BOTTOM_CENTER" />
+   </bottom>
+   <center>
+      <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="42.0" layoutY="31.0" text="Speed" />
+            <Label layoutX="42.0" layoutY="57.0" text="Power" />
+            <Label layoutX="42.0" layoutY="83.0" text="Ki" />
+            <Label layoutX="38.0" layoutY="109.0" text="Kp" />
+            <Label layoutX="31.0" layoutY="150.0" text="Service Brake" />
+            <Label layoutX="31.0" layoutY="179.0" text="Emergency Brake" />
+         </children>
+      </AnchorPane>
+   </center>
+   <right>
+      <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
+         <children>
+            <Label layoutX="39.0" layoutY="39.0" text="Drive Mode" />
+            <Separator layoutX="1.0" layoutY="71.0" prefWidth="200.0" />
+            <Label layoutX="39.0" layoutY="97.0" text="Lights" />
+            <Label layoutX="39.0" layoutY="114.0" text="Left Door" />
+            <Label layoutX="39.0" layoutY="131.0" text="Right Door" />
+            <Label layoutX="39.0" layoutY="150.0" text="Temperature" />
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
