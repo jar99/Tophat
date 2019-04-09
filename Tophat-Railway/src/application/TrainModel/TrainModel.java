@@ -16,22 +16,35 @@ import java.util.Queue;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelSingleton;
+import application.TrackModel.TrainCrashedException;
 
 class TrainModel implements TrainInterface {
 
 	//These are some constants that should change
 	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
+	private static final double GRAVITY = 9.8;
+	
+	private static final double STDFRICTION = 0.002;
+	private static final double TIMESCALE = 1e9;
+	
+	//The minimum force to have acelleration
+	private static final double MINFORCE = 10.0;
+	
 	
 	//These are basic information on the train
 	private int trainID;
 	private boolean isActive = false;
+	private boolean hasCrashed = false;
 	
 	private int passengers = 0;
 	private int crewCount = 1;
 	
 	private double power;
+    private double acceleration;
     private double speed;
+    private double displacement;
+    private double possition;
     
     //These are the actual position read from the block this should change at some point
     private double x, y;
@@ -56,15 +69,25 @@ class TrainModel implements TrainInterface {
     private boolean doorOperationState = true;
     private boolean engineOperationState = true;
     
-    //These are the train simulation metrics
-    private int passengerCap = 200;
     
-    private double mass = 10000.0;
+    private double passengerWeight = 0.0;
+
+    
+    //These are the train simulation metrics
+    private int passengerCap = 222;
+    
+    private double maxPower = 120e3; // 120kw
+    private double speedLimit = 70; // 70 kmh
+    private double acelerationLimit = 0.5; // 0.5 m/s^2
+    
+    private double trainWaight = 100000;
     private double length = 100.05; //Need to load in from database
     private double width = 10.0;
     private double height = 15.0;
+    private int axelCount = 6;
+    private int carCount = 5;
     
-    private double maxPower = 120e3; // 120kw
+    private double crf = 0.0020; // The rolling resistance of the train
     
     private Queue<String> trainLog = new LinkedList<>();
     
@@ -97,23 +120,83 @@ class TrainModel implements TrainInterface {
      * @param delaTime
      */
     void update(int delaTime){
-    	System.out.println(this + " train runs at " + System.nanoTime());
+    	if(!isActive || hasCrashed) return;
     	
-    	if(trModSin.trainHasPower(trainID) && power > 0) { // The train should have power
-    		// Calculate the applied force
-    		
+    	System.out.println(this + " train runs at " + System.nanoTime());
+    	double dt = delaTime/TIMESCALE;
+    	
+    	double angle = Math.atan(trModSin.getTrainBlockGrade(trainID));
+    	
+    	double f = force(angle);
+    	if(trModSin.trainHasPower(trainID)) { // The train should have power
+//    		Calculate how much force is applied by power
+    		f+=powerF();
     	}
+    	
+//    	Calculate the acceleration
+    	double an = 0;
+    	if (f > MINFORCE) {
+    		an = f/mass();
+    	}
+    	
+    	double vn = laplace(dt, acceleration, an, speed);
+		double xn = laplace(dt, speed, vn, possition);
+    	
+		
+		possition = xn;
+		speed = vn;
+		acceleration = an;
+		displacement = xn - possition;
+		
+//    	Update train location
+		try {
+			trModSin.updateTrainDisplacement(trainID, displacement);
+		} catch (TrainCrashedException e) {
+			trainCrashed();
+		}
+		
+		x = trModSin.getTrainXCoordinate(trainID);
+		y = trModSin.getTrainYCoordinate(trainID);
+		
+		
+    	
+//    	Update everyone else
+		callMBO();
         
     }
     
-    private void callTrackModel(double distance) {
-    	// TODO This needs to be fixed so it works on it's own
-//    	TrackTrain trackTrain = trackModelSingleton.getCurrentBlock();
-//    	if(trackTrain == null) return;
-//    	x = trackTrain.getX();
-//    	y = trackTrain.getY();
-    	
+    private void trainCrashed() {
+		System.out.println(trainID + ": The train has crashed.");
+		hasCrashed = true;
+	}
+
+	private double powerF() {
+		return power/speed;
+	}
+
+	private double force(double angle) {
+    	return gravity(angle) - staticF(angle);
+	}
+    
+    private double staticF(double angle) {
+		return crf*normal(angle)/axelCount;
+	}
+
+	private double gravity(double angle) {
+		return GRAVITY*Math.sin(angle)*mass();
+	}
+	
+	private double normal(double angle) {
+		return GRAVITY*Math.cos(angle)*mass();
+	}
+    
+    private double mass() {
+    	return getWeight()/GRAVITY;
     }
+    
+    private double laplace(double deltaT, double a, double an, double b) {
+		return b+((deltaT)/2)*(an + a);
+	}
 
     private void callMBO(){
         //TODO This needs to change i don't know how it should work.
@@ -133,22 +216,24 @@ class TrainModel implements TrainInterface {
 	//Getters and setters
 	
 	public double getPower(){
-		return Math.min(power, maxPower); // Caps the power setting
+		return power;
+		
     }
 	
 	public void setPower(double power){
+		if(power < 0) this.power = 0;
+		else if(power > maxPower) this.power = maxPower;
 		this.power = power;
     }
 	
 	
 	public boolean hasPower() {
-		return true; //TODO add block power
-//		return currentBlock.hasPower();
+		return trModSin.trainHasPower(trainID);
 	}
 
     
     public double getWeight() {
-        return mass;
+        return trainWaight+passengerWeight;
     }
     
 
@@ -181,14 +266,14 @@ class TrainModel implements TrainInterface {
 	@Override
 	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
-		mass += AVERAGEPASSENGERMASS*numPassengers;
+		passengerWeight += AVERAGEPASSENGERMASS*numPassengers;
 		return passengers+=numPassengers;
 	}
 	
 	@Override
 	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
-		mass -= AVERAGEPASSENGERMASS*numPassengers;
+		passengerWeight -= AVERAGEPASSENGERMASS*numPassengers;
 		return passengers-=numPassengers;
 	}
 	
