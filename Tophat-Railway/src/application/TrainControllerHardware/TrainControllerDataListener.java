@@ -1,36 +1,29 @@
 package application.TrainControllerHardware;
 
-import com.fazecast.jSerialComm.*;
-
-import application.TrainController.TrainControllerSingleton;
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortEvent;
+import com.fazecast.jSerialComm.SerialPortDataListener;
 
 public class TrainControllerDataListener implements SerialPortDataListener{
-	private SerialPort port;
 	
-	public TrainControllerDataListener(SerialPort port) {
-		this.port = port;
-	}
+	public TrainControllerDataListener(){}
 	
+	/**
+	 * Only acceptable port events are data reception
+	 */
 	@Override
 	public int getListeningEvents(){
-		return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
+		return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
 	}
 	
+	/**
+	 * Function to process data transmissions
+	 */
 	@Override
 	public void serialEvent(SerialPortEvent ev){
-		if(ev.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) return;
+		if(ev.getEventType() != SerialPort.LISTENING_EVENT_DATA_RECEIVED) return;
 		
-		// send Singleton data over serial b/c this is simple for iteration 2
-		//TrainControllerSingleton ctrlSin = TrainControllerSingleton.getInstance();
-		//String trainSpeed = ctrlSin.getSpeed();
-		//byte[] speedBuff = trainSpeed.getBytes();
-		//String trainPower = ctrlSin.getPower();
-		//byte[] powerBuff = trainPower.getBytes();
-		//String trainTemp = ctrlSin.getTemperature();
-		//byte[] tempBuff = trainTemp.getBytes();
-		
-		//port.writeBytes(speedBuff, speedBuff.length);
-		//port.writeBytes(powerBuff, powerBuff.length);
-		//port.writeBytes(tempBuff, tempBuff.length);
+		byte[] data = ev.getReceivedData();
+		System.out.println(data);
 	}
 }

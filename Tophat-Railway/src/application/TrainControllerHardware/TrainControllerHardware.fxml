@@ -105,7 +105,7 @@
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="engineStatusValue" layoutX="100.0" layoutY="225.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+            <Label fx:id="engineStatusValue" layoutX="100.0" layoutY="225.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#f5363d" AnchorPane.leftAnchor="100.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -132,22 +132,22 @@
    <center>
       <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="speedLabel" layoutX="20.0" layoutY="20.0" text="Speed:">
+            <Label fx:id="speedLabel" layoutX="10.0" layoutY="20.0" text="Speed:">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powerLabel" layoutX="20.0" layoutY="45.0" text="Power:">
+            <Label fx:id="powerLabel" layoutX="10.0" layoutY="70.0" text="Power:">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="kiLabel" layoutX="20.0" layoutY="70.0" text="Ki:">
+            <Label fx:id="kiLabel" layoutX="10.0" layoutY="95.0" text="Ki:">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="kpLabel" layoutX="20.0" layoutY="95.0" text="Kp:">
+            <Label fx:id="kpLabel" layoutX="10.0" layoutY="120.0" text="Kp:">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
@@ -162,22 +162,22 @@
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="speedValue" layoutX="100.0" layoutY="20.0" style="-fx-background-color: #dae3db;" text="km/h">
+            <Label fx:id="speedValue" layoutX="115.0" layoutY="20.0" style="-fx-background-color: #dae3db;" text="km/h">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="powerValue" layoutX="100.0" layoutY="45.0" style="-fx-background-color: #dae3db;" text="W">
+            <Label fx:id="powerValue" layoutX="115.0" layoutY="70.0" style="-fx-background-color: #dae3db;" text="W">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="kiValue" layoutX="100.0" layoutY="70.0" style="-fx-background-color: #dae3db;" text="wtf">
+            <Label fx:id="kiValue" layoutX="115.0" layoutY="95.0" style="-fx-background-color: #dae3db;" text="wtf">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="kpValue" layoutX="100.0" layoutY="95.0" style="-fx-background-color: #dae3db;" text="is this unit">
+            <Label fx:id="kpValue" layoutX="115.0" layoutY="120.0" style="-fx-background-color: #dae3db;" text="unit">
                <font>
                   <Font name="Consolas" size="14.0" />
                </font>
@@ -192,7 +192,17 @@
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Separator layoutY="150.0" prefWidth="200.0" />
+            <Separator layoutY="166.0" prefWidth="200.0" />
+            <Label fx:id="actualSpeedLabel" layoutX="10.0" layoutY="45.0" text="Actual Speed:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="actualSpeedValue" layoutX="115.0" layoutY="45.0" style="-fx-background-color: #dae3db;" text="km/h">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

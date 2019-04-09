@@ -1,6 +1,5 @@
 package application.TrainControllerHardware;
 
-import com.fazecast.jSerialComm.*;
 import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
 
@@ -22,17 +21,17 @@ public class TrainControllerHWSingleton{
 	}
 	
 	// these are all of the values that I actually change
-	private int trainId;
-	private boolean drivingMode;
-	private double speed, power, ki, kp;
-	private boolean brake, eBrake;
-	private boolean lights, leftDoor, rightDoor;
-	private double temp;
+	int trainId;
+	boolean drivingMode;
+	double speed, power, ki, kp;
+	boolean brake, eBrake;
+	boolean lights, leftDoor, rightDoor;
+	double temp;
 	
 	// values that I'm just displaying
-	private int mboAuthority, trackAuthority;
-	private double mboSpeed, trackSpeed, actualSpeed;
-	private boolean engineState, signalState, brakeState;
+	int mboAuthority, trackAuthority;
+	double mboSpeed, trackSpeed, actualSpeed;
+	boolean engineState, signalState, brakeState;
 	
 	// getters and setters
 	public int getTrainId() {
