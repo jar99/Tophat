@@ -4,7 +4,7 @@ import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
-import application.TrainControllerHardware.TrainControllerHardwareSingleton;
+import application.TrainControllerHardware.TrainControllerHWSingleton;
 import application.TrainModel.TrainModelSingleton;
 import application.CTC.CTCSingleton;
 
@@ -27,6 +27,7 @@ public class Main {
 	private static boolean ENABLE_4 = true;
 	private static boolean ENABLE_5 = true;
 	private static boolean ENABLE_6 = true;
+	private static boolean ENABLE_7 = true;
 	
 	
 	
@@ -39,7 +40,7 @@ public class Main {
 		TrackModelSingleton 		     tckModSin = 	TrackModelSingleton.getInstance();
 		TrainModelSingleton 		     trnModSin = 	TrainModelSingleton.getInstance();
 		TrainControllerSingleton 	     trnCtrlSin = 	TrainControllerSingleton.getInstance();
-		TrainControllerHardwareSingleton trnHwSin = TrainControllerHardwareSingleton.getInstance();
+		TrainControllerHWSingleton       trnHwSin =     TrainControllerHWSingleton.getInstance();
 		MBOSingleton 				     mboSin = 		MBOSingleton.getInstance();
 
 		// Calling Thread which starts the FX UI
@@ -57,7 +58,7 @@ public class Main {
 
 			@Override
 			public void run() {
-				update(ctcSin, tckCtrlSin, tckModSin, trnModSin, trnCtrlSin, mboSin);
+				update(ctcSin, tckCtrlSin, tckModSin, trnModSin, trnCtrlSin, trnHwSin, mboSin);
 			}
 		}, 0, 1, TimeUnit.SECONDS); // Determines update frequency (1 sec atm)
 
@@ -65,10 +66,12 @@ public class Main {
 
 	// calls each singleton's update() method
 	private static void update(CTCSingleton ctcSin, TrackControllerSingleton tckCtrlSin, TrackModelSingleton tckModSin,
-			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, MBOSingleton mboSin) {
+			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, TrainControllerHWSingleton trnHwSin, MBOSingleton mboSin) {
 		// call singleton update methods
 		
-		if(DEBUG && !printedUpdateDebugs && !(ENABLE_1 && ENABLE_2 && ENABLE_3 && ENABLE_4 && ENABLE_5 && ENABLE_6) ) System.err.println("WARNING: Some updates Have been disabled");
+		if(DEBUG && !printedUpdateDebugs && !(ENABLE_1 && ENABLE_2 && ENABLE_3 && ENABLE_4 && ENABLE_5 && ENABLE_6 && ENABLE_7) ) {
+			System.err.println("WARNING: Some updates Have been disabled");
+		}
 		
 		try {
 			if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 0 - Scheduler worked");
@@ -90,6 +93,11 @@ public class Main {
 			
 			if(ENABLE_6) mboSin.update();
 			if(DEBUG && !printedUpdateDebugs) System.out.println("DEBUG: 6 - MBO update worked");
+			
+			if(ENABLE_7) trnHwSin.update();
+			if(DEBUG && !printedUpdateDebugs){
+				System.out.println("DEBUG: 7 - Train Controller Hardware update worked");
+			}
 			
 		} catch (Exception e) {
 			System.err.println();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,9 +12,9 @@
    <top>
       <AnchorPane prefHeight="75.0" prefWidth="600.0" BorderPane.alignment="TOP_CENTER">
          <children>
-            <Label layoutX="122.0" layoutY="29.0" text="Train Controller Hardware">
+            <Label fx:id="titleLabel" layoutX="162.0" layoutY="26.0" text="Train Controller Hardware" underline="true" AnchorPane.leftAnchor="162.0" AnchorPane.rightAnchor="73.33333333333333" AnchorPane.topAnchor="26.0">
                <font>
-                  <Font name="Comic Sans MS" size="20.0" />
+                  <Font name="Consolas" size="20.0" />
                </font>
             </Label>
          </children>
@@ -22,20 +23,107 @@
    <left>
       <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
          <children>
-            <Label layoutX="72.0" layoutY="14.0" text="Train ID" />
-            <Separator layoutY="38.0" prefWidth="200.0" />
-            <Label layoutX="21.0" layoutY="53.0" text="CTC" underline="true" />
-            <Label layoutX="21.0" layoutY="70.0" text="Speed" />
-            <Label layoutX="21.0" layoutY="87.0" text="Authority" />
-            <Label layoutX="21.0" layoutY="124.0" text="MBO" underline="true" />
-            <Label layoutX="21.0" layoutY="142.0" text="Speed" />
-            <Label layoutX="21.0" layoutY="159.0" text="Authority" />
-            <Separator layoutY="194.0" prefWidth="200.0" />
-            <Label layoutX="21.0" layoutY="197.0" text="Train Status" underline="true" />
-            <Label layoutX="21.0" layoutY="221.0" text="Engine" />
-            <Label layoutX="24.0" layoutY="238.0" text="Brake" />
-            <Label layoutX="18.0" layoutY="255.0" text="Signal" />
+            <Label fx:id="trainIdLabel" layoutX="25.0" layoutY="10.0" text="Train ID:" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font name="Consolas" size="16.0" />
+               </font>
+            </Label>
+            <Separator layoutY="40.0" prefWidth="200.0" />
+            <Label fx:id="ctcLabel" layoutX="25.0" layoutY="55.0" text="CTC" underline="true" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="ctcSpeedLabel" layoutX="25.0" layoutY="75.0" text="Speed:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="ctcAuthorityLabel" layoutX="25.0" layoutY="90.0" text="Authority:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="mboLabel" layoutX="25.0" layoutY="125.0" text="MBO" underline="true" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="mboSpeedLabel" layoutX="25.0" layoutY="145.0" text="Speed:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="mboAuthorityLabel" layoutX="25.0" layoutY="160.0" text="Authority:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Separator layoutY="190.0" prefWidth="200.0" />
+            <Label fx:id="trainStatusLabel" layoutX="25.0" layoutY="205.0" text="Train Status" underline="true" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="engineStatusLabel" layoutX="25.0" layoutY="225.0" text="Engine:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="brakeStatusLabel" layoutX="25.0" layoutY="240.0" text="Brake:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="signalStatusLabel" layoutX="25.0" layoutY="255.0" text="Signal:" AnchorPane.leftAnchor="25.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="trainIdValue" layoutX="115.0" layoutY="10.0" style="-fx-background-color: #dae3db;" text="tID" AnchorPane.leftAnchor="115.0" AnchorPane.topAnchor="10.0">
+               <font>
+                  <Font name="Consolas" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="ctcSpeedValue" layoutX="100.0" layoutY="75.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="ctcAuthorityValue" layoutX="100.0" layoutY="90.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="mboSpeedValue" layoutX="100.0" layoutY="145.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="mboAuthorityValue" layoutX="100.0" layoutY="160.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="engineStatusValue" layoutX="100.0" layoutY="225.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="brakeStatusValue" layoutX="100.0" layoutY="240.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="signalStatusValue" layoutX="100.0" layoutY="255.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
          </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </AnchorPane>
    </left>
    <bottom>
@@ -44,24 +132,124 @@
    <center>
       <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="42.0" layoutY="31.0" text="Speed" />
-            <Label layoutX="42.0" layoutY="57.0" text="Power" />
-            <Label layoutX="42.0" layoutY="83.0" text="Ki" />
-            <Label layoutX="38.0" layoutY="109.0" text="Kp" />
-            <Label layoutX="31.0" layoutY="150.0" text="Service Brake" />
-            <Label layoutX="31.0" layoutY="179.0" text="Emergency Brake" />
+            <Label fx:id="speedLabel" layoutX="20.0" layoutY="20.0" text="Speed:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="powerLabel" layoutX="20.0" layoutY="45.0" text="Power:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="kiLabel" layoutX="20.0" layoutY="70.0" text="Ki:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="kpLabel" layoutX="20.0" layoutY="95.0" text="Kp:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="serviceBrakeLabel" layoutX="20.0" layoutY="220.0" text="Service Brake:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="emergencyBrakeLabel" layoutX="20.0" layoutY="250.0" text="Emergency Brake:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="speedValue" layoutX="100.0" layoutY="20.0" style="-fx-background-color: #dae3db;" text="km/h">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="powerValue" layoutX="100.0" layoutY="45.0" style="-fx-background-color: #dae3db;" text="W">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="kiValue" layoutX="100.0" layoutY="70.0" style="-fx-background-color: #dae3db;" text="wtf">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="kpValue" layoutX="100.0" layoutY="95.0" style="-fx-background-color: #dae3db;" text="is this unit">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="serviceBrakeValue" layoutX="150.0" layoutY="220.0" style="-fx-background-color: #dae3db;" text="On?">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="emergencyBrakeValue" layoutX="150.0" layoutY="250.0" style="-fx-background-color: #dae3db;" text="Off?">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Separator layoutY="150.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
    </center>
    <right>
       <AnchorPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
          <children>
-            <Label layoutX="39.0" layoutY="39.0" text="Drive Mode" />
+            <Label fx:id="driveModeLabel" layoutX="20.0" layoutY="30.0" text="Drive Mode:">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
             <Separator layoutX="1.0" layoutY="71.0" prefWidth="200.0" />
-            <Label layoutX="39.0" layoutY="97.0" text="Lights" />
-            <Label layoutX="39.0" layoutY="114.0" text="Left Door" />
-            <Label layoutX="39.0" layoutY="131.0" text="Right Door" />
-            <Label layoutX="39.0" layoutY="150.0" text="Temperature" />
+            <Label fx:id="lightsLabel" layoutX="20.0" layoutY="100.0" prefHeight="14.0" prefWidth="50.0" text="Lights:">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="leftDoorLabel" layoutX="20.0" layoutY="125.0" text="Left Door:">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="rightDoorLabel" layoutX="20.0" layoutY="150.0" text="Right Door:">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="temperatureLabel" layoutX="20.0" layoutY="175.0" text="Temperature:">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="driveModeValue" layoutX="110.0" layoutY="30.0" style="-fx-background-color: #dae3db;" text="Automatic">
+               <font>
+                  <Font name="Consolas" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="temperatureValue" layoutX="110.0" layoutY="175.0" style="-fx-background-color: #dae3db;" text="On?">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="rightDoorValue" layoutX="110.0" layoutY="150.0" style="-fx-background-color: #dae3db;" text="On?">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="leftDoorValue" layoutX="110.0" layoutY="125.0" style="-fx-background-color: #dae3db;" text="On?">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="lightsValue" layoutX="110.0" layoutY="100.0" style="-fx-background-color: #dae3db;" text="On">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </right>

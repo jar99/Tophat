@@ -1,6 +1,6 @@
 package application.TrainControllerHardware;
 
-public interface TrainCtrlHWInterface {
+public interface TrainControllerHWInterface {
 	public int getTrainID();
 	public double getPower();
 	public double getSpeed();

@@ -20,6 +20,7 @@ public class UIApp extends Application {
 	private static boolean ENABLE_4 = true;
 	private static boolean ENABLE_5 = true;
 	private static boolean ENABLE_6 = true;
+	private static boolean ENABLE_7 = true;
 	
 	
 	public static final CountDownLatch latch = new CountDownLatch(1);
@@ -80,6 +81,8 @@ public class UIApp extends Application {
 			Scene mboScene = new Scene(mboRoot, 1000, 600); // NOTE: Change last two ints to make window bigger
 			mboStage.setScene(mboScene);
 			if(ENABLE_6) mboStage.show();
+			
+			// Root for Train Controller Hardware
 
 			// If we have time, we'll start adding styles using the line below
 			// scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

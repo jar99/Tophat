@@ -5,26 +5,26 @@ import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
 
 
-public class TrainControllerHardwareSingleton{
+public class TrainControllerHWSingleton{
 
-	private static TrainControllerHardwareSingleton instance = null;
+	private static TrainControllerHWSingleton instance = null;
 	
-	private TrainControllerHardwareSingleton(){}
+	/**
+	 * Private constructor that makes this a singleton class.
+	 */
+	private TrainControllerHWSingleton(){}
 	
-	public static TrainControllerHardwareSingleton getInstance(){
-		if(instance == null) instance = new TrainControllerHardwareSingleton();
+	public static TrainControllerHWSingleton getInstance(){
+		if(instance == null) instance = new TrainControllerHWSingleton();
 		
 		return instance;
 	}
 	
-	// getters and setters
+	// these are all of the values that I actually change
+	private int trainId;
 	private boolean drivingMode;
-	private double x, y;
-	private int trainID;
-	private double ctcSpeed, ctcAuth, mboSpeed, mboAuth;
 	private double speed, power, ki, kp;
 	private boolean brake, eBrake;
-	private boolean engineStatus, brakeStatus, signalStatus;
 	private boolean lights, lDoor, rDoor, temp;
 	
 	/**
