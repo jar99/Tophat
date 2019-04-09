@@ -96,7 +96,7 @@ class TrainModel implements TrainInterface {
     
     public TrainModel(int trainID) {
         this.trainID = trainID;
-        isActive = true;
+        isActive = false;
     }
 
     /**
@@ -228,6 +228,7 @@ class TrainModel implements TrainInterface {
 	
 	
 	public boolean hasPower() {
+		if(!isActive) return false;
 		return trModSin.trainHasPower(trainID);
 	}
 
@@ -279,6 +280,7 @@ class TrainModel implements TrainInterface {
 	
 	@Override
 	public int getTrackAuthority() {
+		if(!isActive) return -9;
 		try {
 			return trModSin.getTrainBlockAuthority(trainID);
 		} catch (TrackCircuitFailureException e) {
@@ -288,6 +290,7 @@ class TrainModel implements TrainInterface {
 
 	@Override
 	public double getTrackSpeed() {
+		if(!isActive) return -9.9;
 		try {
 			return trModSin.getTrainSuggestedSpeed(trainID);
 		} catch (TrackCircuitFailureException e) {

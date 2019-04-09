@@ -45,7 +45,7 @@ public class TrainModelSingleton implements TrainModelInterface {
     	if(trainExists(trainID)) return null;
     	TrainModel train = new TrainModel(trainID);
 //    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
-    	
+    	train.dispatch();
         return trainModelHashTable.putIfAbsent(trainID, train);
     }
     
