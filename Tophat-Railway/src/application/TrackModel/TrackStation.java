@@ -3,8 +3,12 @@ package application.TrackModel;
 public class TrackStation extends TrackBlock {
 
 	// Ticket sale information
+	private int scheduledBoarders = 0;
+	private int scheduledAlighters = 0;
 	private int boarding = 0;
 	private int alighting = 0;
+
+	private boolean docked = false;
 
 	// ================CONSTRUCTOR===================
 	public TrackStation(String lineName, char sectionID, int blockID, TrackJunction junctionA, TrackJunction junctionB,
@@ -16,6 +20,13 @@ public class TrackStation extends TrackBlock {
 	}
 
 	// ================GET METHODS===================
+	public int getScheduledBoarders() {
+		return scheduledBoarders;
+	}
+
+	public int getScheduledAlighters() {
+		return scheduledAlighters;
+	}
 
 	public int getBoarding() {
 		return boarding;
@@ -25,31 +36,55 @@ public class TrackStation extends TrackBlock {
 		return alighting;
 	}
 
+	public boolean isDocked() {
+		return docked;
+	}
+
 	// ================SET METHODS===================
-	// adjusted when people meet train
-	public void boarded(int boarded) {
-		if (boarded > boarding)
-			throw new IllegalArgumentException("Too many boarding train");
-		this.boarding -= boarded;
+
+	// Adjusted when tickets sell
+	public void addScheduledBoarders(int newBoarders) {
+		if (newBoarders < 0)
+			throw new IllegalArgumentException("New Boarders cannot be less than 0");
+		this.scheduledBoarders += newBoarders;
 	}
 
-	public void alighted(int alighted) {
-		if (alighted > alighting)
-			throw new IllegalArgumentException("Too many alighting train");
-		this.alighting -= alighted;
+	public void addScheduledAlighters(int newAlighters) {
+		if (newAlighters < 0)
+			throw new IllegalArgumentException("New Alighters cannot be less than 0");
+		this.scheduledAlighters += newAlighters;
 	}
 
-	// adjusted when tickets sell
-	public void addBoarder(int boarders) {
-		if (boarders < 0)
-			throw new IllegalArgumentException("Boarders cannot be less than 0");
-		this.boarding += boarders;
+	public int arrival(int currentPassengers, int capacity) {
+		docked = true;
+
+		// Alight them
+		if (currentPassengers >= this.scheduledAlighters) {
+			this.alighting = this.scheduledAlighters;
+		} else {
+			this.alighting = currentPassengers;
+		}
+		this.scheduledAlighters -= this.alighting;
+		currentPassengers -= this.alighting;
+
+		// Board them
+		if (currentPassengers < capacity) {
+			if (currentPassengers + scheduledBoarders <= capacity) {
+				this.boarding = scheduledBoarders;
+			} else {
+				this.boarding = capacity - currentPassengers;
+			}
+			this.scheduledBoarders -= this.boarding;
+			currentPassengers += this.boarding;
+		}
+
+		return currentPassengers;
 	}
 
-	public void addAlighters(int alighters) {
-		if (alighters < 0)
-			throw new IllegalArgumentException("Alighters cannot be less than 0");
-		this.alighting += alighters;
+	public void departure() {
+		this.docked = false;
+		this.alighting = 0;
+		this.boarding = 0;
 	}
 
 }

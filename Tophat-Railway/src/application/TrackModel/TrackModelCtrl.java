@@ -1,7 +1,7 @@
 package application.TrackModel;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -11,10 +11,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -48,6 +50,10 @@ public class TrackModelCtrl implements Initializable {
 	@FXML
 	private ChoiceBox<String> choiceBoxFail;
 
+	// Set Temperature
+	@FXML
+	private TextField textTemperature;
+
 	// Value Properties
 	@FXML
 	private Label propLength;
@@ -59,6 +65,8 @@ public class TrackModelCtrl implements Initializable {
 	private Label propElevation;
 	@FXML
 	private Label propTotalElevation;
+	@FXML
+	private Label propDirection;
 
 	// Boolean Properties
 	@FXML
@@ -77,14 +85,26 @@ public class TrackModelCtrl implements Initializable {
 	private Circle iconPropSwitch;
 	@FXML
 	private Label connectedSwitch;
+	
+	// Station Properties
+	@FXML
+    private Label propSchdBoarders;
+    @FXML
+    private Label propSchdAlighters;
+    @FXML
+    private Label propBoarding;
+    @FXML
+    private Label propAlighting;
 
 	// : Link to anchor box for the map
 	@FXML
 	private AnchorPane trackMap;
+	@FXML
+	private ChoiceBox<?> choiceBoxLine;
 
 	private Map<Integer, Circle> trainIcons = new Hashtable<Integer, Circle>();
 
-	// TODO: implement conversion ration, xdisplacement, ydisplacement
+	// TODO: implement conversion ratio, xdisplacement, ydisplacement
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
@@ -99,14 +119,14 @@ public class TrackModelCtrl implements Initializable {
 	void getRightBlock() {
 		mySin.shiftBlockRight();
 	}
-	
-	//TODO: Create a nextLine() method/button
+
+	// TODO: Create a Line Selection Box Listener
 
 	@FXML
 	void importLine() {
-		// TODO: Import Line Block by Block, Switch by Switch, Section by Section
-
 		mySin.importLine("green.xlsx");
+
+		// TODO: Draw Sections on Map
 		/*
 		 * //: Add 3 lines based on the start/ length of the TrackBlock Objects
 		 * ArrayList<TrackBlock> blockList = mySin.getBlockList(); for (TrackBlock
@@ -116,6 +136,18 @@ public class TrackModelCtrl implements Initializable {
 		 * line.setEndY(trackBlock.getEndY()); trackMap.getChildren().add(line); }
 		 */
 
+	}
+
+	@FXML
+	void setTemperature(ActionEvent event) {
+		//: Evaluate temperature to change heaters. Check for bad input.
+		try{
+			double newTemperature = Double.parseDouble(textTemperature.getText());
+			mySin.setTemperature(newTemperature);
+		} catch(NumberFormatException e) {
+			double curTemperature = mySin.getTemperature();
+			textTemperature.setText(Double.toString(curTemperature));
+		}
 	}
 
 	@FXML
@@ -133,7 +165,7 @@ public class TrackModelCtrl implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		// TODO: Implement CB Selection Block (See old code)
+		// TODO: Implement CB Selection Box (See old code)
 		/*
 		 * ObservableList<String> list = FXCollections.observableArrayList();
 		 * ArrayList<String> blockNameList = mySin.getBlockNameList(); for (String
@@ -168,16 +200,20 @@ public class TrackModelCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+
+		DecimalFormat df1 = new DecimalFormat("#.##");
+
 		if (mySin.hasALine()) {
 			TrackBlock CB = mySin.getCurrentBlock();
 
 			currentBlock.setText(CB.getName());
 
-			propLength.setText(CB.getLength() * 0.000621371 + " miles");
-			propGrade.setText(CB.getGrade() + " %");
-			propSpeedLimit.setText(CB.getSpdLmt() * 2.23694 + " mph");
-			propElevation.setText(CB.getElev() * 3.28084 + " ft");
-			propTotalElevation.setText(CB.getTotElev() * 3.28084 + " ft");
+			propLength.setText(df1.format(CB.getLength() * 0.000621371) + " miles");
+			propGrade.setText(df1.format(CB.getGrade()) + " %");
+			propSpeedLimit.setText(df1.format(CB.getSpdLmt() * 2.23694) + " mph");
+			propElevation.setText(df1.format(CB.getElev() * 3.28084) + " ft");
+			propTotalElevation.setText(df1.format(CB.getTotElev() * 3.28084) + " ft");
+			propDirection.setText(CB.getCardinalDirection());
 
 			if (CB.isOccupied())
 				iconPropOccupied.setFill(javafx.scene.paint.Color.GREEN);
@@ -214,7 +250,18 @@ public class TrackModelCtrl implements Initializable {
 			else
 				iconPropSwitch.setFill(javafx.scene.paint.Color.WHITE);
 
-			// TODO: Get switch connection
+			// : Get switch connection
+			if (CB.getJunctionA().isSwitch()) {
+				TrackJunction junctionA = CB.getJunctionA();
+				String switchConnection = mySin.getSwitchConnection(junctionA);
+				connectedSwitch.setText(switchConnection);
+			} else if (CB.getJunctionB().isSwitch()) {
+				TrackJunction junctionB = CB.getJunctionB();
+				String switchConnection = mySin.getSwitchConnection(junctionB);
+				connectedSwitch.setText(switchConnection);
+			} else {
+				connectedSwitch.setText("--");
+			}
 
 			// : Get Failure Status and display just like above
 			if (CB.isFailRail())
@@ -231,6 +278,20 @@ public class TrackModelCtrl implements Initializable {
 				iconFailPower.setFill(javafx.scene.paint.Color.RED);
 			else
 				iconFailPower.setFill(javafx.scene.paint.Color.WHITE);
+			
+			//: Get Station Properties if a Station, otherwise erase
+			if(CB.isStation()) {
+				TrackStation CS = mySin.getCurrentStation();
+				propSchdBoarders.setText(Integer.toString(CS.getScheduledBoarders()));
+				propSchdAlighters.setText(Integer.toString(CS.getScheduledAlighters()));
+				propBoarding.setText(Integer.toString(CS.getBoarding()));
+				propAlighting.setText(Integer.toString(CS.getAlighting()));
+			}else {
+				propSchdBoarders.setText("--");
+				propSchdAlighters.setText("--");
+				propBoarding.setText("--");
+				propAlighting.setText("--");
+			}
 		}
 
 		// TODO: Get list of trains and coords, add dots to map. Make sure train has
