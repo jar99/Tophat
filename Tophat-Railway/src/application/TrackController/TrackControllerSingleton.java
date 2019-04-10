@@ -91,19 +91,26 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			 trainID = value.getID();
 			 authority = value.getAuthority();
 			 if(authority > 63) { 
-				 for(int i = 63; i < authority; i++) {
+				 for(int i = 62; i < authority; i++) {
 				 	blockListAuthority[i] = authority - i;
 				 	blockListSpeed[i] = suggestedSpeed;
+				 	track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+				 	track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
 			 	}
 			 }
 			 if(authority < 63) {
-				 for(int i = 63; i < 150; i++) {
+				 for(int i = 62; i < 150; i++) {
 					 blockListAuthority[i] = 150-i+authority;
 					 blockListSpeed[i] = suggestedSpeed;
+					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+
 				 }
 				 for(int i = 0; i < authority; i++) {
 					 blockListAuthority[i] = authority-i;
 					 blockListSpeed[i] = suggestedSpeed;
+					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
 				 }
 			 }
 		  
