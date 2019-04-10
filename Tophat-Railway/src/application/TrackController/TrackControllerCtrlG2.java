@@ -141,9 +141,10 @@ public class TrackControllerCtrlG2 implements Initializable {
 	private void update() {
 		currentBlockG2.setText(mySin.getCBNameG2());
 		mySin.setSwitchG4();
+		CBIDG2 = mySin.getCurrentBlockIDG2();
 		
-		//blockSpeedG2.setText(mySin.getSpeed(1, CBIDG2));
-		//blockAuthority.setText(mySin.getAuthority());
+		blockSpeedG2.setText(mySin.getSpeed(2, CBIDG2));
+		blockAuthorityG2.setText(mySin.getAuthority(2, CBIDG2));
 		
 		if (mySin.isCBOccupied())
 			iconOccupancyG2.setFill(javafx.scene.paint.Color.GREEN);
@@ -209,7 +210,10 @@ public class TrackControllerCtrlG2 implements Initializable {
 			}
 		}
 		
-		if ((CBIDG2 != 28) && (CBIDG2 != 150))
+		if ((CBIDG2 != 28) && (CBIDG2 != 150)) {
 				nextBlockG2.setText("--");
+				iconLightsOnG2.setFill(javafx.scene.paint.Color.WHITE);
+				iconLightsOffG2.setFill(javafx.scene.paint.Color.WHITE);
+		}
 	}
 }
