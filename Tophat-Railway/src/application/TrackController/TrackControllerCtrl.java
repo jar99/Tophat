@@ -191,10 +191,10 @@ public class TrackControllerCtrl implements Initializable {
 		}
 		
 		if (CBIDG1 == 1) {
-			if (mySin.isSwitchG5Straight()) {
+			if (mySin.isSwitchG5Straight() == true) {
 				nextBlockG1.setText("--");
 			}
-			else if (!mySin.isSwitchG5Straight()) {
+			else if (mySin.isSwitchG5Straight() == false) {
 				nextBlockG1.setText("13");
 			}
 				

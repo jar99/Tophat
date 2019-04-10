@@ -93,7 +93,12 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			 //TODO fill authority
 		 }
 		  
-		  if (!sent_train) { trackModSin.createTrain("green", trainID); sent_train = !sent_train; }
+		  if (!sent_train) { try {
+			trackModSin.createTrain("green", trainID);
+		} catch (SwitchStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} sent_train = !sent_train; }
 		  
 		 }
 		 
