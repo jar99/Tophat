@@ -30,10 +30,10 @@ public class TrackControllerCtrl implements Initializable {
     private ChoiceBox<?> choiceBoxBlockG1;
 
 	@FXML
-    private Label blockSpeed;
+    private Label blockSpeedG1;
 
 	@FXML
-    private Label blockAuthority;
+    private Label blockAuthorityG1;
 
 	@FXML
     private Label speedUnits;
@@ -140,9 +140,10 @@ public class TrackControllerCtrl implements Initializable {
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		currentBlockG1.setText(mySin.getCBNameG1());
+		//mySin.setSwitchG5();
 		
-		blockSpeed.setText(mySin.getSpeed());
-		blockAuthority.setText(mySin.getAuthority());
+		//blockSpeedG1.setText(mySin.getSpeed(1, CBIDG1));
+		//blockAuthority.setText(mySin.getAuthority());
 		
 		if (mySin.isCBOccupied())
 			iconOccupancyG1.setFill(javafx.scene.paint.Color.GREEN);
@@ -208,6 +209,7 @@ public class TrackControllerCtrl implements Initializable {
 			}
 		}
 		
-		nextBlockG1.setText("--");
+		if ((CBIDG1 != 1) || (CBIDG1 != 13))
+			nextBlockG1.setText("--");
 	}
 }
