@@ -302,7 +302,7 @@ class TrainModel implements TrainInterface {
 	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
 		passengerWeight += AVERAGEPASSENGERMASS*numPassengers;
-		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded.");
+//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded.");
 		return passengers+=numPassengers;
 	}
 	
@@ -310,6 +310,7 @@ class TrainModel implements TrainInterface {
 	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
 		passengerWeight -= AVERAGEPASSENGERMASS*numPassengers;
+//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " alighted.");
 		return passengers-=numPassengers;
 	}
 	
