@@ -58,7 +58,9 @@
             <CheckBox fx:id="manual" layoutX="48.0" layoutY="277.0" mnemonicParsing="false" onAction="#ManualMode" prefHeight="17.0" prefWidth="71.0" text="Manual" />
             <CheckBox fx:id="automatic" layoutX="48.0" layoutY="301.0" mnemonicParsing="false" onAction="#AutomaticMode" prefHeight="17.0" prefWidth="84.0" text="Automatic" />
             <Label fx:id="driveStatus" layoutX="19.0" layoutY="339.0" prefHeight="17.0" prefWidth="155.0" />
-            <ComboBox layoutX="11.0" layoutY="32.0" prefWidth="150.0" />
+            <ComboBox fx:id="listTrainID" layoutX="11.0" layoutY="32.0" prefWidth="150.0" />
+            <Label fx:id="MBOSpeed" layoutX="109.0" layoutY="190.0" prefHeight="17.0" prefWidth="46.0" text="Label" />
+            <Label fx:id="MBOAuthority" layoutX="108.0" layoutY="213.0" prefHeight="17.0" prefWidth="38.0" text="Label" />
          </children>
       </AnchorPane>
    </left>
@@ -91,7 +93,7 @@
             <Label layoutX="20.0" layoutY="192.0" text="Lights:" />
             <Label layoutX="18.0" layoutY="226.0" text="Right Doors:" />
             <Label layoutX="17.0" layoutY="259.0" text="Left Doors:" />
-            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="On" />
+            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="Off" />
             <ToggleButton fx:id="rightDoor" layoutX="124.0" layoutY="222.0" mnemonicParsing="false" onAction="#rightDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <ToggleButton fx:id="leftDoor" layoutX="126.0" layoutY="256.0" mnemonicParsing="false" onAction="#leftDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <Label layoutX="15.0" layoutY="294.0" text="Temperature:" />

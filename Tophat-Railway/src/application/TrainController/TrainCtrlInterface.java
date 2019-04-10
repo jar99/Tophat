@@ -12,15 +12,30 @@ public interface TrainCtrlInterface {
 	
 	public void Power(int power);
 	
+	public void serviceBrake(boolean serviceBrake);
+	
 	/**
 	 * sets the temperature inside the train
 	 * @param temperture
 	 */
 	public void temperature(double temperature);
 	
+	/**
+	 * if true = open 
+	 * if false = closed
+	 * @param leftDoor
+	 * @param rightDoor
+	 */
 	public void leftDoor(boolean leftDoor);
 	
 	public void rightDoor(boolean rightDoor);
+	
+	/**
+	 * true = On
+	 * false = off
+	 * @param lights
+	 */
+	public void lights(boolean lights);
 ///new branch
 	
 	/**
@@ -51,10 +66,12 @@ public interface TrainCtrlInterface {
 	public void brakeStatus(boolean brakeFailure);
 	
 	/**
-	 * What's the fucking wifi password?!
+	 * What's the f*cking wifi password?!
 	 * @param signalFailure
 	 */
 	public void signalStatus(boolean signalFailure);
+
+
 	
 	
 }
