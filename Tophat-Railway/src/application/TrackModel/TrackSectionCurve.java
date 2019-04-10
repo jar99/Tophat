@@ -43,7 +43,7 @@ public class TrackSectionCurve extends TrackSection {
 		}
 		sectionDisplacement += blockDisplacement;
 
-		double angle = Math.atan2(startY - centerY, startX - centerX);
+		double angle = Math.atan2((-1) * (startY - centerY), startX - centerX);
 
 		if (isClockwise)
 			angle = angle - sectionDisplacement / radius;
@@ -51,7 +51,7 @@ public class TrackSectionCurve extends TrackSection {
 			angle = angle + sectionDisplacement / radius;
 
 		double coordX = centerX + radius * Math.cos(angle);
-		double coordY = centerY + radius * Math.sin(angle);
+		double coordY = centerY - radius * Math.sin(angle);
 		trainLocation.setCoordinates(coordX, coordY);
 
 	}
@@ -70,6 +70,17 @@ public class TrackSectionCurve extends TrackSection {
 
 	public boolean isClockwise() {
 		return isClockwise;
+	}
+
+	public double getStartAngle() {
+		return Math.atan2((-1) * (startY - centerY), startX - centerX);
+	}
+
+	public double getLengthAngle() {
+		if (isClockwise)
+			return (-1) * getLength() / radius;
+		else
+			return getLength() / radius;
 	}
 
 }
