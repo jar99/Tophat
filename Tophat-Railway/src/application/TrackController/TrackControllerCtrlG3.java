@@ -141,8 +141,9 @@ public class TrackControllerCtrlG3 implements Initializable {
 	private void update() {
 		currentBlockG3.setText(mySin.getCBNameG3());
 		
-		//blockSpeedG1.setText(mySin.getSpeed(1, CBIDG1));
-		//blockAuthority.setText(mySin.getAuthority());
+		blockSpeedG3.setText(mySin.getSpeed(3, CBIDG3));
+		blockAuthorityG3.setText(mySin.getAuthority(3, CBIDG3));
+		CBIDG3 = mySin.getCurrentBlockIDG3();
 		
 		if (mySin.isCBOccupied())
 			iconOccupancyG3.setFill(javafx.scene.paint.Color.GREEN);
@@ -208,7 +209,10 @@ public class TrackControllerCtrlG3 implements Initializable {
 			}
 		}
 		
-		if ((CBIDG3 != 57) && (CBIDG3 != 62))
+		if ((CBIDG3 != 57) && (CBIDG3 != 62)) {
 			nextBlockG3.setText("--");
+			iconLightsOnG3.setFill(javafx.scene.paint.Color.WHITE);
+			iconLightsOffG3.setFill(javafx.scene.paint.Color.WHITE);
+		}
 	}
 }

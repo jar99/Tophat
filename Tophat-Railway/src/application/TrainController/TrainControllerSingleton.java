@@ -32,9 +32,10 @@ public class TrainControllerSingleton {
 	Double temperature;
 	private int trainID;
 	double numSpeed;
-	private int numPower, numTemperature, numOfTrains, trainStatus;
+	private int numPower, MBOAuthority= 0, numTemperature, numOfTrains, trainStatus, size;
 	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode, engineFail, brakeFail, signalFail;
-	private double speed = 0;
+	private boolean lights;
+	private double speed = 0, MBOSpeed = 0;;
 
 	// create hashtable for each individual train
 	// public void makeTrain(put information in){
@@ -43,6 +44,7 @@ public class TrainControllerSingleton {
 
 	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 	Train train;
+	private TrainInterface trainMod;
 
 	// NOTE: Put some functions here
 	// Hardware will use signalton and get information
@@ -50,36 +52,45 @@ public class TrainControllerSingleton {
 	// switch between software or hardware..hardware needs approved
 
 	// Check TrainID and remove HashTable
-	public void createTrain() {
-		for (Integer trainID : trnModSin.getAllTrainIDs()) {
-			if (!trainCtrlHashTable.contains(trainID)) {
+	public Train createTrain(int trainID, TrainInterface trainMod) {
+				this.trainMod = trainMod;
 				Train train = new Train(trainID);
 				trainCtrlHashTable.put(trainID, train);
-			}
-		}
-
-		for (Integer trainID : trainCtrlHashTable.keySet()) {
-			if (!trnModSin.getAllTrainIDs().contains(trainID)) {
+				return train;	
+	}
+	
+	public void removeTrain(int trianID) {
+			if(!trainCtrlHashTable.contains(trainID)) {
 				trainCtrlHashTable.remove(trainID);
 			}
-		}
 	}
-
 	// Sends TrainID as INTEGER
 	public Train getTrainID(int trainID) {
-		return trainCtrlHashTable.get(trainID);
+			return trainCtrlHashTable.get(trainID);
 	}
+	
 
 	public void setTrainID(int trainID) {
 		this.trainID = trainID;
 	}
-
+	
+	public int getTrainSize() {
+		return trainCtrlHashTable.size();
+	}
+	
+	public void setTrainSize(int size) {
+		this.size = size;
+	}
+	
 	// Send Speed as DOUBLE
 	public double getSpeed() {
-		return speed;
+			return speed;
 	}
 
 	public void setSpeed(double speed) {
+		if(speed < 0) {
+			throw new IllegalArgumentException("Cannot have negative speed.");
+		}
 		this.speed = speed;
 	}
 
@@ -107,6 +118,9 @@ public class TrainControllerSingleton {
 	}
 
 	public void setTemperature(double temperature) {
+		if(temperature < 0) {
+			throw new IllegalArgumentException("Cannot have negative temperature.");
+		}
 		this.temperature = temperature;
 	}
 
@@ -199,6 +213,13 @@ public class TrainControllerSingleton {
 		this.rightDoor = rightDoor;
 	}
 
+	public boolean getLights() {
+		return lights;
+	}
+	
+	public void setLights(boolean lights) {
+		this.lights = lights;
+	}
 	// Drive Mode
 	public boolean getDriveMode() {
 		return driveMode;
@@ -208,22 +229,51 @@ public class TrainControllerSingleton {
 		this.driveMode = driveMode;
 	}
 
+	
+	public double getMBOSpeed() {
+		return MBOSpeed;
+	}
+	
+	public void setMBOSpeed(double MBOSpeed) {
+		this.MBOSpeed = MBOSpeed;
+	}
+	
+	public int getMBOAuthority() {
+		return MBOAuthority;
+	}
+	
+	public void setMBOAuthoirty(int MBOAuthority) {
+		this.MBOAuthority = MBOAuthority;
+	}
+	
+	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
 
-	private TrainInterface trainMod; // Train Model Interface
+ 
 
 	public void update() {
-
-		speed = trainMod.getSpeed();
-		 
-		leftDoor = trainMod.getLeftDoorState();
 		
-		rightDoor = trainMod.getRightDoorState();
+		/*for(Train train: trainCtrlHashTable.values()) {
+			train.update(0);
+		}*/
+		
+		if(trainMod == null) {
+			return;
+		}
+		speed = trainMod.getSpeed();
+		
+		//leftDoor = trainMod.getLeftDoorState();
+		
+		//rightDoor = trainMod.getRightDoorState();
 		  
-		engineFail = trainMod.engineState();
+		//engineFail = trainMod.engineState();
+		
+		//MBOAuthority = trainMod.getMBOAuthority();
+		
+		//MBOSpeed = trainMod.getMBOSpeed();
 		 //trainStatus = trainMod.
 
 	}
