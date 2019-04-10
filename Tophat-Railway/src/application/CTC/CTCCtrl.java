@@ -37,6 +37,8 @@ public class CTCCtrl implements Initializable {
 	private ChoiceBox<String> LineChoiceBox;
 	@FXML
 	private ChoiceBox<String> DestinationChoiceBox;
+	@FXML
+	private ChoiceBox<String> ImportScheduleChioceBox;
     @FXML
 	private ListView<String> ScheduleListView;
 	@FXML
@@ -54,7 +56,6 @@ public class CTCCtrl implements Initializable {
 		if (mySin.addTrain(TrainIDTextField.getCharacters().toString(),SpeedTextField.getCharacters().toString())){
 			System.out.print("Successful");//TODO Change this into UI
 		}
-		else return;
 		String departure=DepartureStationChoiceBox.getSelectionModel().getSelectedItem();
 		String line=LineChoiceBox.getSelectionModel().getSelectedItem();
 		String destination=DestinationChoiceBox.getSelectionModel().getSelectedItem();
@@ -97,7 +98,8 @@ public class CTCCtrl implements Initializable {
 		Integer[] myBlocks=Arrays.copyOf(objectList2,objectList2.length,Integer[].class);
 		Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
 		//int[] intArray = Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray();
-		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum()+1,Integer.parseInt(SpeedTextField.getCharacters().toString()));
+		int tmpauthority=mySin.viewtrains().get(Integer.parseInt(TrainIDTextField.getCharacters().toString())).getAuthority();
+		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum()+1+tmpauthority,Integer.parseInt(SpeedTextField.getCharacters().toString()));
 		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,0,Integer.parseInt(SpeedTextField.getCharacters().toString()));//TODO convert time String (here is 0) into an Int
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
@@ -110,7 +112,12 @@ public class CTCCtrl implements Initializable {
 		mySin.ModifyTrain(Integer.valueOf(ID),Integer.parseInt(AuthorityModify.getCharacters().toString()),Integer.parseInt(SpeedModify.getCharacters().toString()));
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 		ManagementListView.setItems(TrainString);
-    }
+	}
+	public void ImportClicked(){
+		//TODO import Schedule file
+		System.out.println("I'm Clicked!");
+		//TODO update the current schedule
+	}
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -120,6 +127,9 @@ public class CTCCtrl implements Initializable {
 		LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
 		DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
 		//TODO load info from trackmodel
+		String[] Schedulename={"FIXME", "Schedule2","Schedule3"};
+		ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
+		//TODO load info from MBO
 		updateAnimation = new AnimationTimer() {
 
 			@Override

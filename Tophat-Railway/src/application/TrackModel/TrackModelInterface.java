@@ -27,8 +27,9 @@ public interface TrackModelInterface {
 	 * 
 	 * @param lineName - the line a train is dispatched on
 	 * @param trainID  - ID assigned to train
+	 * @throws SwitchStateException - if entrance isn't set correctly
 	 */
-	public void createTrain(String lineName, int trainID);
+	public void createTrain(String lineName, int trainID) throws SwitchStateException;
 
 	/**
 	 * Get ID for Track Controller which owns a Block
@@ -157,7 +158,7 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID           - the id for the train
 	 * @param currentPassengers - current number of passengers on the train
-	 * @param capacity           - maximum number of passengers for that train
+	 * @param capacity          - maximum number of passengers for that train
 	 * @return new number of Passengers
 	 */
 	public int stationPassengerExchange(int trainID, int currentPassengers, int capacity);

@@ -9,7 +9,7 @@ public class TrackJunction {
 	// ========CONSTRUCTOR====================
 	public TrackJunction(boolean isSwitch, int ID, int entryPoint) {
 
-		if (ID < 0)
+		if (ID < -1)
 			throw new IllegalArgumentException("ID cannot be negative");
 
 		if (isSwitch) {
