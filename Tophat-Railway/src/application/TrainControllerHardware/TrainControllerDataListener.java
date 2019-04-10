@@ -25,5 +25,7 @@ public class TrainControllerDataListener implements SerialPortDataListener{
 		
 		byte[] data = ev.getReceivedData();
 		System.out.println(data);
+		// data includes multiple bytes, the first containing the value changed,
+		// and the rest containing the changed value
 	}
 }

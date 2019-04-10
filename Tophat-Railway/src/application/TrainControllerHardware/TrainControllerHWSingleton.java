@@ -1,5 +1,7 @@
 package application.TrainControllerHardware;
 
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortIOException;
 import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
 
@@ -12,10 +14,19 @@ public class TrainControllerHWSingleton{
 	/**
 	 * Private constructor that makes this a singleton class.
 	 */
-	private TrainControllerHWSingleton(){}
+	private TrainControllerHWSingleton() throws SerialPortIOException{
+		String primary = "COM16";
+		SerialPort primaryPort = SerialPort.getCommPort(primary);
+		if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
+	}
 	
 	public static TrainControllerHWSingleton getInstance(){
-		if(instance == null) instance = new TrainControllerHWSingleton();
+		try {
+			if(instance == null) instance = new TrainControllerHWSingleton();
+		}
+		catch(SerialPortIOException e) {
+			System.err.println("Shit this is bad lol");
+		}
 		
 		return instance;
 	}

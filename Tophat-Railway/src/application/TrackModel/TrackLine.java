@@ -1,6 +1,8 @@
 package application.TrackModel;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Hashtable;
 import java.util.Map;
 
 //NOTE: don't need to clone, just create multiple instances during import and send those.
@@ -56,9 +58,6 @@ public class TrackLine {
 
 	}
 
-	public TrackSection getRailYard() {
-		return getSection('0'); // NOTE: 0 will represent both the yard section and block
-	}
 
 	public TrackJunction getNextBlockJunction(boolean isDirectionAB, int currentBlockID) throws SwitchStateException {
 		// return the next BLOCK junction. use switch first if necessary
@@ -87,6 +86,44 @@ public class TrackLine {
 
 	public String getLineName() {
 		return lineName;
+	}
+
+	public int getNumBlocks() {
+		return blocks.size();
+	}
+
+	public Collection<TrackBlock> getBlocks() {
+		return blocks.values();
+	}
+
+	public Collection<TrackStation> getStations() {
+		return stations.values();
+	}
+	
+	public Collection<TrackSwitch> getSwitches() {
+		return switches.values();
+	}
+	
+	public Collection<TrackSection> getSections() {
+		return sections.values();
+	}
+
+	
+
+	public TrackBlock getEntrance() throws SwitchStateException {
+		TrackSwitch entranceSwitch = switches.get(1);
+		TrackJunction gate;
+		if(entranceSwitch.getMainJunction().getID() == -1)
+			gate = entranceSwitch.getNextJunction(0);
+		else if(entranceSwitch.getStraightJunction().getID() == -1)
+			gate = entranceSwitch.getNextJunction(1);
+		else if(entranceSwitch.getDivergingJunction().getID() == -1)
+			gate = entranceSwitch.getNextJunction(2);
+		else
+			throw new IllegalStateException("Line: " + this.lineName + " does not have an entrance at switch 1");
+		
+		return blocks.get(gate.getID());
+		
 	}
 
 }
