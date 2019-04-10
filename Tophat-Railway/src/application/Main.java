@@ -100,12 +100,12 @@ public class Main {
 				trnModSin.update();
 			if (DEBUG && !printedUpdateDebugs)
 				System.out.println("DEBUG: 4 - Train Model update worked");
-/*
+
 			if (ENABLE_5)
 				trnCtrlSin.update();
 			if (DEBUG && !printedUpdateDebugs)
 				System.out.println("DEBUG: 5 - Train Controller update worked");
-*/
+
 			if (ENABLE_6)
 				mboSin.update();
 			if (DEBUG && !printedUpdateDebugs)

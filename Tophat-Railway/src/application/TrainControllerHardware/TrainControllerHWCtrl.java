@@ -76,7 +76,6 @@ public class TrainControllerHWCtrl implements Initializable{
 			}
 		};
 		updateAnimation.start();
-		System.out.println("Something");
 	}
 	
 	/**
@@ -84,19 +83,17 @@ public class TrainControllerHWCtrl implements Initializable{
 	 */
 	private void update() {
 		// numeric values
-		System.out.println("HW Update");
 		trainIdValue.setText(mySin.trainId + "");
-		System.out.println("HW Update");
-		ctcSpeedValue.setText(mySin.trackSpeed + "mph");
-		ctcAuthorityValue.setText(mySin.trackAuthority + "blocks");
-		mboSpeedValue.setText(mySin.mboSpeed + "mph");
-		mboAuthorityValue.setText(mySin.mboAuthority + "blocks");
-		speedValue.setText(mySin.speed + "mph");
-		actualSpeedValue.setText(mySin.actualSpeed + "mph");
-		powerValue.setText(mySin.power + "KW");
+		ctcSpeedValue.setText(mySin.trackSpeed + " mph");
+		ctcAuthorityValue.setText(mySin.trackAuthority + " blocks");
+		mboSpeedValue.setText(mySin.mboSpeed + " mph");
+		mboAuthorityValue.setText(mySin.mboAuthority + " blocks");
+		speedValue.setText(mySin.speed + " mph");
+		actualSpeedValue.setText(mySin.actualSpeed + " mph");
+		powerValue.setText(mySin.power + " KW");
 		kiValue.setText(mySin.ki + "");
 		kpValue.setText(mySin.kp + "");
-		temperatureValue.setText(mySin.temp + "F");
+		temperatureValue.setText(mySin.temp + " F");
 		
 		// brakes
 		if(mySin.brake) serviceBrakeValue.setText("On");

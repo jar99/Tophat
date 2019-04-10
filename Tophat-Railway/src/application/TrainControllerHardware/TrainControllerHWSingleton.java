@@ -105,7 +105,6 @@ public class TrainControllerHWSingleton{
 	 * Controls Singleton connections, doesn't update UI
 	 */
 	public void update(){
-		System.out.println("Fuck me");
 		TrainInterface train = trnModelSin.getTrain(trainId);
 		if(train == null) return;
 		
@@ -116,10 +115,10 @@ public class TrainControllerHWSingleton{
 		actualSpeed = train.getSpeed();
 		engineState = train.engineState();
 		signalState = train.railSignalState();
-		// brakeState = train.brakeState();
+		brakeState = train.brakeOperationState();
 		
 		train.setPower(power);
-		// train.setTemperature(temp);
+		train.setTemperature(temp);
 		if(train.getServiceBrake() != brake) train.setServiceBrake();
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) train.resetEmergencyBrake();
