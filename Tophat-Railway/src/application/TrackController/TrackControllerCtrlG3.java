@@ -208,7 +208,7 @@ public class TrackControllerCtrlG3 implements Initializable {
 			}
 		}
 		
-		if ((CBIDG3 != 57) || (CBIDG3 != 62))
+		if ((CBIDG3 != 57) && (CBIDG3 != 62))
 			nextBlockG3.setText("--");
 	}
 }

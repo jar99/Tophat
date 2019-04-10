@@ -209,7 +209,7 @@ public class TrackControllerCtrlG2 implements Initializable {
 			}
 		}
 		
-		if ((CBIDG2 != 28) || (CBIDG2 != 150))
+		if ((CBIDG2 != 28) && (CBIDG2 != 150))
 				nextBlockG2.setText("--");
 	}
 }

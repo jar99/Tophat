@@ -209,7 +209,7 @@ public class TrackControllerCtrl implements Initializable {
 			}
 		}
 		
-		if ((CBIDG1 != 1) || (CBIDG1 != 13))
+		if ((CBIDG1 != 1) && (CBIDG1 != 13))
 			nextBlockG1.setText("--");
 	}
 }

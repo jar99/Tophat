@@ -249,7 +249,7 @@ public class TrackControllerCtrlG4 implements Initializable {
 			}
 		}
 		
-		if ((CBIDG4 != 76) || (CBIDG4 != 77) || (CBIDG4 != 85) || (CBIDG4 != 100))
+		if ((CBIDG4 != 76) && (CBIDG4 != 77) && (CBIDG4 != 85) && (CBIDG4 != 100))
 				nextBlockG4.setText("--");
 	}
 }
