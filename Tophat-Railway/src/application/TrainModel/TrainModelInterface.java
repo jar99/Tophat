@@ -10,8 +10,6 @@ package application.TrainModel;
 
 import java.util.Set;
 
-import application.TrackModel.TrackBlock;
-
 public interface TrainModelInterface {
 	
 	/**

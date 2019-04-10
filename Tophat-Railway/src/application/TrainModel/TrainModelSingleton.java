@@ -21,7 +21,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	private static TrainModelSingleton instance;
 
 	private TrainModelSingleton() {
-		 trainModelHashTable = new Hashtable<>();
+		 trainModelHashTable = new Hashtable<>();	 
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -57,11 +57,12 @@ public class TrainModelSingleton implements TrainModelInterface {
     TrainModel createTrain(int trainID, int passanger, double speed) {
     	if(trainExists(trainID)) return null;
     	
-    	TrainModel train = new TrainModel(trainID, new TrainModelTrackTest(1/2, 10, 20.0), new MBOConnection(), passanger, speed);
+    	TrainModel train = new TrainModel(trainID, new application.TrainModel.Test.TrainModelTrackTest(1/2, 10, 20.0), new application.TrainModel.Test.MBOConnection(), passanger, speed);
     	train.dispatch();
         return trainModelHashTable.putIfAbsent(trainID, train);
 		
 	}
+    
     
     public boolean trainExists(int trainID) {
         return trainModelHashTable.containsKey(trainID);
@@ -110,7 +111,7 @@ public class TrainModelSingleton implements TrainModelInterface {
     private long last;
 	public void update() {
 		if(disabled) return;
-		if(last <= 0) last = System.nanoTime();
+		if(last <= 0) last = System.nanoTime(); // To get the current update to work
 		
 		long now = System.nanoTime();
 		for(TrainModel trainModel : trainModelHashTable.values()) {

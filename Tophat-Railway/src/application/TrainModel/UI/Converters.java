@@ -45,7 +45,7 @@ public class Converters<T> {
  	
  	public static String TempratureConverter(double tempC) {
  		// TODO add c to f convention
- 		return String.format("%f°F", tempC);
+ 		return String.format("%.2f°F", tempC);
  	}
  	
 	public static String SpeedConverter(double speedM) {

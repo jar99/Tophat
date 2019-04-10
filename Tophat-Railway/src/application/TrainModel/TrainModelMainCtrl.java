@@ -9,8 +9,6 @@ package application.TrainModel;
  */
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import application.TrackModel.TrackModelSingleton;
-
 public class TrainModelMainCtrl implements Initializable {
 	
 	//TODO display multiple trains at the same time.
@@ -42,8 +38,6 @@ public class TrainModelMainCtrl implements Initializable {
 	
 	@FXML
 	Button trainButton;
-	@FXML
-	Button train;
 	
 	List<TrainModelCtrl> windowCtrls; 
 	
@@ -77,12 +71,6 @@ public class TrainModelMainCtrl implements Initializable {
     private void trainSelectWindow(ActionEvent e){
     	TrainModel train = trainSelector.getSelectionModel().getSelectedItem();
     	createTrainWindow(train);
-    }
-    
-    @FXML
-    private void testTrain(ActionEvent e){
-    	TrackModelSingleton.getInstance().createTrain("green", 1);
-
     }
 
     @Override

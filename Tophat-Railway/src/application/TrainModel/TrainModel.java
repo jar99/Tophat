@@ -14,10 +14,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import application.MBO.MBOInterface;
-import application.MBO.MBOSingleton;
 import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelInterface;
-import application.TrackModel.TrackModelSingleton;
 import application.TrackModel.TrainCrashedException;
 
 class TrainModel implements TrainInterface {
@@ -27,8 +25,6 @@ class TrainModel implements TrainInterface {
 	private static final int BEACONSIZE = 126;
 	
 	private static final double GRAVITY = 9.8;
-	
-	private static final double STDFRICTION = 0.002;
 	private static final double TIMESCALE = 1e9;
 	
 	private static final double MINFORCE = 10.0;
@@ -68,7 +64,7 @@ class TrainModel implements TrainInterface {
     //These are fault variables
     private boolean mboConnection = true;
     private boolean railSignalConnection = true;
-    private boolean doorOperationState = true;
+    private boolean brakeOperationState = true;
     private boolean engineOperationState = true;
     
     
@@ -92,7 +88,6 @@ class TrainModel implements TrainInterface {
     private double serviceBrakeForce = 6307.724082; 
     private double emergencyBrakeForce = 12089.80449; 
     
-    private double crf = 0.0020; // The rolling resistance of the train
     
     private Queue<String> trainLog = new LinkedList<>();
     
@@ -137,7 +132,7 @@ class TrainModel implements TrainInterface {
     void update(long deltaTime){
     	if(!isActive || hasCrashed) return;
     	
-    	System.out.println(this + " train runs at " + System.nanoTime());
+//    	System.out.println(this + " train runs at " + System.nanoTime());
     	double dt = deltaTime/TIMESCALE;
     	
     	double grade = trModSin.getTrainBlockGrade(trainID);
@@ -146,28 +141,35 @@ class TrainModel implements TrainInterface {
     		angle = Math.atan(grade);
     	}
     	
+    	double f = gravity(angle);
     	
-    	double f = force(angle) - brakeF();
     	if(trModSin.trainHasPower(trainID)) { // The train should have power
 //    		Calculate how much force is applied by power
     		f+=powerF();
     	}
     	
-    	System.out.printf("angle= %f\tgravity= %f\tfriction= %fbrakeforce= %f\n",angle, gravity(angle), staticF(angle), brakeF());
+//    	System.out.printf("angle= %f\tgravity= %f\tbrakeforce= %f\n",angle, gravity(angle), brakeF());
     	
 //    	Calculate the acceleration
     	double an = 0;
     	if (Math.abs(f) > MINFORCE) {
-    		an = f/mass();
+    		an = Math.min(acelerationLimit, f/mass());
     	}
     	
-    	//TODO add clamps to range
+    	if(speed > 0) {		
+			an -= brakeF()/mass();
+    	}
     	
-    	double vn = laplace(dt, acceleration, an, speed);
+    	
+    	double vn = Math.min(laplace(dt, acceleration, an, speed), speedLimit); //This should prevent negative movement.
+    	
+    	vn = Math.max(0, vn); // Prevents negative movements
     	
 		double xn = laplace(dt, speed, vn, possition);
     	
-		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
+		
+//		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
+		
 		
 		possition = xn;
 		speed = vn;
@@ -197,14 +199,13 @@ class TrainModel implements TrainInterface {
 	}
 
 	private double powerF() {
+		if(!engineOperationState) return 0.0;
+		if(speed == 0.0) return 0.0; // prevents NaN
 		return power/speed;
 	}
 
-	private double force(double angle) {
-    	return gravity(angle) - staticF(angle);
-	}
-	
 	private double brakeF() {
+		if(!brakeOperationState) return 0.0;
 		if(emergencyBrake) return emergencyBrakeF();
 		return serviceBrakeF();
 	}
@@ -218,19 +219,11 @@ class TrainModel implements TrainInterface {
 		if(!emergencyBrake) return 0.0;
 		return emergencyBrakeForce;
 	}
-    
-    private double staticF(double angle) {
-		return crf*normal(angle)/axelCount;
-	}
-
+   
 	private double gravity(double angle) {
 		return GRAVITY*Math.sin(angle)*mass();
 	}
 	
-	private double normal(double angle) {
-		return GRAVITY*Math.cos(angle)*mass();
-	}
-    
     private double mass() {
     	return getWeight()/GRAVITY;
     }
@@ -287,7 +280,7 @@ class TrainModel implements TrainInterface {
         return temperature;
     }
 
-    public void setTemperature(float temperature) {
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
     
@@ -343,7 +336,8 @@ class TrainModel implements TrainInterface {
 	@Override
 	public int getMBOAuthority() {
 		// TODO add the mbo connection
-		if(null == null) return Integer.MIN_VALUE;
+		if(!isActive) return -8;
+		if(mboSin == null) return Integer.MIN_VALUE;
 		return 0;
 	}
 	
@@ -361,7 +355,8 @@ class TrainModel implements TrainInterface {
 	@Override
 	public double getMBOSpeed() {
 		// TODO add the mbo connection
-		if(null == null) return Double.NaN;
+		if(!isActive) return -8.8;
+		if(mboSin == null) return Double.NaN;
 		return 0;
 	}
 
@@ -377,14 +372,12 @@ class TrainModel implements TrainInterface {
 
 	@Override
 	public boolean toggleLeftDoors() {
-		if(doorOperationState) return false;
 		leftDoorState = !leftDoorState;
 		return true;
 	}
 
 	@Override
 	public boolean toggleRightDoors() {
-		if(doorOperationState) return false;
 		rightDoorState = !rightDoorState;
 		return true;
 	}
@@ -471,8 +464,8 @@ class TrainModel implements TrainInterface {
 	}
 	
 	@Override
-	public boolean doorOperationState() {
-		return doorOperationState;
+	public boolean brakeOperationState() {
+		return brakeOperationState;
 	}
 	
 	/**
@@ -506,4 +499,28 @@ class TrainModel implements TrainInterface {
         return "Train_" + getTrainID();
     }
 
+	public void setEngineFailureState(boolean isFailure) {
+		if(isFailure) addTrainInformation("The trains engine stopped working.");
+		else addTrainInformation("The trains engine has been fixed.");
+		engineOperationState = !isFailure;
+	}
+
+	public void setMBOConnectionState(boolean isFailure) {
+		if(isFailure) addTrainInformation("The trains lost connection to the MBO.");
+		else addTrainInformation("The trains regained the MBO signal.");
+		mboConnection = !isFailure;
+	}
+	
+	public void setRailSignalConnectionState(boolean isFailure) {
+		if(isFailure) addTrainInformation("The trains lost connection to the rail signal.");
+		else addTrainInformation("The trains regained the rail signal.");
+		railSignalConnection = !isFailure;
+	}
+	
+	public void setBrakeOperationState(boolean isFailure) {
+		if(isFailure) addTrainInformation("The trains brakes stopped working.");
+		else addTrainInformation("The trains brakes are fixed.");
+		brakeOperationState = !isFailure;
+		
+	}
 }

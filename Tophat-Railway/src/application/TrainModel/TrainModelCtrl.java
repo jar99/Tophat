@@ -15,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -27,24 +28,38 @@ public class TrainModelCtrl implements Initializable {
 	
     TrainModel trainModel;
 
-    @FXML
+    @SuppressWarnings("rawtypes")
+	@FXML
     TableView<TableRow> train_info;
     
-    @FXML
+    @SuppressWarnings("rawtypes")
+	@FXML
     TableColumn<TableRow, String> information_item;
     
-    @FXML
+    @SuppressWarnings("rawtypes")
+	@FXML
     TableColumn<TableRow, String> information_value;
     
     @FXML
     ToggleButton emergencyButton;
     
     @FXML
+    CheckBox engineFailure;
+    
+    @FXML
+    CheckBox brakeFailure;
+    
+    @FXML
+    CheckBox mboFailure;
+    
+    @FXML
+    CheckBox railSignalFailure;
+    
+    @FXML
     ListView<String> train_log;
 
 	private boolean shouldRun = false;
     
-    //TODO fix the emergency brake button
     @FXML
     public void clickEmergencyButton(ActionEvent event) {
     	if(trainModel != null && !trainModel.getEmergencyBrake()) {
@@ -63,6 +78,27 @@ public class TrainModelCtrl implements Initializable {
     	}
     }
     
+    @FXML
+    public void engineFailureToggle(ActionEvent event) {
+    	trainModel.setEngineFailureState(engineFailure.isSelected()); 	
+    }
+    
+    @FXML
+    public void brakeFailureToggle(ActionEvent event) {
+    	trainModel.setBrakeOperationState(brakeFailure.isSelected());	
+    }
+    
+    @FXML
+    public void mboFailureToggle(ActionEvent event) {
+    	trainModel.setMBOConnectionState(mboFailure.isSelected());
+    	
+    }
+    
+    @FXML
+    public void railSignalFailureToggle(ActionEvent event) {
+    	trainModel.setRailSignalConnectionState(railSignalFailure.isSelected());
+    }
+    
     /**
      * This method is called when the tab should be removed.
      */
@@ -72,9 +108,10 @@ public class TrainModelCtrl implements Initializable {
     }
 
     // Starts the automatic update (NO TOUCHY!!)
- 	@Override
+ 	@SuppressWarnings("rawtypes")
+	@Override
  	public void initialize(URL arg0, ResourceBundle arg1) {
- 		information_item.setCellValueFactory(new PropertyValueFactory<TableRow,String>("name"));
+ 		information_item.setCellValueFactory(new PropertyValueFactory<TableRow, String>("name"));
  		information_value.setCellValueFactory(new Callback<CellDataFeatures<TableRow, String> ,ObservableValue<String>>(){
  			public ObservableValue<String> call(CellDataFeatures<TableRow, String> c) {
  		        return c.getValue().getValue();
