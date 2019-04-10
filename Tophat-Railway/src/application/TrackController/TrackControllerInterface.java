@@ -28,6 +28,13 @@ public interface TrackControllerInterface {
 	 * @param trackLine - deep copy of the new line object with all it's data
 	 */
 	public void importLine(TrackLine trackLine);
+
+	/**
+	 * Tells Track Controller that a train left the track
+	 * 
+	 * @param trainID - ID of train which left track
+	 */
+	public void removeTrain(int trainID);
 	
 	
 	

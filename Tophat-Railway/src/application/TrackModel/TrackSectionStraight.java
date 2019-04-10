@@ -4,10 +4,9 @@ import java.util.Map;
 
 public class TrackSectionStraight extends TrackSection {
 
-	public TrackSectionStraight(String lineName, char sectionID, int firstBlockID, double startX, double startY,
-			double endX, double endY, TrackJunction junctionA, TrackJunction junctionB,
-			Map<Integer, TrackBlock> blocks) {
-		super(lineName, sectionID, firstBlockID, startX, startY, endX, endY, junctionA, junctionB, blocks);
+	public TrackSectionStraight(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX,
+			double startY, double endX, double endY, Map<Integer, TrackBlock> blocks) {
+		super(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, blocks);
 	}
 
 	@Override

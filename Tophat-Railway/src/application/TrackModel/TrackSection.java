@@ -30,12 +30,12 @@ public abstract class TrackSection {
 	final protected Map<Integer, TrackBlock> blocks;
 
 	// =======CONSTRUCTORS===========================
-	public TrackSection(String lineName, char sectionID, int firstBlockID, double startX, double startY, double endX,
-			double endY, TrackJunction junctionA, TrackJunction junctionB, Map<Integer, TrackBlock> blocks) {
+	public TrackSection(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX, double startY, double endX,
+			double endY, Map<Integer, TrackBlock> blocks) {
 		this.lineName = lineName;
 		this.sectionID = sectionID;
 		this.firstBlockID = firstBlockID;
-		this.lastBlockID = firstBlockID + blocks.size() - 1;
+		this.lastBlockID = lastBlockID;
 		this.numBlocks = blocks.size();
 		double t_length = 0.0;
 		for (TrackBlock block : blocks.values()) {
@@ -46,8 +46,8 @@ public abstract class TrackSection {
 		this.startY = startY;
 		this.endX = endX;
 		this.endY = endY;
-		this.junctionA = junctionA;
-		this.junctionB = junctionB;
+		this.junctionA = blocks.get(firstBlockID).getJunctionA();
+		this.junctionB = blocks.get(lastBlockID).getJunctionB();
 		this.blocks = Collections.unmodifiableMap(blocks);
 	}
 
