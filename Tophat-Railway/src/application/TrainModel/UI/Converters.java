@@ -45,17 +45,17 @@ public class Converters<T> {
  	
  	public static String TempratureConverter(double tempC) {
  		// TODO add c to f convention
- 		return tempC + "°F";
+ 		return String.format("%.2f°F", tempC);
  	}
  	
 	public static String SpeedConverter(double speedM) {
  		// TODO add kmh to mph convention
- 		return speedM + "mph";
+ 		return String.format("%.2fmph", speedM) ;
  	}
 
 	public static String Waight(double waightKG) {
 		// TODO add kg to lbs
-		return waightKG + " LBS";
+		return String.format("%.2fLBS", waightKG);
 	}
 
 	public String concat(T item) {

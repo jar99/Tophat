@@ -354,6 +354,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		track.put(trackLine.getLineName(), trackLine);
 	}
 
+
 	void shiftBlockLeftG2() {
 		if (g2Index == 0)
 		{
@@ -936,5 +937,10 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 
 	public int getCurrentBlockIDG5() {
 		return CBIDG5;
+	}
+	@Override
+	public void removeTrain(int trainID) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -85,7 +85,7 @@ public class UIApp extends Application {
 				Stage tckModStage = new Stage();
 				Parent tckModRoot = FXMLLoader.load(getClass().getResource("./TrackModel/TrackModel.fxml"));
 				tckModStage.setTitle("Track Model");
-				Scene tckModScene = new Scene(tckModRoot, 1000, 600); // NOTE: Change last two ints to make window
+				Scene tckModScene = new Scene(tckModRoot, 1100, 620); // NOTE: Change last two ints to make window
 																		// bigger
 				tckModStage.setScene(tckModScene);
 				tckModStage.show();
