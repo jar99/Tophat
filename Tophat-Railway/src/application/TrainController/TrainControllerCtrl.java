@@ -4,6 +4,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import javax.swing.JComboBox;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -32,7 +34,7 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	private TextField speed, power, ki, kp, temp;
 	@FXML 
-	private Label actualSpeed, actualPower, currentTemp, driveStatus;
+	private Label actualSpeed, actualPower, currentTemp, driveStatus, MBOSpeed, MBOAuthority;
 	@FXML
 	private Button confirmSpeed, confirmPower, confirmKi, confirmKp, confirmTemp;
 	@FXML
@@ -40,32 +42,43 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	private CheckBox manual = new CheckBox(), automatic;
 	@FXML
+	private static JComboBox<String> listTrainID = new JComboBox<>();
+	@FXML
 	private Circle engineStatus, brakeStatus, signalStatus;
-	String inputSpeed, inputPower, inputKi, inputKp, inputTemp, setDriveStatus;
-	double temperature, modelSpeed = 0, ctrlSpeed;
-	DecimalFormat mdlSpeed = new DecimalFormat("#.##");
-	int numPower, trainStatus;
+	String inputSpeed, inputPower, inputKi, inputKp, inputTemp, setDriveStatus, setMBOSpeed, setMBOAuthority;
+	double temperature, modelSpeed = 0, ctrlSpeed = 0, inputMBOSpeed = 0;
+	//DecimalFormat mdlSpeed = new DecimalFormat("#0.00");
+	int numPower, trainStatus, inputMBOAuthority = 0, trainID = 0;
+
+
+	int currentTrainID;
 	boolean srvBrake, emgrBrake, driveManual, driveAutomatic, lightStatus, driveMode, engineFail, brakeFail, signalFail;
+	boolean leftDoor1 = false, rightDoor1 = false;
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
 
-	@FXML //change to the button 
-	public void Speed() { //inputSpeed.isEmpty();
-		inputSpeed = speed.getText();
-		if(modelSpeed == 0) {
-			//mySin.setSpeed(ctrlSpeed);
-			if(!inputSpeed.isEmpty()) {
-				ctrlSpeed = Double.parseDouble(inputSpeed);
-			}
-			actualSpeed.setText(inputSpeed + "mph");
-		}else if(modelSpeed > 0) {
-			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
-		}else
-			actualSpeed.setText(mdlSpeed.format(modelSpeed) + "mph");
-		//mySin.setSpeed(ctrlSpeed);
+	
+	public void trainID(int trainID) {
+			//listTrainID.addItem(currentTrainID);
+			
 	}
 	
+	@FXML
+	public void Speed() { //inputSpeed.isEmpty();
+		inputSpeed = speed.getText();
+		if(!inputSpeed.isEmpty()) {
+			ctrlSpeed = Double.parseDouble(inputSpeed);
+			mySin.setSpeed(ctrlSpeed);
+		}
+	}
+	
+	public void restartSpeed() {
+		mySin.setSpeed(0);
+		speed.setText("0");
+		ctrlSpeed = 0.0;
+		actualSpeed.setText(ctrlSpeed + "mph");
+	}
 	
 	//need to calculate this 
 	public void Power() {
@@ -82,9 +95,7 @@ public class TrainControllerCtrl implements Initializable {
 		if(serviceBrake.isSelected()) {
 			mySin.setServiceBrake(true);
 			serviceBrake.setText("Slowing down Train.");
-			for(double i = ctrlSpeed; i >= 0; i--) {
-				actualSpeed.setText(i + "mph");
-			}
+			restartSpeed();
 		}else
 			serviceBrake.setText("Brake is off.");
 	}
@@ -96,7 +107,7 @@ public class TrainControllerCtrl implements Initializable {
 			mySin.setSpeed(0);
 			emergencyBrake.setText("EMERGENCY STOP!!");
 			emergencyBrake.setStyle("-fx-background-color:red");
-			actualSpeed.setText("0mph");
+			restartSpeed();
 			//emergencyBrake.setStyle("-fx-text-fill: black");
 
 		}/*else
@@ -130,12 +141,20 @@ public class TrainControllerCtrl implements Initializable {
 		inputKp = kp.getText();
 	}
 	
+	
+	/**
+	 *true = On 
+	 *false = off 
+	 */
 	@FXML
 	public void Lights() {
 		if(lights.isSelected()) {
-			lights.setText("Off");
-		}else
+			mySin.setLights(true);
 			lights.setText("On");
+		}else {
+			mySin.setLights(false);
+			lights.setText("Off");
+		}
 	}
 	
 	@FXML
@@ -143,19 +162,26 @@ public class TrainControllerCtrl implements Initializable {
 		if(rightDoor.isSelected()) {
 			mySin.setRightDoor(true);
 			rightDoor.setText("Open");
-		}else
+		}else {
 			mySin.setRightDoor(false);
 			rightDoor.setText("Closed");
+		}
 	}
 	
+	/**
+	 * true = open
+	 * false = closed
+	 */
 	@FXML
 	public void leftDoor() {
+		
 		if(leftDoor.isSelected()) {
 			mySin.setLeftDoor(true);
 			leftDoor.setText("Open");
-		}else
+		}else {
 			mySin.setLeftDoor(false);
 			leftDoor.setText("Closed");
+		}
 	}
 	
 	@FXML
@@ -171,18 +197,33 @@ public class TrainControllerCtrl implements Initializable {
 	public void engineStatus() {
 		mySin.setSpeed(0);
 		engineStatus.setFill(javafx.scene.paint.Color.RED);
+		restartSpeed();
 		
 	}
 	
 	public void brakeStatus() {
 		mySin.setSpeed(0);
 		brakeStatus.setFill(javafx.scene.paint.Color.RED);
+		restartSpeed();
 	}
 	
 	public void signalStatus() {
 		mySin.setSpeed(0);
 		signalStatus.setFill(javafx.scene.paint.Color.RED);
+		restartSpeed();
 	}	
+	
+	/**
+	 * this sets the speed/authority from MBO and possibly CTC office
+	 * @param inputMBOSpeed
+	 * @param inputMBOAuthority
+	 */
+	public void StationInput(double inputMBOSpeed, int inputMBOAuthority) {
+		setMBOSpeed = Double.toString(inputMBOSpeed);
+		setMBOAuthority = Double.toString(inputMBOAuthority);
+		MBOSpeed.setText(setMBOSpeed);
+		MBOAuthority.setText(setMBOAuthority);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -209,15 +250,24 @@ public class TrainControllerCtrl implements Initializable {
 	//	int decrease = mySin.getDecrease();
 		confirmPower.setOnAction(e -> Power());
 		
+		
+		//currentTrainID = mySin.getTrainID();
+		
+		
+		
 		modelSpeed = mySin.getSpeed();
 		if(modelSpeed == 0) {
-			mySin.setSpeed(ctrlSpeed);
 			Speed();
+			actualSpeed.setText(ctrlSpeed + "mph");
 		}else if(modelSpeed > 0) {
-			mySin.setSpeed(modelSpeed);
-			ctrlSpeed = mySin.getSpeed();
+			//mySin.setSpeed(modelSpeed);
+			ctrlSpeed = modelSpeed;
+			actualSpeed.setText(ctrlSpeed + "mph");
 
 		}
+		
+		inputMBOSpeed = mySin.getMBOSpeed();
+		inputMBOAuthority = mySin.getMBOAuthority();
 		
 		engineFail = mySin.getEngineStatus();
 		brakeFail = mySin.getBrakeStatus();
@@ -242,10 +292,9 @@ public class TrainControllerCtrl implements Initializable {
 		confirmKp.setOnAction(e -> Kp());
 		confirmTemp.setOnAction(e -> Temperature());
 		emergencyBrake.setOnAction(e -> emergencyBrake());
-		serviceBrake.setOnAction(e -> serviceBrake());
-		lights.setOnAction(e -> Lights());
-		rightDoor.setOnAction(e -> rightDoor());
-		leftDoor.setOnAction(e -> leftDoor());
+		//serviceBrake.setOnAction(e -> serviceBrake());
+//		lights.setOnAction(e -> Lights());
+
 		
 		//counter.setText(Integer.toString(count));
 		//counter.setText(Integer.toString(decrease));

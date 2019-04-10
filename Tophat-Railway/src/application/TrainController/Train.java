@@ -85,6 +85,10 @@ public class Train implements TrainCtrlInterface {
 		rightDoor = mySin.getRightDoor();
 	}
 	
+	public void lights(boolean lights) {
+		lights = mySin.getLights();
+	}
+	
 }
 
 //new edits
