@@ -29,6 +29,10 @@ public interface TrainInterface {
 	 */
 	double getWeight();
 	
+	void setTemperature(double temperature);
+	
+	double getTemperature();
+	
 	/**
 	 * Function to get the number passengers on the train.
 	 * @return int number of passengers
@@ -134,8 +138,9 @@ public interface TrainInterface {
 	
 	boolean railSignalState();
 
-	boolean doorOperationState();
 	
 	void trainDerails();
+
+	boolean brakeOperationState();
 	
 }

@@ -31,10 +31,10 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin></ToggleButton>
             <Label text="Faults" />
-            <CheckBox mnemonicParsing="false" text="Engine Failure" />
-            <CheckBox mnemonicParsing="false" text="Brake Failure" />
-            <CheckBox mnemonicParsing="false" text="Door Failure" />
-            <CheckBox mnemonicParsing="false" text="Signal Pickup Failure" />
+            <CheckBox fx:id="engineFailure" mnemonicParsing="false" onAction="#engineFailureToggle" text="Engine Failure" />
+            <CheckBox fx:id="brakeFailure" mnemonicParsing="false" onAction="#brakeFailureToggle" text="Brake Failure" />
+            <CheckBox fx:id="mboFailure" mnemonicParsing="false" onAction="#mboFailureToggle" text="MBO Connection Failure" />
+            <CheckBox fx:id="railSignalFailure" mnemonicParsing="false" onAction="#railSignalFailureToggle" text="Rail Signal Pickup Failure" />
             <ListView fx:id="train_log" prefHeight="200.0" prefWidth="200.0">
                <VBox.margin>
                   <Insets top="5.0" />
