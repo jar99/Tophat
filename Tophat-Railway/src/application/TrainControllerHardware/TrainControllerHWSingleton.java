@@ -17,7 +17,7 @@ public class TrainControllerHWSingleton{
 	private TrainControllerHWSingleton() throws SerialPortIOException{
 		String primary = "COM16";
 		SerialPort primaryPort = SerialPort.getCommPort(primary);
-		if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
+		//if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
 	}
 	
 	public static TrainControllerHWSingleton getInstance(){
@@ -105,6 +105,7 @@ public class TrainControllerHWSingleton{
 	 * Controls Singleton connections, doesn't update UI
 	 */
 	public void update(){
+		System.out.println("Fuck me");
 		TrainInterface train = trnModelSin.getTrain(trainId);
 		if(train == null) return;
 		

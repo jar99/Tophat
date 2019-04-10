@@ -67,7 +67,8 @@ public class TrainControllerHWCtrl implements Initializable{
 	/**
 	 * initialize UI
 	 */
-	public void initialize(URL url, ResourceBundle resourceBundle) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		
 		updateAnimation = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
@@ -75,6 +76,7 @@ public class TrainControllerHWCtrl implements Initializable{
 			}
 		};
 		updateAnimation.start();
+		System.out.println("Something");
 	}
 	
 	/**
@@ -82,7 +84,9 @@ public class TrainControllerHWCtrl implements Initializable{
 	 */
 	private void update() {
 		// numeric values
+		System.out.println("HW Update");
 		trainIdValue.setText(mySin.trainId + "");
+		System.out.println("HW Update");
 		ctcSpeedValue.setText(mySin.trackSpeed + "mph");
 		ctcAuthorityValue.setText(mySin.trackAuthority + "blocks");
 		mboSpeedValue.setText(mySin.mboSpeed + "mph");
