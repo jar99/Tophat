@@ -655,7 +655,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public double getTrainSuggestedSpeed(int trainID) throws TrackCircuitFailureException {
-		if (trainLocations.containsKey(trainID))
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
 
 		String lineName = trainLocations.get(trainID).getLineName();
@@ -671,7 +671,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public int getTrainBlockAuthority(int trainID) throws TrackCircuitFailureException {
-		if (trainLocations.containsKey(trainID))
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
 
 		String lineName = trainLocations.get(trainID).getLineName();
