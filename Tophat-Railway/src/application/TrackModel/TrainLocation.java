@@ -95,8 +95,10 @@ public class TrainLocation {
 
 	// Change train coordinates
 	void setCoordinates(double newX, double newY) {
-		if (newX < 0 || newY < 0)
-			throw new IllegalArgumentException("Coordinates cannot be less than 0");
+		/*
+		 * if (newX < 0 || newY < 0) throw new
+		 * IllegalArgumentException("Coordinates cannot be less than 0");
+		 */
 		this.coordX = newX;
 		this.coordY = newY;
 	}

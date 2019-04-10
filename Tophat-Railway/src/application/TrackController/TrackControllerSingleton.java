@@ -316,4 +316,10 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public void importLine(TrackLine trackLine) {
 		track.put(trackLine.getLineName(), trackLine);
 	}
+
+	@Override
+	public void removeTrain(int trainID) {
+		// TODO Auto-generated method stub
+		
+	}
 }
