@@ -301,17 +301,30 @@ class TrainModel implements TrainInterface {
 	@Override
 	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
+		int remainingPassangers = 0;
+		if(numPassengers > passengerCap) {
+			remainingPassangers = numPassengers - passengerCap;
+			numPassengers -= remainingPassangers;
+		}
 		passengerWeight += AVERAGEPASSENGERMASS*numPassengers;
-//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded.");
-		return passengers+=numPassengers;
+		passengers+=numPassengers;
+		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded. The train now has " + passengers + " people onboard. People were left behind " + remainingPassangers + " passangers.");
+		return remainingPassangers;
 	}
 	
 	@Override
 	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
+		int exessPassangers = 0;
+		if(numPassengers < passengers) {
+			exessPassangers = passengers - numPassengers;
+			numPassengers -= exessPassangers;
+		}
+		
 		passengerWeight -= AVERAGEPASSENGERMASS*numPassengers;
-//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " alighted.");
-		return passengers-=numPassengers;
+		passengers-=numPassengers;
+		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded. The train now has " + passengers + " people onboard. People were left behind " + exessPassangers + " passangers.");
+		return exessPassangers;
 	}
 	
 	@Override
@@ -374,13 +387,25 @@ class TrainModel implements TrainInterface {
 	@Override
 	public boolean toggleLeftDoors() {
 		leftDoorState = !leftDoorState;
+		if(leftDoorState) exchangePassangers();
 		return true;
 	}
 
 	@Override
 	public boolean toggleRightDoors() {
 		rightDoorState = !rightDoorState;
+		if(rightDoorState) exchangePassangers();
 		return true;
+	}
+	
+	private void exchangePassangers() {
+		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
+		int deltaPassengers = newPassengers-passengers;
+		if(deltaPassengers > 0) {
+			boardPassengers(deltaPassengers);
+		} else {
+			alightPassengers(deltaPassengers);
+		}
 	}
 	
 	@Override
