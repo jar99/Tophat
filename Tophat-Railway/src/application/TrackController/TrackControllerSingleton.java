@@ -96,6 +96,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 				 	blockListSpeed[i] = suggestedSpeed;
 				 	track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
 				 	track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+				 	track.get("green").getBlock(i+1).setControlAuthority(true);
 			 	}
 			 }
 			 if(authority < 63) {
@@ -104,6 +105,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 					 blockListSpeed[i] = suggestedSpeed;
 					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
 					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+					 track.get("green").getBlock(i+1).setControlAuthority(true);
 
 				 }
 				 for(int i = 0; i < authority; i++) {
@@ -111,6 +113,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 					 blockListSpeed[i] = suggestedSpeed;
 					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
 					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+					 track.get("green").getBlock(i+1).setControlAuthority(true);
 				 }
 			 }
 		  
@@ -389,17 +392,6 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		return switchStraightG5;
 	}
 	
-	@Override
-	public double setSuggestedSpeed(String lineName, int blockID) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setAuthority(String lineName) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public void importLine(TrackLine trackLine) {
@@ -990,9 +982,22 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public int getCurrentBlockIDG5() {
 		return CBIDG5;
 	}
+	
 	@Override
 	public void removeTrain(int trainID) {
+		//TODO
+	}
+
+	@Override
+	public void createTrain(String lineName, int trainID) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

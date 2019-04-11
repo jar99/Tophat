@@ -5,22 +5,21 @@ import application.TrackModel.TrackLine;
 public interface TrackControllerInterface {
 
 	// =========CTC Methods==========
-	/*
-	 * Get suggested speed from CTC for each block.
-	 * 
-	 * @param lineName - Name of the block line
-	 * @param blockID - ID number for each block
-	 * @return speed - Suggested speed for that block
-	 */
-	public double setSuggestedSpeed(String lineName, int blockID);
 	
-	/*
-	 * Get authority from CTC
+	/**
 	 * 
-	 * @param lineName - Name of the line
-	 * @return - blockID - block the train is being dispatched to
+	 * @param lineName
+	 * @param trainID
 	 */
-	public int setAuthority(String lineName);
+	public void createTrain(String lineName, int trainID);
+	
+	/**
+	 * @param trainID
+	 * @param blockID
+	 * @param suggestedSpeed
+	 */
+	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed);
+	
 	
 	/**
 	 * Gives Track Controller a new line
