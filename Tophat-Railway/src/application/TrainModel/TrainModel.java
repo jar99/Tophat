@@ -149,7 +149,7 @@ class TrainModel implements TrainInterface {
     	
     	double f = gravity(angle);
     	
-    	if(trModSin.trainHasPower(trainID) && brakeF() != 0.0) { // The train should have power
+    	if(trModSin.trainHasPower(trainID) && brakeF() == 0.0) { // The train should have power
 //    		Calculate how much force is applied by power
     		f+=powerF();
     	}
