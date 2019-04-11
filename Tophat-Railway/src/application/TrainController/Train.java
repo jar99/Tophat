@@ -189,6 +189,30 @@ public class Train implements TrainCtrlInterface {
 		return kp;
 	}
 	
+	public void setLights(boolean b) {
+		if(getLights() != b) {
+			toggleLights();
+		}
+	}
+	
+	
+	public void setRightDoor(boolean b) {
+		if(rightDoorState() != b) {
+			toggleRightDoor();
+		}
+	}
+	
+	public void setLeftDoor(boolean b) {
+		if(leftDoorState() != b) {
+			toggleLeftDoor();
+		}	
+	}
+	
+	public void setEmergencyBrake(boolean b) {
+		if(getEngineStatus() != b) {
+			toggleEmergencyBrake();
+		}
+	}
 }
 
 //new edits

@@ -48,31 +48,47 @@ public class TrainControllerCtrl implements Initializable {
 	private Circle engineStatus, brakeStatus, signalStatus;
 	
 	
+	Train train;
+	
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
 	
 	@FXML
+	public void Temperature() {
+		String inputTemp = temp.getText();
+		if(!inputTemp.isEmpty()) {	
+			double temperature = Double.parseDouble(inputTemp);
+			if(temperature < 0) {
+				throw new IllegalArgumentException("Cannot have negative temperature.");
+			}
+			if(train != null) train.setTemperature(temperature);
+		}
+	}
+	
+	@FXML
 	public void Speed() { //inputSpeed.isEmpty();
 		String inputSpeed = speed.getText();
-		if(!inputSpeed.isEmpty()) {
-			System.out.println(inputSpeed);
+		if(!inputSpeed.isEmpty()) {			
 			double ctrlSpeed = Double.parseDouble(inputSpeed);
-			mySin.setSpeed(ctrlSpeed);
+			if(ctrlSpeed < 0) {
+				throw new IllegalArgumentException("Cannot have negative speed.");
+			}
+			if(train != null) train.setSpeed(ctrlSpeed);
 		}
 	}
 	
 	private void restartSpeed() {
-		mySin.setSpeed(0);
+		if(train != null) train.setSpeed(0);
 	}
 	
 	//need to calculate this 
 	void Power() {
-		actualPower.setText(Double.toString(mySin.getPower()) + "Kwatts");
+		actualPower.setText(Double.toString(train.getPower()) + "Kwatts");
 	}
 	
 	void UpdateSpeed() {
-		actualSpeed.setText(Double.toString(mySin.getSpeed()) + "mph");
+		actualSpeed.setText(Double.toString(train.getSpeed()) + "mph");
 	}
 	
 	@FXML
@@ -85,13 +101,13 @@ public class TrainControllerCtrl implements Initializable {
 		}else {
 			serviceBrake.setText("Brake is off.");
 		}
-		mySin.toggleServiceBrake();
+		if(train != null) train.toggleServiceBrake();
 	}
 	
 	@FXML
 	public void emergencyBrake() {
 		if(emergencyBrake.isSelected()) {
-			mySin.setSpeed(0);
+			if(train != null) train.setSpeed(0);
 			emergencyBrake.setText("EMERGENCY STOP!!");
 			emergencyBrake.setStyle("-fx-background-color:red");
 			restartSpeed();
@@ -100,9 +116,8 @@ public class TrainControllerCtrl implements Initializable {
 		} else {
 			emergencyBrake.setStyle("-fx-background-color:grey");
 			emergencyBrake.setText("EMERGENCY BRAKE");
-		}
-		
-		mySin.toggleEmergencyBrake();
+		}	
+		if(train != null) train.toggleEmergencyBrake();
 	}
 	
 	@FXML
@@ -110,7 +125,7 @@ public class TrainControllerCtrl implements Initializable {
 			manual.setSelected(true);
 			automatic.setSelected(false);
 			driveStatus.setText("Manual Mode");
-			mySin.setDriveMode(true);
+			if(train != null) train.setDriveMode(true);
 	}
 	
 	@FXML
@@ -118,19 +133,19 @@ public class TrainControllerCtrl implements Initializable {
 			automatic.setSelected(true);
 			manual.setSelected(false);
 			driveStatus.setText("Automatic Mode");
-			mySin.setDriveMode(false);
+			if(train != null) train.setDriveMode(false);
 	}
 	
 	@FXML
 	public void Ki() {
 		String inputKi = ki.getText();
-		mySin.setKI(Double.parseDouble(inputKi));
+		if(train != null) train.setKI(Double.parseDouble(inputKi));
 	}
 	
 	@FXML
 	public void Kp() {
 		String inputKp = kp.getText();
-		mySin.setKP(Double.parseDouble(inputKp));
+		if(train != null) train.setKP(Double.parseDouble(inputKp));
 	}
 	
 	
@@ -141,10 +156,10 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	public void Lights() {
 		if(lights.isSelected()) {
-			mySin.setLights(true);
+			if(train != null) train.setLights(true);
 			lights.setText("On");
 		}else {
-			mySin.setLights(false);
+			if(train != null) train.setLights(false);
 			lights.setText("Off");
 		}
 	}
@@ -152,10 +167,10 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	public void rightDoor() {
 		if(rightDoor.isSelected()) {
-			mySin.setRightDoor(true);
+			if(train != null) train.setRightDoor(true);
 			rightDoor.setText("Open");
 		}else {
-			mySin.setRightDoor(false);
+			if(train != null) train.setRightDoor(false);
 			rightDoor.setText("Closed");
 		}
 	}
@@ -167,26 +182,21 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	public void leftDoor() {
 		if(leftDoor.isSelected()) {
-			mySin.setLeftDoor(true);
+			if(train != null) train.setLeftDoor(true);
 			leftDoor.setText("Open");
 		}else {
-			mySin.setLeftDoor(false);
+			if(train != null) train.setLeftDoor(false);
 			leftDoor.setText("Closed");
 		}
 	}
 	
-	@FXML
-	public void Temperature() {
-		String inputTemp = temp.getText();
-		double temperature = Double.parseDouble(inputTemp);
-		mySin.setTemperature(temperature);
-		currentTemp.setText(Double.toString(mySin.getTemperature()));
-		
+	void UpdateTemprature() {
+		currentTemp.setText(Double.toString(train.getTemperature()));
 	}
 	
 	
 	public void engineStatus() {
-		if(!mySin.getEngineStatus()) {
+		if(!train.getEngineStatus()) {
 			engineStatus.setFill(javafx.scene.paint.Color.RED);
 			restartSpeed();
 		}else {
@@ -196,7 +206,7 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	public void brakeStatus() {
-		if(!mySin.getBrakeStatus()) {
+		if(!train.getBrakeStatus()) {
 			brakeStatus.setFill(javafx.scene.paint.Color.RED);
 			restartSpeed();
 		} else {
@@ -205,7 +215,7 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	public void signalStatus() {
-		if(!mySin.getSignalStatus()) {
+		if(!train.getSignalStatus()) {
 			signalStatus.setFill(javafx.scene.paint.Color.RED);
 			restartSpeed();
 		} else {
@@ -224,6 +234,14 @@ public class TrainControllerCtrl implements Initializable {
 		CTCSpeed.setText(Double.toString(inputCTCSpeed));
 		CTCAuthority.setText(Integer.toString(inputMBOAuthority));
 	}
+	
+	public void setTrain(int trainID) {
+		 Train train = mySin.getTrain(trainID);
+		 if(train != null) {
+			 this.train = train;
+		 }
+		
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -231,7 +249,7 @@ public class TrainControllerCtrl implements Initializable {
 		listTrainID.valueProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-				mySin.setTrain(newValue);
+				setTrain(newValue);
 				setKvalues();
 			}
 	    });
@@ -253,16 +271,18 @@ public class TrainControllerCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
-	
-		//currentTrainID = mySin.getTrainID();
-		double inputMBOSpeed = mySin.getMBOSpeed();
+		if(train == null) return;
 		
-		int inputMBOAuthority = mySin.getMBOAuthority();
-		double inputCTCSpeed = mySin.getCTCSpeed();
-		int inputCTCAuthority = mySin.getCTCAuthority();
+		//currentTrainID = mySin.getTrainID();
+		double inputMBOSpeed = train.getMBOSpeed();
+		
+		int inputMBOAuthority = train.getMBOAuthority();
+		double inputCTCSpeed = train.getCTCSpeed();
+		int inputCTCAuthority = train.getCTCAuthority();
 		StationInput(inputMBOSpeed, inputMBOAuthority, inputCTCSpeed, inputCTCAuthority);
 		Power();
 		UpdateSpeed();
+		UpdateTemprature();
 		
 		engineStatus();
 		brakeStatus();
@@ -287,8 +307,8 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	private void setKvalues() {
-		ki.setText(Double.toString(mySin.getKI()));
-		kp.setText(Double.toString(mySin.getKP()));
+		ki.setText(Double.toString(train.getKI()));
+		kp.setText(Double.toString(train.getKP()));
 	}
 
 	void removeTrain(int trainID) {
