@@ -537,8 +537,12 @@ class TrainModel implements TrainInterface {
 	 */
 	@Override
 	public void setBeaconData(String beaconData) {  
-		this.beaconData = beaconData.substring(0, BEACONSIZE);
-		addTrainInformation("Beacon Data: " + this.beaconData);
+		
+		String newData = beaconData.substring(0, Math.min(beaconData.length(), BEACONSIZE));
+		if(newData != this.beaconData) {
+			this.beaconData = newData;
+			addTrainInformation("Beacon Data: " + newData);
+		}
 	}
 
 	@Override
@@ -547,7 +551,9 @@ class TrainModel implements TrainInterface {
 	}
 	
 	public void addTrainInformation(String message) {
-		trainLog.add(System.nanoTime() + ": " + message);
+		ClockSingleton clock = ClockSingleton.getInstance();
+		
+		trainLog.add(clock.getCurrentTimeString() + ": " + message);
 	}
 	
 	@Override
