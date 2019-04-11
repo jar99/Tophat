@@ -1,7 +1,8 @@
 package application.TrainControllerHardware;
 
 public interface TrainControllerHWInterface {
-	public int getTrainID();
+	public int getTrainId();
+	/*
 	public double getPower();
 	public double getSpeed();
 	public boolean getLights();
@@ -14,4 +15,5 @@ public interface TrainControllerHWInterface {
 	public boolean getEngineState();
 	public boolean getBrakeState();
 	public boolean getSignalState();
+	*/
 }

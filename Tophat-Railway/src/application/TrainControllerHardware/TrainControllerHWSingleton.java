@@ -6,7 +6,7 @@ import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
 
 
-public class TrainControllerHWSingleton{
+public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 
 	private static TrainControllerHWSingleton instance = null;
 	private static TrainModelSingleton trnModelSin = TrainModelSingleton.getInstance();
@@ -119,7 +119,7 @@ public class TrainControllerHWSingleton{
 		
 		train.setPower(power);
 		train.setTemperature(temp);
-		if(train.getServiceBrake() != brake) train.setServiceBrake();
+		train.setServiceBrake();
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) train.resetEmergencyBrake();
 		if(train.getLightState() != lights) train.toggleLights();
