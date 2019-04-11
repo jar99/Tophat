@@ -28,19 +28,17 @@ public class TrainControllerSingleton {
 	// =====================================
 
 	// NOTE: Put your data objects here
-	private String power;
-	Double temperature;
 	private int trainID;
-	double numSpeed;
-	private int numPower, MBOAuthority= 0, numTemperature, numOfTrains, trainStatus, size;
+	private double numSpeed, power = 0, temperature = 0;
+	private int numPower, MBOAuthority= 0, CTCAuthority = 0, numTemperature, numOfTrains, trainStatus, size;
 	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode, engineFail, brakeFail, signalFail;
 	private boolean lights;
-	private double speed = 0, MBOSpeed = 0;;
+	private double speed = 0, MBOSpeed = 0, CTCSpeed = 0;
 
 	// create hashtable for each individual train
 	// public void makeTrain(put information in){
 
-	private Hashtable<Integer, Train> trainCtrlHashTable;
+	private Hashtable<Integer, Train> trainCtrlHashTable = new Hashtable<>();
 
 	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
 	Train train;
@@ -54,9 +52,9 @@ public class TrainControllerSingleton {
 	// Check TrainID and remove HashTable
 	public Train createTrain(int trainID, TrainInterface trainMod) {
 				this.trainMod = trainMod;
-				Train train = new Train(trainID);
-				trainCtrlHashTable.put(trainID, train);
-				return train;	
+					Train train = new Train(trainID);
+					trainCtrlHashTable.put(trainID, train);
+					return train;
 	}
 	
 	public void removeTrain(int trianID) {
@@ -94,22 +92,13 @@ public class TrainControllerSingleton {
 		this.speed = speed;
 	}
 
-	// Send Power as STRING
-	public String getPower() {
+	// Send Power as Double
+	public double getPower() {
 		return power;
 	}
 
-	public void setPower(String power) {
+	public void setPower(double power) {
 		this.power = power;
-	}
-
-	// Send Power as INTEGER
-	public int getnumPower() {
-		return numPower;
-	}
-
-	public void setnumPower(int numPower) {
-		this.numPower = numPower;
 	}
 
 	// Sends Temperature as DOUBLE
@@ -246,6 +235,22 @@ public class TrainControllerSingleton {
 		this.MBOAuthority = MBOAuthority;
 	}
 	
+	public double getCTCSpeed() {
+		return CTCSpeed;
+	}
+	
+	public void setCTCSpeed(double CTCSpeed) {
+		this.CTCSpeed = CTCSpeed;
+	}
+	
+	public int getCTCAuthority() {
+		return CTCAuthority;
+	}
+	
+	public void setCTCAuthoirty(int CTCAuthority) {
+		this.CTCAuthority = CTCAuthority;
+	}
+	
 	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
@@ -256,14 +261,17 @@ public class TrainControllerSingleton {
 
 	public void update() {
 		
-		/*for(Train train: trainCtrlHashTable.values()) {
-			train.update(0);
-		}*/
+
 		
 		if(trainMod == null) {
 			return;
 		}
 		speed = trainMod.getSpeed();
+		
+		MBOSpeed = trainMod.getMBOSpeed();
+		MBOAuthority = trainMod.getMBOAuthority();
+		CTCSpeed = trainMod.getTrackSpeed();
+		CTCAuthority = trainMod.getTrackAuthority();
 		
 		//leftDoor = trainMod.getLeftDoorState();
 		

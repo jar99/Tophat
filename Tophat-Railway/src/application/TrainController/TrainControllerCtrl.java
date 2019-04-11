@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JComboBox;
 
+import application.ClockSingleton;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ public class TrainControllerCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
 	private TrainControllerSingleton mySin = TrainControllerSingleton.getInstance();
+	private ClockSingleton clkSin = ClockSingleton.getInstance();
 
 
 	private AnimationTimer updateAnimation;
@@ -30,7 +32,7 @@ public class TrainControllerCtrl implements Initializable {
 	// WARNING: Your fx:id and variable name Must Match!
 	// Links to FXML elements
 	@FXML
-	private Label counter;
+	private Label counter, CTCSpeed, CTCAuthority;
 	@FXML
 	private TextField speed, power, ki, kp, temp;
 	@FXML 
@@ -45,13 +47,16 @@ public class TrainControllerCtrl implements Initializable {
 	private static JComboBox<String> listTrainID = new JComboBox<>();
 	@FXML
 	private Circle engineStatus, brakeStatus, signalStatus;
+	
 	String inputSpeed, inputPower, inputKi, inputKp, inputTemp, setDriveStatus, setMBOSpeed, setMBOAuthority;
-	double temperature, modelSpeed = 0, ctrlSpeed = 0, inputMBOSpeed = 0;
+	String setCTCSpeed, setCTCAuthority;
+	double temperature, modelSpeed = 0, ctrlSpeed = 0, inputMBOSpeed = 0, newError = 0, lastError = 0, actPower = 0;
+	double lastPower = 0, numKi = 0, numKp = 0, s = 0, inputCTCSpeed = 0;
 	//DecimalFormat mdlSpeed = new DecimalFormat("#0.00");
-	int numPower, trainStatus, inputMBOAuthority = 0, trainID = 0;
+	int numPower, trainStatus, inputMBOAuthority = 0, inputCTCAuthority = 0, trainID = 0;
 
 
-	int currentTrainID;
+	int currentTrainID, deltaT, checkKi = 0, checkKp = 0;
 	boolean srvBrake, emgrBrake, driveManual, driveAutomatic, lightStatus, driveMode, engineFail, brakeFail, signalFail;
 	boolean leftDoor1 = false, rightDoor1 = false;
 	// NOTE: This is where you build UI functionality
@@ -69,23 +74,49 @@ public class TrainControllerCtrl implements Initializable {
 		inputSpeed = speed.getText();
 		if(!inputSpeed.isEmpty()) {
 			ctrlSpeed = Double.parseDouble(inputSpeed);
-			mySin.setSpeed(ctrlSpeed);
+			//mySin.setSpeed(ctrlSpeed);
+			lastError = newError;
+			newError = newError(ctrlSpeed, modelSpeed);	
+			actualSpeed.setText(ctrlSpeed + "mph");
 		}
 	}
 	
-	public void restartSpeed() {
+	private void restartSpeed() {
 		mySin.setSpeed(0);
 		speed.setText("0");
 		ctrlSpeed = 0.0;
 		actualSpeed.setText(ctrlSpeed + "mph");
 	}
 	
+	private double newError(double ctrlSpeed, double modSpeed) {
+		ctrlSpeed = ctrlSpeed - modSpeed;
+		return ctrlSpeed;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param deltaT = time difference (time between updates)
+	 * @param a = error last
+	 * @param an = error new
+	 * @param b = power last 
+	 * @return new power
+	 */
+    private double laplace(double deltaT, double a, double an, double b) {
+		return b+((deltaT)/2)*(an + a);
+	}
+	    
 	//need to calculate this 
 	public void Power() {
 		inputPower = power.getText();
 		numPower = Integer.parseInt(inputPower);
-		//mySin.setnumPower(numPower);
-		actualPower.setText(inputPower + "Kwatts");
+		deltaT = clkSin.getCurrentTimeSeconds();
+		s = laplace(deltaT,newError,actPower,lastError);
+		if(checkKi == 1 && checkKp == 1) {
+			actPower = numKp + (numKi / s);
+		}
+		//mySin.setPower(actPower);
+		actualPower.setText(actPower + "Kwatts");
 	}
 	
 	@FXML
@@ -133,12 +164,18 @@ public class TrainControllerCtrl implements Initializable {
 			mySin.setDriveMode(false);
 	}
 	
+	@FXML
 	public void Ki() {
 		inputKi = ki.getText();
+		numKi = Double.parseDouble(inputKi);
+		checkKi = 1;
 	}
 	
+	@FXML
 	public void Kp() {
 		inputKp = kp.getText();
+		numKp = Double.parseDouble(inputKp);
+		checkKp = 1;
 	}
 	
 	
@@ -218,11 +255,15 @@ public class TrainControllerCtrl implements Initializable {
 	 * @param inputMBOSpeed
 	 * @param inputMBOAuthority
 	 */
-	public void StationInput(double inputMBOSpeed, int inputMBOAuthority) {
+	public void StationInput(double inputMBOSpeed, int inputMBOAuthority, double inputCTCSpeed, int inputCTCAuthority) {
 		setMBOSpeed = Double.toString(inputMBOSpeed);
-		setMBOAuthority = Double.toString(inputMBOAuthority);
+		setMBOAuthority = Integer.toString(inputMBOAuthority);
+		setCTCSpeed = Double.toString(inputCTCSpeed);
+		setCTCAuthority = Integer.toString(inputMBOAuthority);		
 		MBOSpeed.setText(setMBOSpeed);
 		MBOAuthority.setText(setMBOAuthority);
+		CTCSpeed.setText(setCTCSpeed);
+		CTCAuthority.setText(setCTCAuthority);
 	}
 
 	@Override
@@ -246,28 +287,14 @@ public class TrainControllerCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
-	//	int count = mySin.getIncrement();
-	//	int decrease = mySin.getDecrease();
-		confirmPower.setOnAction(e -> Power());
-		
-		
+	
 		//currentTrainID = mySin.getTrainID();
 		
-		
-		
-		modelSpeed = mySin.getSpeed();
-		if(modelSpeed == 0) {
-			Speed();
-			actualSpeed.setText(ctrlSpeed + "mph");
-		}else if(modelSpeed > 0) {
-			//mySin.setSpeed(modelSpeed);
-			ctrlSpeed = modelSpeed;
-			actualSpeed.setText(ctrlSpeed + "mph");
-
-		}
-		
+		modelSpeed = mySin.getSpeed();	
 		inputMBOSpeed = mySin.getMBOSpeed();
 		inputMBOAuthority = mySin.getMBOAuthority();
+		inputCTCSpeed = mySin.getCTCSpeed();
+		inputCTCAuthority = mySin.getCTCAuthority();
 		
 		engineFail = mySin.getEngineStatus();
 		brakeFail = mySin.getBrakeStatus();
@@ -280,24 +307,6 @@ public class TrainControllerCtrl implements Initializable {
 		}
 		if(signalFail == true) {
 			signalStatus();
-		}
-		
-		//actualSpeed.setText(mySin.getSpeed());
-		//driveStatus.setOnAction(e -> driveStatus());
-		
-//		manual.setOnAction(e -> ManualMode());
-//		automatic.setOnAction(e -> AutomaticMode());
-		
-		confirmKi.setOnAction(e -> Ki());
-		confirmKp.setOnAction(e -> Kp());
-		confirmTemp.setOnAction(e -> Temperature());
-		emergencyBrake.setOnAction(e -> emergencyBrake());
-		//serviceBrake.setOnAction(e -> serviceBrake());
-//		lights.setOnAction(e -> Lights());
-
-		
-		//counter.setText(Integer.toString(count));
-		//counter.setText(Integer.toString(decrease));
-
+		}	
 	}
 }
