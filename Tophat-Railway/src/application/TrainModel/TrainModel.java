@@ -27,7 +27,7 @@ class TrainModel implements TrainInterface {
 	
 	private static final double GRAVITY = 9.8;
 	
-	private static final double MINFORCE = 10.0;
+	private static final double MINFORCE = 1000.0;
 	
 	
 	//These are basic information on the train
@@ -175,8 +175,7 @@ class TrainModel implements TrainInterface {
     	
 		
 //		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
-		
-
+	
 		displacement = xn - possition;
 		
 		possition = xn;
@@ -192,18 +191,14 @@ class TrainModel implements TrainInterface {
 		
 		if(trModSin.trainBlockHasBeacon(trainID)) {
 			String beaconData = trModSin.getTrainBlockBeaconData(trainID);
-			System.out.println("Beacon: " + beaconData);
 			setBeaconData(beaconData);
 		}
 		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
-//		
-//		
-//    	
-////    	Update everyone else
-//		callMBO();
-//        
+    	
+//    	Update everyone else
+		callMBO();   
     }
     
     private double kmhToms(double kmh) {
@@ -221,6 +216,7 @@ class TrainModel implements TrainInterface {
 
 	private double powerF() {
 		if(!engineOperationState) return 0.0;
+		if(speed == 0.0) return power;
 		return power/speed;
 	}
 
