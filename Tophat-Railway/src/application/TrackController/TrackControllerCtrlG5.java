@@ -134,10 +134,10 @@ public class TrackControllerCtrlG5 implements Initializable {
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		currentBlockG5.setText(mySin.getCBNameG5());
-		//mySin.setSwitchG5();
+		CBIDG5 = mySin.getCurrentBlockIDG5();
 		
-		//blockSpeedG1.setText(mySin.getSpeed(1, CBIDG1));
-		//blockAuthority.setText(mySin.getAuthority());
+		blockSpeedG5.setText(mySin.getSpeed(5, CBIDG5));
+		blockAuthorityG5.setText(mySin.getAuthority(5, CBIDG5));
 		
 		if (mySin.isCBOccupied())
 			iconOccupancyG5.setFill(javafx.scene.paint.Color.GREEN);
@@ -153,5 +153,7 @@ public class TrackControllerCtrlG5 implements Initializable {
 		}
 		
 		nextBlockG5.setText("--");
+		iconLightsOnG5.setFill(javafx.scene.paint.Color.WHITE);
+		iconLightsOffG5.setFill(javafx.scene.paint.Color.WHITE);
 	}
 }

@@ -45,7 +45,7 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="blockSpeedG2" layoutX="27.0" layoutY="164.0" text="10">
+            <Label fx:id="blockSpeedG2" layoutX="7.0" layoutY="164.0" text="10.0">
                <font>
                   <Font size="22.0" />
                </font>
@@ -60,7 +60,7 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="authorityUnits" layoutX="174.0" layoutY="164.0" text="mi">
+            <Label fx:id="authorityUnits" layoutX="174.0" layoutY="164.0" text="blks">
                <font>
                   <Font size="22.0" />
                </font>
