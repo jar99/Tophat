@@ -18,7 +18,6 @@ import javafx.fxml.Initializable;
 public class TrainControllerHWCtrl implements Initializable{
 
 	// link to singleton
-	private TrainControllerHWSingleton mySin = TrainControllerHWSingleton.getInstance();
 	
 	private AnimationTimer updateAnimation;
 	
@@ -82,6 +81,8 @@ public class TrainControllerHWCtrl implements Initializable{
 	 * Function to get information from singleton.
 	 */
 	private void update() {
+		TrainControllerHWSingleton mySin = TrainControllerHWSingleton.getInstance();
+
 		// numeric values
 		trainIdValue.setText(mySin.trainId + "");
 		ctcSpeedValue.setText(mySin.trackSpeed + " mph");
