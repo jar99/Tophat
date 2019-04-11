@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
 import application.CTC.Schedule;
 import application.ClockSingleton;
+import application.TrackController.*;
 public class CTCCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
@@ -197,7 +198,7 @@ public class CTCCtrl implements Initializable {
 					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getSpeed());
 				}
 			}
-			if (mytime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
+			if (myTime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
 				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getSpeed());
 			}
 		}
