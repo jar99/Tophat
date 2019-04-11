@@ -24,7 +24,7 @@
             </Label>
             <AnchorPane layoutX="10.0" layoutY="49.0" prefHeight="507.0" prefWidth="302.0" style="-fx-border-color: black; -fx-border-width: 5;">
                <children>
-                  <VBox layoutX="24.0" layoutY="186.0" prefHeight="176.0" prefWidth="257.0">
+                  <VBox layoutX="24.0" layoutY="171.0" prefHeight="176.0" prefWidth="257.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
                            <children>
@@ -67,19 +67,6 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
                            <children>
-                              <Circle fx:id="iconPropCrossing" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
-                              <Label text="Rail Crossing">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="5.0" right="5.0" />
-                           </padding>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
-                           <children>
                               <Circle fx:id="iconPropBeacon" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
                               <Label text="Beacon">
                                  <font>
@@ -93,8 +80,34 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
                            <children>
+                              <Circle fx:id="iconPropCrossing" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                              <Label text="Rail Crossing">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
+                           <children>
                               <Circle fx:id="iconPropHeated" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
                               <Label text="Track Heated">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
+                           <children>
+                              <Circle fx:id="iconPropLight" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                              <Label text="Switch Light">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -195,7 +208,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox layoutX="23.0" layoutY="385.0" prefHeight="60.0" prefWidth="258.0">
+                  <HBox layoutX="24.0" layoutY="387.0" prefHeight="60.0" prefWidth="258.0">
                      <children>
                         <VBox alignment="CENTER_LEFT" prefHeight="201.0" prefWidth="128.0">
                            <children>

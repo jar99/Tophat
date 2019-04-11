@@ -95,11 +95,13 @@ public class TrackModelCtrl implements Initializable {
 	@FXML
 	private Circle iconPropStation;
 	@FXML
-	private Circle iconPropCrossing;
-	@FXML
 	private Circle iconPropBeacon;
 	@FXML
 	private Circle iconPropHeated;
+	@FXML
+	private Circle iconPropCrossing;
+	@FXML
+	private Circle iconPropLight;
 	@FXML
 	private Circle iconPropSwitch;
 	@FXML
@@ -333,42 +335,59 @@ public class TrackModelCtrl implements Initializable {
 			propTotalElevation.setText(df1.format(cBlock.getTotElev() * 3.28084) + " ft");
 			propDirection.setText(cBlock.getCardinalDirection());
 
-			if (cBlock.isOccupied())
-				iconPropOccupied.setFill(javafx.scene.paint.Color.GREEN);
-			else
-				iconPropOccupied.setFill(javafx.scene.paint.Color.WHITE);
+			Color nonLightColor = Color.BLACK;
+
+			if (cBlock.isFailCircuit()) {
+				iconPropOccupied.setFill(Color.TRANSPARENT);
+				iconPropOccupied.setStroke(Color.RED);
+			} else if (cBlock.isOccupied() || cBlock.isFailRail()) {
+				iconPropOccupied.setFill(nonLightColor);
+				iconPropOccupied.setStroke(Color.BLACK);
+			} else {
+				iconPropOccupied.setFill(Color.WHITE);
+				iconPropOccupied.setStroke(Color.BLACK);
+			}
 
 			if (cBlock.isUnderground())
-				iconPropUnderground.setFill(javafx.scene.paint.Color.GREEN);
+				iconPropUnderground.setFill(nonLightColor);
 			else
-				iconPropUnderground.setFill(javafx.scene.paint.Color.WHITE);
+				iconPropUnderground.setFill(Color.WHITE);
 
 			if (cBlock.isStation())
-				iconPropStation.setFill(javafx.scene.paint.Color.GREEN);
+				iconPropStation.setFill(nonLightColor);
 			else
-				iconPropStation.setFill(javafx.scene.paint.Color.WHITE);
-
-			if (cBlock.isCrossing())
-				iconPropCrossing.setFill(javafx.scene.paint.Color.GREEN);
-			else
-				iconPropCrossing.setFill(javafx.scene.paint.Color.WHITE);
-
-			// TODO: Get Crossing On state
+				iconPropStation.setFill(Color.WHITE);
 
 			if (cBlock.hasBeacon())
-				iconPropBeacon.setFill(javafx.scene.paint.Color.GREEN);
+				iconPropBeacon.setFill(nonLightColor);
 			else
-				iconPropBeacon.setFill(javafx.scene.paint.Color.WHITE);
+				iconPropBeacon.setFill(Color.WHITE);
 
 			if (cBlock.isHeated())
-				iconPropHeated.setFill(javafx.scene.paint.Color.GREEN);
+				iconPropHeated.setFill(nonLightColor);
 			else
-				iconPropHeated.setFill(javafx.scene.paint.Color.WHITE);
+				iconPropHeated.setFill(Color.WHITE);
+
+			if (cBlock.isCrossing())
+				if (cBlock.isCrossingOn())
+					iconPropCrossing.setFill(Color.RED);
+				else
+					iconPropCrossing.setFill(Color.GREEN);
+			else
+				iconPropCrossing.setFill(Color.WHITE);
+
+			if (cBlock.hasLight())
+				if (cBlock.isLightGreen())
+					iconPropLight.setFill(Color.GREEN);
+				else
+					iconPropLight.setFill(Color.RED);
+			else
+				iconPropLight.setFill(Color.WHITE);
 
 			if (cBlock.getJunctionA().isSwitch() || cBlock.getJunctionB().isSwitch())
-				iconPropSwitch.setFill(javafx.scene.paint.Color.GREEN);
+				iconPropSwitch.setFill(nonLightColor);
 			else
-				iconPropSwitch.setFill(javafx.scene.paint.Color.WHITE);
+				iconPropSwitch.setFill(Color.WHITE);
 
 			// : Get switch connection
 			if (cBlock.getJunctionA().isSwitch()) {
@@ -385,19 +404,19 @@ public class TrackModelCtrl implements Initializable {
 
 			// : Get Failure Status and display just like above
 			if (cBlock.isFailRail())
-				iconFailRail.setFill(javafx.scene.paint.Color.RED);
+				iconFailRail.setFill(Color.RED);
 			else
-				iconFailRail.setFill(javafx.scene.paint.Color.WHITE);
+				iconFailRail.setFill(Color.WHITE);
 
 			if (cBlock.isFailCircuit())
-				iconFailCircuit.setFill(javafx.scene.paint.Color.RED);
+				iconFailCircuit.setFill(Color.RED);
 			else
-				iconFailCircuit.setFill(javafx.scene.paint.Color.WHITE);
+				iconFailCircuit.setFill(Color.WHITE);
 
 			if (cBlock.isFailPower())
-				iconFailPower.setFill(javafx.scene.paint.Color.RED);
+				iconFailPower.setFill(Color.RED);
 			else
-				iconFailPower.setFill(javafx.scene.paint.Color.WHITE);
+				iconFailPower.setFill(Color.WHITE);
 
 			// : Get Station Properties if a Station, otherwise erase
 			if (cBlock.isStation()) {
@@ -428,8 +447,8 @@ public class TrackModelCtrl implements Initializable {
 
 				newTrain.setCenterX(centerX);
 				newTrain.setCenterY(centerY);
-				newTrain.setRadius(5);
-				newTrain.setFill(javafx.scene.paint.Color.BLUE);
+				newTrain.setRadius(4);
+				newTrain.setFill(Color.BLUE);
 
 				// add icon to icon map
 				trainIcons.put(eTrain.getTrainID(), newTrain);
