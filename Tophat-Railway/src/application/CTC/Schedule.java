@@ -1,5 +1,6 @@
 package application.CTC;
 import java.util.*;
+import application.TrackModel.*;
 public class Schedule{
 	private int ID;
 	private String Line;
@@ -16,14 +17,33 @@ public class Schedule{
 		distance=Arrays.stream(myDistance).mapToInt(Integer::intValue).toArray();
 		Departuretime=myDeparturetime;
 		speed=suggestedSpeed;
-		ArrivalTime=new int[myDistance.length+1];
-		LeaveTime=new int[myDistance.length+1];
-		ArrivalTime[0]=Departuretime-30*60;
+		ArrivalTime=new int[2];
+		LeaveTime=new int[2];
+		ArrivalTime[0]=Departuretime-10*60;
 		LeaveTime[0]=Departuretime;
 		for (int i=1;i<ArrivalTime.length;i++){
 			ArrivalTime[i]=LeaveTime[i-1]+distance[i-1]/speed;
 			LeaveTime[i]=ArrivalTime[i]+5*60;
+		}/*
+		double totallength=0;
+		HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
+		String DepartureStation=myStation[0];
+		String StopStation=myStation[myStation.length-1];
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			try {
+				TrackBlock myBlock=tmp.getEntrance();
+				totallength=myBlock.getLength();
+				boolean
+				while(true) {
+					TrackBlock next=myBlock
+				}
+			} catch (SwitchStateException e) {
+			}
+
 		}
+			*/
+		
 	}
 	public void mergeSchedule(Schedule tmp2){
 		int tmpsize=this.getStation().length+tmp2.getStation().length-1;
@@ -47,7 +67,7 @@ public class Schedule{
 		leavetmp[this.getStation().length-1]=tmp2.getDepartureTime();
 		for (int i=this.getStation().length;i<tmpsize;i++){
 			arrivaltmp[i]=leavetmp[i-1]+distancetmp[i-1]/tmp2.getSpeed();
-			leavetmp[i]=arrivaltmp[i]+5*60;
+			leavetmp[i]=arrivaltmp[i]+1*60;
 			distancetmp[i]=tmp2.getDistance()[i-this.getStation().length];
 			stationtmp[i]=tmp2.getStation()[i-this.getStation().length+1];
 		}
