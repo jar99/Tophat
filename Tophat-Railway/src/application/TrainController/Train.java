@@ -29,7 +29,7 @@ public class Train implements TrainCtrlInterface {
 	}
 	
 	public void Power(int Power) {
-		mySin.getnumPower();
+		mySin.getPower();
 	}
 	
 	public void temperature(double temperature) {

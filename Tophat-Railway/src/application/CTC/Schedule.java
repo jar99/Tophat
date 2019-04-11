@@ -31,8 +31,13 @@ public class Schedule{
 		String[] stationtmp=new String[tmpsize];
 		int[] arrivaltmp=new int[tmpsize];
 		int[] leavetmp=new int[tmpsize];
-		for (int i=0;i<this.getStation().length;i++){
-			distancetmp[i]=distance[i];
+		distancetmp[0]=distance[0];
+		stationtmp[0]=Station[0];
+		arrivaltmp[0]=ArrivalTime[0];
+		leavetmp[0]=LeaveTime[0];
+		stationtmp[0]=Station[0];
+		for (int i=1;i<this.getStation().length;i++){
+			distancetmp[i]=distance[i-1];
 			stationtmp[i]=Station[i];
 			arrivaltmp[i]=ArrivalTime[i];
 			leavetmp[i]=LeaveTime[i];
@@ -41,20 +46,26 @@ public class Schedule{
 		distancetmp[this.getStation().length-1]=tmp2.getDistance()[0];
 		leavetmp[this.getStation().length-1]=tmp2.getDepartureTime();
 		for (int i=this.getStation().length;i<tmpsize;i++){
-			arrivaltmp[i]=leavetmp[i-1]+distance[i-1]/tmp2.getSpeed();
-			leavetmp[i]=ArrivalTime[i]+5*60;
+			arrivaltmp[i]=leavetmp[i-1]+distancetmp[i-1]/tmp2.getSpeed();
+			leavetmp[i]=arrivaltmp[i]+5*60;
 			distancetmp[i]=tmp2.getDistance()[i-this.getStation().length];
-			stationtmp[i]=tmp2.getStation()[i-this.getStation().length];
+			stationtmp[i]=tmp2.getStation()[i-this.getStation().length+1];
 		}
+		Station=stationtmp;
+		ArrivalTime=arrivaltmp;
+		LeaveTime=leavetmp;
+		distance=distancetmp;
+		
 	}
 	public ArrayList<String> printschedule(){
 		
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
 		tmp.add("	"+Line);
-		//tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
-		tmp.add("	"+Station[0]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
-		tmp.add("	"+Station[Station.length-1]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
+		for (int i=0;i<Station.length;i++) {
+			//tmp.add("	"+Station[i]+" "+"Arrival at "+ArrivalTime[i]+". Leave at "+LeaveTime[i]);//TODO 
+			tmp.add("	"+Station[i]+" "+"Arrival at "+"10:00"+". Leave at "+"10:05");//TODO 
+		}
 		return tmp;
 	}
 	public int getID(){
