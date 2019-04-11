@@ -2,10 +2,8 @@ package application.TrackModel;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,6 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import application.ClockSingleton;
 
+/*
+//TODO: 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -24,7 +24,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrainModel.TrainModelInterface;
 import application.TrainModel.TrainModelSingleton;
 import application.MBO.MBOInterface;
-import application.MBO.MBOSingleton;
+import application.MBO.MBOSingleton;*/
 
 public class TrackModelSingleton implements TrackModelInterface {
 
@@ -126,10 +126,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 			firstSection.getBlock(firstSection.getFirstBlockID()).setOccupied(true);
 
 			// call the Train Model create train method
-
-			TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-			trnModInt.createTrain(trainID);
-
+			/*
+			 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+			 * trnModInt.createTrain(trainID);
+			 */
 		}
 	}
 
@@ -218,7 +218,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public void setCrossing(String lineName, int blockID, boolean crossingOn) {
-		// TODO Auto-generated method stub
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+		track.get(lineName).getBlock(blockID).setCrossingOn(crossingOn);
 
 	}
 
@@ -303,14 +306,16 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
-							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-							tckCtrlInt.removeTrain(trainID);
+							/*
+							 * TODO TrackControllerInterface tckCtrlInt =
+							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
+							 */
 
 							// Call Train Model Remove Train option
-
-							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							trnModInt.removeTrain(trainID);
+							/*
+							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							 * trnModInt.removeTrain(trainID);
+							 */
 
 							train.delete();
 
@@ -367,14 +372,16 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
-							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-							tckCtrlInt.removeTrain(trainID);
+							/*
+							 * TODO TrackControllerInterface tckCtrlInt =
+							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
+							 */
 
 							// Call Train Model Remove Train option
-
-							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							trnModInt.removeTrain(trainID);
+							/*
+							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							 * trnModInt.removeTrain(trainID);
+							 */
 
 							train.delete();
 
@@ -795,21 +802,24 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 			// Call CTC importLine Method
 			TrackLine ctcLine = readLineFile(workbook);
-
-			CTCInterface ctcInt = CTCSingleton.getInstance();
-			ctcInt.importLine(ctcLine);
+			/*
+			 * TODO CTCInterface ctcInt = CTCSingleton.getInstance();
+			 * ctcInt.importLine(ctcLine);
+			 */
 
 			// Call Track Controller importLine Method
 			TrackLine tckCtrlLine = readLineFile(workbook);
-
-			TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-			tckCtrlInt.importLine(tckCtrlLine);
+			/*
+			 * TODO TrackControllerInterface tckCtrlInt =
+			 * TrackControllerSingleton.getInstance(); tckCtrlInt.importLine(tckCtrlLine);
+			 */
 
 			// Call MBO importLine Method
 			TrackLine mboLine = readLineFile(workbook);
-
-			MBOInterface mboInt = MBOSingleton.getInstance();
-			mboInt.importLine(mboLine);
+			/*
+			 * TODO MBOInterface mboInt = MBOSingleton.getInstance();
+			 * mboInt.importLine(mboLine);
+			 */
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -865,7 +875,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 			String cardinalDirection = blockRow.getCell(19).getStringCellValue();
 
 			boolean isStation = blockRow.getCell(21).getBooleanCellValue();
-			boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
+			// boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
 			boolean isUnderground = blockRow.getCell(23).getBooleanCellValue();
 			boolean isCrossing = blockRow.getCell(24).getBooleanCellValue();
 			boolean hasLight = blockRow.getCell(25).getBooleanCellValue();
