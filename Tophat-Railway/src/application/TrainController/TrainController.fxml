@@ -92,17 +92,17 @@
             <Circle fx:id="engineStatus" fill="#00e91f" layoutX="128.0" layoutY="54.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fx:id="brakeStatus" fill="#00e91f" layoutX="128.0" layoutY="92.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
             <Circle fx:id="signalStatus" fill="#00e91f" layoutX="128.0" layoutY="127.0" radius="12.0" stroke="BLACK" strokeType="INSIDE" />
-            <Label layoutX="20.0" layoutY="192.0" text="Lights:" />
-            <Label layoutX="18.0" layoutY="226.0" text="Right Doors:" />
-            <Label layoutX="17.0" layoutY="259.0" text="Left Doors:" />
+            <Label layoutX="9.0" layoutY="192.0" text="Lights:" />
+            <Label layoutX="7.0" layoutY="226.0" text="Right Doors:" />
+            <Label layoutX="6.0" layoutY="259.0" text="Left Doors:" />
             <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="Off" />
             <ToggleButton fx:id="rightDoor" layoutX="124.0" layoutY="222.0" mnemonicParsing="false" onAction="#rightDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <ToggleButton fx:id="leftDoor" layoutX="126.0" layoutY="256.0" mnemonicParsing="false" onAction="#leftDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
-            <Label layoutX="15.0" layoutY="294.0" text="Temperature:" />
+            <Label layoutX="5.0" layoutY="294.0" text="Temperature:" />
             <TextField fx:id="temp" layoutX="106.0" layoutY="290.0" prefHeight="25.0" prefWidth="36.0" />
             <Button fx:id="confirmTemp" layoutX="146.0" layoutY="290.0" mnemonicParsing="false" onAction="#Temperature" prefHeight="25.0" prefWidth="34.0" text="Set" />
-            <Label layoutX="15.0" layoutY="326.0" text="Current Temperature:" />
-            <Label fx:id="currentTemp" layoutX="147.0" layoutY="326.0" prefHeight="17.0" prefWidth="18.0" text="0" />
+            <Label layoutX="5.0" layoutY="326.0" text="Current Temperature:" />
+            <Label fx:id="currentTemp" layoutX="127.0" layoutY="326.0" prefHeight="17.0" prefWidth="60.0" text="0" />
             <Separator layoutY="171.0" prefWidth="200.0" />
             <Separator orientation="VERTICAL" prefHeight="396.0" prefWidth="5.0" />
          </children>
@@ -158,7 +158,7 @@
                </font>
             </Label>
             <Label fx:id="actualSpeed" layoutX="133.0" layoutY="136.0" prefHeight="17.0" prefWidth="67.0" text="0" />
-            <Label layoutX="83.0" layoutY="199.0" prefHeight="21.0" prefWidth="90.0" text="Service Brake" textAlignment="CENTER">
+            <Label layoutX="72.0" layoutY="199.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
