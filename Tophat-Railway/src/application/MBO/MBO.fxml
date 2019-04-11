@@ -3,14 +3,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -30,12 +29,10 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <SplitPane dividerPositions="0.8469945355191257" layoutX="23.0" layoutY="47.0" orientation="VERTICAL" prefHeight="368.0" prefWidth="316.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <SplitPane dividerPositions="0.825136612021858" layoutX="23.0" layoutY="47.0" orientation="VERTICAL" prefHeight="368.0" prefWidth="316.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <items>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                                    <children>
-                                                      <ListView fx:id="operatorsLV" layoutX="16.0" layoutY="173.0" prefHeight="90.0" prefWidth="271.0" />
-                                                      <ScrollBar fx:id="operatorsSB" layoutX="287.0" layoutY="173.0" orientation="VERTICAL" prefHeight="89.0" prefWidth="14.0" />
                                                       <TextField fx:id="operatorNameTF" layoutX="8.0" layoutY="142.0" prefHeight="25.0" prefWidth="86.0" promptText="Operator Name">
                                                          <font>
                                                             <Font size="10.0" />
@@ -56,14 +53,12 @@
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Button>
-                                                      <ListView fx:id="trainsLV" layoutX="16.0" layoutY="45.0" prefHeight="90.0" prefWidth="271.0" />
-                                                      <ScrollBar fx:id="trainsSB" layoutX="287.0" layoutY="45.0" orientation="VERTICAL" prefHeight="89.0" prefWidth="14.0" />
-                                                      <TextField fx:id="trainNameTF" layoutX="8.0" layoutY="14.0" prefHeight="25.0" prefWidth="86.0" promptText="Train Name">
+                                                      <TextField fx:id="trainIDTF" layoutX="8.0" layoutY="14.0" prefHeight="25.0" prefWidth="86.0" promptText="Train ID">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
                                                       </TextField>
-                                                      <TextField fx:id="trainStartTimeTF" layoutX="100.0" layoutY="14.0" prefHeight="25.0" prefWidth="58.0" promptText="Start Time">
+                                                      <TextField fx:id="trainStartTimeTF" layoutX="100.0" layoutY="14.0" prefHeight="25.0" prefWidth="58.0" promptText="Depart Time">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -78,7 +73,14 @@
                                                             <Font size="10.0" />
                                                          </font>
                                                       </Button>
-                                                      <Button fx:id="createScheduleBtn" layoutX="84.0" layoutY="275.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="136.0" text="Create Schedule">
+                                                      <Button fx:id="createScheduleBtn" layoutX="155.0" layoutY="269.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="136.0" text="Create Schedule">
+                                                         <font>
+                                                            <Font size="10.0" />
+                                                         </font>
+                                                      </Button>
+                                                      <TableView fx:id="operatorsTV" layoutX="16.0" layoutY="173.0" prefHeight="90.0" prefWidth="271.0" />
+                                                      <TableView fx:id="trainsTV" layoutX="16.0" layoutY="45.0" prefHeight="90.0" prefWidth="271.0" />
+                                                      <Button fx:id="deleteBtn" layoutX="14.0" layoutY="269.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="136.0" text="Delete Selection">
                                                          <font>
                                                             <Font size="10.0" />
                                                          </font>
@@ -116,18 +118,17 @@
                                               </Menu>
                                             </menus>
                                           </MenuBar>
-                                          <ListView fx:id="schedulerLV" layoutX="14.0" layoutY="61.0" prefHeight="247.0" prefWidth="271.0" />
-                                          <ScrollBar fx:id="schedulerSB" layoutX="285.0" layoutY="61.0" orientation="VERTICAL" prefHeight="247.0" prefWidth="14.0" />
-                                          <Button fx:id="editScheduleBtn" layoutX="26.0" layoutY="327.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="123.0" text="Edit Schedule">
+                                          <Button fx:id="editScheduleBtn" layoutX="25.0" layoutY="327.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="123.0" text="Edit Schedule">
                                              <font>
                                                 <Font size="10.0" />
                                              </font>
                                           </Button>
-                                          <Button fx:id="sendScheduleBtn" layoutX="168.0" layoutY="327.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="123.0" text="Send Schedule">
+                                          <Button fx:id="sendScheduleBtn" layoutX="166.0" layoutY="327.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="123.0" text="Send Schedule">
                                              <font>
                                                 <Font size="10.0" />
                                              </font>
                                           </Button>
+                                          <TableView fx:id="scheduleTV" layoutX="26.0" layoutY="59.0" prefHeight="249.0" prefWidth="265.0" />
                                        </children>
                                     </AnchorPane>
                                 </items>
