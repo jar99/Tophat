@@ -27,7 +27,7 @@ class TrainModel implements TrainInterface {
 	
 	private static final double GRAVITY = 9.8;
 	
-	private static final double MINFORCE = 1000.0;
+	private static final double MINFORCE = 100.0;
 	
 	
 	//These are basic information on the train
