@@ -146,7 +146,7 @@ public class TrackControllerCtrlG2 implements Initializable {
 		blockSpeedG2.setText(mySin.getSpeed(2, CBIDG2));
 		blockAuthorityG2.setText(mySin.getAuthority(2, CBIDG2));
 		
-		if (mySin.isCBOccupied())
+		if (mySin.isCBOccupied(2))
 			iconOccupancyG2.setFill(javafx.scene.paint.Color.GREEN);
 		else
 			iconOccupancyG2.setFill(javafx.scene.paint.Color.WHITE);

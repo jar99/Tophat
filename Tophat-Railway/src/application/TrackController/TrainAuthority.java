@@ -74,24 +74,62 @@ public class TrainAuthority {
 	}
 	
 	public void setSuggestedSpeedEachBlock(double suggestedSpeed, int blockIDOccupied, int authorityDisplacement) {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		for(int i = 0; i <= authorityDisplacement; i++) {
 			if(i+blockIDOccupied > 150)
 				for(int j = 1; j <= authority; j++) {
-					track.get("green").getBlock(j).setSuggestedSpeed(suggestedSpeed);
-					track.get("green").getBlock(j).setControlAuthority(true);
+					try {
+						trackModInt.setSuggestedSpeed("green", j, suggestedSpeed);
+					} catch (TrackCircuitFailureException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						trackModInt.setControlAuthority("green", j, true);
+					} catch (TrackCircuitFailureException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//track.get("green").getBlock(j).setSuggestedSpeed(suggestedSpeed);
+					//track.get("green").getBlock(j).setControlAuthority(true);
 				}
-			track.get("green").getBlock(i+blockIDOccupied).setSuggestedSpeed(suggestedSpeed);
-			track.get("green").getBlock(i+blockIDOccupied).setControlAuthority(true);
+			try {
+				trackModInt.setSuggestedSpeed("green", i+blockIDOccupied, suggestedSpeed);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				trackModInt.setControlAuthority("green", i+blockIDOccupied, true);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//track.get("green").getBlock(i+blockIDOccupied).setSuggestedSpeed(suggestedSpeed);
+			//track.get("green").getBlock(i+blockIDOccupied).setControlAuthority(true);
 		}
 	}
 	
 	public void setAuthorityEachBlock(int authority, int blockIDOccupied, int authorityDisplacement) {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		for(int i = 0; i <= authorityDisplacement; i++) {
 			if(i+blockIDOccupied > 150)
 				for(int j = 1; j <= authority; j++) {
-					track.get("green").getBlock(j).setAuthority(authorityDisplacement-i-j);
+					try {
+						trackModInt.setAuthority("green", j, authorityDisplacement-i-j);
+					} catch (TrackCircuitFailureException e) {
+						//TODO
+						e.printStackTrace();
+					}
+					//track.get("green").getBlock(j).setAuthority(authorityDisplacement-i-j);
 				}
-			track.get("green").getBlock(i+blockIDOccupied).setAuthority(authorityDisplacement-i);
+			try {
+				trackModInt.setAuthority("green", i+blockIDOccupied, authorityDisplacement-i);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//track.get("green").getBlock(i+blockIDOccupied).setAuthority(authorityDisplacement-i);
 		}
 	}
 	
