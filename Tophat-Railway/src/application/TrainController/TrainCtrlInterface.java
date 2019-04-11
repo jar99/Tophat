@@ -2,75 +2,41 @@ package application.TrainController;
 
 public interface TrainCtrlInterface {
 
-	public void trianID(int trainID);
+	int getTrianID();
 	
-	/**
-	 * This will send speed that I have inputed
-	 * @param speed
-	 */
-	public void Speed(double speed);
+	void setSpeed(double speed);
 	
-	public void Power(int power);
+	double getSpeed();
 	
-	public void serviceBrake(boolean serviceBrake);
+	void setPower(double power);
 	
-	/**
-	 * sets the temperature inside the train
-	 * @param temperture
-	 */
-	public void temperature(double temperature);
+	double getPower();
 	
-	/**
-	 * if true = open 
-	 * if false = closed
-	 * @param leftDoor
-	 * @param rightDoor
-	 */
-	public void leftDoor(boolean leftDoor);
+	void setTemperature(double temp);
 	
-	public void rightDoor(boolean rightDoor);
+	double getTemperature();
 	
-	/**
-	 * true = On
-	 * false = off
-	 * @param lights
-	 */
-	public void lights(boolean lights);
-///new branch
+	void toggleServiceBrake();
 	
-	/**
-	 * true = Manual
-	 * False = Automatic
-	 * @param drvieStatus
-	 */
-	public void driveMode(boolean driveMode);
+	boolean getServiceBrake();
 	
-	/**
-	 * 1 = Engine Failure,
-	 * 2 = Brake Failure,
-	 * 3 = Signal Lost
-	 * @param trainStatus
-	 */
-	//public void trainStatus(int trainStatus);
+	boolean getEmergencyBrake();
 	
-	/**
-	 * Engine has failed:(
-	 * @param engineFailure
-	 */
-	public void engineStatus(boolean engineFailure);
+	void toggleEmergencyBrake();
 	
-	/**
-	 * The brakes went bad:'(
-	 * @param brakeFailure
-	 */
-	public void brakeStatus(boolean brakeFailure);
+	void setDriveMode(boolean drvieMode);
 	
-	/**
-	 * What's the f*cking wifi password?!
-	 * @param signalFailure
-	 */
-	public void signalStatus(boolean signalFailure);
-
+	boolean getDriveMode();
+	
+	boolean engineStatus();
+	
+	boolean brakeStatus();
+	
+	 void toggleLeftDoor();
+	 
+	 void toggleRightDoor();
+	 
+	 void toggleInteriorLights();
 
 	
 	

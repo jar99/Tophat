@@ -27,7 +27,7 @@ class TrainModel implements TrainInterface {
 	
 	private static final double GRAVITY = 9.8;
 	
-	private static final double MINFORCE = 10.0;
+	private static final double MINFORCE = 1000.0;
 	
 	
 	//These are basic information on the train
@@ -167,7 +167,7 @@ class TrainModel implements TrainInterface {
     	}
     	
     	
-    	double vn = Math.min(laplace(dt, acceleration, an, v), speedLimit); //This should prevent negative movement.
+    	double vn = Math.min(laplace(dt, acceleration, an, v), kmhToms(speedLimit)); //This should prevent negative movement.
     	
     	vn = Math.max(0, vn); // Prevents negative movements
     	
@@ -175,13 +175,13 @@ class TrainModel implements TrainInterface {
     	
 		
 //		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
-		
+	
+		displacement = xn - possition;
 		
 		possition = xn;
 		speed = msTokmh(vn);
 		acceleration = an;
-		displacement = xn - possition;
-		
+
 //    	Update train location
 		try {
 			trModSin.updateTrainDisplacement(trainID, displacement);
@@ -189,20 +189,16 @@ class TrainModel implements TrainInterface {
 			trainCrashed();
 		}
 		
-		if(trModSin.trainBlockHasBeacon(trainID)){
+		if(trModSin.trainBlockHasBeacon(trainID)) {
 			String beaconData = trModSin.getTrainBlockBeaconData(trainID);
-			System.out.println("Beacon: " + beaconData);
 			setBeaconData(beaconData);
 		}
 		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
-//		
-//		
-//    	
-////    	Update everyone else
-//		callMBO();
-//        
+    	
+//    	Update everyone else
+		callMBO();   
     }
     
     private double kmhToms(double kmh) {
@@ -220,7 +216,7 @@ class TrainModel implements TrainInterface {
 
 	private double powerF() {
 		if(!engineOperationState) return 0.0;
-		if(speed == 0.0) return 0.0; // prevents NaN
+		if(speed == 0.0) return power;
 		return power/speed;
 	}
 
@@ -282,8 +278,14 @@ class TrainModel implements TrainInterface {
     }
 	
 	public void setPower(double power){
-		if(power < 0) this.power = 0;
-		else if(power > maxPower) this.power = maxPower;
+		if(power < 0) {
+			this.power = 0.0;
+			return;
+		}
+		else if(power > maxPower) {
+			this.power = maxPower;
+			return;
+		}
 		this.power = power;
     }
 	
@@ -327,7 +329,6 @@ class TrainModel implements TrainInterface {
 
 	@Override
 	public int boardPassengers(int numPassengers) {
-		//TODO check for edge cases
 		int remainingPassangers = 0;
 		if(numPassengers > passengerCap) {
 			remainingPassangers = numPassengers - passengerCap;
@@ -431,6 +432,7 @@ class TrainModel implements TrainInterface {
 	}
 	
 	private void exchangePassangers() {
+		if(!trModSin.trainBlockIsStation(trainID)) return;
 		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
 		int deltaPassengers = newPassengers-passengers;
 		if(deltaPassengers > 0) {
@@ -531,8 +533,12 @@ class TrainModel implements TrainInterface {
 	 */
 	@Override
 	public void setBeaconData(String beaconData) {  
-		this.beaconData = beaconData.substring(0, BEACONSIZE);
-		addTrainInformation("Beacon Data: " + this.beaconData);
+		
+		String newData = beaconData.substring(0, Math.min(beaconData.length(), BEACONSIZE));
+		if(newData != this.beaconData) {
+			this.beaconData = newData;
+			addTrainInformation("Beacon Data: " + newData);
+		}
 	}
 
 	@Override
@@ -541,7 +547,9 @@ class TrainModel implements TrainInterface {
 	}
 	
 	public void addTrainInformation(String message) {
-		trainLog.add(System.nanoTime() + ": " + message);
+		ClockSingleton clock = ClockSingleton.getInstance();
+		
+		trainLog.add(clock.getCurrentTimeString() + ": " + message);
 	}
 	
 	@Override
