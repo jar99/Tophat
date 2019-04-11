@@ -136,6 +136,8 @@ public class CTCSingleton implements CTCInterface {
 		if (!flag){
 			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed,track);
 			myschedule.put(ID,tmp);
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			TCInterface.createTrain("green",ID);
 			return true;
 		}
 		else{

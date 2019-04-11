@@ -1,4 +1,3 @@
-
 package application.TrainController;
 
 import application.ClockSingleton;
@@ -213,4 +212,3 @@ public class Train implements TrainCtrlInterface {
 		}
 	}
 }
-

@@ -1,4 +1,3 @@
-
 package application.TrainController;
 
 import java.util.Hashtable;
@@ -52,10 +51,6 @@ public class TrainControllerSingleton {
 		return trainCtrlHashTable.size();
 	}
 
-
-//////////////////////END OF TRAIN SHIT/////////////////////////////////////////	
-
-
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
@@ -68,4 +63,3 @@ public class TrainControllerSingleton {
 		}
 	}
 }
-

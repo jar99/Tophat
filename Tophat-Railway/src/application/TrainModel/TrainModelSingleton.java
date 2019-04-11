@@ -14,6 +14,7 @@ import java.util.Set;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
+import application.TrainControllerHardware.TrainControllerHWSingleton;
 
 public class TrainModelSingleton implements TrainModelInterface {
 
@@ -43,13 +44,25 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 	private Hashtable<Integer, TrainModel> trainModelHashTable;
 	
+	private int trainIDHW = -1; //Negative numbers not assigned
+	
     public TrainInterface createTrain(int trainID) {  	
-    	if(trainExists(trainID)) return null;
+    	if (trainExists(trainID)) return null;
     	TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
-//    	
-    	TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-    	trnCtrl.createTrain(trainID, train); //Create this method.
+    	TrainModelMainCtrl.addTrainS(trainID, train);
     	
+//    	if (trainIDHW < 0) { // This is the check if no train belongs to train ctr hardware
+//    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
+//    		//TODO assigne it
+//    		trainIDHW = trainID;
+//    	} else {
+//    		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+//    		trnCtrl.createTrain(trainID, train); //Create this method.
+//    	}
+    	
+    	TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+		trnCtrl.createTrain(trainID, train); //Create this method.
+		
     	train.dispatch();
     	
         return trainModelHashTable.putIfAbsent(trainID, train);
@@ -59,6 +72,8 @@ public class TrainModelSingleton implements TrainModelInterface {
     	if(trainExists(trainID)) return null;
     	
     	TrainModel train = new TrainModel(trainID, new application.TrainModel.Test.TrainModelTrackTest(1/2, 10, 20.0), new application.TrainModel.Test.MBOConnection(), passanger, speed);
+    	TrainModelMainCtrl.addTrainS(trainID, train);
+    	
     	train.dispatch();
         return trainModelHashTable.putIfAbsent(trainID, train);
 		
@@ -77,12 +92,16 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainModel train = trainModelHashTable.remove(trainID);
 		if(train != null) {
 			train.remove();
+			TrainModelMainCtrl.removeTrainS(trainID, train);
 		}
-		try {
-		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-		trnCtrl.removeTrain(trainID);
-		} catch(Exception e) {
-			e.printStackTrace();
+		if(trainIDHW == trainID) { // This is the check if no train belongs to train ctr hardware
+    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
+    		//TODO remove it
+    		
+    		trainIDHW = trainID*-1;
+		}else {
+			TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+			trnCtrl.removeTrain(trainID);
 		}
 		
 		return train != null;
@@ -118,7 +137,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
     
-    private long last;
 	public void update() {
 		if(disabled) return;
 		

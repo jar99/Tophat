@@ -1,4 +1,3 @@
-
 package application.TrainController;
 
 import java.net.URL;
@@ -68,7 +67,7 @@ public class TrainControllerCtrl implements Initializable {
 	void UpdateTemprature() {
 		Double temp = train.getTemperature();
 		String temperature = String.format("%.2f",temp);
-		currentTemp.setText(temperature + "°C");
+		currentTemp.setText(temperature + "ï¿½C");
 	}
 
 	@FXML
