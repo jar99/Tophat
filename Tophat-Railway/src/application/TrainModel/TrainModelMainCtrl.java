@@ -9,8 +9,6 @@ package application.TrainModel;
  */
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -75,12 +73,11 @@ public class TrainModelMainCtrl implements Initializable {
     	createTrainWindow(train);
     }
 
-
     @Override
     // Starts the automatic update (NO TOUCHY!!)
     public void initialize(URL url, ResourceBundle resourceBundle) {
     	windowCtrls = new ArrayList<>();
-    	trainSelector.getItems().add(new TrainModel(-1)); //This is just test code to have a default train.
+    	
         updateAnimation = new AnimationTimer() {
         	
  			@Override
@@ -89,18 +86,36 @@ public class TrainModelMainCtrl implements Initializable {
  			}
  		};
  		updateAnimation.start();
+ 		trainModCtrl = this; //This is a bad hack
+ 		
+ 		mySin.createTrain(-1, 7, 70.0);
     }
     
     private void update() {
-    	ObservableList<TrainModel> items = trainSelector.getItems();
-    	for(TrainModel train: mySin.getTrains()) {
-    		if(!items.contains(train)) {
-    			items.add(train);
-    		}
-    	}
-    	
     	for(TrainModelCtrl ctrl: windowCtrls) {
     		ctrl.update();
     	}
     }
+    
+    
+	static TrainModelMainCtrl trainModCtrl;
+	
+	static void addTrainS(int trainID, TrainModel train) {
+		trainModCtrl.addTrain(trainID, train);
+	}
+	
+	static void removeTrainS(int trainID, TrainModel train) {
+		trainModCtrl.removeTrain(trainID, train);
+	}
+	
+	void addTrain(int trainID, TrainModel train) {
+		ObservableList<TrainModel> list = trainSelector.getItems();
+		if(!list.contains(train)) list.add(train);
+		
+	}
+
+	void removeTrain(int trainID, TrainModel train) {
+		ObservableList<TrainModel> list = trainSelector.getItems();
+		if(list.contains(train)) list.remove(train);
+	}
 }

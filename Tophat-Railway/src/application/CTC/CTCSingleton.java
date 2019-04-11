@@ -10,11 +10,10 @@ import java.util.regex.Matcher;
 import java.util.Map.Entry;
 import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
-import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
-import application.TrackModel.TrackLine;
 import application.TrackModel.*;
+import application.TrackController.*;
 public class CTCSingleton implements CTCInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
@@ -35,28 +34,66 @@ public class CTCSingleton implements CTCInterface {
 
 	// NOTE: Put your data objects here
 	private HashMap<Integer,Train> trains =new HashMap<Integer,Train>();
-	private ArrayList<Schedule> myschedule=new ArrayList<Schedule>();
-	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
+	private HashMap<Integer,Schedule> myschedule=new HashMap<Integer,Schedule>();
+	private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 	//private String[] Stations=TrackModelSingleton.getInstance().getBlockNameList().stream().toArray(String[]::new);
 	//TODO: need a function, getBlockName, return array/list of strings of all block names and stations
-	private String[] Stations={"B0","B1 FIXME","B2 StationA"};
+	private String[] Stations={"B0","B1 FIXME","B2 StationA","B3"};
+	private String[] Sections= {"A"};
+	private String[] RealStations;
 	private int[] blocks=new int[Stations.length];
 	private int[] distance=new int[Stations.length];
+	private boolean isSectionClose[];
 	// NOTE: Put some functions here
 	public String[] getStations(){
-		Stations=null;
-		TrackLine tmp=track.get("Green");//TODO:fix later
-		Stations=new String[150];
-		for (int i=0;i<150;i++){
-			Stations[i]="Block "+(i+1)+" StationnameFIXME";//+tmp.getBlock(i).getStationName();
+		Stations=new String[1];
+		Stations[0]="";
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			Collection<TrackBlock> myBlocks=tmp.getBlocks();
+			int mySize=myBlocks.size()+1;
+			Stations=new String[mySize];
+			int i=0;
+			for (TrackBlock block:myBlocks){
+				String lala=block.getStationName();
+				if (lala==null) lala="";
+				Stations[i]="Block "+block.getBlockID()+" "+lala;
+				i++;
+			}
+			Stations[mySize-1]="yard";
 		}
-		Stations=new String[3];
-		Stations[0]="B0";
-		Stations[1]="B1 FIXME";
-		Stations[2]="B2 StationA";
 		blocks=new int[Stations.length];
 		distance=new int[Stations.length];
 		return Stations;
+	}
+	public String[] getSections() {
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			Collection<TrackSection> mySections=tmp.getSections();
+			int mySize=mySections.size();
+			Sections=new String[mySize];
+			int i=0;
+			for (TrackSection section:mySections){
+				Sections[i]=String.valueOf(section.getSectionID());
+				i++;
+			}
+		}
+		isSectionClose=new boolean[Sections.length];
+		return Sections;
+	}
+	public String[] getOnlyStations() {
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			Collection<TrackStation> myStation=tmp.getStations();
+			int mySize=myStation.size();
+			RealStations=new String[mySize];
+			int i=0;
+			for (TrackStation astation:myStation){
+				RealStations[i]=astation.getStationName()+" Alighting:"+astation.getAlighting()+" Boarding:"+astation.getBoarding();
+				i++;
+			}
+		}
+		return RealStations;
 	}
 	public int[] getBlocks(){
 		for (int i=0;i<blocks.length;i++){
@@ -65,21 +102,20 @@ public class CTCSingleton implements CTCInterface {
 		return blocks;
 	}
 	public int[] getDistance(){
-		/*TrackBlock[] tmp=TrackModelSingleton.getInstance().getBlockList().stream().toArray(TrackBlock[]::new);
-		
-		for (int i=0;i<distance.length;i++){
-			distance[i]=(int)tmp[i].getLength();
-		}*/
+		for(String key:track.keySet()) {
+			int i=0;
+			TrackLine tmp=track.get(key);
+			Collection<TrackBlock> myBlocks=tmp.getBlocks();
+			for (TrackBlock block:myBlocks) {
+				distance[distance.length-1-i]=(int)block.getLength();
+				i++;
+			}
+		}
 
-		//TODO need a function to return an array of int, the distance
-		TrackLine tmp=track.get("Green");//TODO: fix later
-		for (int i=0;i<distance.length;i++){
-			//distance[i]=(int)tmp.getBlock(i).getLength();
-			distance[i]=1000;//TODO:fix later
-		} 
 		return distance;
 	}
 	public boolean addTrain(String ID,String Speed){
+
 		Pattern pattern = Pattern.compile("[0-9]*");
 		Matcher isNum1 = pattern.matcher(ID);
 		Matcher isNum2 = pattern.matcher(Speed);
@@ -90,34 +126,34 @@ public class CTCSingleton implements CTCInterface {
 		if (trains.containsKey(Integer.valueOf(ID))){
 			System.out.println("Duplicated train ID!!");//TODO change this into UI
 		}
-		trains.put(Integer.valueOf(ID), new Train(Integer.parseInt(ID), Integer.parseInt(Speed)));
+		trains.put(Integer.valueOf(ID), new Train(Integer.parseInt(ID), (int)(Integer.parseInt(Speed)*0.448)));
 		return true;
 		
 	}
 	public boolean addSchedule(int ID, String myLine, String[] myStation, Integer[] mydistance, int myDeparturetime, int suggestedSpeed){
 		boolean flag=false;
-		for (Schedule m:myschedule) {
-			if (m.getID()==ID) {
-				flag=true;
-			}
-		}
+		if (myschedule.containsKey(ID)) flag=true;
 		if (!flag){
-			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
-			myschedule.add(tmp);
+			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed,track);
+			myschedule.put(ID,tmp);
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			TCInterface.createTrain("green",ID);
 			return true;
 		}
 		else{
 			Schedule tmp1=myschedule.get(ID);
-			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
+			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed,track);
 			tmp1.mergeSchedule(tmp2);
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			TCInterface.createTrain("green",ID);
 			return true;
 		}
 		
 	}
 	public ArrayList<String> tolist(){
 		ArrayList<String> tmp=new ArrayList<String>();
-		for (Schedule s:myschedule){
-			tmp.addAll(s.printschedule());
+		for (Integer key:myschedule.keySet()){
+			tmp.addAll(myschedule.get(key).printschedule());
 		}
 		return tmp;
 	}
@@ -138,10 +174,18 @@ public class CTCSingleton implements CTCInterface {
 	public Map<Integer,Train> viewtrains(){
 		return trains;
 	}
-	public ArrayList<Schedule> viewSchedule(){
+	public HashMap<Integer,Schedule> viewSchedule(){
 		return myschedule;
 	}
-
+	public boolean[] getifSectionClose() {
+		return isSectionClose;
+	}
+	public void openSection(int ID) {
+		isSectionClose[ID]=false;
+	}
+	public void closeSection(int ID) {
+		isSectionClose[ID]=true;
+	}
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in

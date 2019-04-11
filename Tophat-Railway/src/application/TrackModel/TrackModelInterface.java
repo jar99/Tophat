@@ -119,13 +119,22 @@ public interface TrackModelInterface {
 	// public boolean isBroken(String lineName, int blockID);
 
 	/**
-	 * Sets heating status for a block
+	 * OBSOLETE? Sets heating status for a block
 	 * 
 	 * @param lineName - the name of the block's line
 	 * @param blockID  - the id for the block
 	 * @param heated   - true for heated; false for not
 	 */
 	public void setHeating(String lineName, int blockID, boolean heated);
+
+	/**
+	 * Sets Crossing bars and lights
+	 * 
+	 * @param lineName   - the name of the block's line
+	 * @param blockID    - the id for the block
+	 * @param crossingOn - true for on; false for not
+	 */
+	public void setCrossing(String lineName, int blockID, boolean crossingOn);
 
 	// =========Train Model Methods==========
 	/**

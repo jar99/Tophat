@@ -2,59 +2,42 @@ package application.TrainController;
 
 public interface TrainCtrlInterface {
 
-	public void trianID(int trainID);
+	int getTrianID();
 	
-	/**
-	 * This will send speed that I have inputed
-	 * @param speed
-	 */
-	public void Speed(double speed);
+	void setSpeed(double speed);
 	
-	public void Power(int power);
+	double getSpeed();
 	
-	/**
-	 * sets the temperature inside the train
-	 * @param temperture
-	 */
-	public void temperature(double temperature);
+	void setPower(double power);
 	
-	public void leftDoor(boolean leftDoor);
+	double getPower();
 	
-	public void rightDoor(boolean rightDoor);
-///new branch
+	void setTemperature(double temp);
 	
-	/**
-	 * true = Manual
-	 * False = Automatic
-	 * @param drvieStatus
-	 */
-	public void driveMode(boolean driveMode);
+	double getTemperature();
 	
-	/**
-	 * 1 = Engine Failure,
-	 * 2 = Brake Failure,
-	 * 3 = Signal Lost
-	 * @param trainStatus
-	 */
-	//public void trainStatus(int trainStatus);
+	void toggleServiceBrake();
 	
-	/**
-	 * Engine has failed:(
-	 * @param engineFailure
-	 */
-	public void engineStatus(boolean engineFailure);
+	boolean getServiceBrake();
 	
-	/**
-	 * The brakes went bad:'(
-	 * @param brakeFailure
-	 */
-	public void brakeStatus(boolean brakeFailure);
+	boolean getEmergencyBrake();
 	
-	/**
-	 * What's the fucking wifi password?!
-	 * @param signalFailure
-	 */
-	public void signalStatus(boolean signalFailure);
+	void toggleEmergencyBrake();
+	
+	void setDriveMode(boolean drvieMode);
+	
+	boolean getDriveMode();
+	
+	boolean engineStatus();
+	
+	boolean brakeStatus();
+	
+	 void toggleLeftDoor();
+	 
+	 void toggleRightDoor();
+	 
+	 void toggleInteriorLights();
+
 	
 	
 }

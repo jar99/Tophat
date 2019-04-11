@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
+<BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
    <top>
       <AnchorPane style="-fx-background-color: green;" BorderPane.alignment="CENTER">
          <children>
@@ -58,7 +63,11 @@
             <CheckBox fx:id="manual" layoutX="48.0" layoutY="277.0" mnemonicParsing="false" onAction="#ManualMode" prefHeight="17.0" prefWidth="71.0" text="Manual" />
             <CheckBox fx:id="automatic" layoutX="48.0" layoutY="301.0" mnemonicParsing="false" onAction="#AutomaticMode" prefHeight="17.0" prefWidth="84.0" text="Automatic" />
             <Label fx:id="driveStatus" layoutX="19.0" layoutY="339.0" prefHeight="17.0" prefWidth="155.0" />
-            <ComboBox layoutX="11.0" layoutY="32.0" prefWidth="150.0" />
+            <ComboBox fx:id="listTrainID" layoutX="11.0" layoutY="32.0" prefWidth="150.0" />
+            <Label fx:id="MBOSpeed" layoutX="109.0" layoutY="190.0" prefHeight="17.0" prefWidth="46.0" />
+            <Label fx:id="MBOAuthority" layoutX="108.0" layoutY="213.0" prefHeight="17.0" prefWidth="38.0" />
+            <Label fx:id="CTCSpeed" layoutX="113.0" layoutY="100.0" prefHeight="17.0" prefWidth="45.0" />
+            <Label fx:id="CTCAuthority" layoutX="110.0" layoutY="125.0" prefHeight="17.0" prefWidth="41.0" />
          </children>
       </AnchorPane>
    </left>
@@ -91,7 +100,7 @@
             <Label layoutX="20.0" layoutY="192.0" text="Lights:" />
             <Label layoutX="18.0" layoutY="226.0" text="Right Doors:" />
             <Label layoutX="17.0" layoutY="259.0" text="Left Doors:" />
-            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="On" />
+            <ToggleButton fx:id="lights" layoutX="126.0" layoutY="188.0" mnemonicParsing="false" onAction="#Lights" prefHeight="25.0" prefWidth="54.0" text="Off" />
             <ToggleButton fx:id="rightDoor" layoutX="124.0" layoutY="222.0" mnemonicParsing="false" onAction="#rightDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <ToggleButton fx:id="leftDoor" layoutX="126.0" layoutY="256.0" mnemonicParsing="false" onAction="#leftDoor" prefHeight="25.0" prefWidth="56.0" text="Closed" />
             <Label layoutX="15.0" layoutY="294.0" text="Temperature:" />
@@ -119,7 +128,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
+            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" onAction="#Speed" prefHeight="25.0" prefWidth="41.0" />
             <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" onAction="#Speed" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="147.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Power">
                <font>
@@ -134,14 +143,14 @@
                </font>
             </Label>
             <TextField fx:id="ki" layoutX="11.0" layoutY="90.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmKi" layoutX="55.0" layoutY="90.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Button fx:id="confirmKi" layoutX="55.0" layoutY="90.0" mnemonicParsing="false" onAction="#Ki" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="162.0" layoutY="70.0" text="Kp">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <TextField fx:id="kp" layoutX="150.0" layoutY="93.0" prefHeight="25.0" prefWidth="41.0" />
-            <Button fx:id="confirmKp" layoutX="194.0" layoutY="93.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="18.0" text="Button" />
+            <Button fx:id="confirmKp" layoutX="194.0" layoutY="93.0" mnemonicParsing="false" onAction="#Kp" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="10.0" layoutY="159.0" text="Actual Power:">
                <font>
                   <Font size="15.0" />

@@ -30,10 +30,10 @@ public class TrackControllerCtrl implements Initializable {
     private ChoiceBox<?> choiceBoxBlockG1;
 
 	@FXML
-    private Label blockSpeed;
+    private Label blockSpeedG1;
 
 	@FXML
-    private Label blockAuthority;
+    private Label blockAuthorityG1;
 
 	@FXML
     private Label speedUnits;
@@ -140,11 +140,13 @@ public class TrackControllerCtrl implements Initializable {
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		currentBlockG1.setText(mySin.getCBNameG1());
+		mySin.setSwitchG5();
+		CBIDG1 = mySin.getCurrentBlockIDG1();
 		
-		blockSpeed.setText(mySin.getSpeed());
-		blockAuthority.setText(mySin.getAuthority());
+		blockSpeedG1.setText(mySin.getSpeed(1, CBIDG1));
+		blockAuthorityG1.setText(mySin.getAuthority(1, CBIDG1));
 		
-		if (mySin.isCBOccupied())
+		if (mySin.isCBOccupied(1))
 			iconOccupancyG1.setFill(javafx.scene.paint.Color.GREEN);
 		else
 			iconOccupancyG1.setFill(javafx.scene.paint.Color.WHITE);
@@ -190,10 +192,10 @@ public class TrackControllerCtrl implements Initializable {
 		}
 		
 		if (CBIDG1 == 1) {
-			if (mySin.isSwitchG5Straight()) {
+			if (mySin.isSwitchG5Straight() == true) {
 				nextBlockG1.setText("--");
 			}
-			else if (!mySin.isSwitchG5Straight()) {
+			else if (mySin.isSwitchG5Straight() == false) {
 				nextBlockG1.setText("13");
 			}
 				
@@ -208,6 +210,10 @@ public class TrackControllerCtrl implements Initializable {
 			}
 		}
 		
-		nextBlockG1.setText("--");
+		if ((CBIDG1 != 1) && (CBIDG1 != 13)) {
+			nextBlockG1.setText("--");
+			iconLightsOnG1.setFill(javafx.scene.paint.Color.WHITE);
+			iconLightsOffG1.setFill(javafx.scene.paint.Color.WHITE);
+		}
 	}
 }

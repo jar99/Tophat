@@ -2,10 +2,8 @@ package application.TrackModel;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -17,7 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import application.ClockSingleton;
 
-//: 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -214,6 +211,15 @@ public class TrackModelSingleton implements TrackModelInterface {
 			track.get(lineName).getBlock(blockID).setHeated(heated);
 		} else
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+	}
+
+	@Override
+	public void setCrossing(String lineName, int blockID, boolean crossingOn) {
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+		track.get(lineName).getBlock(blockID).setCrossingOn(crossingOn);
 
 	}
 
@@ -655,7 +661,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public double getTrainSuggestedSpeed(int trainID) throws TrackCircuitFailureException {
-		if (trainLocations.containsKey(trainID))
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
 
 		String lineName = trainLocations.get(trainID).getLineName();
@@ -671,7 +677,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public int getTrainBlockAuthority(int trainID) throws TrackCircuitFailureException {
-		if (trainLocations.containsKey(trainID))
+		if (!trainLocations.containsKey(trainID))
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
 
 		String lineName = trainLocations.get(trainID).getLineName();
@@ -756,6 +762,17 @@ public class TrackModelSingleton implements TrackModelInterface {
 		return currentLine.getStation(stationName);
 	}
 
+	public TrackSection getSection(char sectionID) {
+		TrackLine currentLine = track.get(currentLineName);
+		return currentLine.getSection(sectionID);
+	}
+
+	public void setCurrentSection(char sectionID) {
+		TrackLine currentLine = track.get(currentLineName);
+		TrackSection section = currentLine.getSection(sectionID);
+		currentBlockID = section.getFirstBlockID();
+	}
+
 	public Map<Integer, TrainLocation> getTrainMap() {
 		return trainLocations;
 	}
@@ -801,8 +818,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	}
 
-	public Collection<TrackSection> getLineSection(String lineName) {
+	public Collection<TrackSection> getLineSections(String lineName) {
 		return track.get(lineName).getSections();
+	}
+
+	public Collection<TrackStation> getLineStations(String lineName) {
+		return track.get(lineName).getStations();
 	}
 
 	private TrackLine readLineFile(XSSFWorkbook workbook) {
@@ -845,7 +866,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 			String cardinalDirection = blockRow.getCell(19).getStringCellValue();
 
 			boolean isStation = blockRow.getCell(21).getBooleanCellValue();
-			boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
+			// boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
 			boolean isUnderground = blockRow.getCell(23).getBooleanCellValue();
 			boolean isCrossing = blockRow.getCell(24).getBooleanCellValue();
 			boolean hasLight = blockRow.getCell(25).getBooleanCellValue();

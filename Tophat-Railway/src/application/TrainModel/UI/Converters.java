@@ -44,18 +44,23 @@ public class Converters<T> {
  	}
  	
  	public static String TempratureConverter(double tempC) {
- 		// TODO add c to f convention
- 		return tempC + "°F";
+ 		tempC = tempC*9/5 + 32;
+ 		return String.format("%.2f°F", tempC);
  	}
  	
 	public static String SpeedConverter(double speedM) {
- 		// TODO add kmh to mph convention
- 		return speedM + "mph";
+		speedM = speedM*0.621371;
+ 		return String.format("%.2fmph", speedM) ;
+ 	}
+	
+	public static String AccelerationConverter(double acelM) {
+ 		acelM = acelM*3.2808398950131;
+ 		return String.format("%.2ff/s^2", acelM);
  	}
 
 	public static String Waight(double waightKG) {
-		// TODO add kg to lbs
-		return waightKG + " LBS";
+		waightKG = waightKG*2.20462;
+		return String.format("%.2fLBS", waightKG);
 	}
 
 	public String concat(T item) {

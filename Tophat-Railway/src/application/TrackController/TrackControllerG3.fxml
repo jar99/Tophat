@@ -9,11 +9,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="597.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrackController.TrackControllerCtrl">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="597.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrackController.TrackControllerCtrlG3">
    <children>
       <AnchorPane layoutY="-2.0" prefHeight="33.0" prefWidth="810.0" style="-fx-background-color: green;">
          <children>
-            <Text fill="WHITE" layoutX="14.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Controller G1">
+            <Text fill="WHITE" layoutX="14.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Track Controller G3">
                <font>
                   <Font size="15.0" />
                </font>
@@ -22,14 +22,14 @@
       </AnchorPane>
       <AnchorPane layoutX="21.0" layoutY="50.0" prefHeight="213.0" prefWidth="235.0" style="-fx-border-color: green; -fx-border-width: 2;">
          <children>
-            <Button layoutX="27.0" layoutY="40.0" mnemonicParsing="false" onAction="#getLeftBlockG1" prefHeight="25.0" prefWidth="46.0" text="Left" />
-            <Button layoutX="163.0" layoutY="40.0" mnemonicParsing="false" onAction="#getRightBlockG1" prefHeight="25.0" prefWidth="46.0" text="Right" />
-            <Label fx:id="currentBlockG1" layoutX="95.0" layoutY="26.0" prefHeight="45.0" prefWidth="46.0" text="1">
+            <Button layoutX="16.0" layoutY="41.0" mnemonicParsing="false" onAction="#getLeftBlockG3" prefHeight="25.0" prefWidth="46.0" text="Left" />
+            <Button layoutX="176.0" layoutY="41.0" mnemonicParsing="false" onAction="#getRightBlockG3" prefHeight="25.0" prefWidth="46.0" text="Right" />
+            <Label fx:id="currentBlockG3" layoutX="95.0" layoutY="26.0" prefHeight="45.0" prefWidth="46.0" text="1">
                <font>
-                  <Font size="37.0" />
+                  <Font size="24.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="choiceBoxBlockG1" layoutX="149.0" layoutY="95.0" prefHeight="25.0" prefWidth="74.0" />
+            <ChoiceBox fx:id="choiceBoxBlockG3" layoutX="149.0" layoutY="95.0" prefHeight="25.0" prefWidth="74.0" />
             <Label layoutX="13.0" layoutY="91.0" text="Select Block:">
                <font>
                   <Font size="22.0" />
@@ -45,12 +45,12 @@
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="blockSpeedG1" layoutX="7.0" layoutY="164.0" text="10.0">
+            <Label fx:id="blockSpeedG3" layoutX="7.0" layoutY="164.0" text="10.0">
                <font>
                   <Font size="22.0" />
                </font>
             </Label>
-            <Label fx:id="blockAuthorityG1" layoutX="141.0" layoutY="164.0" text="10">
+            <Label fx:id="blockAuthorityG3" layoutX="141.0" layoutY="164.0" text="10">
                <font>
                   <Font size="22.0" />
                </font>
@@ -74,21 +74,22 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Circle fx:id="iconOccupancyG1" fill="WHITE" layoutX="187.0" layoutY="41.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Circle fx:id="iconOccupancyG3" fill="WHITE" layoutX="187.0" layoutY="41.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
             <Label layoutX="14.0" layoutY="77.0" text="Operational:">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
-            <Circle fx:id="iconOperationalG1" fill="#137c36" layoutX="187.0" layoutY="94.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Circle fx:id="iconOperationalG3" fill="#137c36" layoutX="187.0" layoutY="94.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
             <Label layoutX="61.0" layoutY="141.0" text="Import PLC">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="79.0" layoutY="175.0" mnemonicParsing="false" onAction="#selectPLC" prefHeight="25.0" prefWidth="74.0" text="Select" />
-            <Button layoutX="28.0" layoutY="221.0" mnemonicParsing="false" onAction="#runPLC" prefHeight="25.0" prefWidth="74.0" text="Run" />
-            <Button layoutX="116.0" layoutY="221.0" mnemonicParsing="false" onAction="#stopPLC" prefHeight="25.0" prefWidth="74.0" text="Stop" />
+            <Button layoutX="79.0" layoutY="175.0" mnemonicParsing="false" onAction="#selectPLCG3" prefHeight="25.0" prefWidth="74.0" text="Select" />
+            <Button layoutX="28.0" layoutY="209.0" mnemonicParsing="false" onAction="#runPLCG3" prefHeight="25.0" prefWidth="74.0" text="Run" />
+            <Button layoutX="116.0" layoutY="209.0" mnemonicParsing="false" onAction="#stopPLCG3" prefHeight="25.0" prefWidth="74.0" text="Stop" />
+            <Button layoutX="24.0" layoutY="242.0" mnemonicParsing="false" onAction="#createTrain" prefHeight="25.0" prefWidth="163.0" text="Create Train" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="263.0" layoutY="50.0" prefHeight="96.0" prefWidth="538.0" style="-fx-border-color: green; -fx-border-width: 2;">
@@ -98,32 +99,32 @@
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="14.0" layoutY="57.0" mnemonicParsing="false" onAction="#setLightsOnG1" prefHeight="25.0" prefWidth="34.0" text="On" />
-            <Button layoutX="55.0" layoutY="57.0" mnemonicParsing="false" onAction="#setLightsOffG1" prefHeight="25.0" prefWidth="34.0" text="Off" />
-            <Circle fx:id="iconLightsOnG1" fill="WHITE" layoutX="117.0" layoutY="32.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
-            <Circle fx:id="iconLightsOffG1" fill="WHITE" layoutX="117.0" layoutY="70.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Button layoutX="14.0" layoutY="57.0" mnemonicParsing="false" onAction="#setLightsOnG3" prefHeight="25.0" prefWidth="34.0" text="On" />
+            <Button layoutX="55.0" layoutY="57.0" mnemonicParsing="false" onAction="#setLightsOffG3" prefHeight="25.0" prefWidth="34.0" text="Off" />
+            <Circle fx:id="iconLightsOnG3" fill="WHITE" layoutX="117.0" layoutY="32.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Circle fx:id="iconLightsOffG3" fill="WHITE" layoutX="117.0" layoutY="70.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
             <Label layoutX="155.0" layoutY="14.0" prefHeight="34.0" prefWidth="102.0" text="Crossing">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="155.0" layoutY="58.0" mnemonicParsing="false" onAction="#setCrossingOnG1" prefHeight="25.0" prefWidth="34.0" text="On" />
-            <Button layoutX="206.0" layoutY="58.0" mnemonicParsing="false" onAction="#setCrossingOffG1" prefHeight="25.0" prefWidth="34.0" text="Off" />
-            <Circle fx:id="iconCrossingOnG1" fill="WHITE" layoutX="274.0" layoutY="31.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
-            <Circle fx:id="iconCrossingOffG1" fill="WHITE" layoutX="274.0" layoutY="71.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Button layoutX="155.0" layoutY="58.0" mnemonicParsing="false" onAction="#setCrossingOnG3" prefHeight="25.0" prefWidth="34.0" text="On" />
+            <Button layoutX="206.0" layoutY="58.0" mnemonicParsing="false" onAction="#setCrossingOffG3" prefHeight="25.0" prefWidth="34.0" text="Off" />
+            <Circle fx:id="iconCrossingOnG3" fill="WHITE" layoutX="274.0" layoutY="31.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+            <Circle fx:id="iconCrossingOffG3" fill="WHITE" layoutX="274.0" layoutY="71.0" radius="13.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
             <Label layoutX="335.0" layoutY="15.0" prefHeight="34.0" prefWidth="102.0" text="Switch">
                <font>
                   <Font size="23.0" />
                </font>
             </Label>
-            <Button layoutX="305.0" layoutY="57.0" mnemonicParsing="false" onAction="#setSwitchStraightG1" prefHeight="25.0" prefWidth="61.0" text="Straight" />
-            <Button layoutX="374.0" layoutY="57.0" mnemonicParsing="false" onAction="#setSwitchDivergeG1" prefHeight="25.0" prefWidth="61.0" text="Diverge" />
+            <Button layoutX="305.0" layoutY="57.0" mnemonicParsing="false" onAction="#setSwitchStraightG3" prefHeight="25.0" prefWidth="61.0" text="Straight" />
+            <Button layoutX="374.0" layoutY="57.0" mnemonicParsing="false" onAction="#setSwitchDivergeG3" prefHeight="25.0" prefWidth="61.0" text="Diverge" />
             <Label layoutX="442.0" layoutY="17.0" text="Next Block">
                <font>
                   <Font size="19.0" />
                </font>
             </Label>
-            <Label fx:id="nextBlockG1" layoutX="470.0" layoutY="53.0" prefHeight="34.0" prefWidth="34.0" text="--">
+            <Label fx:id="nextBlockG3" layoutX="470.0" layoutY="53.0" prefHeight="34.0" prefWidth="34.0" text="--">
                <font>
                   <Font size="18.0" />
                </font>
