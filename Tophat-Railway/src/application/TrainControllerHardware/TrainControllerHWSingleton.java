@@ -17,7 +17,7 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	private TrainControllerHWSingleton() throws SerialPortIOException{
 		String primary = "COM16";
 		SerialPort primaryPort = SerialPort.getCommPort(primary);
-		//if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
+		if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
 	}
 	
 	public static TrainControllerHWSingleton getInstance(){

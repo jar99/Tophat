@@ -761,11 +761,15 @@ public class TrackModelSingleton implements TrackModelInterface {
 		return currentLine.getStation(stationName);
 	}
 
-	public TrackSection getCurrentSection() {
+	public TrackSection getSection(char sectionID) {
 		TrackLine currentLine = track.get(currentLineName);
-		TrackBlock currentBlock = currentLine.getBlock(currentBlockID);
-		char sectionID = currentBlock.getSectionID();
 		return currentLine.getSection(sectionID);
+	}
+
+	public void setCurrentSection(char sectionID) {
+		TrackLine currentLine = track.get(currentLineName);
+		TrackSection section = currentLine.getSection(sectionID);
+		currentBlockID = section.getFirstBlockID();
 	}
 
 	public Map<Integer, TrainLocation> getTrainMap() {
@@ -813,8 +817,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	}
 
-	public Collection<TrackSection> getLineSection(String lineName) {
+	public Collection<TrackSection> getLineSections(String lineName) {
 		return track.get(lineName).getSections();
+	}
+
+	public Collection<TrackStation> getLineStations(String lineName) {
+		return track.get(lineName).getStations();
 	}
 
 	private TrackLine readLineFile(XSSFWorkbook workbook) {

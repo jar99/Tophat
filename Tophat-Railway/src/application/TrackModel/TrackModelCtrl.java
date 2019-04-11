@@ -2,6 +2,9 @@ package application.TrackModel;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -34,12 +37,11 @@ public class TrackModelCtrl implements Initializable {
 	double mostY = 3554.92;
 	double windowX = 481;
 	double windowY = 502;
-	
+
 	double dispX = 0 - leastX;
 	double dispY = 0 - leastY;
 	double ratioX = windowX / (mostX + dispX + 200);
 	double ratioY = windowY / (mostY + dispY + 200);
-
 
 	// Links to your Singleton (NO TOUCHY!!)
 	private TrackModelSingleton mySin = TrackModelSingleton.getInstance();
@@ -120,7 +122,7 @@ public class TrackModelCtrl implements Initializable {
 	private ChoiceBox<?> choiceBoxLine;
 
 	private Map<Integer, Circle> trainIcons = new Hashtable<Integer, Circle>();
-	
+
 	private Arc currentArc = new Arc();
 	private Line currentLine = new Line();
 
@@ -144,46 +146,88 @@ public class TrackModelCtrl implements Initializable {
 	void importLine() {
 		mySin.importLine("green.xlsx");
 
-		for (TrackSection section : mySin.getLineSection("green")) {
-			
-			//System.out.println("RatioX: " + ratioX + "RatioY: " + ratioY);
-			
+		for (TrackStation station : mySin.getLineStations("green")) {
+			int blockID = station.getBlockID();
+			char sectionID = station.getSectionID();
+			TrackSection section = mySin.getSection(sectionID);
+
 			if (section instanceof TrackSectionStraight) {
-				drawLine(section.getStartX(), section.getStartY(), section.getEndX(), section.getEndY());
+				TrackSectionStraight sectionStraight = (TrackSectionStraight) section;
+				drawLine(sectionStraight.getBlockStartX(blockID), sectionStraight.getBlockStartY(blockID),
+						sectionStraight.getBlockEndX(blockID), sectionStraight.getBlockEndY(blockID), Color.BLACK, 5);
 			} else if (section instanceof TrackSectionCurve) {
 				TrackSectionCurve sectionCurve = (TrackSectionCurve) section;
-				drawArc(sectionCurve.getCenterX(), sectionCurve.getCenterY(), sectionCurve.getRadius(), sectionCurve.getStartAngle(), sectionCurve.getLengthAngle());
-				//System.out.println("Section: " + sectionCurve.getSectionID() + " Length: " + sectionCurve.getLength() + " CX: " + sectionCurve.getCenterX() + " CY: " + sectionCurve.getCenterY() + " R: " + sectionCurve.getRadius() + " SAng: " + Math.toDegrees(sectionCurve.getStartAngle()) + " LAng: " + Math.toDegrees(sectionCurve.getLengthAngle()));
+				drawArc(sectionCurve.getCenterX(), sectionCurve.getCenterY(), sectionCurve.getRadius(),
+						sectionCurve.getBlockStartAngle(blockID), sectionCurve.getBlockLengthAngle(blockID),
+						Color.BLACK, 5);
 			}
-			
-			
 		}
+
+		for (TrackSection section : mySin.getLineSections("green")) {
+			// System.out.println("RatioX: " + ratioX + "RatioY: " + ratioY);
+			if (section instanceof TrackSectionStraight) {
+				drawLine(section.getStartX(), section.getStartY(), section.getEndX(), section.getEndY(), Color.GREY, 3);
+			} else if (section instanceof TrackSectionCurve) {
+				TrackSectionCurve sectionCurve = (TrackSectionCurve) section;
+				drawArc(sectionCurve.getCenterX(), sectionCurve.getCenterY(), sectionCurve.getRadius(),
+						sectionCurve.getStartAngle(), sectionCurve.getLengthAngle(), Color.GREY, 3);
+				// System.out.println("Section: " + sectionCurve.getSectionID() + " Length: " +
+				// sectionCurve.getLength() + " CX: " + sectionCurve.getCenterX() + " CY: " +
+				// sectionCurve.getCenterY() + " R: " + sectionCurve.getRadius() + " SAng: " +
+				// Math.toDegrees(sectionCurve.getStartAngle()) + " LAng: " +
+				// Math.toDegrees(sectionCurve.getLengthAngle()));
+			}
+		}
+
+		// TODO: Implement CB Selection Box (See old code)
+		ObservableList<String> list = FXCollections.observableArrayList();
+		Collection<TrackSection> sections = mySin.getLineSections("green");
+
+		for (TrackSection section : sections) {
+			list.add(Character.toString(section.getSectionID()));
+		}
+
+		Collections.sort(list);
+
+		choiceBoxBlock.setItems(list);
+
+		choiceBoxBlock.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> selected, String oldCB, String newCB) {
+				if (newCB != null) {
+					// newCB = newCB.replaceAll("\\D+", "");
+					mySin.setCurrentSection(newCB.charAt(0));
+				}
+			}
+		});
 
 	}
 
-	private void drawLine(double startX, double startY, double endX, double endY) {
+	private void drawLine(double startX, double startY, double endX, double endY, Color color, double width) {
 		startX = (startX + dispX) * ratioX + 10;
 		startY = (startY + dispY) * ratioY + 10;
 		endX = (endX + dispX) * ratioX + 10;
-		endY = (endY + dispY) * ratioY + 10;		//System.out.println(startX + " " + startY + " " + endX + " " + endY);
+		endY = (endY + dispY) * ratioY + 10; // System.out.println(startX + " " + startY + " " + endX + " " + endY);
 
 		Line line = new Line();
 		line.setStartX(startX);
 		line.setStartY(startY);
 		line.setEndX(endX);
 		line.setEndY(endY);
-		line.setStroke(Color.GREY);
-		line.setStrokeWidth(3);
+		line.setStroke(color);
+		line.setStrokeWidth(width);
 
 		trackMap.getChildren().add(line);
 	}
-	
-	private void drawArc(double centerX, double centerY, double radius, double startAngle, double lengthAngle) {
+
+	private void drawArc(double centerX, double centerY, double radius, double startAngle, double lengthAngle,
+			Color color, double width) {
 		centerX = (centerX + dispX) * ratioX + 10;
 		centerY = (centerY + dispY) * ratioY + 10;
 		double radiusX = radius * ratioX;
 		double radiusY = radius * ratioY;
-		
+
 		Arc arc = new Arc();
 		arc.setCenterX(centerX);
 		arc.setCenterY(centerY);
@@ -192,10 +236,10 @@ public class TrackModelCtrl implements Initializable {
 		arc.setStartAngle(Math.toDegrees(startAngle));
 		arc.setLength(Math.toDegrees(lengthAngle));
 		arc.setType(ArcType.OPEN);
-		arc.setFill(Color.TRANSPARENT); 
-		arc.setStroke(Color.GREY);
-		arc.setStrokeWidth(3);
-		
+		arc.setFill(Color.TRANSPARENT);
+		arc.setStroke(color);
+		arc.setStrokeWidth(width);
+
 		trackMap.getChildren().add(arc);
 	}
 
@@ -226,23 +270,9 @@ public class TrackModelCtrl implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		// Add highlights to track map
 		trackMap.getChildren().add(currentLine);
 		trackMap.getChildren().add(currentArc);
-		
-		// TODO: Implement CB Selection Box (See old code)
-		/*
-		 * ObservableList<String> list = FXCollections.observableArrayList();
-		 * ArrayList<String> blockNameList = mySin.getBlockNameList(); for (String
-		 * blockName : blockNameList) { list.add(blockName); }
-		 * choiceBoxBlock.setItems(list);
-		 * 
-		 * choiceBoxBlock.getSelectionModel().selectedItemProperty().addListener(new
-		 * ChangeListener<String>() {
-		 * 
-		 * @Override public void changed(ObservableValue<? extends String> selected,
-		 * String oldCB, String newCB) { if (newCB != null) { newCB =
-		 * newCB.replaceAll("\\D+",""); mySin.setCB(Integer.parseInt(newCB)); } } });
-		 */
 
 		// Fill in choiceBoxFail
 		ObservableList<String> list2 = FXCollections.observableArrayList();
@@ -268,21 +298,30 @@ public class TrackModelCtrl implements Initializable {
 		DecimalFormat df1 = new DecimalFormat("#.##");
 
 		if (mySin.hasALine()) {
-			
+
 			TrackBlock cBlock = mySin.getCurrentBlock();
 			int cBlockID = cBlock.getBlockID();
-			
-			TrackSection cSection = mySin.getCurrentSection();
-			
+
+			// Keep Track of current block on map by drawing a different colored line over
+			// it
+			char cSectionID = cBlock.getSectionID();
+			TrackSection cSection = mySin.getSection(cSectionID);
+
 			if (cSection instanceof TrackSectionStraight) {
 				TrackSectionStraight cSectionStraight = (TrackSectionStraight) cSection;
-				moveCurrentLine(cSectionStraight.getBlockStartX(cBlockID), cSectionStraight.getBlockStartY(cBlockID), cSectionStraight.getBlockEndX(cBlockID), cSectionStraight.getBlockEndY(cBlockID));
+				moveCurrentLine(cSectionStraight.getBlockStartX(cBlockID), cSectionStraight.getBlockStartY(cBlockID),
+						cSectionStraight.getBlockEndX(cBlockID), cSectionStraight.getBlockEndY(cBlockID));
 				hideCurrentArc();
 			} else if (cSection instanceof TrackSectionCurve) {
 				TrackSectionCurve cSectionCurve = (TrackSectionCurve) cSection;
-				moveCurrentArc(cSectionCurve.getCenterX(), cSectionCurve.getCenterY(), cSectionCurve.getRadius(), cSectionCurve.getBlockStartAngle(cBlockID), cSectionCurve.getBlockLengthAngle(cBlockID));
+				moveCurrentArc(cSectionCurve.getCenterX(), cSectionCurve.getCenterY(), cSectionCurve.getRadius(),
+						cSectionCurve.getBlockStartAngle(cBlockID), cSectionCurve.getBlockLengthAngle(cBlockID));
 				hideCurrentLine();
-				//System.out.println("Section: " + cSectionCurve.getSectionID() + " Length: " + cSectionCurve.getLength() + " CX: " + cSectionCurve.getCenterX() + " CY: " + cSectionCurve.getCenterY() + " R: " + cSectionCurve.getRadius() + " SAng: " + Math.toDegrees(cSectionCurve.getStartAngle()) + " LAng: " + Math.toDegrees(cSectionCurve.getLengthAngle()));
+				// System.out.println("Section: " + cSectionCurve.getSectionID() + " Length: " +
+				// cSectionCurve.getLength() + " CX: " + cSectionCurve.getCenterX() + " CY: " +
+				// cSectionCurve.getCenterY() + " R: " + cSectionCurve.getRadius() + " SAng: " +
+				// Math.toDegrees(cSectionCurve.getStartAngle()) + " LAng: " +
+				// Math.toDegrees(cSectionCurve.getLengthAngle()));
 			}
 
 			currentBlock.setText(cBlock.getName());
@@ -314,8 +353,8 @@ public class TrackModelCtrl implements Initializable {
 			else
 				iconPropCrossing.setFill(javafx.scene.paint.Color.WHITE);
 
-			//TODO: Get Crossing On state
-			
+			// TODO: Get Crossing On state
+
 			if (cBlock.hasBeacon())
 				iconPropBeacon.setFill(javafx.scene.paint.Color.GREEN);
 			else
@@ -375,8 +414,7 @@ public class TrackModelCtrl implements Initializable {
 			}
 		}
 
-		// TODO: Get list of trains and coords, add dots to map. Make sure train has
-		// fx:id
+		// : Get list of trains and coords, add dots to map. Make sure train has fx:id
 		Map<Integer, TrainLocation> existingTrains = mySin.getTrainMap(); // getX, Y, ID
 		ObservableList<Node> visibleTrains = trackMap.getChildren();
 		for (TrainLocation eTrain : existingTrains.values()) {
@@ -384,10 +422,10 @@ public class TrackModelCtrl implements Initializable {
 
 				// Create new icon
 				Circle newTrain = new Circle();
-				
+
 				double centerX = (eTrain.getCoordX() + dispX) * ratioX + 10;
 				double centerY = (eTrain.getCoordY() + dispY) * ratioY + 10;
-				
+
 				newTrain.setCenterX(centerX);
 				newTrain.setCenterY(centerY);
 				newTrain.setRadius(5);
@@ -418,10 +456,10 @@ public class TrackModelCtrl implements Initializable {
 				// Get the icon from the icon map and update it
 				Circle trainIcon = trainIcons.get(eTrain.getTrainID());
 				visibleTrains.remove(trainIcon);
-				
+
 				double centerX = (eTrain.getCoordX() + dispX) * ratioX + 10;
 				double centerY = (eTrain.getCoordY() + dispY) * ratioY + 10;
-				
+
 				trainIcon.setCenterX(centerX);
 				trainIcon.setCenterY(centerY);
 
@@ -431,8 +469,6 @@ public class TrackModelCtrl implements Initializable {
 
 		}
 
-		// TODO: Keep Track of current block on map by drawing a different colored line
-		// over it
 	}
 
 	private void hideCurrentLine() {
@@ -445,23 +481,21 @@ public class TrackModelCtrl implements Initializable {
 		centerY = (centerY + dispY) * ratioY + 10;
 		double radiusX = radius * ratioX;
 		double radiusY = radius * ratioY;
-		
+
 		currentArc.setCenterX(centerX);
 		currentArc.setCenterY(centerY);
 		currentArc.setRadiusX(radiusX);
 		currentArc.setRadiusY(radiusY);
 		currentArc.setStartAngle(Math.toDegrees(blockStartAngle));
 		currentArc.setLength(Math.toDegrees(blockLengthAngle));
-		
+
 		currentArc.setType(ArcType.OPEN);
 		currentArc.setFill(Color.TRANSPARENT);
 		currentArc.setStroke(Color.YELLOW);
 		currentArc.setStrokeWidth(4);
 		currentArc.toFront();
 
-		currentArc.setVisible(true);	
-		//TODO move to front?
-		
+		currentArc.setVisible(true);
 	}
 
 	private void hideCurrentArc() {
@@ -472,19 +506,19 @@ public class TrackModelCtrl implements Initializable {
 		blockStartX = (blockStartX + dispX) * ratioX + 10;
 		blockStartY = (blockStartY + dispY) * ratioY + 10;
 		blockEndX = (blockEndX + dispX) * ratioX + 10;
-		blockEndY = (blockEndY + dispY) * ratioY + 10;		//System.out.println(startX + " " + startY + " " + endX + " " + endY);
+		blockEndY = (blockEndY + dispY) * ratioY + 10; // System.out.println(startX + " " + startY + " " + endX + " " +
+														// endY);
 
 		currentLine.setStartX(blockStartX);
 		currentLine.setStartY(blockStartY);
 		currentLine.setEndX(blockEndX);
 		currentLine.setEndY(blockEndY);
-		
+
 		currentLine.setStroke(Color.YELLOW);
 		currentLine.setStrokeWidth(4);
 		currentLine.toFront();
-		
-		currentLine.setVisible(true);		
-		//TODO move to front?
+
+		currentLine.setVisible(true);
 	}
 
 }
