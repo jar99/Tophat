@@ -183,15 +183,16 @@ public class CTCCtrl implements Initializable {
 		HashMap<Integer,Schedule> tmp=new HashMap<Integer,Schedule>();
 		tmp=mySin.viewSchedule();
 		for (Integer key:tmp.keySet()){
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
 			Schedule tmp2=tmp.get(key);
 			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
 				if (tmp2.getLeaveTime()[i]==myTime){
-					TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+					
 					String Block=tmp2.getStation()[i];
 					int n=-1;
 					for (int m=0;m<mySin.getStations().length;m++){
 						if(mySin.getStations()[m].equals(Block)){
-							n=m
+							n=m;
 							break;
 						}
 					}
