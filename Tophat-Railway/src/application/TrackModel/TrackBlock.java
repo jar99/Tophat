@@ -34,6 +34,7 @@ public class TrackBlock {
 	private boolean isOccupied = false;
 	private boolean isHeated = false;
 	private boolean isLightGreen = true;
+	//TODO: IsCrossingOn
 
 	// Speed, Authority, and Control Values
 	private double suggestedSpeed = 0.0;

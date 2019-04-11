@@ -39,4 +39,40 @@ public class TrackSectionStraight extends TrackSection {
 		trainLocation.setCoordinates(coordX, coordY);
 	}
 
+	public double getBlockStartX(int chosenBlockID) {
+		double sectionDisplacement = 0.0;
+		for (int blockID = firstBlockID; blockID < chosenBlockID; blockID++) {
+			sectionDisplacement += getBlock(blockID).getLength();
+		}
+		
+		return (sectionDisplacement / length) * (endX - startX) + startX;
+	}
+
+	public double getBlockStartY(int chosenBlockID) {
+		double sectionDisplacement = 0.0;
+		for (int blockID = firstBlockID; blockID < chosenBlockID; blockID++) {
+			sectionDisplacement += getBlock(blockID).getLength();
+		}
+		
+		return (sectionDisplacement / length) * (endY - startY) + startY;
+	}
+
+	public double getBlockEndX(int chosenBlockID) {
+		double sectionDisplacement = 0.0;
+		for (int blockID = firstBlockID; blockID <= chosenBlockID; blockID++) {
+			sectionDisplacement += getBlock(blockID).getLength();
+		}
+		
+		return (sectionDisplacement / length) * (endX - startX) + startX;
+	}
+
+	public double getBlockEndY(int chosenBlockID) {
+		double sectionDisplacement = 0.0;
+		for (int blockID = firstBlockID; blockID <= chosenBlockID; blockID++) {
+			sectionDisplacement += getBlock(blockID).getLength();
+		}
+		
+		return (sectionDisplacement / length) * (endY - startY) + startY;
+	}
+
 }

@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
+import application.CTC.Schedule;
+import application.ClockSingleton;
+import application.TrackController.*;
 public class CTCCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
@@ -172,10 +175,34 @@ public class CTCCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+		ClockSingleton myClock=ClockSingleton.getInstance();
+		int myTime=myClock.getCurrentTimeHours()*60*60+myClock.getCurrentTimeMinutes()*60+myClock.getCurrentTimeSeconds();
 		//DepartureStationChoiceBox.setItems(FXCollections.observableArrayList("STATIONA", "STATIONB"));
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 		ManagementListView.setItems(TrainString);
-
+		HashMap<Integer,Schedule> tmp=new HashMap<Integer,Schedule>();
+		tmp=mySin.viewSchedule();
+		for (Integer key:tmp.keySet()){
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			Schedule tmp2=tmp.get(key);
+			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
+				if (tmp2.getLeaveTime()[i]==myTime){
+					
+					String Block=tmp2.getStation()[i];
+					int n=-1;
+					for (int m=0;m<mySin.getStations().length;m++){
+						if(mySin.getStations()[m].equals(Block)){
+							n=m;
+							break;
+						}
+					}
+					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getSpeed());
+				}
+			}
+			if (myTime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
+				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getSpeed());
+			}
+		}
 
 	}
 }
