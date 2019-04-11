@@ -18,7 +18,7 @@ public class TrackControllerCtrlG3 implements Initializable {
 
 	private AnimationTimer updateAnimation;
 	private int CBIDG3 = mySin.getCurrentBlockIDG3();
-
+	
 	// NOTE: This is where you link to elements in your FXML file
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
@@ -120,6 +120,12 @@ public class TrackControllerCtrlG3 implements Initializable {
 	void setSwitchDivergeG3() {
 		mySin.setSwitchDivergeG3();
 	}
+	
+	@FXML
+	void createTrain() {
+		mySin.createTrain("green", 1);
+		mySin.sendTrainToBlock(1, 140, 10);
+	}
 
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
@@ -145,7 +151,7 @@ public class TrackControllerCtrlG3 implements Initializable {
 		blockAuthorityG3.setText(mySin.getAuthority(3, CBIDG3));
 		CBIDG3 = mySin.getCurrentBlockIDG3();
 		
-		if (mySin.isCBOccupied())
+		if (mySin.isCBOccupied(3))
 			iconOccupancyG3.setFill(javafx.scene.paint.Color.GREEN);
 		else
 			iconOccupancyG3.setFill(javafx.scene.paint.Color.WHITE);

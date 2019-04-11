@@ -1,94 +1,214 @@
 package application.TrainController;
 
+import application.ClockSingleton;
+import application.TrainModel.TrainInterface;
+
+
 public class Train implements TrainCtrlInterface {
-	//update from train model get necessary information and update hashtable
-	//update hashtable from controller assign each variable to necessary train
-	
-	private TrainControllerSingleton mySin = TrainControllerSingleton.getInstance();
-
 	//do power calculation in here
-	
-	private int speed, power, trainID;
-	private boolean serviceBrake, emergencyBrake, lights, rightDoor, leftDoor, driveStatus;
-	private boolean manual = false, automatic = true, engineStatus = false, brakeStatus = false, signalStatus = false;
-	
 
-	public Train(Integer trainID) {
+	private int trainID;
+	private double speed, power;
+	private boolean isManual = false;
+
+	private TrainInterface trainMod;
+	private double ki = 0.01, kp = 0.01;
+
+	public Train(Integer trainID, TrainInterface trainMod) {
 		this.trainID = trainID;
+		this.trainMod = trainMod;
 	}
 
-	public void trianID(int trainID) {
-		mySin.getTrainID(trainID);
-		
+	public int getTrianID() {
+		return trainID;
 	}
-	public void Speed(double speed) {
-		if(speed == 0) {
-			mySin.setSpeed(0);
-		}else
-			mySin.setSpeed(speed);
+
+	public void setSpeed(double speed) {
+		this.speed = speed;
 	}
-	
-	public void Power(int Power) {
-		mySin.getPower();
+
+	public double getSpeed() {
+		return speed;
 	}
 	
-	public void temperature(double temperature) {
-		mySin.getTemperature();
+	public double getActualSpeed() {
+		return trainMod.getSpeed();
 	}
-	
-	public void serviceBrake(boolean serviceBrake) {
-		mySin.getServiceBrake();
+
+	public void setPower(double power) {
+		this.power = power;
 	}
-	
-	public void emergencyBrake(boolean emergencyBrake) {
-		mySin.getemergencyBrake();
+
+	public double getPower() {
+		return power;
 	}
-	
+
+	public double getTemperature() {
+		return trainMod.getTemperature();
+	}
+
+	public void setTemperature(double temp) {
+		trainMod.setTemperature(temp);
+	}
+
+	public void toggleServiceBrake() {
+		trainMod.toggleServiceBrake();
+	}
+
+	public boolean getServiceBrake() {
+		return trainMod.getServiceBrake();
+	}
+
+	public boolean getEmergencyBrake() {
+		return trainMod.getEmergencyBrake();
+	}
+
+	public void toggleEmergencyBrake() {
+		if(!getEmergencyBrake()) {
+			trainMod.triggerEmergencyBrake();
+		}else {
+			trainMod.resetEmergencyBrake();
+		}
+	}
+
 	/**
 	 * true = Manual
 	 * False = Automatic
 	 * @param drvieStatus
 	 */
-	public void driveMode(boolean drvieMode) {
-			mySin.getDriveMode();
+	public void setDriveMode(boolean drvieMode) {
+		isManual = drvieMode;
 	}
-	
-	/*public void trainStatus(int trainStatus) {
-		trainStatus = mySin.getTrainStatus();
-		switch(trainStatus) {
-			case 1:
-				engineStatus = true;
-			case 2:
-				brakeStatus = true;
-			case 3:
-				signalStatus = true;
-		}
-	}*/
-	
-	public void engineStatus(boolean engineFail) {
-		engineFail = mySin.getEngineStatus();
-	}
-	
-	public void brakeStatus(boolean brakeFailure) {
-		brakeFailure = mySin.getBrakeStatus();
-	}
-	
-	public void signalStatus(boolean signalFailure) {
-		signalFailure = mySin.getSignalStatus();
-	}
-	
-	public void leftDoor(boolean leftDoor) {
-		leftDoor = mySin.getLeftDoor();
-	}
-	
-	public void rightDoor(boolean rightDoor) {
-		rightDoor = mySin.getRightDoor();
-	}
-	
-	public void lights(boolean lights) {
-		lights = mySin.getLights();
-	}
-	
-}
 
-//new edits
+	public boolean getDriveMode() {
+		return isManual;
+	}
+	
+	public boolean engineStatus() {
+		return trainMod.engineState();
+	}
+
+	public boolean brakeStatus() {
+		return trainMod.brakeOperationState();
+	}
+
+	public void toggleLeftDoor() {
+		trainMod.toggleLeftDoors();
+	}
+
+	public void toggleRightDoor() {
+		trainMod.toggleRightDoors();
+	}
+
+	public void toggleInteriorLights() {
+		trainMod.toggleInterierLight();
+	}
+
+	public boolean leftDoorState() {
+		return trainMod.getLeftDoorState();
+	}
+
+	public boolean rightDoorState() {
+		return trainMod.getRightDoorState();
+	}
+
+	public boolean getLights() {
+		return trainMod.getLightState();
+	}
+
+	public void toggleLights() {
+		trainMod.toggleLights();
+	}
+
+	public double getMBOSpeed() {
+		return trainMod.getMBOSpeed();
+	}
+
+	public int getMBOAuthority() {
+		return trainMod.getMBOAuthority();
+	}
+
+	public double getCTCSpeed() {
+		return trainMod.getTrackSpeed();
+	}
+
+	public int getCTCAuthority() {
+		return trainMod.getTrackAuthority();
+	}
+
+	public void setKI(double ki) {
+		this.ki = ki;
+	}
+
+	public void setKP(double kp) {
+		this.kp = kp;
+	}
+
+	/**
+	 * 
+	 * @param deltaT = time difference (time between updates)
+	 * @param a = error last
+	 * @param an = error new
+	 * @param b = power last 
+	 * @return new power
+	 */
+    private double laplace(double deltaT, double a, double an, double b) {
+		return b+((deltaT)/2)*(an + a);
+	}
+
+    double lastError;
+   
+	public void update() {
+		ClockSingleton clkSin = ClockSingleton.getInstance();
+		double deltaT = clkSin.getRatio();
+		double newError = speed - trainMod.getSpeed();
+		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
+		trainMod.setPower(np);
+		lastError = newError;
+		power = np;
+	}
+
+	public boolean getBrakeStatus() {
+		return trainMod.brakeOperationState();
+	}
+
+	public boolean getSignalStatus() {
+		return trainMod.railSignalState();
+	}
+
+	public boolean getEngineStatus() {
+		return trainMod.engineState();
+	}
+
+	public double getKI() {
+		return ki;
+	}
+
+	public double getKP() {
+		return kp;
+	}
+
+	public void setLights(boolean b) {
+		if(getLights() != b) {
+			toggleLights();
+		}
+	}
+
+	public void setRightDoor(boolean b) {
+		if(rightDoorState() != b) {
+			toggleRightDoor();
+		}
+	}
+
+	public void setLeftDoor(boolean b) {
+		if(leftDoorState() != b) {
+			toggleLeftDoor();
+		}	
+	}
+
+	public void setEmergencyBrake(boolean b) {
+		if(getEngineStatus() != b) {
+			toggleEmergencyBrake();
+		}
+	}
+}

@@ -155,8 +155,13 @@ public class TrainModelCtrl implements Initializable {
  			weight.update(trainModel.getWeight());
  			cord.update(trainModel.getCoordinates());
  			
+ 			
+ 			
  			leftDoor.update(trainModel.getLeftDoorState());
  			rightDoor.update(trainModel.getRightDoorState());
+ 			
+ 			light.update(trainModel.getLightState());
+ 			intLight.update(trainModel.getInterierLightState());
  			
  			passangers.update(trainModel.getPassengers());
  			temprature.update(trainModel.getTemperature());
@@ -171,7 +176,7 @@ public class TrainModelCtrl implements Initializable {
  	private TableRow<Double> power, trackSpeed, mboSpeed, speed, accel, temprature, weight, speedLimit;
  	private TableRow<String> trainid, cord;
  	
- 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor;
+ 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor, light, intLight;
  	private TableRow<Integer> trackAuthority, mboAuthority, passangers;
  	
  	private void setupTable() {
@@ -200,10 +205,16 @@ public class TrainModelCtrl implements Initializable {
  		leftDoor = new TableRow<Boolean>("Left Door", true, (a)-> Converters.OpenOrClosed(a));
  		rightDoor = new TableRow<Boolean>("Right Door", true, (a)-> Converters.OpenOrClosed(a));
  		
+ 		light = new TableRow<Boolean>("Lights", true, (a)-> Converters.OnOrOff(a));
+ 		intLight = new TableRow<Boolean>("Interior Lights", true, (a)-> Converters.OnOrOff(a));
+ 		
+ 		
  		serviceBrake = new TableRow<Boolean>("Service Brake", true, (a)-> Converters.OnOrOff(a));
  		emergancyBrake = new TableRow<Boolean>("Emergency Brake", true, (a)-> Converters.OnOrOff(a));
  		
- 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, speedLimit, mboAuthority, mboSpeed, power, accel, speed, serviceBrake, emergancyBrake, weight, cord, leftDoor, rightDoor, passangers, temprature);
+ 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, speedLimit, mboAuthority, mboSpeed,
+ 				power, accel, speed, serviceBrake, emergancyBrake, weight, cord, leftDoor, rightDoor,
+ 				light, intLight, passangers, temprature);
  	}
 
  	void run() {

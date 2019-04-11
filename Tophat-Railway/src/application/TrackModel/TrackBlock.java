@@ -28,13 +28,13 @@ public class TrackBlock {
 	final private boolean isUnderground;
 	final private boolean isCrossing;
 	final private boolean hasLight;
-	final private boolean isBidirectional; //Note: A -> B is default
+	final private boolean isBidirectional; // Note: A -> B is default
 
 	// Boolean Controls
 	private boolean isOccupied = false;
 	private boolean isHeated = false;
 	private boolean isLightGreen = true;
-	//TODO: IsCrossingOn
+	private boolean isCrossingOn = false;
 
 	// Speed, Authority, and Control Values
 	private double suggestedSpeed = 0.0;
@@ -48,11 +48,12 @@ public class TrackBlock {
 
 	// ===========CONSTRUCTORS============================
 
-	//TODO: MEH - check arguments (construction)
+	// TODO: MEH - check arguments (construction)
 	public TrackBlock(String lineName, char sectionID, int blockID, TrackJunction junctionA, TrackJunction junctionB,
 			double length, double grade, double spdLmt, double elev, double totElev, String stationName,
-			String beaconData, String cardinalDirection, boolean isUnderground, boolean isCrossing, boolean hasLight, boolean isBidirectional) {
-		
+			String beaconData, String cardinalDirection, boolean isUnderground, boolean isCrossing, boolean hasLight,
+			boolean isBidirectional) {
+
 		this.lineName = lineName;
 		this.sectionID = sectionID;
 		this.blockID = blockID;
@@ -142,7 +143,7 @@ public class TrackBlock {
 	public String getBeaconData() {
 		return beaconData;
 	}
-	
+
 	public String getCardinalDirection() {
 		return cardinalDirection;
 	}
@@ -167,7 +168,7 @@ public class TrackBlock {
 	public boolean hasLight() {
 		return hasLight;
 	}
-	
+
 	public boolean isBidirectional() {
 		return isBidirectional;
 	}
@@ -183,6 +184,10 @@ public class TrackBlock {
 
 	public boolean isLightGreen() {
 		return isLightGreen;
+	}
+
+	public boolean isCrossingOn() {
+		return isCrossingOn;
 	}
 
 	// Speed, Authority, and Control Values
@@ -228,6 +233,10 @@ public class TrackBlock {
 
 	public void setRed() {
 		isLightGreen = false;
+	}
+
+	public void setCrossingOn(boolean isCrossingOn) {
+		this.isCrossingOn = isCrossingOn;
 	}
 
 	// Speed, Authority, and Control Values

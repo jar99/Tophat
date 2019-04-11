@@ -1,8 +1,9 @@
 package application.CTC;
 import java.util.stream.IntStream;
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.*;
+
+import application.TrackModel.TrackLine;
 import application.TrackModel.TrackModelSingleton;
 import javafx.collections.*;
 import javafx.animation.AnimationTimer;
@@ -28,6 +29,9 @@ public class CTCCtrl implements Initializable {
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
 	// Links to FXML elements
+    @FXML
+    private Label clockLabel;
+
 	@FXML
 	private TextField TrainIDTextField;
 	@FXML
@@ -42,10 +46,16 @@ public class CTCCtrl implements Initializable {
 	private ChoiceBox<String> DestinationChoiceBox;
 	@FXML
 	private ChoiceBox<String> ImportScheduleChioceBox;
+	@FXML
+	private ChoiceBox<String> DepartureStationChoiceBox1;
     @FXML
 	private ListView<String> ScheduleListView;
 	@FXML
 	private ListView<String> ManagementListView;
+	@FXML
+	private ListView<String> ScheduleListView1;
+	@FXML
+	private ListView<String> MapListView;
 	@FXML
     private TextField IDModify;
     @FXML
@@ -55,6 +65,15 @@ public class CTCCtrl implements Initializable {
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
+    private boolean stopupdate=false;
+    public void ButtonOpenClicked() {
+    	int ID=DepartureStationChoiceBox1.getSelectionModel().getSelectedIndex();
+    	mySin.openSection(mySin.getifSectionClose().length-ID-1);
+    }
+    public void ButtonCloseClicked() {
+    	int ID=DepartureStationChoiceBox1.getSelectionModel().getSelectedIndex();
+    	mySin.closeSection(mySin.getifSectionClose().length-ID-1);
+    }
 	public void ButtonCreateTrainClicked() {
 		if (mySin.addTrain(TrainIDTextField.getCharacters().toString(),SpeedTextField.getCharacters().toString())){
 			System.out.print("Successful");//TODO Change this into UI
@@ -63,6 +82,8 @@ public class CTCCtrl implements Initializable {
 		String line=LineChoiceBox.getSelectionModel().getSelectedItem();
 		String destination=DestinationChoiceBox.getSelectionModel().getSelectedItem();
 		String departuretime=DepartureTimeText.getCharacters().toString();
+		String[] origintime=departuretime.split(":");
+		int mytime=Integer.parseInt(origintime[0])*3600+Integer.parseInt(origintime[1])*60;
 		String[] routine=mySin.getStations();
 		Integer[] blocks = Arrays.stream(mySin.getBlocks()).boxed().toArray( Integer[]::new );
 		Integer[] distance = Arrays.stream(mySin.getDistance()).boxed().toArray( Integer[]::new );
@@ -102,8 +123,8 @@ public class CTCCtrl implements Initializable {
 		Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
 		//int[] intArray = Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray();
 		int tmpauthority=mySin.viewtrains().get(Integer.parseInt(TrainIDTextField.getCharacters().toString())).getAuthority();
-		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum()+1+tmpauthority,Integer.parseInt(SpeedTextField.getCharacters().toString()));
-		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,0,Integer.parseInt(SpeedTextField.getCharacters().toString()));//TODO convert time String (here is 0) into an Int
+		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),IntStream.of(Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray()).sum()+tmpauthority,1+(int)(Integer.parseInt(SpeedTextField.getCharacters().toString())*0.448));
+		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,mytime,1+(int)(Integer.parseInt(SpeedTextField.getCharacters().toString())*0.448));//TODO convert time String (here is 0) into an Int
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
@@ -124,22 +145,22 @@ public class CTCCtrl implements Initializable {
 		mySin.ModifyTrain(1, 3, 80);
 		mySin.ModifyTrain(2, 3, 80);
 		mySin.ModifyTrain(3, 3, 80);
-		String[] tmp1={"B0","B1 FIXME"};
+		String[] tmp1={"Block 1 ","Block2 PIONEER","Block 3 "};
 		Integer[] tmp2=new Integer[2];
 		tmp2[0]=1000;
 		tmp2[1]=1000;
 		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
 		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
 		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
-		tmp1[0]="B1 FIXME";
-		tmp1[1]="B2 StationA";
-		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
-		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
-		tmp1[0]="B1 FIXME";
+		tmp1[0]="Block 1 ";
+		tmp1[1]="Block2 PIONEER";
+		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		//mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		tmp1[0]="Block 1 ";
 		tmp1[1]="B3";
-		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		//mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
 		tmp1[0]="B2 StationA";
-		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
 
@@ -151,15 +172,6 @@ public class CTCCtrl implements Initializable {
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		String[] routine=mySin.getStations();
-		DepartureStationChoiceBox.setItems(FXCollections.observableArrayList(routine));
-		//TODO load info from trackmodel
-		LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
-		DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
-		//TODO load info from trackmodel
-		String[] Schedulename={"schedule1", "FIXME","schedule3"};
-		ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
-		//TODO load info from MBO
 		updateAnimation = new AnimationTimer() {
 
 			@Override
@@ -175,6 +187,42 @@ public class CTCCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+		ClockSingleton aClock=ClockSingleton.getInstance();
+		clockLabel.setText(aClock.getCurrentTimeString());
+		String[] routine=mySin.getStations();
+		String[] sections=mySin.getSections();
+		String[] realstations=mySin.getOnlyStations();
+		if (!stopupdate) {
+			DepartureStationChoiceBox.setItems(FXCollections.observableArrayList(routine));
+			//TODO load info from trackmodel
+			LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
+			DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
+			//TODO load info from trackmodel
+			String[] Schedulename={"schedule1", "FIXME","schedule3"};
+			ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
+			DepartureStationChoiceBox1.setItems(FXCollections.observableArrayList(sections));
+
+		}
+		String[] mapstring=new String[routine.length];
+		for (int i=0;i<mapstring.length;i++) {
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
+			boolean isOccupied=false;
+			for(String key:track.keySet()) {
+				TrackLine tmp=track.get(key);
+				if (i<=(tmp.getBlocks().size())&&i!=0)
+					isOccupied=TCInterface.getOccupancyCTC(tmp.getLineName(),i);
+			}		
+			if (isOccupied)
+				mapstring[routine.length-1-i]=routine[routine.length-1-i]+" Occupied";
+			else
+				mapstring[routine.length-1-i]=routine[routine.length-1-i]+" Not Occupied";
+		}
+		MapListView.setItems(FXCollections.observableArrayList(mapstring));
+		if (realstations!=null)
+		ScheduleListView1.setItems(FXCollections.observableArrayList(realstations));
+		if (!routine[0].equals("")) stopupdate=true;
+		//TODO load info from MBO
 		ClockSingleton myClock=ClockSingleton.getInstance();
 		int myTime=myClock.getCurrentTimeHours()*60*60+myClock.getCurrentTimeMinutes()*60+myClock.getCurrentTimeSeconds();
 		//DepartureStationChoiceBox.setItems(FXCollections.observableArrayList("STATIONA", "STATIONB"));

@@ -20,7 +20,7 @@ public class UIApp extends Application {
 	private static boolean ENABLE_4 = true;
 	private static boolean ENABLE_5 = true;
 	private static boolean ENABLE_6 = true;
-	private static boolean ENABLE_7 = true;
+	private static boolean ENABLE_7 = false;
 	public static final CountDownLatch latch = new CountDownLatch(1);
 	public static UIApp uiApp = null;
 

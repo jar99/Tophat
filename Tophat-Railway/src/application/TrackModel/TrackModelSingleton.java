@@ -2,10 +2,8 @@ package application.TrackModel;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -218,7 +216,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	@Override
 	public void setCrossing(String lineName, int blockID, boolean crossingOn) {
-		// TODO Auto-generated method stub
+		if (!track.containsKey(lineName))
+			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+		track.get(lineName).getBlock(blockID).setCrossingOn(crossingOn);
 
 	}
 
@@ -761,11 +762,15 @@ public class TrackModelSingleton implements TrackModelInterface {
 		return currentLine.getStation(stationName);
 	}
 
-	public TrackSection getCurrentSection() {
+	public TrackSection getSection(char sectionID) {
 		TrackLine currentLine = track.get(currentLineName);
-		TrackBlock currentBlock = currentLine.getBlock(currentBlockID);
-		char sectionID = currentBlock.getSectionID();
 		return currentLine.getSection(sectionID);
+	}
+
+	public void setCurrentSection(char sectionID) {
+		TrackLine currentLine = track.get(currentLineName);
+		TrackSection section = currentLine.getSection(sectionID);
+		currentBlockID = section.getFirstBlockID();
 	}
 
 	public Map<Integer, TrainLocation> getTrainMap() {
@@ -813,8 +818,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 	}
 
-	public Collection<TrackSection> getLineSection(String lineName) {
+	public Collection<TrackSection> getLineSections(String lineName) {
 		return track.get(lineName).getSections();
+	}
+
+	public Collection<TrackStation> getLineStations(String lineName) {
+		return track.get(lineName).getStations();
 	}
 
 	private TrackLine readLineFile(XSSFWorkbook workbook) {
@@ -857,7 +866,7 @@ public class TrackModelSingleton implements TrackModelInterface {
 			String cardinalDirection = blockRow.getCell(19).getStringCellValue();
 
 			boolean isStation = blockRow.getCell(21).getBooleanCellValue();
-			boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
+			// boolean hasBeacon = blockRow.getCell(22).getBooleanCellValue();
 			boolean isUnderground = blockRow.getCell(23).getBooleanCellValue();
 			boolean isCrossing = blockRow.getCell(24).getBooleanCellValue();
 			boolean hasLight = blockRow.getCell(25).getBooleanCellValue();
