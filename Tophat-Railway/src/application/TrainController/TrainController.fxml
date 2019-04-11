@@ -123,7 +123,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
+            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" onAction="#Speed" prefHeight="25.0" prefWidth="41.0" />
             <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" onAction="#Speed" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="147.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Power">
                <font>
@@ -151,13 +151,13 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="actualPower" layoutX="133.0" layoutY="161.0" prefHeight="17.0" prefWidth="67.0" text="0" />
+            <Label fx:id="actualPower" layoutX="109.0" layoutY="161.0" prefHeight="17.0" prefWidth="105.0" text="0" />
             <Label layoutX="10.0" layoutY="134.0" text="Actual Speed:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="actualSpeed" layoutX="133.0" layoutY="136.0" prefHeight="17.0" prefWidth="67.0" text="0" />
+            <Label fx:id="actualSpeed" layoutX="110.0" layoutY="136.0" prefHeight="17.0" prefWidth="96.0" text="0" />
             <Label layoutX="72.0" layoutY="199.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />

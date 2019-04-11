@@ -1,3 +1,4 @@
+
 package application.TrainController;
 
 import java.net.URL;
@@ -83,8 +84,9 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	void UpdateSpeed() {
-		Double speed = train.getSpeed();
-		String ctrlSpeed = String.format("%.2f", speed);
+		Double speed = train.getActualSpeed();
+		Double speedMPH = speed * 0.621371;
+		String ctrlSpeed = String.format("%.2f", speedMPH);
 		actualSpeed.setText(ctrlSpeed + "mph");
 	}
 
@@ -95,8 +97,13 @@ public class TrainControllerCtrl implements Initializable {
 	//need to calculate this 
 	void Power() {
 		Double inputPower = train.getPower();
-		String power = String.format("%.2f", inputPower);
-		actualPower.setText(power + "Kwatts");
+		if(inputPower >= 120000) {
+			//String power = String.format("%.2f", inputPower);
+			actualPower.setText("120,000Kwatts");
+		}else {
+			String power = String.format("%.2f", inputPower);
+			actualPower.setText(power + "Kwatts");
+		}
 	}
 
 	@FXML

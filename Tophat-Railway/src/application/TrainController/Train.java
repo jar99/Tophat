@@ -1,3 +1,4 @@
+
 package application.TrainController;
 
 import application.ClockSingleton;
@@ -29,6 +30,10 @@ public class Train implements TrainCtrlInterface {
 
 	public double getSpeed() {
 		return speed;
+	}
+	
+	public double getActualSpeed() {
+		return trainMod.getSpeed();
 	}
 
 	public void setPower(double power) {
@@ -208,3 +213,4 @@ public class Train implements TrainCtrlInterface {
 		}
 	}
 }
+
