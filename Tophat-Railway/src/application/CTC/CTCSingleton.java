@@ -15,6 +15,7 @@ import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 import application.TrackModel.TrackLine;
 import application.TrackModel.*;
+import application.TrackController.*;
 public class CTCSingleton implements CTCInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
@@ -81,6 +82,7 @@ public class CTCSingleton implements CTCInterface {
 		return distance;
 	}
 	public boolean addTrain(String ID,String Speed){
+
 		Pattern pattern = Pattern.compile("[0-9]*");
 		Matcher isNum1 = pattern.matcher(ID);
 		Matcher isNum2 = pattern.matcher(Speed);
@@ -107,6 +109,8 @@ public class CTCSingleton implements CTCInterface {
 			Schedule tmp1=myschedule.get(ID);
 			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
 			tmp1.mergeSchedule(tmp2);
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			TCInterface.createTrain("green",ID);
 			return true;
 		}
 		
