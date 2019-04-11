@@ -61,7 +61,7 @@
             <ComboBox fx:id="listTrainID" layoutX="11.0" layoutY="32.0" prefWidth="150.0" />
             <Label fx:id="MBOSpeed" layoutX="109.0" layoutY="190.0" prefHeight="17.0" prefWidth="46.0" />
             <Label fx:id="MBOAuthority" layoutX="108.0" layoutY="213.0" prefHeight="17.0" prefWidth="38.0" />
-            <Label fx:id="CTCSpeed" layoutX="113.0" layoutY="100.0" prefHeight="17.0" prefWidth="39.0" />
+            <Label fx:id="CTCSpeed" layoutX="113.0" layoutY="100.0" prefHeight="17.0" prefWidth="45.0" />
             <Label fx:id="CTCAuthority" layoutX="110.0" layoutY="125.0" prefHeight="17.0" prefWidth="41.0" />
          </children>
       </AnchorPane>

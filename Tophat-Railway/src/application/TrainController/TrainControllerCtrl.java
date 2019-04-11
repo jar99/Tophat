@@ -26,6 +26,7 @@ public class TrainControllerCtrl implements Initializable {
 
 
 	private AnimationTimer updateAnimation;
+	
 
 	// NOTE: This is where you link to elements in your FXML file
 	// Example:(fx:id="counter")

@@ -143,6 +143,7 @@ public class TrainControllerSingleton {
 	public void setTrainStatus(int trainStatus) {
 		this.trainStatus = trainStatus;
 	}
+	
 
 	/////////////////// TRAIN FAILURES//////////////////////
 	/**
