@@ -83,4 +83,26 @@ public class TrackSectionCurve extends TrackSection {
 			return getLength() / radius;
 	}
 
+	public double getBlockStartAngle(int cBlockID) {
+		double sectionDisplacement = 0.0;
+		for (int blockID = firstBlockID; blockID < cBlockID; blockID++) {
+			sectionDisplacement += getBlock(blockID).getLength();
+		}
+
+		double angle = Math.atan2((-1) * (startY - centerY), startX - centerX);
+		
+		if (isClockwise)
+			return angle - sectionDisplacement / radius;
+		else
+			return angle + sectionDisplacement / radius;
+
+	}
+
+	public double getBlockLengthAngle(int cBlockID) {		
+		if (isClockwise)
+			return (-1) * getBlock(cBlockID).getLength() / radius;
+		else
+			return getBlock(cBlockID).getLength() / radius;
+	}
+
 }
