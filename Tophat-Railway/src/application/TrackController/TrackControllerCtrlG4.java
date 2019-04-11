@@ -19,6 +19,7 @@ public class TrackControllerCtrlG4 implements Initializable {
 	private AnimationTimer updateAnimation;
 	private int CBIDG4 = mySin.getCurrentBlockIDG4();
 
+
 	// NOTE: This is where you link to elements in your FXML file
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!

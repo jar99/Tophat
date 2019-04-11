@@ -18,7 +18,7 @@ public class TrackControllerCtrlG3 implements Initializable {
 
 	private AnimationTimer updateAnimation;
 	private int CBIDG3 = mySin.getCurrentBlockIDG3();
-
+	
 	// NOTE: This is where you link to elements in your FXML file
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
@@ -119,6 +119,12 @@ public class TrackControllerCtrlG3 implements Initializable {
 	@FXML
 	void setSwitchDivergeG3() {
 		mySin.setSwitchDivergeG3();
+	}
+	
+	@FXML
+	void createTrain() {
+		mySin.createTrain("green", 1);
+		mySin.sendTrainToBlock(1, 140, 20);
 	}
 
 	// Starts the automatic update (NO TOUCHY!!)
