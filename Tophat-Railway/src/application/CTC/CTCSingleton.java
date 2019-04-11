@@ -15,6 +15,7 @@ import application.TrainController.TrainControllerSingleton;
 import application.TrainModel.TrainModelSingleton;
 import application.TrackModel.TrackLine;
 import application.TrackModel.*;
+import application.TrackController.*;
 public class CTCSingleton implements CTCInterface {
 
 	// Singleton Functions (NO TOUCHY!!)
@@ -35,11 +36,11 @@ public class CTCSingleton implements CTCInterface {
 
 	// NOTE: Put your data objects here
 	private HashMap<Integer,Train> trains =new HashMap<Integer,Train>();
-	private ArrayList<Schedule> myschedule=new ArrayList<Schedule>();
+	private HashMap<Integer,Schedule> myschedule=new HashMap<Integer,Schedule>();
 	final private HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
 	//private String[] Stations=TrackModelSingleton.getInstance().getBlockNameList().stream().toArray(String[]::new);
 	//TODO: need a function, getBlockName, return array/list of strings of all block names and stations
-	private String[] Stations={"B0","B1 FIXME","B2 StationA"};
+	private String[] Stations={"B0","B1 FIXME","B2 StationA","B3"};
 	private int[] blocks=new int[Stations.length];
 	private int[] distance=new int[Stations.length];
 	// NOTE: Put some functions here
@@ -50,10 +51,11 @@ public class CTCSingleton implements CTCInterface {
 		for (int i=0;i<150;i++){
 			Stations[i]="Block "+(i+1)+" StationnameFIXME";//+tmp.getBlock(i).getStationName();
 		}
-		Stations=new String[3];
+		Stations=new String[4];
 		Stations[0]="B0";
 		Stations[1]="B1 FIXME";
 		Stations[2]="B2 StationA";
+		Stations[3]="B3";
 		blocks=new int[Stations.length];
 		distance=new int[Stations.length];
 		return Stations;
@@ -80,6 +82,7 @@ public class CTCSingleton implements CTCInterface {
 		return distance;
 	}
 	public boolean addTrain(String ID,String Speed){
+
 		Pattern pattern = Pattern.compile("[0-9]*");
 		Matcher isNum1 = pattern.matcher(ID);
 		Matcher isNum2 = pattern.matcher(Speed);
@@ -96,28 +99,26 @@ public class CTCSingleton implements CTCInterface {
 	}
 	public boolean addSchedule(int ID, String myLine, String[] myStation, Integer[] mydistance, int myDeparturetime, int suggestedSpeed){
 		boolean flag=false;
-		for (Schedule m:myschedule) {
-			if (m.getID()==ID) {
-				flag=true;
-			}
-		}
+		if (myschedule.containsKey(ID)) flag=true;
 		if (!flag){
 			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
-			myschedule.add(tmp);
+			myschedule.put(ID,tmp);
 			return true;
 		}
 		else{
 			Schedule tmp1=myschedule.get(ID);
 			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed);
 			tmp1.mergeSchedule(tmp2);
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			TCInterface.createTrain("green",ID);
 			return true;
 		}
 		
 	}
 	public ArrayList<String> tolist(){
 		ArrayList<String> tmp=new ArrayList<String>();
-		for (Schedule s:myschedule){
-			tmp.addAll(s.printschedule());
+		for (Integer key:myschedule.keySet()){
+			tmp.addAll(myschedule.get(key).printschedule());
 		}
 		return tmp;
 	}
@@ -138,7 +139,7 @@ public class CTCSingleton implements CTCInterface {
 	public Map<Integer,Train> viewtrains(){
 		return trains;
 	}
-	public ArrayList<Schedule> viewSchedule(){
+	public HashMap<Integer,Schedule> viewSchedule(){
 		return myschedule;
 	}
 

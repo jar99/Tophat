@@ -61,7 +61,8 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	private int blockListG5[] = {105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143};
 	private int g5Index = 0;
 	private int trainID = 0;
-	private double blockListSpeed[] = {};
+	private double[] blockListSpeed = new double[200];
+	private int[] blockListAuthority = new int[200];
 	
 	// NOTE: Put some functions here
 
@@ -87,11 +88,34 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			 Entry<Integer, Train> entry = iterator.next();
 			 Train value = entry.getValue(); 
 			 suggestedSpeed = value.getSuggestedSpeed();
-		 trainID = value.getID();
-		 authority = value.getAuthority();
-		 for(int i = 0; i < authority; i++) {
-			 //TODO fill authority
-		 }
+			 trainID = value.getID();
+			 authority = value.getAuthority();
+			 if(authority > 63) { 
+				 for(int i = 62; i < authority; i++) {
+				 	blockListAuthority[i] = authority - i;
+				 	blockListSpeed[i] = suggestedSpeed;
+				 	track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+				 	track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+				 	track.get("green").getBlock(i+1).setControlAuthority(true);
+			 	}
+			 }
+			 if(authority < 63) {
+				 for(int i = 62; i < 150; i++) {
+					 blockListAuthority[i] = 150-i+authority;
+					 blockListSpeed[i] = suggestedSpeed;
+					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+					 track.get("green").getBlock(i+1).setControlAuthority(true);
+
+				 }
+				 for(int i = 0; i < authority; i++) {
+					 blockListAuthority[i] = authority-i;
+					 blockListSpeed[i] = suggestedSpeed;
+					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+					 track.get("green").getBlock(i+1).setControlAuthority(true);
+				 }
+			 }
 		  
 		  if (!sent_train) { try {
 			trackModSin.createTrain("green", trainID);
@@ -229,40 +253,66 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	 * 70 mph in blocks 13-16, 21-57, 63-68, 77-85, 110-116, 122-150
 	 * Suggested speed absolutely can NOT exceed speed limit in a block
 	 */
-	void setSuggestedSpeed(double suggestedSpeed, int blockID) {
-		if (((blockID >= 1 && blockID <=12) || (blockID >= 86 && blockID <= 101))
-				&& suggestedSpeed > 55)
-			throw new IllegalArgumentException("The suggested speed is over the speed limit for block: " + blockID);
-		if (((blockID >= 17 && blockID <= 20)  || (blockID >= 58 && blockID <= 62)
-				|| (blockID >= 69 && blockID <= 76) || (blockID >= 117 && blockID <= 121))
-				&& suggestedSpeed > 60)
-			throw new IllegalArgumentException("The suggested speed is over the speed limit for block: " + blockID);
-		if (((blockID >= 13 && blockID <= 16)  || (blockID >= 21 && blockID <= 57)
-				|| (blockID >= 63 && blockID <= 68) || (blockID >= 77 && blockID <= 85)
-				|| (blockID >= 110 && blockID <= 116) || (blockID >= 122 && blockID <= 150))
-				&& suggestedSpeed > 70)
-			throw new IllegalArgumentException("The suggested speed is over the speed limit for block: " + blockID);
-		else
-			blockListSpeed[blockID-1] = suggestedSpeed;
+	void checkSuggestedSpeed() {
+		for(int i = 0; i < 150; i++) {
+			if((i >= 0 && i <= 12) || (i >= 85 && i <= 100)) {
+				if(blockListSpeed[i] > 55)
+					throw new IllegalArgumentException("Suggested speed is too high for the block: " +(i+1));
+			}
+			if((i >= 16 && i <= 19) || (i >= 57 && i <= 61) || (i >= 68 && i <= 75) || (i >= 116 && i <= 120)) {
+				if(blockListSpeed[i] > 60)
+					throw new IllegalArgumentException("Suggested speed is too high for the block: " +(i+1));
+			}
+			if((i >= 12 && i <= 15) || (i >= 20 && i <= 56) || (i >= 62 && i <= 67) || (i >= 76 && i <= 84) || (i >= 109 && i <= 115) || (i >= 121 || i <= 149)) {
+				if(blockListSpeed[i] > 70)
+					throw new IllegalArgumentException("Suggested speed is too high for the block: " +(i+1));
+			}
+		}
 	}
 	
-//	String getSpeed(int controllerID, int blockID) {
-//		if (controllerID == 1) {
-//			for (int i = 0; i < blockListG1.length; i++) {
-//				if(i+1 == blockID)
-//					return Double.toString(blockListSpeed[i]);
-//			}
-//		}
-//		return Double.toString(suggestedSpeed);
-//
-//	}
+	String getSpeed(int controllerID, int blockID) {
+		if(track.isEmpty())
+			return null;
+		if (controllerID == 1) {
+			return Double.toString(blockListSpeed[blockID-1]);
+		}
+		if (controllerID == 2) {
+			return Double.toString(blockListSpeed[blockID-1]);
+		}
+		if (controllerID == 3) {
+			return Double.toString(blockListSpeed[blockID-1]);
+		}
+		if (controllerID == 4) {
+			return Double.toString(blockListSpeed[blockID-1]);
+		}
+		if (controllerID == 5) {
+			return Double.toString(blockListSpeed[blockID-1]);
+		}
+		else
+			return null;
+	}
 
-//	String getAuthority() {
-//		if (CBIDG1 == 0) {
-//			return Integer.toString(authorityA1);
-//		}
-//		return Integer.toString(authorityA2);
-//	}
+	String getAuthority(int controllerID, int blockID) {
+		if(track.isEmpty())
+			return null;
+		if(controllerID == 1) {
+			return Integer.toString(blockListAuthority[blockID-1]);
+		}
+		if(controllerID == 2) {
+			return Integer.toString(blockListAuthority[blockID-1]);
+		}
+		if(controllerID == 3) {
+			return Integer.toString(blockListAuthority[blockID-1]);
+		}
+		if(controllerID == 4) {
+			return Integer.toString(blockListAuthority[blockID-1]);
+		}
+		if(controllerID == 5) {
+			return Integer.toString(blockListAuthority[blockID-1]);
+		}
+		else
+			return null;
+	}
 	
 	int getCurrentBlockIDG1() {
 		return CBIDG1;
@@ -342,17 +392,6 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		return switchStraightG5;
 	}
 	
-	@Override
-	public double setSuggestedSpeed(String lineName, int blockID) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int setAuthority(String lineName) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public void importLine(TrackLine trackLine) {
@@ -943,9 +982,22 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public int getCurrentBlockIDG5() {
 		return CBIDG5;
 	}
+	
 	@Override
 	public void removeTrain(int trainID) {
+		//TODO
+	}
+
+	@Override
+	public void createTrain(String lineName, int trainID) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -195,4 +195,10 @@ public class TrainModelTrackTest implements TrackModelInterface {
 		return false;
 	}
 
+	@Override
+	public void setCrossing(String lineName, int blockID, boolean crossingOn) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

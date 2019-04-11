@@ -13,6 +13,7 @@ package application.TrainModel;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import application.ClockSingleton;
 import application.MBO.MBOInterface;
 import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelInterface;
@@ -25,7 +26,6 @@ class TrainModel implements TrainInterface {
 	private static final int BEACONSIZE = 126;
 	
 	private static final double GRAVITY = 9.8;
-	private static final double TIMESCALE = 1e9;
 	
 	private static final double MINFORCE = 10.0;
 	
@@ -47,7 +47,7 @@ class TrainModel implements TrainInterface {
     //These are the actual position read from the block this should change at some point
     private double x, y;
     
-    private double temperature;
+    private double temperature = 20;
     private boolean lights = false;
     private boolean interiorLights = false;
     private boolean leftDoorState = false;
@@ -127,13 +127,19 @@ class TrainModel implements TrainInterface {
     }
     /**
      * To update the train model this function is called.
-     * @param deltaTime
+     * 
      */
-    void update(long deltaTime){
+    void update(){
     	if(!isActive || hasCrashed) return;
+    	ClockSingleton clock = ClockSingleton.getInstance();
     	
 //    	System.out.println(this + " train runs at " + System.nanoTime());
-    	double dt = deltaTime/TIMESCALE;
+    	
+    	double dt = clock.getRatio(); // The amount of seconds between updates
+    	if(dt == 0) return; // If no time has passed there will not be an update to the train physics
+    	
+    	
+    	double v = kmhToms(speed);
     	
     	double grade = trModSin.getTrainBlockGrade(trainID);
     	double angle = 0.0;
@@ -156,23 +162,23 @@ class TrainModel implements TrainInterface {
     		an = Math.min(acelerationLimit, f/mass());
     	}
     	
-    	if(speed > 0) {		
+    	if(v > 0) {		
 			an -= brakeF()/mass();
     	}
     	
     	
-    	double vn = Math.min(laplace(dt, acceleration, an, speed), speedLimit); //This should prevent negative movement.
+    	double vn = Math.min(laplace(dt, acceleration, an, v), speedLimit); //This should prevent negative movement.
     	
     	vn = Math.max(0, vn); // Prevents negative movements
     	
-		double xn = laplace(dt, speed, vn, possition);
+		double xn = laplace(dt, v, vn, possition);
     	
 		
 //		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
 		
 		
 		possition = xn;
-		speed = vn;
+		speed = msTokmh(vn);
 		acceleration = an;
 		displacement = xn - possition;
 		
@@ -183,6 +189,12 @@ class TrainModel implements TrainInterface {
 			trainCrashed();
 		}
 		
+		if(trModSin.trainBlockHasBeacon(trainID)){
+			String beaconData = trModSin.getTrainBlockBeaconData(trainID);
+			System.out.println("Beacon: " + beaconData);
+			setBeaconData(beaconData);
+		}
+		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
 //		
@@ -191,6 +203,14 @@ class TrainModel implements TrainInterface {
 ////    	Update everyone else
 //		callMBO();
 //        
+    }
+    
+    private double kmhToms(double kmh) {
+    	return 0.277778*kmh;
+    }
+    
+    private double msTokmh(double ms) {
+    	return 3.60000288*ms;
     }
     
     private void trainCrashed() {
@@ -247,8 +267,15 @@ class TrainModel implements TrainInterface {
 		return trainLog.isEmpty();
 	}
 	
-	//Getters and setters
+	double getAcelleration() {
+		return acceleration;
+	}
 	
+	double getCrew() {
+		return crewCount;
+	}
+	
+	//Getters and setters	
 	public double getPower(){
 		return power;
 		
@@ -301,17 +328,30 @@ class TrainModel implements TrainInterface {
 	@Override
 	public int boardPassengers(int numPassengers) {
 		//TODO check for edge cases
+		int remainingPassangers = 0;
+		if(numPassengers > passengerCap) {
+			remainingPassangers = numPassengers - passengerCap;
+			numPassengers -= remainingPassangers;
+		}
 		passengerWeight += AVERAGEPASSENGERMASS*numPassengers;
-//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded.");
-		return passengers+=numPassengers;
+		passengers+=numPassengers;
+		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded. The train now has " + passengers + " people onboard. People were left behind " + remainingPassangers + " passangers.");
+		return remainingPassangers;
 	}
 	
 	@Override
 	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
+		int exessPassangers = 0;
+		if(numPassengers < passengers) {
+			exessPassangers = passengers - numPassengers;
+			numPassengers -= exessPassangers;
+		}
+		
 		passengerWeight -= AVERAGEPASSENGERMASS*numPassengers;
-//		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " alighted.");
-		return passengers-=numPassengers;
+		passengers-=numPassengers;
+		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers + " boarded. The train now has " + passengers + " people onboard. People were left behind " + exessPassangers + " passangers.");
+		return exessPassangers;
 	}
 	
 	@Override
@@ -323,6 +363,11 @@ class TrainModel implements TrainInterface {
 			return Integer.MIN_VALUE;
 		}
 	}
+	
+	double getSpeedLimit() {
+		return trModSin.getTrainBlockSpeedLimit(trainID);
+	}
+	
 
 	@Override
 	public double getTrackSpeed() {
@@ -374,13 +419,25 @@ class TrainModel implements TrainInterface {
 	@Override
 	public boolean toggleLeftDoors() {
 		leftDoorState = !leftDoorState;
+		if(leftDoorState) exchangePassangers();
 		return true;
 	}
 
 	@Override
 	public boolean toggleRightDoors() {
 		rightDoorState = !rightDoorState;
+		if(rightDoorState) exchangePassangers();
 		return true;
+	}
+	
+	private void exchangePassangers() {
+		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
+		int deltaPassengers = newPassengers-passengers;
+		if(deltaPassengers > 0) {
+			boardPassengers(deltaPassengers);
+		} else {
+			alightPassengers(deltaPassengers);
+		}
 	}
 	
 	@Override
@@ -473,12 +530,13 @@ class TrainModel implements TrainInterface {
 	 * This might be removed later.
 	 */
 	@Override
-	public void setBeacon(String beaconData) {   	
-		this.beaconData = beaconData.substring(0, BEACONSIZE); 	
+	public void setBeaconData(String beaconData) {  
+		this.beaconData = beaconData.substring(0, BEACONSIZE);
+		addTrainInformation("Beacon Data: " + this.beaconData);
 	}
 
 	@Override
-	public String getBeacon() {
+	public String getBeaconData() {
 		return beaconData;
 	}
 	

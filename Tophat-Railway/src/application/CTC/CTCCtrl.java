@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ListView;
+import application.CTC.Schedule;
+import application.ClockSingleton;
+import application.TrackController.*;
 public class CTCCtrl implements Initializable {
 
 	// Links to your Singleton (NO TOUCHY!!)
@@ -115,7 +118,34 @@ public class CTCCtrl implements Initializable {
 	}
 	public void ImportClicked(){
 		//TODO import Schedule file
-		System.out.println("I'm Clicked!");
+		mySin.addTrain("1", "80");
+		mySin.addTrain("2", "80");
+		mySin.addTrain("3", "80");
+		mySin.ModifyTrain(1, 3, 80);
+		mySin.ModifyTrain(2, 3, 80);
+		mySin.ModifyTrain(3, 3, 80);
+		String[] tmp1={"B0","B1 FIXME"};
+		Integer[] tmp2=new Integer[2];
+		tmp2[0]=1000;
+		tmp2[1]=1000;
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		tmp1[0]="B1 FIXME";
+		tmp1[1]="B2 StationA";
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		tmp1[0]="B1 FIXME";
+		tmp1[1]="B3";
+		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		tmp1[0]="B2 StationA";
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
+		ScheduleListView.setItems(ScheduleString);
+
+
+
+
 		//TODO update the current schedule
 	}
 	// Starts the automatic update (NO TOUCHY!!)
@@ -127,7 +157,7 @@ public class CTCCtrl implements Initializable {
 		LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
 		DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
 		//TODO load info from trackmodel
-		String[] Schedulename={"FIXME", "Schedule2","Schedule3"};
+		String[] Schedulename={"schedule1", "FIXME","schedule3"};
 		ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
 		//TODO load info from MBO
 		updateAnimation = new AnimationTimer() {
@@ -145,10 +175,34 @@ public class CTCCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+		ClockSingleton myClock=ClockSingleton.getInstance();
+		int myTime=myClock.getCurrentTimeHours()*60*60+myClock.getCurrentTimeMinutes()*60+myClock.getCurrentTimeSeconds();
 		//DepartureStationChoiceBox.setItems(FXCollections.observableArrayList("STATIONA", "STATIONB"));
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 		ManagementListView.setItems(TrainString);
-
+		HashMap<Integer,Schedule> tmp=new HashMap<Integer,Schedule>();
+		tmp=mySin.viewSchedule();
+		for (Integer key:tmp.keySet()){
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			Schedule tmp2=tmp.get(key);
+			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
+				if (tmp2.getLeaveTime()[i]==myTime){
+					
+					String Block=tmp2.getStation()[i];
+					int n=-1;
+					for (int m=0;m<mySin.getStations().length;m++){
+						if(mySin.getStations()[m].equals(Block)){
+							n=m;
+							break;
+						}
+					}
+					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getSpeed());
+				}
+			}
+			if (myTime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
+				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getSpeed());
+			}
+		}
 
 	}
 }
