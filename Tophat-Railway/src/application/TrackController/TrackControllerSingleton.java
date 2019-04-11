@@ -2,6 +2,7 @@ package application.TrackController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,6 +64,10 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	private int trainID = 0;
 	private double[] blockListSpeed = new double[200];
 	private int[] blockListAuthority = new int[200];
+	private int[] storedTrainID = new int [50];
+	private int storedTrainIDIndex = 0;
+	
+	final private Hashtable<Integer, TrainAuthority> trainAuthority = new Hashtable<Integer, TrainAuthority>();
 	
 	// NOTE: Put some functions here
 
@@ -78,54 +83,53 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		CTCSingleton ctcModSin = CTCSingleton.getInstance();
 		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
 
-
 		//get map<Integer,Train> 
-		Map<Integer, Train> trains = ctcModSin.viewtrains();
-
-		
-		 Iterator<Entry<Integer, Train>> iterator = trains.entrySet().iterator();
-		 while (iterator.hasNext()) { 
-			 Entry<Integer, Train> entry = iterator.next();
-			 Train value = entry.getValue(); 
-			 suggestedSpeed = value.getSuggestedSpeed();
-			 trainID = value.getID();
-			 authority = value.getAuthority();
-			 if(authority > 63) { 
-				 for(int i = 62; i < authority; i++) {
-				 	blockListAuthority[i] = authority - i;
-				 	blockListSpeed[i] = suggestedSpeed;
-				 	track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
-				 	track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
-				 	track.get("green").getBlock(i+1).setControlAuthority(true);
-			 	}
-			 }
-			 if(authority < 63) {
-				 for(int i = 62; i < 150; i++) {
-					 blockListAuthority[i] = 150-i+authority;
-					 blockListSpeed[i] = suggestedSpeed;
-					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
-					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
-					 track.get("green").getBlock(i+1).setControlAuthority(true);
-
-				 }
-				 for(int i = 0; i < authority; i++) {
-					 blockListAuthority[i] = authority-i;
-					 blockListSpeed[i] = suggestedSpeed;
-					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
-					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
-					 track.get("green").getBlock(i+1).setControlAuthority(true);
-				 }
-			 }
-		  
-		  if (!sent_train) { try {
-			trackModSin.createTrain("green", trainID);
-		} catch (SwitchStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} sent_train = !sent_train; }
-		  
-		 }
-		 
+//		Map<Integer, Train> trains = ctcModSin.viewtrains();
+//
+//		
+//		 Iterator<Entry<Integer, Train>> iterator = trains.entrySet().iterator();
+//		 while (iterator.hasNext()) { 
+//			 Entry<Integer, Train> entry = iterator.next();
+//			 Train value = entry.getValue(); 
+//			 suggestedSpeed = value.getSuggestedSpeed();
+//			 trainID = value.getID();
+//			 authority = value.getAuthority();
+//			 if(authority > 63) { 
+//				 for(int i = 62; i < authority; i++) {
+//				 	blockListAuthority[i] = authority - i;
+//				 	blockListSpeed[i] = suggestedSpeed;
+//				 	track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+//				 	track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+//				 	track.get("green").getBlock(i+1).setControlAuthority(true);
+//			 	}
+//			 }
+//			 if(authority < 63) {
+//				 for(int i = 62; i < 150; i++) {
+//					 blockListAuthority[i] = 150-i+authority;
+//					 blockListSpeed[i] = suggestedSpeed;
+//					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+//					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+//					 track.get("green").getBlock(i+1).setControlAuthority(true);
+//
+//				 }
+//				 for(int i = 0; i < authority; i++) {
+//					 blockListAuthority[i] = authority-i;
+//					 blockListSpeed[i] = suggestedSpeed;
+//					 track.get("green").getBlock(i+1).setSuggestedSpeed(blockListSpeed[i]);
+//					 track.get("green").getBlock(i+1).setAuthority(blockListAuthority[i]);
+//					 track.get("green").getBlock(i+1).setControlAuthority(true);
+//				 }
+//			 }
+//		  
+//		  if (!sent_train) { try {
+//			trackModSin.createTrain("green", trainID);
+//		} catch (SwitchStateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} sent_train = !sent_train; }
+//		  
+//		 }
+//		 
 
 	}
 
@@ -248,9 +252,9 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	 }
 	 
 	/*
-	 * Speed Limit: 55 mph in blocks 1-12, 86-101
-	 * 60 mph in blocks 17-20, 58-62, 69-76, 117-121
-	 * 70 mph in blocks 13-16, 21-57, 63-68, 77-85, 110-116, 122-150
+	 * Speed Limit: 55 mph (24.5872) in blocks 1-12, 86-101
+	 * 60 mph (26.8224) in blocks 17-20, 58-62, 69-76, 117-121
+	 * 70 mph (31.2928) in blocks 13-16, 21-57, 63-68, 77-85, 110-116, 122-150
 	 * Suggested speed absolutely can NOT exceed speed limit in a block
 	 */
 	void checkSuggestedSpeed() {
@@ -274,19 +278,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if (controllerID == 1) {
-			return Double.toString(blockListSpeed[blockID-1]);
+			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
 		}
 		if (controllerID == 2) {
-			return Double.toString(blockListSpeed[blockID-1]);
+			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
 		}
 		if (controllerID == 3) {
-			return Double.toString(blockListSpeed[blockID-1]);
+			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
 		}
 		if (controllerID == 4) {
-			return Double.toString(blockListSpeed[blockID-1]);
+			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
 		}
 		if (controllerID == 5) {
-			return Double.toString(blockListSpeed[blockID-1]);
+			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
 		}
 		else
 			return null;
@@ -296,19 +300,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if(controllerID == 1) {
-			return Integer.toString(blockListAuthority[blockID-1]);
+			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
 		}
 		if(controllerID == 2) {
-			return Integer.toString(blockListAuthority[blockID-1]);
+			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
 		}
 		if(controllerID == 3) {
-			return Integer.toString(blockListAuthority[blockID-1]);
+			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
 		}
 		if(controllerID == 4) {
-			return Integer.toString(blockListAuthority[blockID-1]);
+			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
 		}
 		if(controllerID == 5) {
-			return Integer.toString(blockListAuthority[blockID-1]);
+			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
 		}
 		else
 			return null;
@@ -990,14 +994,57 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 
 	@Override
 	public void createTrain(String lineName, int trainID) {
-		// TODO Auto-generated method stub
+		if(track.isEmpty())
+			return;
+		for(int i = 0; i < storedTrainID.length; i++) {
+			if(trainID == storedTrainID[i])
+				return;
+		}
+		storedTrainID[storedTrainIDIndex] = trainID;
+		storedTrainIDIndex++;
+		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
+		if (!sent_train) { try {
+			trackModSin.createTrain(lineName, trainID);
+		} catch (SwitchStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} sent_train = !sent_train; }
 		
 	}
 
 	@Override
 	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed) {
-		// TODO Auto-generated method stub
-		
+		if(track.isEmpty())
+			return;
+		TrainAuthority newTrain = new TrainAuthority(trainID, blockID, suggestedSpeed);
+		trainAuthority.put(trainID, newTrain);
+		int blockIDOccupied = 0;
+		for(int i = 0; i < 150; i++) {
+			if(track.get("green").getBlock(i+1).isOccupied())
+				blockIDOccupied = i+1;
+		}
+		trainAuthority.get(trainID).calculateBlockDisplacement(blockID, blockIDOccupied);
+		int authorityDisplacement = trainAuthority.get(trainID).getAuthorityDisplacement();
+		trainAuthority.get(trainID).setSuggestedSpeedEachBlock(suggestedSpeed, blockIDOccupied, authorityDisplacement);
+		trainAuthority.get(trainID).setAuthorityEachBlock(blockID, blockIDOccupied, authorityDisplacement);
 	}
 
+	public int getTrainID() {
+		if(storedTrainID.length == 0)
+			return 0;
+		else
+			return storedTrainID[0];
+		
+	}
+	
+	@Override
+	public boolean getOccupancyCTC(String lineName, int blockID) {
+		return track.get(lineName).getBlock(blockID).isOccupied();
+	}
+	
+	@Override
+	public int getAuthorityCTC(String lineName, int blockID) {
+		return track.get(lineName).getBlock(blockID).getAuthority();
+	}
+	
 }
