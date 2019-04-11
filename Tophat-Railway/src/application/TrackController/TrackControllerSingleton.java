@@ -81,7 +81,21 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public void update() {
 		// Example: get the count from a singleton and replace yours with the largest
 		CTCSingleton ctcModSin = CTCSingleton.getInstance();
-		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		
+		for(TrackLine line : track.values()) {
+			for(TrackBlock block : line.getBlocks()) {
+				try {
+					block.setOccupied(trackModInt.getOccupancy(line.getLineName(), block.getBlockID()));
+					if(block.isFailCircuit())
+						block.toggleFailCircuit();
+				} catch (TrackCircuitFailureException e) {
+					if(!block.isFailCircuit())
+						block.toggleFailCircuit();
+					e.printStackTrace();
+				}
+			}
+		}
 
 		//get map<Integer,Train> 
 //		Map<Integer, Train> trains = ctcModSin.viewtrains();
@@ -1000,6 +1014,8 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 			if(trainID == storedTrainID[i])
 				return;
 		}
+		TrainAuthority newTrain = new TrainAuthority(trainID, 63, 0);
+		trainAuthority.put(trainID, newTrain);
 		storedTrainID[storedTrainIDIndex] = trainID;
 		storedTrainIDIndex++;
 		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
@@ -1016,26 +1032,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed) {
 		if(track.isEmpty())
 			return;
-		TrainAuthority newTrain = new TrainAuthority(trainID, blockID, suggestedSpeed);
-		trainAuthority.put(trainID, newTrain);
 		int blockIDOccupied = 0;
 		for(int i = 0; i < 150; i++) {
 			if(track.get("green").getBlock(i+1).isOccupied())
 				blockIDOccupied = i+1;
 		}
+		trainAuthority.get(trainID).setAuthority(blockID);
+		trainAuthority.get(trainID).setSuggestedSpeed(suggestedSpeed);
 		trainAuthority.get(trainID).calculateBlockDisplacement(blockID, blockIDOccupied);
 		int authorityDisplacement = trainAuthority.get(trainID).getAuthorityDisplacement();
 		trainAuthority.get(trainID).setSuggestedSpeedEachBlock(suggestedSpeed, blockIDOccupied, authorityDisplacement);
 		trainAuthority.get(trainID).setAuthorityEachBlock(blockID, blockIDOccupied, authorityDisplacement);
 	}
 
-	public int getTrainID() {
-		if(storedTrainID.length == 0)
-			return 0;
-		else
-			return storedTrainID[0];
-		
-	}
 	
 	@Override
 	public boolean getOccupancyCTC(String lineName, int blockID) {
