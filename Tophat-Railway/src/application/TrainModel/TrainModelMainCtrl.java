@@ -90,6 +90,7 @@ public class TrainModelMainCtrl implements Initializable {
     }
     
     private void update() {
+    	//Fix train
     	ObservableList<TrainModel> items = trainSelector.getItems();
     	for(TrainModel train: mySin.getTrains()) {
     		if(!items.contains(train)) {

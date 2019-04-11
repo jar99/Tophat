@@ -21,7 +21,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	private static TrainModelSingleton instance;
 
 	private TrainModelSingleton() {
-		 trainModelHashTable = new Hashtable<>();	 
+		 trainModelHashTable = new Hashtable<>();
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -42,13 +42,14 @@ public class TrainModelSingleton implements TrainModelInterface {
 	// =====================================
 
 	private Hashtable<Integer, TrainModel> trainModelHashTable;
-	private static TrainControllerSingleton trnCtrl;
 	
     public TrainInterface createTrain(int trainID) {  	
     	if(trainExists(trainID)) return null;
-    	
     	TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
-//    	trainControllerSingleton.createTrain(trainID, train); //Create this method.
+//    	
+    	TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+    	trnCtrl.createTrain(trainID, train); //Create this method.
+    	
     	train.dispatch();
     	
         return trainModelHashTable.putIfAbsent(trainID, train);
@@ -72,9 +73,18 @@ public class TrainModelSingleton implements TrainModelInterface {
         return trainModelHashTable.get(trainID);
     }
     
-	public boolean removeTrain(int tranID) {	
-		TrainModel train = trainModelHashTable.remove(tranID);
-		if(train != null) train.remove();
+	public boolean removeTrain(int trainID) {
+		TrainModel train = trainModelHashTable.remove(trainID);
+		if(train != null) {
+			train.remove();
+		}
+		try {
+		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+		trnCtrl.removeTrain(trainID);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		return train != null;
 	}
 	
@@ -111,15 +121,11 @@ public class TrainModelSingleton implements TrainModelInterface {
     private long last;
 	public void update() {
 		if(disabled) return;
-		if(last <= 0) last = System.nanoTime(); // To get the current update to work
 		
-		long now = System.nanoTime();
 		for(TrainModel trainModel : trainModelHashTable.values()) {
 			//Any code to call for each train model update.
-			trainModel.update(now-last);
+			trainModel.update();
 		}
-		
-		last = now;
 	}
 
 	@Override

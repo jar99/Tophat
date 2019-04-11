@@ -77,9 +77,9 @@ public interface TrainInterface {
 	 */
 	double getMBOSpeed();
 	
-	void setBeacon(String beaconData);
+	void setBeaconData(String beaconData);
 	
-	String getBeacon();
+	String getBeaconData();
 	
 	/**
 	 * Gets the state of the left door
