@@ -148,7 +148,7 @@ public class TrackControllerCtrlG4 implements Initializable {
 		blockSpeedG4.setText(mySin.getSpeed(4, CBIDG4));
 		blockAuthorityG4.setText(mySin.getAuthority(4, CBIDG4));
 		
-		if (mySin.isCBOccupied())
+		if (mySin.isCBOccupied(4))
 			iconOccupancyG4.setFill(javafx.scene.paint.Color.GREEN);
 		else
 			iconOccupancyG4.setFill(javafx.scene.paint.Color.WHITE);
