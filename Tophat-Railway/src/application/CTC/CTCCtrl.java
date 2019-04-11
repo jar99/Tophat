@@ -115,7 +115,34 @@ public class CTCCtrl implements Initializable {
 	}
 	public void ImportClicked(){
 		//TODO import Schedule file
-		System.out.println("I'm Clicked!");
+		mySin.addTrain("1", "80");
+		mySin.addTrain("2", "80");
+		mySin.addTrain("3", "80");
+		mySin.ModifyTrain(1, 3, 80);
+		mySin.ModifyTrain(2, 3, 80);
+		mySin.ModifyTrain(3, 3, 80);
+		String[] tmp1={"B0","B1 FIXME"};
+		Integer[] tmp2=new Integer[2];
+		tmp2[0]=1000;
+		tmp2[1]=1000;
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		tmp1[0]="B1 FIXME";
+		tmp1[1]="B2 StationA";
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		tmp1[0]="B1 FIXME";
+		tmp1[1]="B3";
+		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		tmp1[0]="B2 StationA";
+		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
+		ScheduleListView.setItems(ScheduleString);
+
+
+
+
 		//TODO update the current schedule
 	}
 	// Starts the automatic update (NO TOUCHY!!)
@@ -127,7 +154,7 @@ public class CTCCtrl implements Initializable {
 		LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
 		DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
 		//TODO load info from trackmodel
-		String[] Schedulename={"FIXME", "Schedule2","Schedule3"};
+		String[] Schedulename={"schedule1", "FIXME","schedule3"};
 		ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
 		//TODO load info from MBO
 		updateAnimation = new AnimationTimer() {
