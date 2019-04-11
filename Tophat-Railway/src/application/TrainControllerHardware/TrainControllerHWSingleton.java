@@ -5,19 +5,20 @@ import com.fazecast.jSerialComm.SerialPortIOException;
 import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
 
-
 public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 
 	private static TrainControllerHWSingleton instance = null;
-	private static TrainModelSingleton trnModelSin = TrainModelSingleton.getInstance();
+	private static SerialPort primaryPort;
 	
 	/**
 	 * Private constructor that makes this a singleton class.
 	 */
 	private TrainControllerHWSingleton() throws SerialPortIOException{
+		trainId = -1;
 		String primary = "COM16";
-		SerialPort primaryPort = SerialPort.getCommPort(primary);
-		//if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
+		primaryPort = SerialPort.getCommPort(primary);
+		primaryPort.addDataListener(new TrainControllerDataListener());
+		if(!primaryPort.openPort()) throw new SerialPortIOException("Unable to open port");
 	}
 	
 	public static TrainControllerHWSingleton getInstance(){
@@ -25,7 +26,7 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 			if(instance == null) instance = new TrainControllerHWSingleton();
 		}
 		catch(SerialPortIOException e) {
-			System.err.println("Shit this is bad lol");
+			System.err.println("Oops");
 		}
 		
 		return instance;
@@ -62,11 +63,11 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	}
 	
 	void setKi(double newKi) {
-		ki = newKi;
+		this.ki = newKi;
 	}
 	
 	void setKp(double newKp) {
-		kp = newKp;
+		this.kp = newKp;
 	}
 	
 	void setSpeed(double newSpeed) {
@@ -105,9 +106,16 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	 * Controls Singleton connections, doesn't update UI
 	 */
 	public void update(){
+		TrainModelSingleton trnModelSin = TrainModelSingleton.getInstance();
 		TrainInterface train = trnModelSin.getTrain(trainId);
 		if(train == null) return;
 		
+		if(primaryPort.isOpen()) {
+			byte[] vals = new byte[1];
+			if(eBrake) vals[0] = 0x01;
+			else vals[0] = 0x00;
+			primaryPort.writeBytes(vals, 1);
+		}
 		mboAuthority = train.getMBOAuthority();
 		trackAuthority = train.getTrackAuthority();
 		mboSpeed = train.getMBOSpeed();
@@ -121,7 +129,7 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		train.setTemperature(temp);
 		train.setServiceBrake();
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
-		if(train.getEmergencyBrake() && !eBrake) train.resetEmergencyBrake();
+		if(train.getEmergencyBrake() && !eBrake) eBrake = true;
 		if(train.getLightState() != lights) train.toggleLights();
 		if(train.getLeftDoorState() != leftDoor) train.toggleLeftDoors();
 		if(train.getRightDoorState() != rightDoor) train.toggleRightDoors();
