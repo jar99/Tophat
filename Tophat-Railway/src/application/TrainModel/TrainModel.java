@@ -190,7 +190,7 @@ class TrainModel implements TrainInterface {
 			trainCrashed();
 		}
 		
-		if(trModSin.trainBlockHasBeacon(trainID)){
+		if(trModSin.trainBlockHasBeacon(trainID)) {
 			String beaconData = trModSin.getTrainBlockBeaconData(trainID);
 			System.out.println("Beacon: " + beaconData);
 			setBeaconData(beaconData);
@@ -333,7 +333,6 @@ class TrainModel implements TrainInterface {
 
 	@Override
 	public int boardPassengers(int numPassengers) {
-		//TODO check for edge cases
 		int remainingPassangers = 0;
 		if(numPassengers > passengerCap) {
 			remainingPassangers = numPassengers - passengerCap;
@@ -437,6 +436,7 @@ class TrainModel implements TrainInterface {
 	}
 	
 	private void exchangePassangers() {
+		if(!trModSin.trainBlockIsStation(trainID)) return;
 		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
 		int deltaPassengers = newPassengers-passengers;
 		if(deltaPassengers > 0) {

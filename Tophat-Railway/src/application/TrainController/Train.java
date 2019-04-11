@@ -33,6 +33,10 @@ public class Train implements TrainCtrlInterface {
 		return speed;
 	}
 	
+	public double getActualSpeed() {
+		return trainMod.getSpeed();
+	}
+	
 	public void setPower(double power) {
 		this.power = power;
 	}

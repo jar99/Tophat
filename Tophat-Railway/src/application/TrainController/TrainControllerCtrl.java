@@ -88,7 +88,7 @@ public class TrainControllerCtrl implements Initializable {
 	}
 	
 	void UpdateSpeed() {
-		actualSpeed.setText(Double.toString(train.getSpeed()) + "mph");
+		actualSpeed.setText(Double.toString(train.getActualSpeed()) + "mph");
 	}
 	
 	@FXML
@@ -200,7 +200,7 @@ public class TrainControllerCtrl implements Initializable {
 			engineStatus.setFill(javafx.scene.paint.Color.RED);
 			restartSpeed();
 		}else {
-			engineStatus.setFill(javafx.scene.paint.Color.GREEN);
+			engineStatus.setFill(javafx.scene.paint.Color.LIGHTGREEN);
 		}
 		
 	}

@@ -38,10 +38,10 @@ public class TrainControllerSingleton {
 
 	// Check TrainID and remove HashTable
 	public Train createTrain(int trainID, TrainInterface trainMod) {
-		TrainControllerCtrl.addTrainS(trainID);
-				Train train = new Train(trainID, trainMod);
-				trainCtrlHashTable.put(trainID, train);
-				return train;
+		TrainControllerCtrl.addTrainS(trainID); // Called to add train id to trinCTR
+		Train train = new Train(trainID, trainMod);
+		trainCtrlHashTable.put(trainID, train);
+		return train;
 	}
 	
 	public void removeTrain(int trianID) {
