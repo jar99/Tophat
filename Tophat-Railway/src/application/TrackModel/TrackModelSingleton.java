@@ -17,7 +17,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import application.ClockSingleton;
 
-//: 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -214,6 +213,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 			track.get(lineName).getBlock(blockID).setHeated(heated);
 		} else
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
+
+	}
+
+	@Override
+	public void setCrossing(String lineName, int blockID, boolean crossingOn) {
+		// TODO Auto-generated method stub
 
 	}
 
@@ -754,6 +759,13 @@ public class TrackModelSingleton implements TrackModelInterface {
 		TrackBlock currentBlock = currentLine.getBlock(currentBlockID);
 		String stationName = currentBlock.getStationName();
 		return currentLine.getStation(stationName);
+	}
+
+	public TrackSection getCurrentSection() {
+		TrackLine currentLine = track.get(currentLineName);
+		TrackBlock currentBlock = currentLine.getBlock(currentBlockID);
+		char sectionID = currentBlock.getSectionID();
+		return currentLine.getSection(sectionID);
 	}
 
 	public Map<Integer, TrainLocation> getTrainMap() {

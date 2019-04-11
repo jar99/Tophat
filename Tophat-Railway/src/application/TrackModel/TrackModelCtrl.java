@@ -120,6 +120,9 @@ public class TrackModelCtrl implements Initializable {
 	private ChoiceBox<?> choiceBoxLine;
 
 	private Map<Integer, Circle> trainIcons = new Hashtable<Integer, Circle>();
+	
+	private Arc currentArc = new Arc();
+	private Line currentLine = new Line();
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
@@ -169,6 +172,8 @@ public class TrackModelCtrl implements Initializable {
 		line.setStartY(startY);
 		line.setEndX(endX);
 		line.setEndY(endY);
+		line.setStroke(Color.GREY);
+		line.setStrokeWidth(3);
 
 		trackMap.getChildren().add(line);
 	}
@@ -189,6 +194,7 @@ public class TrackModelCtrl implements Initializable {
 		arc.setType(ArcType.OPEN);
 		arc.setFill(Color.TRANSPARENT); 
 		arc.setStroke(Color.GREY);
+		arc.setStrokeWidth(3);
 		
 		trackMap.getChildren().add(arc);
 	}
@@ -220,6 +226,9 @@ public class TrackModelCtrl implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
+		trackMap.getChildren().add(currentLine);
+		trackMap.getChildren().add(currentArc);
+		
 		// TODO: Implement CB Selection Box (See old code)
 		/*
 		 * ObservableList<String> list = FXCollections.observableArrayList();
@@ -259,59 +268,76 @@ public class TrackModelCtrl implements Initializable {
 		DecimalFormat df1 = new DecimalFormat("#.##");
 
 		if (mySin.hasALine()) {
-			TrackBlock CB = mySin.getCurrentBlock();
+			
+			TrackBlock cBlock = mySin.getCurrentBlock();
+			int cBlockID = cBlock.getBlockID();
+			
+			TrackSection cSection = mySin.getCurrentSection();
+			
+			if (cSection instanceof TrackSectionStraight) {
+				TrackSectionStraight cSectionStraight = (TrackSectionStraight) cSection;
+				moveCurrentLine(cSectionStraight.getBlockStartX(cBlockID), cSectionStraight.getBlockStartY(cBlockID), cSectionStraight.getBlockEndX(cBlockID), cSectionStraight.getBlockEndY(cBlockID));
+				hideCurrentArc();
+			} else if (cSection instanceof TrackSectionCurve) {
+				TrackSectionCurve cSectionCurve = (TrackSectionCurve) cSection;
+				moveCurrentArc(cSectionCurve.getCenterX(), cSectionCurve.getCenterY(), cSectionCurve.getRadius(), cSectionCurve.getBlockStartAngle(cBlockID), cSectionCurve.getBlockLengthAngle(cBlockID));
+				hideCurrentLine();
+				//System.out.println("Section: " + cSectionCurve.getSectionID() + " Length: " + cSectionCurve.getLength() + " CX: " + cSectionCurve.getCenterX() + " CY: " + cSectionCurve.getCenterY() + " R: " + cSectionCurve.getRadius() + " SAng: " + Math.toDegrees(cSectionCurve.getStartAngle()) + " LAng: " + Math.toDegrees(cSectionCurve.getLengthAngle()));
+			}
 
-			currentBlock.setText(CB.getName());
+			currentBlock.setText(cBlock.getName());
 
-			propLength.setText(df1.format(CB.getLength() * 0.000621371) + " miles");
-			propGrade.setText(df1.format(CB.getGrade()) + " %");
-			propSpeedLimit.setText(df1.format(CB.getSpdLmt() * 2.23694) + " mph");
-			propElevation.setText(df1.format(CB.getElev() * 3.28084) + " ft");
-			propTotalElevation.setText(df1.format(CB.getTotElev() * 3.28084) + " ft");
-			propDirection.setText(CB.getCardinalDirection());
+			propLength.setText(df1.format(cBlock.getLength() * 0.000621371) + " miles");
+			propGrade.setText(df1.format(cBlock.getGrade()) + " %");
+			propSpeedLimit.setText(df1.format(cBlock.getSpdLmt() * 2.23694) + " mph");
+			propElevation.setText(df1.format(cBlock.getElev() * 3.28084) + " ft");
+			propTotalElevation.setText(df1.format(cBlock.getTotElev() * 3.28084) + " ft");
+			propDirection.setText(cBlock.getCardinalDirection());
 
-			if (CB.isOccupied())
+			if (cBlock.isOccupied())
 				iconPropOccupied.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropOccupied.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isUnderground())
+			if (cBlock.isUnderground())
 				iconPropUnderground.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropUnderground.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isStation())
+			if (cBlock.isStation())
 				iconPropStation.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropStation.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isCrossing())
+			if (cBlock.isCrossing())
 				iconPropCrossing.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropCrossing.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.hasBeacon())
+			//TODO: Get Crossing On state
+			
+			if (cBlock.hasBeacon())
 				iconPropBeacon.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropBeacon.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isHeated())
+			if (cBlock.isHeated())
 				iconPropHeated.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropHeated.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.getJunctionA().isSwitch() || CB.getJunctionB().isSwitch())
+			if (cBlock.getJunctionA().isSwitch() || cBlock.getJunctionB().isSwitch())
 				iconPropSwitch.setFill(javafx.scene.paint.Color.GREEN);
 			else
 				iconPropSwitch.setFill(javafx.scene.paint.Color.WHITE);
 
 			// : Get switch connection
-			if (CB.getJunctionA().isSwitch()) {
-				TrackJunction junctionA = CB.getJunctionA();
+			if (cBlock.getJunctionA().isSwitch()) {
+				TrackJunction junctionA = cBlock.getJunctionA();
 				String switchConnection = mySin.getSwitchConnection(junctionA);
 				connectedSwitch.setText(switchConnection);
-			} else if (CB.getJunctionB().isSwitch()) {
-				TrackJunction junctionB = CB.getJunctionB();
+			} else if (cBlock.getJunctionB().isSwitch()) {
+				TrackJunction junctionB = cBlock.getJunctionB();
 				String switchConnection = mySin.getSwitchConnection(junctionB);
 				connectedSwitch.setText(switchConnection);
 			} else {
@@ -319,28 +345,28 @@ public class TrackModelCtrl implements Initializable {
 			}
 
 			// : Get Failure Status and display just like above
-			if (CB.isFailRail())
+			if (cBlock.isFailRail())
 				iconFailRail.setFill(javafx.scene.paint.Color.RED);
 			else
 				iconFailRail.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isFailCircuit())
+			if (cBlock.isFailCircuit())
 				iconFailCircuit.setFill(javafx.scene.paint.Color.RED);
 			else
 				iconFailCircuit.setFill(javafx.scene.paint.Color.WHITE);
 
-			if (CB.isFailPower())
+			if (cBlock.isFailPower())
 				iconFailPower.setFill(javafx.scene.paint.Color.RED);
 			else
 				iconFailPower.setFill(javafx.scene.paint.Color.WHITE);
 
 			// : Get Station Properties if a Station, otherwise erase
-			if (CB.isStation()) {
-				TrackStation CS = mySin.getCurrentStation();
-				propSchdBoarders.setText(Integer.toString(CS.getScheduledBoarders()));
-				propSchdAlighters.setText(Integer.toString(CS.getScheduledAlighters()));
-				propBoarding.setText(Integer.toString(CS.getBoarding()));
-				propAlighting.setText(Integer.toString(CS.getAlighting()));
+			if (cBlock.isStation()) {
+				TrackStation cStation = mySin.getCurrentStation();
+				propSchdBoarders.setText(Integer.toString(cStation.getScheduledBoarders()));
+				propSchdAlighters.setText(Integer.toString(cStation.getScheduledAlighters()));
+				propBoarding.setText(Integer.toString(cStation.getBoarding()));
+				propAlighting.setText(Integer.toString(cStation.getAlighting()));
 			} else {
 				propSchdBoarders.setText("--");
 				propSchdAlighters.setText("--");
@@ -407,6 +433,58 @@ public class TrackModelCtrl implements Initializable {
 
 		// TODO: Keep Track of current block on map by drawing a different colored line
 		// over it
+	}
+
+	private void hideCurrentLine() {
+		currentLine.setVisible(false);
+	}
+
+	private void moveCurrentArc(double centerX, double centerY, double radius, double blockStartAngle,
+			double blockLengthAngle) {
+		centerX = (centerX + dispX) * ratioX + 10;
+		centerY = (centerY + dispY) * ratioY + 10;
+		double radiusX = radius * ratioX;
+		double radiusY = radius * ratioY;
+		
+		currentArc.setCenterX(centerX);
+		currentArc.setCenterY(centerY);
+		currentArc.setRadiusX(radiusX);
+		currentArc.setRadiusY(radiusY);
+		currentArc.setStartAngle(Math.toDegrees(blockStartAngle));
+		currentArc.setLength(Math.toDegrees(blockLengthAngle));
+		
+		currentArc.setType(ArcType.OPEN);
+		currentArc.setFill(Color.TRANSPARENT);
+		currentArc.setStroke(Color.YELLOW);
+		currentArc.setStrokeWidth(4);
+		currentArc.toFront();
+
+		currentArc.setVisible(true);	
+		//TODO move to front?
+		
+	}
+
+	private void hideCurrentArc() {
+		currentArc.setVisible(false);
+	}
+
+	private void moveCurrentLine(double blockStartX, double blockStartY, double blockEndX, double blockEndY) {
+		blockStartX = (blockStartX + dispX) * ratioX + 10;
+		blockStartY = (blockStartY + dispY) * ratioY + 10;
+		blockEndX = (blockEndX + dispX) * ratioX + 10;
+		blockEndY = (blockEndY + dispY) * ratioY + 10;		//System.out.println(startX + " " + startY + " " + endX + " " + endY);
+
+		currentLine.setStartX(blockStartX);
+		currentLine.setStartY(blockStartY);
+		currentLine.setEndX(blockEndX);
+		currentLine.setEndY(blockEndY);
+		
+		currentLine.setStroke(Color.YELLOW);
+		currentLine.setStrokeWidth(4);
+		currentLine.toFront();
+		
+		currentLine.setVisible(true);		
+		//TODO move to front?
 	}
 
 }
