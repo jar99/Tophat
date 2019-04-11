@@ -4,6 +4,7 @@ import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
+import application.TrainControllerHardware.TrainControllerHWSingleton;
 import application.TrainModel.TrainModelSingleton;
 import application.CTC.CTCSingleton;
 
@@ -26,6 +27,7 @@ public class Main {
 	private static boolean ENABLE_4 = true;
 	private static boolean ENABLE_5 = true;
 	private static boolean ENABLE_6 = true;
+	private static boolean ENABLE_7 = false;
 
 	private static boolean printedUpdateDebugs = false; // ensures 1 print for update methods
 
@@ -36,6 +38,7 @@ public class Main {
 		TrackModelSingleton 		tckModSin = 	TrackModelSingleton.getInstance();
 		TrainModelSingleton 		trnModSin = 	TrainModelSingleton.getInstance();
 		TrainControllerSingleton 	trnCtrlSin = 	TrainControllerSingleton.getInstance();
+		TrainControllerHWSingleton 	trnHwSin = 		TrainControllerHWSingleton.getInstance();
 		MBOSingleton 				mboSin = 		MBOSingleton.getInstance();
 
 		ClockSingleton 				clock = 		ClockSingleton.getInstance();
@@ -55,7 +58,8 @@ public class Main {
 
 			@Override
 			public void run() {
-				update(ctcSin, tckCtrlSin, tckModSin, trnModSin, trnCtrlSin, mboSin, clock);
+				update(ctcSin, tckCtrlSin, tckModSin, trnModSin, trnCtrlSin, trnHwSin, mboSin, clock);
+
 			}
 		}, 0, 1, TimeUnit.SECONDS); // Determines update frequency (1 sec atm)
 
@@ -63,14 +67,17 @@ public class Main {
 
 	// calls each singleton's update() method
 	private static void update(CTCSingleton ctcSin, TrackControllerSingleton tckCtrlSin, TrackModelSingleton tckModSin,
-			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, MBOSingleton mboSin,
-			ClockSingleton clock) {
+			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, TrainControllerHWSingleton trnHwSin,
+			MBOSingleton mboSin, ClockSingleton clock) {
 		// call singleton update methods
 
-		if (DEBUG && !printedUpdateDebugs && !(ENABLE_1 && ENABLE_2 && ENABLE_3 && ENABLE_4 && ENABLE_5 && ENABLE_6))
+		if (DEBUG && !printedUpdateDebugs
+				&& !(ENABLE_1 && ENABLE_2 && ENABLE_3 && ENABLE_4 && ENABLE_5 && ENABLE_6 && ENABLE_7)) {
 			System.err.println("WARNING: Some updates Have been disabled");
+		}
 
 		try {
+
 			if (DEBUG && !printedUpdateDebugs)
 				System.out.println("DEBUG: 0 - Scheduler worked");
 
@@ -103,6 +110,12 @@ public class Main {
 				mboSin.update();
 			if (DEBUG && !printedUpdateDebugs)
 				System.out.println("DEBUG: 6 - MBO update worked");
+
+			if (ENABLE_7)
+				trnHwSin.update();
+			if (DEBUG && !printedUpdateDebugs) {
+				System.out.println("DEBUG: 7 - Train Controller Hardware update worked");
+			}
 
 			clock.update();
 

@@ -20,7 +20,7 @@ public class UIApp extends Application {
 	private static boolean ENABLE_4 = true;
 	private static boolean ENABLE_5 = true;
 	private static boolean ENABLE_6 = true;
-
+	private static boolean ENABLE_7 = false;
 	public static final CountDownLatch latch = new CountDownLatch(1);
 	public static UIApp uiApp = null;
 
@@ -120,6 +120,16 @@ public class UIApp extends Application {
 				Scene mboScene = new Scene(mboRoot, 1000, 600); // NOTE: Change last two ints to make window bigger
 				mboStage.setScene(mboScene);
 				mboStage.show();
+			}
+			
+			// Root for TCHW
+			if(ENABLE_7) {
+				Stage trnCtrlHWStage = new Stage();
+				Parent trnCtrlHWRoot = FXMLLoader.load(getClass().getResource("./TrainControllerHardware/TrainControllerHardware.fxml"));
+				trnCtrlHWStage.setTitle("Train Controller Hardware");
+				Scene trnCtrlHWScene = new Scene(trnCtrlHWRoot, 600, 400);
+				trnCtrlHWStage.setScene(trnCtrlHWScene);
+				trnCtrlHWStage.show();
 			}
 
 			// If we have time, we'll start adding styles using the line below
