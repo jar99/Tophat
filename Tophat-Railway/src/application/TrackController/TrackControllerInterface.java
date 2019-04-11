@@ -20,6 +20,21 @@ public interface TrackControllerInterface {
 	 */
 	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed);
 	
+	/**
+	 * 
+	 * @param blockID
+	 * @param lineName
+	 * @return
+	 */
+	public boolean getOccupancyCTC(String lineName, int blockID);
+	
+ /**
+  * 
+  * @param lineName
+  * @param blockID
+  * @return
+  */
+	public int getAuthorityCTC(String lineName, int blockID);
 	
 	/**
 	 * Gives Track Controller a new line
