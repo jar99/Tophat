@@ -167,7 +167,7 @@ class TrainModel implements TrainInterface {
     	}
     	
     	
-    	double vn = Math.min(laplace(dt, acceleration, an, v), speedLimit); //This should prevent negative movement.
+    	double vn = Math.min(laplace(dt, acceleration, an, v), kmhToms(speedLimit)); //This should prevent negative movement.
     	
     	vn = Math.max(0, vn); // Prevents negative movements
     	
@@ -176,12 +176,13 @@ class TrainModel implements TrainInterface {
 		
 //		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
 		
+
+		displacement = xn - possition;
 		
 		possition = xn;
 		speed = msTokmh(vn);
 		acceleration = an;
-		displacement = xn - possition;
-		
+
 //    	Update train location
 		try {
 			trModSin.updateTrainDisplacement(trainID, displacement);
@@ -220,7 +221,6 @@ class TrainModel implements TrainInterface {
 
 	private double powerF() {
 		if(!engineOperationState) return 0.0;
-		if(speed == 0.0) return 0.0; // prevents NaN
 		return power/speed;
 	}
 
@@ -282,8 +282,14 @@ class TrainModel implements TrainInterface {
     }
 	
 	public void setPower(double power){
-		if(power < 0) this.power = 0;
-		else if(power > maxPower) this.power = maxPower;
+		if(power < 0) {
+			this.power = 0.0;
+			return;
+		}
+		else if(power > maxPower) {
+			this.power = maxPower;
+			return;
+		}
 		this.power = power;
     }
 	
