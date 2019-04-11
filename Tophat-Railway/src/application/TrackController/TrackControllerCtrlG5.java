@@ -135,6 +135,7 @@ public class TrackControllerCtrlG5 implements Initializable {
 	private void update() {
 		currentBlockG5.setText(mySin.getCBNameG5());
 		CBIDG5 = mySin.getCurrentBlockIDG5();
+
 		
 		blockSpeedG5.setText(mySin.getSpeed(5, CBIDG5));
 		blockAuthorityG5.setText(mySin.getAuthority(5, CBIDG5));
