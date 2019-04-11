@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
+<BorderPane prefHeight="500.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainController.TrainControllerCtrl">
    <top>
       <AnchorPane style="-fx-background-color: green;" BorderPane.alignment="CENTER">
          <children>
@@ -123,7 +128,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" prefHeight="25.0" prefWidth="41.0" />
+            <TextField fx:id="speed" layoutX="14.0" layoutY="40.0" onAction="#Speed" prefHeight="25.0" prefWidth="41.0" />
             <Button fx:id="confirmSpeed" layoutX="58.0" layoutY="40.0" mnemonicParsing="false" onAction="#Speed" prefHeight="25.0" prefWidth="18.0" text="Button" />
             <Label layoutX="147.0" layoutY="13.0" prefHeight="21.0" prefWidth="48.0" text="Power">
                <font>

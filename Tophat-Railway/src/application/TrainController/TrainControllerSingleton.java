@@ -2,12 +2,7 @@ package application.TrainController;
 
 import java.util.Hashtable;
 
-import application.CTC.CTCSingleton;
-import application.MBO.MBOSingleton;
-import application.TrackController.TrackControllerSingleton;
-import application.TrackModel.TrackModelSingleton;
 import application.TrainModel.TrainInterface;
-import application.TrainModel.TrainModelSingleton;
 
 public class TrainControllerSingleton {
 
@@ -15,6 +10,7 @@ public class TrainControllerSingleton {
 	private static TrainControllerSingleton instance = null;
 
 	private TrainControllerSingleton() {
+		trainCtrlHashTable = new Hashtable<>();
 	}
 
 	public static TrainControllerSingleton getInstance() {
@@ -29,20 +25,13 @@ public class TrainControllerSingleton {
 
 	// NOTE: Put your data objects here
 	private int trainID;
-	private double numSpeed, power = 0, temperature = 0;
-	private int numPower, MBOAuthority= 0, CTCAuthority = 0, numTemperature, numOfTrains, trainStatus, size;
-	private boolean emergencyBrake, serviceBrake, leftDoor, rightDoor, driveMode, engineFail, brakeFail, signalFail;
-	private boolean lights;
-	private double speed = 0, MBOSpeed = 0, CTCSpeed = 0;
-
+	
 	// create hashtable for each individual train
 	// public void makeTrain(put information in){
 
-	private Hashtable<Integer, Train> trainCtrlHashTable = new Hashtable<>();
-
-	TrainModelSingleton trnModSin = TrainModelSingleton.getInstance();
+	private Hashtable<Integer, Train> trainCtrlHashTable;
+	
 	Train train;
-	private TrainInterface trainMod;
 
 	// NOTE: Put some functions here
 	// Hardware will use signalton and get information
@@ -51,205 +40,170 @@ public class TrainControllerSingleton {
 
 	// Check TrainID and remove HashTable
 	public Train createTrain(int trainID, TrainInterface trainMod) {
-				this.trainMod = trainMod;
-					Train train = new Train(trainID);
-					trainCtrlHashTable.put(trainID, train);
-					return train;
+		TrainControllerCtrl.addTrainS(trainID);
+				Train train = new Train(trainID, trainMod);
+				trainCtrlHashTable.put(trainID, train);
+				return train;
 	}
 	
 	public void removeTrain(int trianID) {
-			if(!trainCtrlHashTable.contains(trainID)) {
-				trainCtrlHashTable.remove(trainID);
-			}
+		TrainControllerCtrl.removeTrainS(trainID);
+		trainCtrlHashTable.remove(trainID);
 	}
 	// Sends TrainID as INTEGER
 	public Train getTrainID(int trainID) {
 			return trainCtrlHashTable.get(trainID);
 	}
 	
-
-	public void setTrainID(int trainID) {
-		this.trainID = trainID;
+	public void setTrain(int trainID) {
+		 Train train = getTrainID(trainID);
+		 if(train != null) {
+			 this.train = train;
+		 }
+		
 	}
 	
 	public int getTrainSize() {
 		return trainCtrlHashTable.size();
 	}
 	
-	public void setTrainSize(int size) {
-		this.size = size;
-	}
-	
 	// Send Speed as DOUBLE
 	public double getSpeed() {
-			return speed;
+		if(train == null) return -7.7;
+			return train.getSpeed();
 	}
 
 	public void setSpeed(double speed) {
+		if(train == null) return;
 		if(speed < 0) {
 			throw new IllegalArgumentException("Cannot have negative speed.");
 		}
-		this.speed = speed;
+		train.setSpeed(speed);
 	}
 
 	// Send Power as Double
 	public double getPower() {
-		return power;
-	}
-
-	public void setPower(double power) {
-		this.power = power;
+		if(train == null) return - 6.6;
+		return train.getPower();
 	}
 
 	// Sends Temperature as DOUBLE
 	public double getTemperature() {
-		return temperature;
+		if(train == null) return - 5.5;
+		return train.getTemperature();
 	}
 
 	public void setTemperature(double temperature) {
+		if(train == null) return;
 		if(temperature < 0) {
 			throw new IllegalArgumentException("Cannot have negative temperature.");
 		}
-		this.temperature = temperature;
+		train.setTemperature(temperature);
 	}
 
 	// Boolean SeriveBrake
 	public boolean getServiceBrake() {
-		return serviceBrake;
+		if(train == null) return true;
+		return train.getServiceBrake();
 	}
 
-	public void setServiceBrake(boolean serviceBrake) {
-		this.serviceBrake = serviceBrake;
+	public void toggleServiceBrake() {
+		if(train == null) return;
+		train.toggleServiceBrake();
 	}
 
 	// Boolean EmergencyBrake
-	public boolean getemergencyBrake() {
-		return emergencyBrake;
+	public boolean getEmergencyBrake() {
+		if(train == null) return true;
+		return train.getEmergencyBrake();
 	}
 
-	public void setemergencyBrake(boolean emergencyBrake) {
-		this.emergencyBrake = emergencyBrake;
-	}
-
-	/**
-	 * 1 = Engine Failure, 2 = Brake Failure, 3 = Signal Lost
-	 * 
-	 * @return
-	 */
-	public int getTrainStatus() {
-		return trainStatus;
-	}
-
-	public void setTrainStatus(int trainStatus) {
-		this.trainStatus = trainStatus;
+	public void toggleEmergencyBrake() {
+		if(train == null) return;
+		train.toggleEmergencyBrake();
 	}
 	
-
-	/////////////////// TRAIN FAILURES//////////////////////
-	/**
-	 * Engine Failure
-	 * 
-	 * @return
-	 */
-	public boolean getEngineStatus() {
-		return engineFail;
+	public void setEmergencyBrake(boolean b) {
+		if(train == null) return;
+		if(train.getEngineStatus() != b) {
+			train.toggleEmergencyBrake();
+		}
 	}
 
-	public void setEngineStatus(boolean engineFail) {
-		this.engineFail = engineFail;
-	}
-
-	/**
-	 * Brake Failure
-	 * 
-	 * @return
-	 */
-	public boolean getBrakeStatus() {
-		return brakeFail;
-	}
-
-	public void setBrakeStatus(boolean brakeFail) {
-		this.brakeFail = brakeFail;
-	}
-
-	/**
-	 * Signal Failure
-	 * 
-	 * @return
-	 */
-	public boolean getSignalStatus() {
-		return signalFail;
-	}
-
-	public void setSignalStatus(boolean signalFail) {
-		this.signalFail = signalFail;
+	public boolean getTrainMode() {
+		if(train == null) return false;
+		return train.getDriveMode();
 	}
 
 //////////////////////END OF TRAIN SHIT/////////////////////////////////////////	
 
 	public boolean getLeftDoor() {
-		return leftDoor;
-	}
-
-	public void setLeftDoor(boolean leftDoor) {
-		this.leftDoor = leftDoor;
+		if(train == null) return false;
+		return train.leftDoorState();
 	}
 
 	public boolean getRightDoor() {
-		return rightDoor;
+		if(train == null) return false;
+		return train.rightDoorState();
 	}
 
-	public void setRightDoor(boolean rightDoor) {
-		this.rightDoor = rightDoor;
+	public void setLeftDoor(boolean b) {
+		if(train == null);
+		if(train.leftDoorState() != b) {
+			train.toggleLeftDoor();
+		}
+		
 	}
 
-	public boolean getLights() {
-		return lights;
+	public void setRightDoor(boolean b) {
+		if(train == null);
+		if(train.rightDoorState() != b) {
+			train.toggleRightDoor();
+		}
 	}
 	
-	public void setLights(boolean lights) {
-		this.lights = lights;
+	public boolean getLights() {
+		if(train == null) return false;
+		return train.getLights();
 	}
+	
+	public void setLights(boolean b) {
+		if(train == null) return;
+		if(train.getLights() != b) {
+			train.toggleLights();
+		}
+	}
+	
 	// Drive Mode
 	public boolean getDriveMode() {
-		return driveMode;
+		if(train == null) return true;
+		return train.getDriveMode();
 	}
 
 	public void setDriveMode(boolean driveMode) {
-		this.driveMode = driveMode;
+		if(train == null) return;
+		train.setDriveMode(driveMode);
 	}
 
 	
 	public double getMBOSpeed() {
-		return MBOSpeed;
-	}
-	
-	public void setMBOSpeed(double MBOSpeed) {
-		this.MBOSpeed = MBOSpeed;
+		if(train == null) return -4.4;
+		return train.getMBOSpeed();
 	}
 	
 	public int getMBOAuthority() {
-		return MBOAuthority;
-	}
-	
-	public void setMBOAuthoirty(int MBOAuthority) {
-		this.MBOAuthority = MBOAuthority;
+		if(train == null) return -4;
+		return train.getMBOAuthority();
 	}
 	
 	public double getCTCSpeed() {
-		return CTCSpeed;
-	}
-	
-	public void setCTCSpeed(double CTCSpeed) {
-		this.CTCSpeed = CTCSpeed;
+		if(train == null) return -3.3;
+		return train.getCTCSpeed();
 	}
 	
 	public int getCTCAuthority() {
-		return CTCAuthority;
-	}
-	
-	public void setCTCAuthoirty(int CTCAuthority) {
-		this.CTCAuthority = CTCAuthority;
+		if(train == null) return -3;
+		return train.getCTCAuthority();
 	}
 	
 	
@@ -261,30 +215,44 @@ public class TrainControllerSingleton {
  
 
 	public void update() {
-		
-
-		
-		if(trainMod == null) {
-			return;
+		for(Train train : trainCtrlHashTable.values()) {
+			//Any code to call for each train model update.
+			train.update();
 		}
-		speed = trainMod.getSpeed();
-		
-		MBOSpeed = trainMod.getMBOSpeed();
-		MBOAuthority = trainMod.getMBOAuthority();
-		CTCSpeed = trainMod.getTrackSpeed();
-		CTCAuthority = trainMod.getTrackAuthority();
-		
-		//leftDoor = trainMod.getLeftDoorState();
-		
-		//rightDoor = trainMod.getRightDoorState();
-		  
-		//engineFail = trainMod.engineState();
-		
-		//MBOAuthority = trainMod.getMBOAuthority();
-		
-		//MBOSpeed = trainMod.getMBOSpeed();
-		 //trainStatus = trainMod.
-
 	}
 
+	public boolean getEngineStatus() {
+		if(train == null) return true;
+		return train.getEngineStatus();
+	}
+
+	public boolean getBrakeStatus() {
+		if(train == null) return true;
+		return train.getBrakeStatus();
+	}
+
+	public boolean getSignalStatus() {
+		if(train == null) return true;
+		return train.getSignalStatus();
+	}
+
+	public void setKP(double kp) {
+		if(train == null) return;
+		train.setKP(kp);
+	}
+	
+	public void setKI(double ki) {
+		if(train == null) return;
+		train.setKI(ki);
+	}
+
+	public double getKI() {
+		if(train == null) return 1.0;
+		return train.getKI();
+	}
+
+	public double getKP() {
+		if(train == null) return 1.0;
+		return train.getKP();
+	}
 }
