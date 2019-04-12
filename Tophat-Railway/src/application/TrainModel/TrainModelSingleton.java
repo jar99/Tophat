@@ -54,6 +54,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 //    	if (trainIDHW < 0) { // This is the check if no train belongs to train ctr hardware
 //    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
 //    		//TODO assigne it
+//    		
 //    		trainIDHW = trainID;
 //    	} else {
 //    		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
