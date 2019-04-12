@@ -7,7 +7,7 @@ import java.util.Map;
 
 //NOTE: don't need to clone, just create multiple instances during import and send those.
 
-public class TrackLine {
+public class TrackLine implements TrackLineInterface{
 
 	final private String lineName;
 

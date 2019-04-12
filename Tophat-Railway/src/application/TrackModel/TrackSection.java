@@ -3,7 +3,7 @@ package application.TrackModel;
 import java.util.Collections;
 import java.util.Map;
 
-public abstract class TrackSection {
+public abstract class TrackSection implements TrackSectionInterface {
 	// Identification
 	final protected String lineName;
 	final protected char sectionID;
