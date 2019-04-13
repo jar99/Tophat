@@ -205,4 +205,10 @@ public class CTCSingleton implements CTCInterface {
 		track.put(trackLine.getLineName(), trackLine);
 	}
 
+	@Override
+	public boolean getSectionMaintenance(String lineName, int blockID) {
+		// TODO Implement function to tell Track Controller what blocks need maintenance
+		return false;
+	}
+
 }
