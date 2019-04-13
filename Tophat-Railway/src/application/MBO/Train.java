@@ -1,32 +1,45 @@
 package application.MBO;
 
 public class Train {
-	private int ID;
-	private int departTime;
-	private int returnTime;
+	private String ID;
+	private String departTime;
+	private String returnTime;
+	private boolean operational;
 	
-	public Train(int ID, int departTime, int returnTime) {
+	public Train(String ID, String departTime, String returnTime) {
 		this.ID = ID;
 		this.departTime = departTime;
 		this.returnTime = returnTime;
 	}
 	
-	public int getID() {
+	public String getID() {
 		return ID;
 	}
-	public int getDepartTime() {
+	public String getDepartTime() {
 		return departTime;
 	}
-	public int getReturnTime() {
+	public String getReturnTime() {
 		return returnTime;
 	}
-	public void setID(int ID) {
+	public void setID(String ID) {
 		this.ID = ID;
 	}
-	public void setDepartTime(int departTime) {
+	public void setDepartTime(String departTime) {
 		this.departTime = departTime;
 	}
-	public void setReturnTime(int returnTime) {
+	public void setReturnTime(String returnTime) {
 		this.returnTime = returnTime;
+	}
+
+	public boolean isOperational(int currentTime) {
+		if (currentTime >= Integer.valueOf(departTime) && currentTime <= Integer.valueOf(returnTime))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	public void setOperational(boolean operational) {
+		this.operational = operational;
 	}
 }

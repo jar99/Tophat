@@ -1,8 +1,9 @@
 package application.CTC;
 import java.util.stream.IntStream;
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.*;
+
+import application.TrackModel.TrackLine;
 import application.TrackModel.TrackModelSingleton;
 import javafx.collections.*;
 import javafx.animation.AnimationTimer;
@@ -28,6 +29,9 @@ public class CTCCtrl implements Initializable {
 	// Example:(fx:id="counter")
 	// WARNING: Your fx:id and variable name Must Match!
 	// Links to FXML elements
+    @FXML
+    private Label clockLabel;
+
 	@FXML
 	private TextField TrainIDTextField;
 	@FXML
@@ -148,15 +152,15 @@ public class CTCCtrl implements Initializable {
 		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
 		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
 		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
-		tmp1[0]="B1 FIXME";
-		tmp1[1]="B2 StationA";
-		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
-		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
-		tmp1[0]="B1 FIXME";
+		tmp1[0]="Block 1 ";
+		tmp1[1]="Block2 PIONEER";
+		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		//mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
+		tmp1[0]="Block 1 ";
 		tmp1[1]="B3";
-		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
+		//mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
 		tmp1[0]="B2 StationA";
-		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
+		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
 
@@ -183,6 +187,8 @@ public class CTCCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+		ClockSingleton aClock=ClockSingleton.getInstance();
+		clockLabel.setText(aClock.getCurrentTimeString());
 		String[] routine=mySin.getStations();
 		String[] sections=mySin.getSections();
 		String[] realstations=mySin.getOnlyStations();
@@ -199,7 +205,18 @@ public class CTCCtrl implements Initializable {
 		}
 		String[] mapstring=new String[routine.length];
 		for (int i=0;i<mapstring.length;i++) {
-			mapstring[i]=routine[i]+" Not Occupied";
+			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+			HashMap<String, TrackLine> track = new HashMap<String, TrackLine>();
+			boolean isOccupied=false;
+			for(String key:track.keySet()) {
+				TrackLine tmp=track.get(key);
+				if (i<=(tmp.getBlocks().size())&&i!=0)
+					isOccupied=TCInterface.getOccupancyCTC(tmp.getLineName(),i);
+			}		
+			if (isOccupied)
+				mapstring[routine.length-1-i]=routine[routine.length-1-i]+" Occupied";
+			else
+				mapstring[routine.length-1-i]=routine[routine.length-1-i]+" Not Occupied";
 		}
 		MapListView.setItems(FXCollections.observableArrayList(mapstring));
 		if (realstations!=null)

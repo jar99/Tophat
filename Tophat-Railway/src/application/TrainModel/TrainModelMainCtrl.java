@@ -77,8 +77,7 @@ public class TrainModelMainCtrl implements Initializable {
     // Starts the automatic update (NO TOUCHY!!)
     public void initialize(URL url, ResourceBundle resourceBundle) {
     	windowCtrls = new ArrayList<>();
-    	mySin.createTrain(-1, 7, 70.0);
-//    	trainSelector.getItems().add(); //This is just test code to have a default train.
+    	
         updateAnimation = new AnimationTimer() {
         	
  			@Override
@@ -87,19 +86,36 @@ public class TrainModelMainCtrl implements Initializable {
  			}
  		};
  		updateAnimation.start();
+ 		trainModCtrl = this; //This is a bad hack
+ 		
+ 		mySin.createTrain(-1, 7, 70.0);
     }
     
     private void update() {
-    	//Fix train
-    	ObservableList<TrainModel> items = trainSelector.getItems();
-    	for(TrainModel train: mySin.getTrains()) {
-    		if(!items.contains(train)) {
-    			items.add(train);
-    		}
-    	}
-    	
     	for(TrainModelCtrl ctrl: windowCtrls) {
     		ctrl.update();
     	}
     }
+    
+    
+	static TrainModelMainCtrl trainModCtrl;
+	
+	static void addTrainS(int trainID, TrainModel train) {
+		trainModCtrl.addTrain(trainID, train);
+	}
+	
+	static void removeTrainS(int trainID, TrainModel train) {
+		trainModCtrl.removeTrain(trainID, train);
+	}
+	
+	void addTrain(int trainID, TrainModel train) {
+		ObservableList<TrainModel> list = trainSelector.getItems();
+		if(!list.contains(train)) list.add(train);
+		
+	}
+
+	void removeTrain(int trainID, TrainModel train) {
+		ObservableList<TrainModel> list = trainSelector.getItems();
+		if(list.contains(train)) list.remove(train);
+	}
 }
