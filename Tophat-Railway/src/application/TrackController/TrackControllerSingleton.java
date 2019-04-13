@@ -1115,6 +1115,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 				try {
 					if(trackModInt.getOccupancy(line.getLineName(), block.getBlockID())) {
 						blockIDOccupied = block.getBlockID();
+						break;
 					}
 				} catch (TrackCircuitFailureException e) {
 					e.printStackTrace();
@@ -1162,12 +1163,25 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	
 	@Override
 	public boolean getOccupancyCTC(String lineName, int blockID) {
-		return track.get(lineName).getBlock(blockID).isOccupied();
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		try {
+			return trackModInt.getOccupancy(lineName, blockID);
+		} catch (TrackCircuitFailureException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
+
+	@Override
+	public boolean isBlockBroken(String lineName, int blockID) {
+		// TODO Write method to return if a block is broken.
+		return false;
+	}
+
 	@Override
 	public int getAuthorityCTC(String lineName, int blockID) {
-		return track.get(lineName).getBlock(blockID).getAuthority();
-	}
-	
+		// TODO Auto-generated method stub
+		return 0;
+	}	
 }
