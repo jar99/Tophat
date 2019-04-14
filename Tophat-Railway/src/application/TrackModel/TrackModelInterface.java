@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+ * <h1>Track Model Interface</h1> Defines methods to be used by other modules
+ * for interacting with the Track Model
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public interface TrackModelInterface {
 
 	// =========CTC Methods==========
@@ -20,6 +28,14 @@ public interface TrackModelInterface {
 	 * @return the number of scheduled alighters
 	 */
 	public int getScheduledAlighting(String lineName, String stationName);
+
+	/**
+	 * Get number of passengers who have boarded trains.
+	 * 
+	 * @param lineName - the name of the station's line
+	 * @return the total number of boarders
+	 */
+	public int getTotalBoarders(String lineName);
 
 	// =========Track Controller Methods==========
 	/**

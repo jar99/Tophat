@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Application;
@@ -10,6 +11,18 @@ import javafx.stage.Stage;
 
 //WARNING: You MUST run this program from Main.java, 
 //	otherwise the Singleton's won't talk to each other
+
+/**
+ * <h1>User Interface Launcher</h1> Creates the windows for each module UI and
+ * launches them. Responsible for UI - Module Communication.
+ *
+ * WARNING: You MUST run this program from Main.java, otherwise the Singleton's
+ * won't talk to each other
+ * 
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class UIApp extends Application {
 
 	// NOTE: Use this to disable update methods for other modules
@@ -39,45 +52,7 @@ public class UIApp extends Application {
 
 			// Root for Track Controller
 			if (ENABLE_2) {
-				Stage tckCtrlStage = new Stage();
-				Parent tckCtrlRoot = FXMLLoader.load(getClass().getResource("./TrackController/TrackController.fxml"));
-				tckCtrlStage.setTitle("Track Controller G1");
-				Scene tckCtrlScene = new Scene(tckCtrlRoot, 810, 600); // NOTE: Change last two ints to make window
-																		// bigger
-				tckCtrlStage.setScene(tckCtrlScene);
-				tckCtrlStage.show();
-				
-				Stage tckCtrlStageG2 = new Stage();
-				Parent tckCtrlRootG2 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG2.fxml"));
-				tckCtrlStageG2.setTitle("Track Controller G2");
-				Scene tckCtrlSceneG2 = new Scene(tckCtrlRootG2, 810, 600); // NOTE: Change last two ints to make window
-																		// bigger
-				tckCtrlStageG2.setScene(tckCtrlSceneG2);
-				tckCtrlStageG2.show();
-				
-				Stage tckCtrlStageG3 = new Stage();
-				Parent tckCtrlRootG3 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG3.fxml"));
-				tckCtrlStageG3.setTitle("Track Controller G3");
-				Scene tckCtrlSceneG3 = new Scene(tckCtrlRootG3, 810, 600); // NOTE: Change last two ints to make window
-																		// bigger
-				tckCtrlStageG3.setScene(tckCtrlSceneG3);
-				tckCtrlStageG3.show();
-				
-				Stage tckCtrlStageG4 = new Stage();
-				Parent tckCtrlRootG4 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG4.fxml"));
-				tckCtrlStageG4.setTitle("Track Controller G4");
-				Scene tckCtrlSceneG4 = new Scene(tckCtrlRootG4, 810, 600); // NOTE: Change last two ints to make window
-																		// bigger
-				tckCtrlStageG4.setScene(tckCtrlSceneG4);
-				tckCtrlStageG4.show();
-				
-				Stage tckCtrlStageG5 = new Stage();
-				Parent tckCtrlRootG5 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG5.fxml"));
-				tckCtrlStageG5.setTitle("Track Controller G5");
-				Scene tckCtrlSceneG5 = new Scene(tckCtrlRootG5, 810, 600); // NOTE: Change last two ints to make window
-																		// bigger
-				tckCtrlStageG5.setScene(tckCtrlSceneG5);
-				tckCtrlStageG5.show();
+				launchTrackControllerUI();
 			}
 
 			// Root for Track Model
@@ -121,11 +96,12 @@ public class UIApp extends Application {
 				mboStage.setScene(mboScene);
 				mboStage.show();
 			}
-			
+
 			// Root for TCHW
-			if(ENABLE_7) {
+			if (ENABLE_7) {
 				Stage trnCtrlHWStage = new Stage();
-				Parent trnCtrlHWRoot = FXMLLoader.load(getClass().getResource("./TrainControllerHardware/TrainControllerHardware.fxml"));
+				Parent trnCtrlHWRoot = FXMLLoader
+						.load(getClass().getResource("./TrainControllerHardware/TrainControllerHardware.fxml"));
 				trnCtrlHWStage.setTitle("Train Controller Hardware");
 				Scene trnCtrlHWScene = new Scene(trnCtrlHWRoot, 600, 400);
 				trnCtrlHWStage.setScene(trnCtrlHWScene);
@@ -138,6 +114,49 @@ public class UIApp extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void launchTrackControllerUI() throws IOException {
+		Stage tckCtrlStage = new Stage();
+		Parent tckCtrlRoot = FXMLLoader.load(getClass().getResource("./TrackController/TrackController.fxml"));
+		tckCtrlStage.setTitle("Track Controller G1");
+		Scene tckCtrlScene = new Scene(tckCtrlRoot, 810, 600); // NOTE: Change last two ints to make window
+																// bigger
+		tckCtrlStage.setScene(tckCtrlScene);
+		tckCtrlStage.show();
+
+		Stage tckCtrlStageG2 = new Stage();
+		Parent tckCtrlRootG2 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG2.fxml"));
+		tckCtrlStageG2.setTitle("Track Controller G2");
+		Scene tckCtrlSceneG2 = new Scene(tckCtrlRootG2, 810, 600); // NOTE: Change last two ints to make window
+																	// bigger
+		tckCtrlStageG2.setScene(tckCtrlSceneG2);
+		tckCtrlStageG2.show();
+
+		Stage tckCtrlStageG3 = new Stage();
+		Parent tckCtrlRootG3 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG3.fxml"));
+		tckCtrlStageG3.setTitle("Track Controller G3");
+		Scene tckCtrlSceneG3 = new Scene(tckCtrlRootG3, 810, 600); // NOTE: Change last two ints to make window
+																	// bigger
+		tckCtrlStageG3.setScene(tckCtrlSceneG3);
+		tckCtrlStageG3.show();
+
+		Stage tckCtrlStageG4 = new Stage();
+		Parent tckCtrlRootG4 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG4.fxml"));
+		tckCtrlStageG4.setTitle("Track Controller G4");
+		Scene tckCtrlSceneG4 = new Scene(tckCtrlRootG4, 810, 600); // NOTE: Change last two ints to make window
+																	// bigger
+		tckCtrlStageG4.setScene(tckCtrlSceneG4);
+		tckCtrlStageG4.show();
+
+		Stage tckCtrlStageG5 = new Stage();
+		Parent tckCtrlRootG5 = FXMLLoader.load(getClass().getResource("./TrackController/TrackControllerG5.fxml"));
+		tckCtrlStageG5.setTitle("Track Controller G5");
+		Scene tckCtrlSceneG5 = new Scene(tckCtrlRootG5, 810, 600); // NOTE: Change last two ints to make window
+																	// bigger
+		tckCtrlStageG5.setScene(tckCtrlSceneG5);
+		tckCtrlStageG5.show();
+
 	}
 
 	public static UIApp waitForUITest() {

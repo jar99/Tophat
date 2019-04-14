@@ -1,5 +1,19 @@
 package application.TrackModel;
 
+/**
+ * <h1>Track Junction</h1> Exists at each end of blocks, switches, and sections.
+ * Either points to a block or a switch.
+ * <p>
+ * Entry Point is represented by an integer. For blocks, 0 indicates the side
+ * with Junction A, while 1 indicates the side with Junction B. For switches, 0
+ * indicates the main track, 1 indicates the straight track, and 2 indicates the
+ * diverging track.
+ * </p>
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackJunction {
 	final private boolean isSwitch; // true = switch / false = block
 	final private int ID;
