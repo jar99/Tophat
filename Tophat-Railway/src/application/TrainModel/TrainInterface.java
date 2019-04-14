@@ -142,5 +142,7 @@ public interface TrainInterface {
 	void trainDerails();
 
 	boolean brakeOperationState();
+
+	int getID();
 	
 }
