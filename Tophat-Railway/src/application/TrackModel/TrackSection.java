@@ -3,7 +3,15 @@ package application.TrackModel;
 import java.util.Collections;
 import java.util.Map;
 
-public abstract class TrackSection implements TrackSectionInterface {
+/**
+ * <h1>Track Section</h1> A collection of block objects joined together.
+ * Contains functions and data related to grid position.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
+public abstract class TrackSection {
 	// Identification
 	final protected String lineName;
 	final protected char sectionID;
@@ -30,8 +38,8 @@ public abstract class TrackSection implements TrackSectionInterface {
 	final protected Map<Integer, TrackBlock> blocks;
 
 	// =======CONSTRUCTORS===========================
-	public TrackSection(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX, double startY, double endX,
-			double endY, Map<Integer, TrackBlock> blocks) {
+	public TrackSection(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX,
+			double startY, double endX, double endY, Map<Integer, TrackBlock> blocks) {
 		this.lineName = lineName;
 		this.sectionID = sectionID;
 		this.firstBlockID = firstBlockID;
@@ -111,6 +119,12 @@ public abstract class TrackSection implements TrackSectionInterface {
 	}
 
 	// Objects and Coordination
+	/**
+	 * Gets a block from this sections
+	 * 
+	 * @param blockID - the requested block ID
+	 * @return the requested block
+	 */
 	final public TrackBlock getBlock(int blockID) {
 		if (!containsBlock(blockID))
 			throw new IllegalArgumentException("Section: " + sectionID + " does not contain block: " + blockID);
@@ -118,11 +132,23 @@ public abstract class TrackSection implements TrackSectionInterface {
 			return blocks.get(blockID);
 	}
 
+	/**
+	 * Checks that this section contains a specific block
+	 * 
+	 * @param blockID - the requested block ID
+	 * @return true - if the section contains the block
+	 */
 	final public boolean containsBlock(int blockID) {
 		return firstBlockID <= blockID && blockID <= lastBlockID;
 	}
 
 	// ========CALCULATIONS============================
+	/**
+	 * Calculates the grid coordinates for a given train
+	 * 
+	 * @param trainLocation - the train containing updated block and block
+	 *                      displacement details
+	 */
 	abstract void calculateCoordinates(TrainLocation trainLocation);
 
 }

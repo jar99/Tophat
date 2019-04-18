@@ -55,7 +55,12 @@
                         <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="218.0" spacing="5.0">
                            <children>
                               <Circle fx:id="iconPropStation" fill="WHITE" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
-                              <Label text="Station">
+                              <Label text="Station:">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="propStationName" text="--">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -341,7 +346,7 @@
                   <HBox alignment="CENTER" layoutX="17.0" layoutY="96.0" prefHeight="52.0" prefWidth="212.0" spacing="10.0">
                      <children>
                         <ChoiceBox fx:id="choiceBoxFail" prefHeight="31.0" prefWidth="120.0" />
-                        <Button mnemonicParsing="false" onAction="#toggleFailure" text="Toggle" />
+                        <Button mnemonicParsing="false" onAction="#toggleFailure" prefHeight="31.0" prefWidth="78.0" text="Toggle" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
