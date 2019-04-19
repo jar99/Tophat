@@ -201,4 +201,10 @@ public class TrainModelTrackTest implements TrackModelInterface {
 		
 	}
 
+	@Override
+	public int getTotalBoarders(String lineName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

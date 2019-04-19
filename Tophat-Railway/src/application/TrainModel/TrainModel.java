@@ -93,6 +93,8 @@ class TrainModel implements TrainInterface {
     
     private TrackModelInterface trModSin;
 	private MBOInterface mboSin;
+	
+	private boolean isDark;
     
     public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
     	this.mboSin = mboSin;
@@ -196,6 +198,8 @@ class TrainModel implements TrainInterface {
 		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
+		
+		isDark = trModSin.trainBlockIsUnderground(trainID);
     	
 //    	Update everyone else
 		callMBO();   
@@ -596,5 +600,10 @@ class TrainModel implements TrainInterface {
 	@Override
 	public int getID() {
 		return trainID;
+	}
+
+	@Override
+	public boolean isDark() {
+		return isDark;
 	}
 }

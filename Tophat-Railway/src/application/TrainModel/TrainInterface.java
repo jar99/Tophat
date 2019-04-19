@@ -18,6 +18,12 @@ public interface TrainInterface {
 	boolean hasPower();
 	
 	/**
+	 * Returns a boolean value from an abient light sensor on the train.
+	 * @return true if it is dark outside.
+	 */
+	boolean isDark();
+	
+	/**
 	 * Function returns the speed of the train.
 	 * @return double of speed in kph
 	 */
