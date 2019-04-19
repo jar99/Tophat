@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+ * <h1>Track Switch</h1> Models a simple railway switch with a main, straight,
+ * and diverging track.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackSwitch {
 
 	final private int switchID;
@@ -12,7 +20,7 @@ public class TrackSwitch {
 	private boolean switchStraight = true;
 
 	// ========CONSTRUCTOR====================
-	//TODO: MEH - check arguments (construction)
+	// TODO: MEH - check arguments (construction)
 	public TrackSwitch(int switchID, TrackJunction mainJunction, TrackJunction straightJunction,
 			TrackJunction divergingJunction) {
 

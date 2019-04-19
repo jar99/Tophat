@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+* <h1>Track Block</h1>
+* Contains block specific attributes and controls, including Junctions
+*
+* @author  Cory Cizauskas
+* @version 1.0
+* @since   2019-04-13
+*/
 public class TrackBlock {
 	// Block Identification
 	final private String lineName;
@@ -86,6 +94,11 @@ public class TrackBlock {
 	// ==========GET METHODS=========================
 
 	// Naming
+	/**
+	* Get the name for a block
+	* 
+	* @return The Section ID concatenated with the Block ID
+	*/
 	public String getName() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(sectionID);

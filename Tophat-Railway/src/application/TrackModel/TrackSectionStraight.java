@@ -2,6 +2,14 @@ package application.TrackModel;
 
 import java.util.Map;
 
+/**
+ * <h1>Track Section</h1> Implements the Track Section abstract class for
+ * straight sections of track.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackSectionStraight extends TrackSection {
 
 	public TrackSectionStraight(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX,
@@ -39,39 +47,63 @@ public class TrackSectionStraight extends TrackSection {
 		trainLocation.setCoordinates(coordX, coordY);
 	}
 
+	/**
+	 * Calculates the starting X coordinate for a block
+	 * 
+	 * @param chosenBlockID - the block requested
+	 * @return the blocks starting X coordinate
+	 */
 	public double getBlockStartX(int chosenBlockID) {
 		double sectionDisplacement = 0.0;
 		for (int blockID = firstBlockID; blockID < chosenBlockID; blockID++) {
 			sectionDisplacement += getBlock(blockID).getLength();
 		}
-		
+
 		return (sectionDisplacement / length) * (endX - startX) + startX;
 	}
 
+	/**
+	 * Calculates the starting Y coordinate for a block
+	 * 
+	 * @param chosenBlockID - the block requested
+	 * @return the blocks starting Y coordinate
+	 */
 	public double getBlockStartY(int chosenBlockID) {
 		double sectionDisplacement = 0.0;
 		for (int blockID = firstBlockID; blockID < chosenBlockID; blockID++) {
 			sectionDisplacement += getBlock(blockID).getLength();
 		}
-		
+
 		return (sectionDisplacement / length) * (endY - startY) + startY;
 	}
 
+	/**
+	 * Calculates the ending X coordinate for a block
+	 * 
+	 * @param chosenBlockID - the block requested
+	 * @return the blocks ending X coordinate
+	 */
 	public double getBlockEndX(int chosenBlockID) {
 		double sectionDisplacement = 0.0;
 		for (int blockID = firstBlockID; blockID <= chosenBlockID; blockID++) {
 			sectionDisplacement += getBlock(blockID).getLength();
 		}
-		
+
 		return (sectionDisplacement / length) * (endX - startX) + startX;
 	}
 
+	/**
+	 * Calculates the ending Y coordinate for a block
+	 * 
+	 * @param chosenBlockID - the block requested
+	 * @return the blocks ending Y coordinate
+	 */
 	public double getBlockEndY(int chosenBlockID) {
 		double sectionDisplacement = 0.0;
 		for (int blockID = firstBlockID; blockID <= chosenBlockID; blockID++) {
 			sectionDisplacement += getBlock(blockID).getLength();
 		}
-		
+
 		return (sectionDisplacement / length) * (endY - startY) + startY;
 	}
 
