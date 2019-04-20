@@ -112,8 +112,9 @@ public interface TrackModelInterface {
 	 * @param lineName - the name of the block's line
 	 * @param blockID  - the id for the block
 	 * @param green    - true for green; false for red
+	 * @throws TrackPowerFailureException 
 	 */
-	public void setLightStatus(String lineName, int blockID, boolean green);
+	public void setLightStatus(String lineName, int blockID, boolean green) throws TrackPowerFailureException;
 
 	/**
 	 * Get occupancy for a block
@@ -273,8 +274,9 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID - the id for the train
 	 * @return true, if green; false, if red
+	 * @throws TrackPowerFailureException 
 	 */
-	public boolean trainBlockLightIsGreen(int trainID);
+	public boolean trainBlockLightIsGreen(int trainID) throws TrackPowerFailureException;
 
 	/**
 	 * Get block suggested speed (meters/second) for train

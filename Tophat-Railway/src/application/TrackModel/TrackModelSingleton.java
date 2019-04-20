@@ -15,6 +15,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import application.ClockSingleton;
 
+/*
+//TODO: 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -22,7 +24,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrainModel.TrainModelInterface;
 import application.TrainModel.TrainModelSingleton;
 import application.MBO.MBOInterface;
-import application.MBO.MBOSingleton;
+import application.MBO.MBOSingleton;*/
 
 /**
  * <h1>Track Model Singleton</h1> Contains data and representation for the Track
@@ -148,10 +150,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 			firstSection.getBlock(firstSection.getFirstBlockID()).setOccupied(true);
 
 			// call the Train Model create train method
-
-			TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-			trnModInt.createTrain(trainID);
-
+			/*
+			 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+			 * trnModInt.createTrain(trainID);
+			 */
 		}
 	}
 
@@ -204,11 +206,14 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	@Override
-	public void setLightStatus(String lineName, int blockID, boolean green) {
+	public void setLightStatus(String lineName, int blockID, boolean green) throws TrackPowerFailureException {
 		if (!track.containsKey(lineName))
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 		else if (!track.get(lineName).getBlock(blockID).hasLight())
 			throw new IllegalArgumentException("Block: " + blockID + " does not have a light");
+		else if (track.get(lineName).getBlock(blockID).isFailPower())
+			throw new TrackPowerFailureException(
+					"The light on Block: " + blockID + " cannot be set because it does not have power");
 		else if (green)
 			track.get(lineName).getBlock(blockID).setGreen();
 		else
@@ -328,14 +333,16 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
-							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-							tckCtrlInt.removeTrain(trainID);
+							/*
+							 * TODO TrackControllerInterface tckCtrlInt =
+							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
+							 */
 
 							// Call Train Model Remove Train option
-
-							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							trnModInt.removeTrain(trainID);
+							/*
+							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							 * trnModInt.removeTrain(trainID);
+							 */
 
 							train.delete();
 
@@ -392,14 +399,16 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
-							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-							tckCtrlInt.removeTrain(trainID);
+							/*
+							 * TODO TrackControllerInterface tckCtrlInt =
+							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
+							 */
 
 							// Call Train Model Remove Train option
-
-							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							trnModInt.removeTrain(trainID);
+							/*
+							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							 * trnModInt.removeTrain(trainID);
+							 */
 
 							train.delete();
 
@@ -697,13 +706,20 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	@Override
-	public boolean trainBlockLightIsGreen(int trainID) {
-		if (trainLocations.containsKey(trainID)) {
-			String lineName = trainLocations.get(trainID).getLineName();
-			int blockID = trainLocations.get(trainID).getBlockID();
-			return track.get(lineName).getBlock(blockID).isLightGreen();
-		} else
+	public boolean trainBlockLightIsGreen(int trainID) throws TrackPowerFailureException {
+		if (!trainLocations.containsKey(trainID)) {
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
+		}
+
+		String lineName = trainLocations.get(trainID).getLineName();
+		int blockID = trainLocations.get(trainID).getBlockID();
+
+		if (track.get(lineName).getBlock(blockID).isFailPower())
+			throw new TrackPowerFailureException(
+					"The light on Block: " + blockID + " cannot be read because it does not have power");
+
+		return track.get(lineName).getBlock(blockID).isLightGreen();
+
 	}
 
 	@Override
@@ -894,21 +910,24 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 			// Call CTC importLine Method
 			TrackLine ctcLine = readLineFile(workbook);
-
-			CTCInterface ctcInt = CTCSingleton.getInstance();
-			ctcInt.importLine(ctcLine);
+			/*
+			 * TODO CTCInterface ctcInt = CTCSingleton.getInstance();
+			 * ctcInt.importLine(ctcLine);
+			 */
 
 			// Call Track Controller importLine Method
 			TrackLine tckCtrlLine = readLineFile(workbook);
-
-			TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
-			tckCtrlInt.importLine(tckCtrlLine);
+			/*
+			 * TODO TrackControllerInterface tckCtrlInt =
+			 * TrackControllerSingleton.getInstance(); tckCtrlInt.importLine(tckCtrlLine);
+			 */
 
 			// Call MBO importLine Method
 			TrackLine mboLine = readLineFile(workbook);
-
-			MBOInterface mboInt = MBOSingleton.getInstance();
-			mboInt.importLine(mboLine);
+			/*
+			 * TODO MBOInterface mboInt = MBOSingleton.getInstance();
+			 * mboInt.importLine(mboLine);
+			 */
 
 		} catch (IOException e) {
 			e.printStackTrace();
