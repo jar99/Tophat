@@ -1,5 +1,5 @@
-
 package application.TrainController;
+
 
 import java.io.IOException;
 import java.net.URL;
@@ -142,6 +142,7 @@ public class TrainControllerCtrl implements Initializable {
 		}else {
 			String power = String.format("%.2f", inputPower);
 			actualPower.setText(power + "Kwatts");
+
 		}
 	}
 	private void restartPower() {
