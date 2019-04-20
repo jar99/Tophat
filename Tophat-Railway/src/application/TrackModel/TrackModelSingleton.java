@@ -15,8 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import application.ClockSingleton;
 
-/*
-//TODO: 
 import application.CTC.CTCInterface;
 import application.CTC.CTCSingleton;
 import application.TrackController.TrackControllerInterface;
@@ -24,7 +22,7 @@ import application.TrackController.TrackControllerSingleton;
 import application.TrainModel.TrainModelInterface;
 import application.TrainModel.TrainModelSingleton;
 import application.MBO.MBOInterface;
-import application.MBO.MBOSingleton;*/
+import application.MBO.MBOSingleton;
 
 /**
  * <h1>Track Model Singleton</h1> Contains data and representation for the Track
@@ -150,10 +148,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 			firstSection.getBlock(firstSection.getFirstBlockID()).setOccupied(true);
 
 			// call the Train Model create train method
-			/*
-			 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-			 * trnModInt.createTrain(trainID);
-			 */
+
+			TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+			trnModInt.createTrain(trainID);
+
 		}
 	}
 
@@ -333,16 +331,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-							/*
-							 * TODO TrackControllerInterface tckCtrlInt =
-							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
-							 */
+							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+							tckCtrlInt.removeTrain(trainID);
 
 							// Call Train Model Remove Train option
-							/*
-							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							 * trnModInt.removeTrain(trainID);
-							 */
+							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							trnModInt.removeTrain(trainID);
 
 							train.delete();
 
@@ -399,16 +393,12 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-							/*
-							 * TODO TrackControllerInterface tckCtrlInt =
-							 * TrackControllerSingleton.getInstance(); tckCtrlInt.removeTrain(trainID);
-							 */
+							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+							tckCtrlInt.removeTrain(trainID);
 
 							// Call Train Model Remove Train option
-							/*
-							 * TODO TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
-							 * trnModInt.removeTrain(trainID);
-							 */
+							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
+							trnModInt.removeTrain(trainID);
 
 							train.delete();
 
@@ -910,24 +900,21 @@ public class TrackModelSingleton implements TrackModelInterface {
 
 			// Call CTC importLine Method
 			TrackLine ctcLine = readLineFile(workbook);
-			/*
-			 * TODO CTCInterface ctcInt = CTCSingleton.getInstance();
-			 * ctcInt.importLine(ctcLine);
-			 */
+
+			CTCInterface ctcInt = CTCSingleton.getInstance();
+			ctcInt.importLine(ctcLine);
 
 			// Call Track Controller importLine Method
 			TrackLine tckCtrlLine = readLineFile(workbook);
-			/*
-			 * TODO TrackControllerInterface tckCtrlInt =
-			 * TrackControllerSingleton.getInstance(); tckCtrlInt.importLine(tckCtrlLine);
-			 */
+
+			TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
+			tckCtrlInt.importLine(tckCtrlLine);
 
 			// Call MBO importLine Method
 			TrackLine mboLine = readLineFile(workbook);
-			/*
-			 * TODO MBOInterface mboInt = MBOSingleton.getInstance();
-			 * mboInt.importLine(mboLine);
-			 */
+
+			MBOInterface mboInt = MBOSingleton.getInstance();
+			mboInt.importLine(mboLine);
 
 		} catch (IOException e) {
 			e.printStackTrace();
