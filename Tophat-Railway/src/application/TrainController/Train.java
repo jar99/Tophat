@@ -163,7 +163,7 @@ public class Train implements TrainCtrlInterface {
 		ClockSingleton clkSin = ClockSingleton.getInstance();
 		double deltaT = clkSin.getRatio();
 		double newError = speed - trainMod.getSpeed();
-		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
+		double np = (kp *newError) + (ki * laplace(deltaT, lastError, newError, power));
 		trainMod.setPower(np);
 		lastError = newError;
 		power = np;
