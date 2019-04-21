@@ -93,6 +93,8 @@ class TrainModel implements TrainInterface {
     
     private TrackModelInterface trModSin;
 	private MBOInterface mboSin;
+	
+	private boolean isDark;
     
     public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
     	this.mboSin = mboSin;
@@ -196,6 +198,8 @@ class TrainModel implements TrainInterface {
 		
 		x = trModSin.getTrainXCoordinate(trainID);
 		y = trModSin.getTrainYCoordinate(trainID);
+		
+		isDark = trModSin.trainBlockIsUnderground(trainID);
     	
 //    	Update everyone else
 		callMBO();   
@@ -211,6 +215,7 @@ class TrainModel implements TrainInterface {
     
     private void trainCrashed() {
 		System.out.println(trainID + ": The train has crashed.");
+		this.addTrainInformation("The train has crashed.");
 		hasCrashed = true;
 	}
 
@@ -344,7 +349,7 @@ class TrainModel implements TrainInterface {
 	public int alightPassengers(int numPassengers) {
 		//TODO check for edge cases
 		int exessPassangers = 0;
-		if(numPassengers < passengers) {
+		if(numPassengers > passengers) {
 			exessPassangers = passengers - numPassengers;
 			numPassengers -= exessPassangers;
 		}
@@ -385,7 +390,7 @@ class TrainModel implements TrainInterface {
 		// TODO add the mbo connection
 		if(!isActive) return -8;
 		if(mboSin == null) return Integer.MIN_VALUE;
-		return 0;
+		return mboAuthority;
 	}
 	
 	void setMBOAuthority(int authority) {
@@ -404,7 +409,7 @@ class TrainModel implements TrainInterface {
 		// TODO add the mbo connection
 		if(!isActive) return -8.8;
 		if(mboSin == null) return Double.NaN;
-		return 0;
+		return mboSuggestedSpeed;
 	}
 
 	@Override
@@ -434,6 +439,7 @@ class TrainModel implements TrainInterface {
 	private void exchangePassangers() {
 		if(!trModSin.trainBlockIsStation(trainID)) return;
 		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
+		System.out.println("Number of passangers " + newPassengers);
 		int deltaPassengers = newPassengers-passengers;
 		if(deltaPassengers > 0) {
 			boardPassengers(deltaPassengers);
@@ -589,5 +595,15 @@ class TrainModel implements TrainInterface {
 		else addTrainInformation("The trains brakes are fixed.");
 		brakeOperationState = !isFailure;
 		
+	}
+
+	@Override
+	public int getID() {
+		return trainID;
+	}
+
+	@Override
+	public boolean isDark() {
+		return isDark;
 	}
 }

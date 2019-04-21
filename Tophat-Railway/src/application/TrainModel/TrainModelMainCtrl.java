@@ -46,13 +46,14 @@ public class TrainModelMainCtrl implements Initializable {
     private void createTrainWindow(TrainModel trainModel) {
     	try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TrainModelUI.fxml"));
+			fxmlLoader.setController(this);
             Parent root = fxmlLoader.load();
+            
             TrainModelCtrl controller = fxmlLoader.getController();
             controller.setTrain(trainModel);
             Stage stage = new Stage();
             stage.setOnCloseRequest((e)->closeWindow(e, stage, controller));           
             windowCtrls.add(controller);
-            
             stage.setTitle(trainModel.toString());
             stage.setScene(new Scene(root, 500, 450));
             stage.show();

@@ -24,7 +24,7 @@ public interface TrainModelInterface {
      * @param trainID the unique id of the train.
      * @return true if the remove was successful.
      */
-    boolean removeTrain(int trainID);
+    TrainInterface removeTrain(int trainID);
 
     /**
      * Sets a train flag to go
