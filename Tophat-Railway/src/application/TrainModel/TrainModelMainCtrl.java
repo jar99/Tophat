@@ -46,7 +46,6 @@ public class TrainModelMainCtrl implements Initializable {
     private void createTrainWindow(TrainModel trainModel) {
     	try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("TrainModelUI.fxml"));
-			fxmlLoader.setController(this);
             Parent root = fxmlLoader.load();
             
             TrainModelCtrl controller = fxmlLoader.getController();
@@ -89,7 +88,7 @@ public class TrainModelMainCtrl implements Initializable {
  		updateAnimation.start();
  		trainModCtrl = this; //This is a bad hack
  		
- 		mySin.createTrain(-1, 7, 70.0);
+// 		mySin.createTrain(-1, 7, 70.0);
     }
     
     private void update() {

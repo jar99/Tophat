@@ -72,13 +72,6 @@ public class TrainModelSingleton implements TrainModelInterface {
         return train;
     }
     
-    TrainModel createTrain(int trainID, int passanger, double speed) {
-    	TrackModelInterface track = new application.TrainModel.Test.TrainModelTrackTest(1/2, 10, 20.0);
-    	MBOInterface mbo = new application.TrainModel.Test.MBOConnection();
-    	return createTrain(trainID,  passanger, speed, track, mbo);
-		
-	}
-    
 
     public TrainModel createTrain(int trainID, int passanger, double speed, TrackModelInterface track, MBOInterface mbo) {
     	if(trainExists(trainID)) return null;

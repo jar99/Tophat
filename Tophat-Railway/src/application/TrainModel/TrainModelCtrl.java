@@ -7,7 +7,11 @@ package application.TrainModel;
  *
  */
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import application.TrainModel.UI.Converters;
 import application.TrainModel.UI.TableRow;
@@ -22,11 +26,15 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 public class TrainModelCtrl implements Initializable {
 	
-    TrainModel trainModel;
+    private static final long updateLock = 10000;
+
+	TrainModel trainModel;
 
     @SuppressWarnings("rawtypes")
 	@FXML
@@ -57,8 +65,14 @@ public class TrainModelCtrl implements Initializable {
     
     @FXML
     ListView<String> train_log;
-
+    
+    @FXML
+    ImageView adBanner;
+    Image[] images;
+    
 	private boolean shouldRun = false;
+
+	private int slide;
     
     @FXML
     public void clickEmergencyButton(ActionEvent event) {
@@ -99,6 +113,16 @@ public class TrainModelCtrl implements Initializable {
     	trainModel.setRailSignalConnectionState(railSignalFailure.isSelected());
     }
     
+    
+    
+    private List<String> listFilesForFolder(File folder, FilenameFilter imageFileFilter) {
+    	List<String> images = new ArrayList<>();
+    	for(File file: folder.listFiles(imageFileFilter)) {
+    		images.add(file.toURI().toString());		
+    	}  	
+    	return images;        
+    }
+    
     /**
      * This method is called when the tab should be removed.
      */
@@ -111,6 +135,23 @@ public class TrainModelCtrl implements Initializable {
  	@SuppressWarnings("rawtypes")
 	@Override
  	public void initialize(URL arg0, ResourceBundle arg1) {
+ 		FilenameFilter imageFileFilter = new FilenameFilter() {
+ 		    public boolean accept(File dir, String name) {
+ 		        return name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg");
+ 		    };
+ 		};
+ 		
+ 		
+ 		// TODO make this relative
+ 		File folder = new File("./ad");
+ 		if(folder.exists()) {
+	 		List<String> list = listFilesForFolder(folder, imageFileFilter);
+			images = new Image[list.size()];
+	        for (int i = 0; i < list.size(); i++) {
+	            images[i] = new Image(list.get(i));
+	        }
+ 		}
+ 		
  		information_item.setCellValueFactory(new PropertyValueFactory<TableRow, String>("name"));
  		information_value.setCellValueFactory(new Callback<CellDataFeatures<TableRow, String> ,ObservableValue<String>>(){
  			public ObservableValue<String> call(CellDataFeatures<TableRow, String> c) {
@@ -121,12 +162,31 @@ public class TrainModelCtrl implements Initializable {
  		run();
  	}
     
+ 	void updateAd(){
+ 		if(images == null || images.length == 0 || !adBanner.isVisible()) return;
+ 		
+ 		//TODO handle empty folder.
+ 		slide++;
+        if(slide >= images.length) {
+        	slide = 0;
+        }
+    	adBanner.setImage(images[slide]);
+ 	}
+ 	
+
+ 	private long last;
     // NOTE: This is where you get new information from your singleton
  	// You can read/change fx elements linked above
  	// WARNING: This assumes your singleton is updating its information
  	void update() {
  		if(!shouldRun || trainModel == null) return;
+ 		long cur = System.currentTimeMillis();
  		
+ 		if((cur-last) > updateLock) {
+ 			updateAd();
+ 			last = cur;
+ 		}
+        
  		if(train_log.isVisible()) {
  			while(!trainModel.trainLogEmpty()) {
  				String log = trainModel.poptrainInformation();
@@ -171,6 +231,7 @@ public class TrainModelCtrl implements Initializable {
  	void setTrain(TrainModel trainModel) {
  		this.trainModel = trainModel;
  		trainid.update(trainModel.toString());
+ 		
  	}
  	
  	private TableRow<Double> power, trackSpeed, mboSpeed, speed, accel, temprature, weight, speedLimit;
