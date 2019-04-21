@@ -63,10 +63,13 @@
             <Separator layoutX="-2.0" layoutY="-1.0" prefHeight="7.0" prefWidth="366.0" />
             <Pane prefHeight="111.0" prefWidth="520.0">
                <children>
-                  <ImageView fitHeight="106.0" fitWidth="265.0" layoutX="189.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                  <ImageView fx:id="adBanner" fitHeight="111.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                      <image>
                         <Image url="@../../../../Code%20Structure%20Diagram.jpg" />
                      </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
                   </ImageView>
                </children>
             </Pane>
