@@ -58,7 +58,7 @@ public class Converters<T> {
 
 	public static String TempratureConverter(double tempC) {
 		tempC = tempC * 9 / 5 + 32;
-		return String.format("%.2f°F", tempC);
+		return String.format("%.2f\u00B0F", tempC);
 	}
 
 	public static String SpeedConverter(double speedM) {

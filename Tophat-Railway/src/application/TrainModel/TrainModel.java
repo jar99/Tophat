@@ -23,7 +23,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	// These are some constants that should change
 	private static final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
-	private static final double POEWRSCALE = 1000.0;
+	private static final double POWERSCALE = 1000.0;
 	private final static double MINVELOCITY = 0.0;
 
 	protected static double MAXVELOCITY = kmhToms(70); // 70 kmh
@@ -146,6 +146,9 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private double width = WIDTH;
 	private double height = HEIGHT;
 	private int carCount = CARCOUNT;
+
+	private double maxVelocity = MAXVELOCITY;
+	private double maxAcceleration = MAXACCELERATION;
 
 	private double maxPower = MAXPOWER; // 120kw
 	private double serviceBrakeForce = SERVICEBRAKEFORCE;
@@ -305,7 +308,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	 * Returns power in watts
 	 */
 	public double getPower() {
-		return power / POEWRSCALE;
+		return power / POWERSCALE;
 
 	}
 
@@ -319,7 +322,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		}
 
 		// Sets power to watts
-		power *= POEWRSCALE;
+		power *= POWERSCALE;
 		if (power > maxPower) {
 			power = maxPower;
 		}
@@ -665,5 +668,20 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	public double getY() {
 		return y;
+	}
+
+	@Override
+	public double getMaxSpeed() {
+		return msTokmh(maxVelocity);
+	}
+
+	@Override
+	public double getMaxPower() {
+		return maxPower / POWERSCALE;
+	}
+
+	@Override
+	public double getMaxAcceleration() {
+		return maxAcceleration;
 	}
 }
