@@ -7,6 +7,8 @@ package application.TrainModel;
  *
  */
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
@@ -25,6 +27,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 	private TrainModelSingleton() {
 		 trainModelHashTable = new Hashtable<>();
+		 loadFromFile();
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -147,6 +150,17 @@ public class TrainModelSingleton implements TrainModelInterface {
 
     Collection<TrainModel> getTrains() {
         return trainModelHashTable.values();
+    }
+    
+    private void loadFromFile() {
+    	File file = new File("train.mod");
+    	if(!file.exists()) return;
+    	try {
+			TrainFileLoader.loadFile(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 	// MBO interface functions

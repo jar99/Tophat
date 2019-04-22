@@ -21,11 +21,86 @@ import application.TrackModel.TrainCrashedException;
 class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInterface {
 
 	// These are some constants that should change
-	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
+	private static final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
 	private static final double POEWRSCALE = 1000.0;
+	private final static double MINVELOCITY = 0.0;
 
-	protected double MINVELOCITY = 0.0;
+	protected static double MAXVELOCITY = kmhToms(70); // 70 kmh
+	protected static double MAXACCELERATION = 0.5; // 0.5 m/s^2
+	protected static double STDFRICTION = 0.002;
+
+	private static double TRAINWAIGHT = 40900.0;
+	private static double MAXPOWER = 120e3; // 120kw
+	private static double SERVICEBRAKEFORCE = 6307.724082;
+	private static double EMERGENCYBRAKEFORCE = 12089.80449;
+
+	private static int PASSENGERCAP = 222;
+
+	private static double LENGTH = 100.05;
+	private static double WIDTH = 10.0;
+	private static double HEIGHT = 15.0;
+	private static int CARCOUNT = 6;
+
+	static void setMaxVelocity(double maxvelocity) {
+		MAXVELOCITY = kmhToms(maxvelocity);
+	}
+
+	static void setMaxAcceleration(double maxacceleration) {
+		MAXACCELERATION = maxacceleration;
+	}
+
+	static void setSTDFriction(double stdfriction) {
+		STDFRICTION = stdfriction;
+	}
+
+	static void setTrainWaight(double trainwaight) {
+		TRAINWAIGHT = trainwaight;
+	}
+
+	static void setMaxPower(double maxpower) {
+		MAXPOWER = maxpower;
+	}
+
+	static void setServiceBrakeForce(double servicebrakeforce) {
+		SERVICEBRAKEFORCE = servicebrakeforce;
+	}
+
+	static void setEmergencyBrakeForce(double emergencybrakeforce) {
+		EMERGENCYBRAKEFORCE = emergencybrakeforce;
+	}
+
+	static void setPassengerCap(int passengercap) {
+		PASSENGERCAP = passengercap;
+	}
+
+	static void setTrainWaight(int trainWaight) {
+		TRAINWAIGHT = trainWaight;
+	}
+
+	static void setLength(double length) {
+		LENGTH = length;
+	}
+
+	static void setWidth(double width) {
+		WIDTH = width;
+	}
+
+	static void setHeight(double height) {
+		HEIGHT = height;
+	}
+
+	static void setCarCount(int carcount) {
+		CARCOUNT = carcount;
+	}
+
+	private static double kmhToms(double kmh) {
+		return 0.277778 * kmh;
+	}
+
+	private static double msTokmh(double ms) {
+		return 3.60000288 * ms;
+	}
 
 	// These are basic information on the train
 	private int trainID;
@@ -64,22 +139,17 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private double passengerWeight = 0.0;
 
 	// These are the train simulation metrics
-	private int passengerCap = 222;
+	private int passengerCap = PASSENGERCAP;
 
-	private static double MAXPOWER = 120e3; // 120kw
-	protected static double MAXVELOCITY = kmhToms(70); // 70 kmh
-	protected static double MAXACCELERATION = 0.5; // 0.5 m/s^2
-	protected static double STDFRICTION = 0.002;
+	private static double trainWaight = TRAINWAIGHT;
+	private double length = LENGTH; // Need to load in from database
+	private double width = WIDTH;
+	private double height = HEIGHT;
+	private int carCount = CARCOUNT;
 
-	private static double trainWaight = 40900.0;
-	private double length = 100.05; // Need to load in from database
-	private double width = 10.0;
-	private double height = 15.0;
-	private int axelCount = 6;
-	private int carCount = 5;
-
-	private double serviceBrakeForce = 6307.724082;
-	private double emergencyBrakeForce = 12089.80449;
+	private double maxPower = MAXPOWER; // 120kw
+	private double serviceBrakeForce = SERVICEBRAKEFORCE;
+	private double emergencyBrakeForce = EMERGENCYBRAKEFORCE;
 
 	private Queue<String> trainLog = new LinkedList<>();
 
@@ -89,7 +159,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private boolean isDark;
 
 	TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
-		super(STDFRICTION, 1, 0.0, MAXVELOCITY, MAXACCELERATION);
+		super(STDFRICTION, 1, MINVELOCITY, MAXVELOCITY, MAXACCELERATION);
 		super.setMass(mass());
 		super.setAngle(0.0);
 
@@ -176,14 +246,6 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		callMBO();
 	}
 
-	private static double kmhToms(double kmh) {
-		return 0.277778 * kmh;
-	}
-
-	private static double msTokmh(double ms) {
-		return 3.60000288 * ms;
-	}
-
 	private void trainCrashed() {
 		System.out.println(trainID + ": The train has crashed.");
 		this.addTrainInformation("The train has crashed.");
@@ -258,8 +320,8 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 		// Sets power to watts
 		power *= POEWRSCALE;
-		if (power > MAXPOWER) {
-			power = MAXPOWER;
+		if (power > maxPower) {
+			power = maxPower;
 		}
 		this.power = power;
 	}
@@ -585,7 +647,6 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		else
 			addTrainInformation("The trains brakes are fixed.");
 		brakeOperationState = !isFailure;
-
 	}
 
 	@Override
