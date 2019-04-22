@@ -56,19 +56,25 @@ public class Converters<T> {
  	
 	public static String SpeedConverter(double speedM) {
 		speedM = speedM*0.621371;
- 		return String.format("%.2fmph", speedM) ;
+ 		return String.format("%.2f mph", speedM) ;
  	}
 	
 	public static String AccelerationConverter(double acelM) {
  		acelM = acelM*3.2808398950131;
- 		return String.format("%.2ff/s^2", acelM);
+ 		return String.format("%.2f f/s^2", acelM);
  	}
 
 	public static String Waight(double waightKG) {
 		waightKG = waightKG*2.20462;
-		return String.format("%.2fLBS", waightKG);
+		return String.format("%.2f LBS", waightKG);
 	}
 
+	public static String KiloWatt(double watts) {
+		watts = watts/1000;
+		return String.format("%.2f KW", watts);
+	}
+
+	
 	public String concat(T item) {
 		return preText + convert(item) + postText;
 	}

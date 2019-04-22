@@ -253,8 +253,7 @@ public class TrainModelCtrl implements Initializable {
  		mboAuthority = new TableRow<Integer>("MBO Authority", 0);
  		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0,  (a) ->  Converters.SpeedConverter(a));
  		
- 		Converters<Double> energy = new Converters<>(" KW");
- 		power = new TableRow<Double>("Power", 0.0,  (a) -> energy.concat(a));
+ 		power = new TableRow<Double>("Power", 0.0,  (a) -> Converters.KiloWatt(a));
  		speed = new TableRow<Double>("Speed", 0.0, (a) -> Converters.SpeedConverter(a));
  		accel = new TableRow<Double>("Acceleration", 0.0, (a) -> Converters.AccelerationConverter(a));
  		

@@ -24,6 +24,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	//These are some constants that should change
 	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
+	private static final double POEWRSCALE = 1000.0;
 	
 
 	
@@ -240,20 +241,29 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		return crewCount;
 	}
 	
-	//Getters and setters	
+	//Getters and setters
+	
+	/**
+	 * Returns power in watts
+	 */
 	public double getPower(){
-		return power;
+		return power/POEWRSCALE;
 		
     }
 	
+	/**
+	 * Sets power in kw
+	 */
 	public void setPower(double power){
 		if(power < 0) {
 			this.power = 0.0;
 			return;
 		}
-		else if(power > MAXPOWER) {
-			this.power = MAXPOWER;
-			return;
+		
+		//Sets power to watts
+		power*=POEWRSCALE;
+		if(power > MAXPOWER) {
+			power = MAXPOWER;
 		}
 		this.power = power;
     }
