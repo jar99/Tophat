@@ -7,6 +7,8 @@ package application.TrainModel;
  *
  */
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
@@ -24,7 +26,8 @@ public class TrainModelSingleton implements TrainModelInterface {
 	private static TrainModelSingleton instance;
 
 	private TrainModelSingleton() {
-		 trainModelHashTable = new Hashtable<>();
+		trainModelHashTable = new Hashtable<>();
+		loadFromFile();
 	}
 
 	public static TrainModelSingleton getInstance() {
@@ -36,8 +39,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	}
 
 	private boolean disabled = false;
-	
-	
+
 	public boolean toggleDisable() {
 		return disabled = !disabled;
 	}
@@ -45,15 +47,16 @@ public class TrainModelSingleton implements TrainModelInterface {
 	// =====================================
 
 	private Hashtable<Integer, TrainModel> trainModelHashTable;
-	
-	private int trainIDHW = -1; //Negative numbers not assigned
-	
-    public TrainInterface createTrain(int trainID) {  	
-    	if (trainExists(trainID)) return null;
-    	TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
-    	trainModelHashTable.put(trainID, train);
-    	TrainModelMainCtrl.addTrainS(trainID, train);
-    	
+
+	private int trainIDHW = -1; // Negative numbers not assigned
+
+	public TrainInterface createTrain(int trainID) {
+		if (trainExists(trainID))
+			return null;
+		TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
+		trainModelHashTable.put(trainID, train);
+		TrainModelMainCtrl.addTrainS(trainID, train);
+
 //    	if (trainIDHW < 0) { // This is the check if no train belongs to train ctr hardware
 //    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
 //    		//TODO assigne it
@@ -63,72 +66,76 @@ public class TrainModelSingleton implements TrainModelInterface {
 //    		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
 //    		trnCtrl.createTrain(trainID, train); //Create this method.
 //    	}
-    	
-    	TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-		trnCtrl.createTrain(trainID, train); //Create this method.
-		
-    	train.dispatch();
-    	
-        return train;
-    }
-    
 
-    public TrainModel createTrain(int trainID, int passanger, double speed, TrackModelInterface track, MBOInterface mbo) {
-    	if(trainExists(trainID)) return null;
-    	
-    	TrainModel train = new TrainModel(trainID, track, mbo, passanger, speed);
-    	trainModelHashTable.put(trainID, train);
-    	TrainModelMainCtrl.addTrainS(trainID, train);
-    	
-    	train.dispatch();
-        return train;
-		
+		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+		trnCtrl.createTrain(trainID, train); // Create this method.
+
+		train.dispatch();
+
+		return train;
 	}
-    
-    public TrainInterface removeTrain(int trainID, boolean isolate) {
-    	TrainModel train = trainModelHashTable.remove(trainID);
-		if(train != null) {
+
+	public TrainModel createTrain(int trainID, int passanger, double speed, TrackModelInterface track,
+			MBOInterface mbo) {
+		if (trainExists(trainID))
+			return null;
+
+		TrainModel train = new TrainModel(trainID, track, mbo, passanger, speed);
+		trainModelHashTable.put(trainID, train);
+		TrainModelMainCtrl.addTrainS(trainID, train);
+
+		train.dispatch();
+		return train;
+
+	}
+
+	public TrainInterface removeTrain(int trainID, boolean isolate) {
+		TrainModel train = trainModelHashTable.remove(trainID);
+		if (train != null) {
 			train.remove();
 			TrainModelMainCtrl.removeTrainS(trainID, train);
 		}
-		
-    	if(!isolate) {
-    		if(trainIDHW == trainID) { // This is the check if no train belongs to train ctr hardware
-        		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
-        		//TODO remove it
-        		
-        		trainIDHW = trainID*-1;
-    		}else {
-    			TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-    			trnCtrl.removeTrain(trainID);
-    		}
 
-    	}
-    	return train;
+		if (!isolate) {
+			if (trainIDHW == trainID) { // This is the check if no train belongs to train ctr hardware
+				TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
+				// TODO remove it
+
+				trainIDHW = trainID * -1;
+			} else {
+				TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
+				trnCtrl.removeTrain(trainID);
+			}
+
+		}
+		return train;
 	}
-    
-    
-    public boolean trainExists(int trainID) {
-        return trainModelHashTable.containsKey(trainID);
-    }
-    
-    public TrainInterface getTrain(int trainID){
-        return trainModelHashTable.get(trainID);
-    }
-    
+
+	public boolean trainExists(int trainID) {
+		return trainModelHashTable.containsKey(trainID);
+	}
+
+	public TrainInterface getTrain(int trainID) {
+		return trainModelHashTable.get(trainID);
+	}
+
+	public TrainModelTrackInterface getTrainTrackInterface(int trainID) {
+		return trainModelHashTable.get(trainID);
+	}
+
 	public TrainInterface removeTrain(int trainID) {
 		return removeTrain(trainID, false);
 	}
-	
+
 	public boolean dispatchTrain(int trainID) {
 		TrainModel train = trainModelHashTable.get(trainID);
-		if(train != null) return train.dispatch();
+		if (train != null)
+			return train.dispatch();
 		return false;
 	}
-    
+
 	/**
-	 * Returns the count of how many trains there are.
-	 * return: int count of trains.
+	 * Returns the count of how many trains there are. return: int count of trains.
 	 */
 	@Override
 	public int trainCount() {
@@ -140,38 +147,71 @@ public class TrainModelSingleton implements TrainModelInterface {
 		return trainModelHashTable.keySet();
 	}
 
+	Collection<TrainModel> getTrains() {
+		return trainModelHashTable.values();
+	}
 
-    Collection<TrainModel> getTrains() {
-        return trainModelHashTable.values();
-    }
+	private void loadFromFile() {
+		File file = new File("train.mod");
+		if (!file.exists())
+			return;
+		try {
+			TrainFileLoader.loadFile(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// MBO interface functions
+	@Override
+	public boolean setTrainAuthority(int trainID, int authority) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if (train == null)
+			return false;
+		train.setMBOAuthority(authority);
+		return true;
+
+	}
+
+	@Override
+	public boolean setTrainSuggestedSpeed(int trainID, double speed) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if (train == null)
+			return false;
+		train.setMBOSuggestedSpeed(speed);
+		return true;
+
+	}
+
+	@Override
+	public double getXcord(int trainID) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if (train == null)
+			return Double.NaN;
+		return train.getX();
+	}
+
+	@Override
+	public double getYcord(int trainID) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if (train == null)
+			return Double.NaN;
+		return train.getY();
+	}
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
-    
+
 	public void update() {
-		if(disabled) return;
-		
-		for(TrainModel trainModel : trainModelHashTable.values()) {
-			//Any code to call for each train model update.
+		if (disabled)
+			return;
+
+		for (TrainModel trainModel : trainModelHashTable.values()) {
+			// Any code to call for each train model update.
 			trainModel.update();
 		}
-	}
-
-	@Override
-	public void setTrainAuthority(int trainID, int authority) {
-		TrainModel train = trainModelHashTable.get(trainID);
-		if(train == null) return;
-		train.setMBOAuthority(authority);
-		
-	}
-	
-	@Override
-	public void setTrainSuggestedSpeed(int trainID, double speed) {
-		TrainModel train = trainModelHashTable.get(trainID);
-		if(train == null) return;
-		train.setMBOSuggestedSpeed(speed);
-		
 	}
 }

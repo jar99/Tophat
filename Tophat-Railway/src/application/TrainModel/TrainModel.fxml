@@ -15,7 +15,7 @@
 
 <BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelMainCtrl">
    <top>
-      <AnchorPane prefHeight="41.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="40.0" style="-fx-background-color: red;" BorderPane.alignment="CENTER">
          <children>
             <Text fill="WHITE" layoutX="14.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Train Model" wrappingWidth="139.51416015625">
                <font>
