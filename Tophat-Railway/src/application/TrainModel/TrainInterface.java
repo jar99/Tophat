@@ -148,5 +148,11 @@ public interface TrainInterface {
 	 * @return
 	 */
 	int getID();
+	
+	double getMaxSpeed();
+	
+	double getMaxPower();
+
+	double getMaxAcceleration();
 
 }
