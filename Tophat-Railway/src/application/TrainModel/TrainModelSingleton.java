@@ -116,6 +116,10 @@ public class TrainModelSingleton implements TrainModelInterface {
         return trainModelHashTable.get(trainID);
     }
     
+    public TrainModelTrackInterface getTrainTrackInterface(int trainID){
+        return trainModelHashTable.get(trainID);
+    }
+    
 	public TrainInterface removeTrain(int trainID) {
 		return removeTrain(trainID, false);
 	}
@@ -145,6 +149,39 @@ public class TrainModelSingleton implements TrainModelInterface {
         return trainModelHashTable.values();
     }
 
+	// MBO interface functions
+	@Override
+	public boolean setTrainAuthority(int trainID, int authority) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return false;
+		train.setMBOAuthority(authority);
+		return true;
+		
+	}
+	
+	@Override
+	public boolean setTrainSuggestedSpeed(int trainID, double speed) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return false;
+		train.setMBOSuggestedSpeed(speed);
+		return true;
+		
+	}
+	
+	@Override
+	public double getXcord(int trainID) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return Double.NaN;
+		return train.getX();
+	}
+
+	@Override
+	public double getYcord(int trainID) {
+		TrainModel train = trainModelHashTable.get(trainID);
+		if(train == null) return Double.NaN;
+		return train.getY();
+	}
+	
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
@@ -157,21 +194,5 @@ public class TrainModelSingleton implements TrainModelInterface {
 			//Any code to call for each train model update.
 			trainModel.update();
 		}
-	}
-
-	@Override
-	public void setTrainAuthority(int trainID, int authority) {
-		TrainModel train = trainModelHashTable.get(trainID);
-		if(train == null) return;
-		train.setMBOAuthority(authority);
-		
-	}
-	
-	@Override
-	public void setTrainSuggestedSpeed(int trainID, double speed) {
-		TrainModel train = trainModelHashTable.get(trainID);
-		if(train == null) return;
-		train.setMBOSuggestedSpeed(speed);
-		
 	}
 }

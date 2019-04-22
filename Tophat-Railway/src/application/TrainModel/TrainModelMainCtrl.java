@@ -100,11 +100,11 @@ public class TrainModelMainCtrl implements Initializable {
     
 	static TrainModelMainCtrl trainModCtrl;
 	
-	static void addTrainS(int trainID, TrainModel train) {
+	protected static void addTrainS(int trainID, TrainModel train) {
 		trainModCtrl.addTrain(trainID, train);
 	}
 	
-	static void removeTrainS(int trainID, TrainModel train) {
+	protected static void removeTrainS(int trainID, TrainModel train) {
 		trainModCtrl.removeTrain(trainID, train);
 	}
 	

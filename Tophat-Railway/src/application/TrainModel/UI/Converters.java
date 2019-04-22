@@ -1,5 +1,11 @@
 package application.TrainModel.UI;
-
+/**
+ * This is a library of of some helpful converters for an interface
+ * 
+ * @author jar99
+ * @version 1.0
+ *
+ */
 import java.util.function.Function;
 
 public class Converters<T> {

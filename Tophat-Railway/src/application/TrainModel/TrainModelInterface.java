@@ -58,10 +58,28 @@ public interface TrainModelInterface {
      * @return the set of trainIDs
      */
     Set<Integer> getAllTrainIDs();
-    
-    
-    void setTrainAuthority(int trainID, int authority);
-    void setTrainSuggestedSpeed(int trainID, double speed);
-    
  
+    /**
+	 * This is called by the MBO.
+ 	 * Sends authority to a train given an ID
+     * This is a satellite Internet connection.
+	 * @param trainID ID of train
+	 * @param authority
+	 * @return returns true if message was received
+	 */
+	boolean setTrainAuthority(int trainID, int authority);
+	
+	/**
+	 * This is called by the MBO.
+     * This sets a trains suggested speed by ID
+	 * @param trainID ID of train
+	 * @param speed in kph
+	 * @return returns true if message was received
+	 */
+	boolean setTrainSuggestedSpeed(int trainID, double speed);
+	
+	double getXcord(int trainID);
+	
+	double getYcord(int trainID);
+	
 }

@@ -1,5 +1,11 @@
 package application.TrainModel.UI;
-
+/**
+ * This is is a class that adds table rows to a javafx table
+ * 
+ * @author jar99
+ * @version 1.0
+ *
+ */
 import java.util.function.Function;
 
 import javafx.beans.property.SimpleStringProperty;

@@ -19,15 +19,15 @@ import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelInterface;
 import application.TrackModel.TrainCrashedException;
 
-class TrainModel implements TrainInterface {
+class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInterface {
 
 	//These are some constants that should change
 	private final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
 	
-	private static final double GRAVITY = 9.8;
+
 	
-	private static final double MINFORCE = 100.0;
+	protected double MINVELOCITY = 0.0;
 	
 	
 	//These are basic information on the train
@@ -39,10 +39,6 @@ class TrainModel implements TrainInterface {
 	private int crewCount = 1;
 	
 	private double power;
-    private double acceleration;
-    private double speed;
-    private double displacement;
-    private double possition;
     
     //These are the actual position read from the block this should change at some point
     private double x, y;
@@ -74,11 +70,12 @@ class TrainModel implements TrainInterface {
     //These are the train simulation metrics
     private int passengerCap = 222;
     
-    private double maxPower = 120e3; // 120kw
-    private double speedLimit = 70; // 70 kmh
-    private double acelerationLimit = 0.5; // 0.5 m/s^2
+    private static double MAXPOWER = 120e3; // 120kw
+    protected static double MAXVELOCITY = kmhToms(70); // 70 kmh
+    protected static double MAXACCELERATION = 0.5; // 0.5 m/s^2
+    protected static double STDFRICTION = 0.002;
     
-    private double trainWaight = 40900.0;
+    private static double trainWaight = 40900.0;
     private double length = 100.05; //Need to load in from database
     private double width = 10.0;
     private double height = 15.0;
@@ -96,16 +93,21 @@ class TrainModel implements TrainInterface {
 	
 	private boolean isDark;
     
-    public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
+    TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSin) {
+    	super(STDFRICTION, 1, 0.0, MAXVELOCITY, MAXACCELERATION);
+    	super.setMass(mass());
+    	super.setAngle(0.0);
+    	
     	this.mboSin = mboSin;
     	this.trModSin = trModSin;
         this.trainID = trainID;
         isActive = false;
     }
 
-    public TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSingleton, int passangers, double speed) {
-		this(trainID, trModSin, mboSingleton);
-		this.speed = speed;
+    TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSingleton, int passangers, double speed) {
+    	this(trainID, trModSin, mboSingleton);
+    	super.setVelocity(kmhToms(speed));
+		
 		boardPassengers(passangers);
 		
 		
@@ -137,52 +139,26 @@ class TrainModel implements TrainInterface {
     	
 //    	System.out.println(this + " train runs at " + System.nanoTime());
     	
-    	double dt = clock.getRatio(); // The amount of seconds between updates
+    	long dt = clock.getRatio(); // The amount of seconds between updates
     	if(dt == 0) return; // If no time has passed there will not be an update to the train physics
     	
-    	
-    	double v = kmhToms(speed);
     	
     	double grade = trModSin.getTrainBlockGrade(trainID);
     	double angle = 0.0;
     	if(grade != 0) {
     		angle = Math.atan(grade);
     	}
-    	
-    	double f = gravity(angle);
+    	super.setAngle(angle);
+    	super.setMass(mass());
     	
     	if(trModSin.trainHasPower(trainID) && brakeF() == 0.0) { // The train should have power
-//    		Calculate how much force is applied by power
-    		f+=powerF();
+    		super.seteIn(engineOperationState ? power: 0.0);
     	}
     	
-//    	System.out.printf("angle= %f\tgravity= %f\tbrakeforce= %f\n",angle, gravity(angle), brakeF());
+    	super.seteOut(brakeF());
     	
-//    	Calculate the acceleration
-    	double an = 0;
-    	if (Math.abs(f) > MINFORCE) {
-    		an = Math.min(acelerationLimit, f/mass());
-    	}
+    	super.update(dt);
     	
-    	if(v > 0) {		
-			an -= brakeF()/mass();
-    	}
-    	
-    	
-    	double vn = Math.min(laplace(dt, acceleration, an, v), kmhToms(speedLimit)); //This should prevent negative movement.
-    	
-    	vn = Math.max(0, vn); // Prevents negative movements
-    	
-		double xn = laplace(dt, v, vn, possition);
-    	
-		
-//		System.out.printf("p= %f\tf= %f\ta= %f\tv= %f\tx= %f\n", power, f, an, vn, xn);
-	
-		displacement = xn - possition;
-		
-		possition = xn;
-		speed = msTokmh(vn);
-		acceleration = an;
 
 //    	Update train location
 		try {
@@ -205,11 +181,12 @@ class TrainModel implements TrainInterface {
 		callMBO();   
     }
     
-    private double kmhToms(double kmh) {
+
+	private static double kmhToms(double kmh) {
     	return 0.277778*kmh;
     }
     
-    private double msTokmh(double ms) {
+    private static double msTokmh(double ms) {
     	return 3.60000288*ms;
     }
     
@@ -217,12 +194,6 @@ class TrainModel implements TrainInterface {
 		System.out.println(trainID + ": The train has crashed.");
 		this.addTrainInformation("The train has crashed.");
 		hasCrashed = true;
-	}
-
-	private double powerF() {
-		if(!engineOperationState) return 0.0;
-//		if(speed == 0.0) return power;
-		return power/speed;
 	}
 
 	private double brakeF() {
@@ -241,17 +212,10 @@ class TrainModel implements TrainInterface {
 		return emergencyBrakeForce;
 	}
    
-	private double gravity(double angle) {
-		return GRAVITY*Math.sin(angle)*mass();
-	}
-	
     private double mass() {
     	return getWeight()/GRAVITY;
     }
     
-    private double laplace(double deltaT, double a, double an, double b) {
-		return b+((deltaT)/2)*(an + a);
-	}
 
     private void callMBO(){
         //TODO This needs to change i don't know how it should work.
@@ -287,8 +251,8 @@ class TrainModel implements TrainInterface {
 			this.power = 0.0;
 			return;
 		}
-		else if(power > maxPower) {
-			this.power = maxPower;
+		else if(power > MAXPOWER) {
+			this.power = MAXPOWER;
 			return;
 		}
 		this.power = power;
@@ -307,7 +271,7 @@ class TrainModel implements TrainInterface {
     
 
     public double getSpeed() {
-        return speed;
+        return msTokmh(velocity);
     }
 
     public double getTemperature() {
@@ -605,5 +569,13 @@ class TrainModel implements TrainInterface {
 	@Override
 	public boolean isDark() {
 		return isDark;
+	}
+
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
 	}
 }

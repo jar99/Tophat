@@ -46,20 +46,6 @@ public interface TrainInterface {
 	int getPassengers();
 	
 	/**
-	 * This function can be used to board the passengers.
-	 * @param numPassangers the number of passengers who board the train.
-	 * @return the amount of people that could not board.
-	 */
-	int boardPassengers(int numPassengers);
-	
-	/**
-	 * This function sets how many passengers are getting off
-	 * @param numPassangers the amount of passengers that should leave the train
-	 * @return the amount of passengers that actually got off
-	 */
-	int alightPassengers(int numPassengers);
-	
-	/**
 	 * Returns the current track segment authority
 	 * @return
 	 */
@@ -83,7 +69,6 @@ public interface TrainInterface {
 	 */
 	double getMBOSpeed();
 	
-	void setBeaconData(String beaconData);
 	
 	String getBeaconData();
 	
@@ -144,11 +129,12 @@ public interface TrainInterface {
 	
 	boolean railSignalState();
 
-	
-	void trainDerails();
-
 	boolean brakeOperationState();
 
+	/**
+	 * Returns the ID value associated with this train.
+	 * @return
+	 */
 	int getID();
 	
 }
