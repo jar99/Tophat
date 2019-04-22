@@ -21,7 +21,7 @@ public class TrainFileLoader {
 		int value = Integer.parseInt(values.get(key));
 		return value;
 	}
-	
+
 	public static void loadFile(File file) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		Hashtable<String, String> values = new Hashtable<>();
@@ -36,7 +36,7 @@ public class TrainFileLoader {
 		}
 		reader.close();
 		setData(values);
-		
+
 	}
 
 	public static void loadFile(String path) throws IOException {
