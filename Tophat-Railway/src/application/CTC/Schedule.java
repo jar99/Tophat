@@ -10,6 +10,7 @@ public class Schedule{
 	private int[] LeaveTime;
 	private int[] distance;
 	private int speed;
+	private int authority=0;
 	Schedule(int TrainID, String myLine, String[] myStation, Integer[] myDistance,int myDeparturetime,int suggestedSpeed,HashMap<String, TrackLine> inputtrack){
 		ID=TrainID;
 		Line=myLine;
@@ -29,11 +30,12 @@ public class Schedule{
 		String StopStation=myStation[myStation.length-1];
 		boolean iffindd=false;
 		boolean iffinds=false;
+		boolean ifYarde=false;
 		for(String key:track.keySet()) {
 			TrackLine tmp=track.get(key);
 			try {
 				TrackBlock myBlock=tmp.getEntrance();
-				TrackBlock next;
+				TrackBlock next=myBlock;
 				boolean ifA=false;
 				TrackJunction possiblenext;
 				while (true) {
@@ -45,7 +47,7 @@ public class Schedule{
 					}
 					while (true) {
 						if (possiblenext.getID()==-1) {
-							next=tmp.getBlock(-1);
+							ifYarde=true;
 							break;
 						}
 						else if (possiblenext.isSwitch()) {
@@ -57,7 +59,7 @@ public class Schedule{
 							else {
 								possiblenext=theswitch.getStraightJunction();
 								if(possiblenext.getID()==-1) {
-									next=tmp.getBlock(-1);
+									ifYarde=true;
 									break;
 								}
 								else if(possiblenext.getEntryPoint()==0||tmp.getBlock(possiblenext.getID()).isBidirectional()) {
@@ -71,6 +73,7 @@ public class Schedule{
 						}
 						else {
 							next=tmp.getBlock(possiblenext.getID());
+							authority++; 
 							if (possiblenext.getEntryPoint()==0) {
 								ifA=false;
 								break;
@@ -84,20 +87,23 @@ public class Schedule{
 					String lala=" "+myBlock.getStationName();
 					if (myBlock.getStationName()==null) lala=" ";
 					String myblockname="Block "+myBlock.getBlockID()+lala;
+					if(DepartureStation.equals("yard"))
+						iffindd=true;
 					if (myblockname.equals(DepartureStation)) {
 						iffindd=true;
 					}
+					
 					lala=" "+next.getStationName();
 					if (next.getStationName()==null) lala=" ";
 					String nextblockname="Block "+next.getBlockID()+lala;
 					if (nextblockname.equals(StopStation)||next.getBlockID()==-1) {
 						iffinds=true;
 					}
-					if (iffindd) {
+					if (iffindd||ifYarde) {
 						totallength+=myBlock.getLength();
 					}
 						myBlock=next;
-					if(iffinds) {
+					if(iffinds||ifYarde) {
 						break;
 					}
 				}
@@ -107,11 +113,16 @@ public class Schedule{
 			
 
 		}
+		if (StopStation.equals("Block 63 ")) {
+			authority=0;
+			totallength=0;
+		}
 		ArrivalTime[1]=LeaveTime[0]+(int)(totallength/speed);
 		LeaveTime[1]=ArrivalTime[1]+1*60;
 		
 	}
 	public void mergeSchedule(Schedule tmp2){
+		this.authority=tmp2.getAuthority();
 		int tmpsize=this.getStation().length+tmp2.getStation().length-1;
 		int[] distancetmp=new int[tmpsize];
 		String[] stationtmp=new String[tmpsize];
@@ -141,7 +152,6 @@ public class Schedule{
 		ArrivalTime=arrivaltmp;
 		LeaveTime=leavetmp;
 		distance=distancetmp;
-		
 	}
 	public ArrayList<String> printschedule(){
 		
@@ -178,5 +188,8 @@ public class Schedule{
 	}
 	public int getSpeed(){
 		return speed;
+	}
+	public int getAuthority() {
+		return authority;
 	}
 }

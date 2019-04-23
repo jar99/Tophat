@@ -82,17 +82,20 @@ public class CTCSingleton implements CTCInterface {
 		return Sections;
 	}
 	public String[] getOnlyStations() {
+		TrackModelInterface aTest = TrackModelSingleton.getInstance();
 		for(String key:track.keySet()) {
 			TrackLine tmp=track.get(key);
 			Collection<TrackStation> myStation=tmp.getStations();
 			int mySize=myStation.size();
-			RealStations=new String[mySize];
+			RealStations=new String[mySize+1];
 			int i=0;
 			for (TrackStation astation:myStation){
-				RealStations[i]=astation.getStationName()+" Alighting:"+astation.getAlighting()+" Boarding:"+astation.getBoarding();
+				RealStations[i+1]=astation.getStationName()+" Alighting:"+aTest.getScheduledAlighting("green",astation.getStationName())+" Boarding:"+aTest.getScheduledBoarding("green",astation.getStationName());
 				i++;
 			}
 		}
+		if (!track.isEmpty())
+			RealStations[0]="Total throughput: "+aTest.getTotalBoarders("green");
 		return RealStations;
 	}
 	public int[] getBlocks(){
@@ -186,6 +189,12 @@ public class CTCSingleton implements CTCInterface {
 	public void closeSection(int ID) {
 		isSectionClose[ID]=true;
 	}
+	public HashMap<String, TrackLine> viewTrack(){
+		return track;
+	}
+	public String viewLine(int ID) {
+		return myschedule.get(ID).getLine();
+	}
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
@@ -208,7 +217,7 @@ public class CTCSingleton implements CTCInterface {
 	@Override
 	public boolean getSectionMaintenance(String lineName, int blockID) {
 		// TODO Implement function to tell Track Controller what blocks need maintenance
-		return false;
+		return isSectionClose[blockID-1];
 	}
 
 }
