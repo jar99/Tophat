@@ -11,7 +11,12 @@ public class Schedule{
 	private int[] distance;
 	private int speed;
 	private int authority=0;
+	private boolean ifLspdlmt=false;
+	private int spdlmt;
+	private int spdprint;
 	Schedule(int TrainID, String myLine, String[] myStation, Integer[] myDistance,int myDeparturetime,int suggestedSpeed,HashMap<String, TrackLine> inputtrack){
+		spdprint=suggestedSpeed;
+		suggestedSpeed=1+(int)(suggestedSpeed*0.448);
 		ID=TrainID;
 		Line=myLine;
 		Station[0]=myStation[0];
@@ -35,6 +40,7 @@ public class Schedule{
 			TrackLine tmp=track.get(key);
 			try {
 				TrackBlock myBlock=tmp.getEntrance();
+				spdlmt=(int)myBlock.getSpdLmt();
 				TrackBlock next=myBlock;
 				boolean ifA=false;
 				TrackJunction possiblenext;
@@ -74,6 +80,9 @@ public class Schedule{
 						else {
 							next=tmp.getBlock(possiblenext.getID());
 							authority++; 
+							if (spdlmt>next.getSpdLmt()) {
+								spdlmt=(int)next.getSpdLmt();
+							}
 							if (possiblenext.getEntryPoint()==0) {
 								ifA=false;
 								break;
@@ -117,9 +126,17 @@ public class Schedule{
 			authority=0;
 			totallength=0;
 		}
+		if (suggestedSpeed>spdlmt) {
+			ifLspdlmt=true;
+			speed=spdlmt;
+			spdprint=(int)(spdlmt/0.448)+1;
+		}
+		else {
+			speed=suggestedSpeed;
+		}
+		
 		ArrivalTime[1]=LeaveTime[0]+(int)(totallength/speed);
 		LeaveTime[1]=ArrivalTime[1]+1*60;
-		
 	}
 	public void mergeSchedule(Schedule tmp2){
 		this.authority=tmp2.getAuthority();
@@ -191,5 +208,23 @@ public class Schedule{
 	}
 	public int getAuthority() {
 		return authority;
+	}
+	public boolean getIfSpdLmt() {
+		return ifLspdlmt;
+	}
+	public int getSpdlmt() {
+		return spdlmt;
+	}
+	public void setSpeed(int a) {
+		speed=a;
+	}
+	public void setIfLspdlmt(boolean a) {
+		ifLspdlmt=a;
+	}
+	public void setspdprint(int a) {
+		spdprint=a;
+	}
+	public int getspdprint() {
+		return spdprint;
 	}
 }
