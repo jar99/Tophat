@@ -204,11 +204,14 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	@Override
-	public void setLightStatus(String lineName, int blockID, boolean green) {
+	public void setLightStatus(String lineName, int blockID, boolean green) throws TrackPowerFailureException {
 		if (!track.containsKey(lineName))
 			throw new IllegalArgumentException("Track does not contain line: " + lineName);
 		else if (!track.get(lineName).getBlock(blockID).hasLight())
 			throw new IllegalArgumentException("Block: " + blockID + " does not have a light");
+		else if (track.get(lineName).getBlock(blockID).isFailPower())
+			throw new TrackPowerFailureException(
+					"The light on Block: " + blockID + " cannot be set because it does not have power");
 		else if (green)
 			track.get(lineName).getBlock(blockID).setGreen();
 		else
@@ -328,12 +331,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
 							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
 							tckCtrlInt.removeTrain(trainID);
 
 							// Call Train Model Remove Train option
-
 							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
 							trnModInt.removeTrain(trainID);
 
@@ -392,12 +393,10 @@ public class TrackModelSingleton implements TrackModelInterface {
 						if (nextBlockJunction.getID() == -1) { // If enter yard (leaving track)
 
 							// Call Track Controller Remove Train option
-
 							TrackControllerInterface tckCtrlInt = TrackControllerSingleton.getInstance();
 							tckCtrlInt.removeTrain(trainID);
 
 							// Call Train Model Remove Train option
-
 							TrainModelInterface trnModInt = TrainModelSingleton.getInstance();
 							trnModInt.removeTrain(trainID);
 
@@ -697,13 +696,20 @@ public class TrackModelSingleton implements TrackModelInterface {
 	}
 
 	@Override
-	public boolean trainBlockLightIsGreen(int trainID) {
-		if (trainLocations.containsKey(trainID)) {
-			String lineName = trainLocations.get(trainID).getLineName();
-			int blockID = trainLocations.get(trainID).getBlockID();
-			return track.get(lineName).getBlock(blockID).isLightGreen();
-		} else
+	public boolean trainBlockLightIsGreen(int trainID) throws TrackPowerFailureException {
+		if (!trainLocations.containsKey(trainID)) {
 			throw new IllegalArgumentException("Train: " + trainID + " not found");
+		}
+
+		String lineName = trainLocations.get(trainID).getLineName();
+		int blockID = trainLocations.get(trainID).getBlockID();
+
+		if (track.get(lineName).getBlock(blockID).isFailPower())
+			throw new TrackPowerFailureException(
+					"The light on Block: " + blockID + " cannot be read because it does not have power");
+
+		return track.get(lineName).getBlock(blockID).isLightGreen();
+
 	}
 
 	@Override

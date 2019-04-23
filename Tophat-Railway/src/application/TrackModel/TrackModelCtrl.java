@@ -450,7 +450,7 @@ public class TrackModelCtrl implements Initializable {
 		else
 			iconPropBeacon.setFill(Color.WHITE);
 
-		if (cBlock.isHeated())
+		if (cBlock.isHeated() && !cBlock.isFailPower())
 			iconPropHeated.setFill(nonLightColor);
 		else
 			iconPropHeated.setFill(Color.WHITE);
@@ -464,12 +464,25 @@ public class TrackModelCtrl implements Initializable {
 			iconPropCrossing.setFill(Color.WHITE);
 
 		if (cBlock.hasLight())
-			if (cBlock.isLightGreen())
+			if (cBlock.isFailPower()) {
+				iconPropLight.setFill(Color.TRANSPARENT);
+				iconPropLight.setStroke(Color.RED);
+			}
+			else if (cBlock.isLightGreen()) {
 				iconPropLight.setFill(Color.GREEN);
-			else
+				iconPropLight.setStroke(Color.BLACK);
+			}
+				
+			else {
 				iconPropLight.setFill(Color.RED);
-		else
+				iconPropLight.setStroke(Color.BLACK);
+			}
+				
+		else {
 			iconPropLight.setFill(Color.WHITE);
+			iconPropLight.setStroke(Color.BLACK);
+		}
+			
 
 		if (cBlock.getJunctionA().isSwitch() || cBlock.getJunctionB().isSwitch())
 			iconPropSwitch.setFill(nonLightColor);
@@ -588,6 +601,10 @@ public class TrackModelCtrl implements Initializable {
 
 				trainIcon.setCenterX(centerX);
 				trainIcon.setCenterY(centerY);
+				
+				if(eTrain.hasCrashed()) {
+					trainIcon.setFill(Color.RED);
+				}
 
 				visibleTrains.add(trainIcon);
 
