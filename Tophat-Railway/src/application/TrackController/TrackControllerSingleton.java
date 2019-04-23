@@ -427,9 +427,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 12)) {
 				trackModInt.setSwitch("green", 5, true);
-				trackModInt.setLightStatus("green", 13, true);
+				try {
+					trackModInt.setLightStatus("green", 13, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 13, false);
+				}
 				trackModInt.setControlAuthority("green", 13, true);
-				trackModInt.setLightStatus("green", 1, false);
+				try {
+					trackModInt.setLightStatus("green", 1, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 1, false);
+				}
 				trackModInt.setControlAuthority("green", 1, false);
 				switchStraightG5 = true;
 			}
@@ -440,9 +448,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 2)) {
 				trackModInt.setSwitch("green", 5, false);
-				trackModInt.setLightStatus("green", 1, true);
+				try {
+					trackModInt.setLightStatus("green", 1, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 1, false);
+				}
 				trackModInt.setControlAuthority("green", 1, true);
-				trackModInt.setLightStatus("green", 13, false);
+				try {
+					trackModInt.setLightStatus("green", 13, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 13, false);
+				}
 				trackModInt.setControlAuthority("green", 13, false);
 				switchStraightG5 = false;
 			}
@@ -611,9 +627,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 27)) {
 				trackModInt.setSwitch("green", 4, true);
-				trackModInt.setLightStatus("green", 28, true);
+				try {
+					trackModInt.setLightStatus("green", 28, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 28, false);
+				}
 				trackModInt.setControlAuthority("green", 28, true);
-				trackModInt.setLightStatus("green", 150, false);
+				try {
+					trackModInt.setLightStatus("green", 150, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 150, false);
+				}
 				trackModInt.setControlAuthority("green", 150, false);
 				switchStraightG4 = true;
 			}
@@ -624,9 +648,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 149)) {
 				trackModInt.setSwitch("green", 4, false);
-				trackModInt.setLightStatus("green", 150, true);
+				try {
+					trackModInt.setLightStatus("green", 150, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 150, false);
+				}
 				trackModInt.setControlAuthority("green", 150, true);
-				trackModInt.setLightStatus("green", 28, false);
+				try {
+					trackModInt.setLightStatus("green", 28, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 28, false);
+				}
 				trackModInt.setControlAuthority("green", 28, false);
 				switchStraightG4 = false;
 			}
@@ -922,9 +954,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 75)) {
 				trackModInt.setSwitch("green", 2, true);
-				trackModInt.setLightStatus("green", 76, true);
+				try {
+					trackModInt.setLightStatus("green", 76, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 76, false);
+				}
 				trackModInt.setControlAuthority("green", 76, true);
-				trackModInt.setLightStatus("green", 77, false);
+				try {
+					trackModInt.setLightStatus("green", 77, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 77, false);
 				switchStraightG2 = true;
 			}
@@ -935,9 +975,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 78)) {
 				trackModInt.setSwitch("green", 2, false);
-				trackModInt.setLightStatus("green", 77, true);
+				try {
+					trackModInt.setLightStatus("green", 77, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 77, true);
-				trackModInt.setLightStatus("green", 76, false);
+				try {
+					trackModInt.setLightStatus("green", 76, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 76, false);
 				switchStraightG2 = false;
 			}
@@ -954,9 +1002,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 84)) {
 				trackModInt.setSwitch("green", 3, true);
-				trackModInt.setLightStatus("green", 85, true);
+				try {
+					trackModInt.setLightStatus("green", 85, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 85, false);
+				}
 				trackModInt.setControlAuthority("green", 85, true);
-				trackModInt.setLightStatus("green", 100, false);
+				try {
+					trackModInt.setLightStatus("green", 100, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 100, false);
+				}
 				trackModInt.setControlAuthority("green", 100, false);
 				switchStraightG3 = true;
 			}
@@ -967,9 +1023,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 99)) {
 				trackModInt.setSwitch("green", 3, false);
-				trackModInt.setLightStatus("green", 100, true);
+				try {
+					trackModInt.setLightStatus("green", 100, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 100, false);
+				}
 				trackModInt.setControlAuthority("green", 100, true);
-				trackModInt.setLightStatus("green", 85, false);
+				try {
+					trackModInt.setLightStatus("green", 85, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 85, false);
+				}
 				trackModInt.setControlAuthority("green", 85, false);
 				switchStraightG5 = false;
 			}
