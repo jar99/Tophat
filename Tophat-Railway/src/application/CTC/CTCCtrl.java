@@ -69,6 +69,12 @@ public class CTCCtrl implements Initializable {
     private boolean stopupdate=false;
     private HashMap <String,String> Departurestorage=new HashMap <String,String>();
     private HashMap <String,Integer> Departureindex=new HashMap<String,Integer>();
+    public void StraightClicked() {
+    	return;
+    }
+    public void DivergeClicked() {
+    	return;
+    }
     public void ButtonPauseClicked() {
     	ClockSingleton aClock=ClockSingleton.getInstance();
     	aClock.setRatio(0);
