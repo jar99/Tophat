@@ -1,6 +1,7 @@
 package application.MBO;
 
 import java.awt.event.ActionEvent;
+import java.io.FileWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -218,6 +219,9 @@ public class MBOCtrl implements Initializable {
 		//Create Schedule Button
 		createScheduleBtn.setOnAction(e -> createSchedule());
 		
+		//Send Schedule Button
+		sendScheduleBtn.setOnAction(e -> buildExampleSchedule());
+		
         updateAnimation = new AnimationTimer() {
 
 			@Override
@@ -230,10 +234,47 @@ public class MBOCtrl implements Initializable {
 		
 	}
 
+	private void buildExampleSchedule() {
+		// TODO Auto-generated method stub
+		FileWriter fileWriter = null;
+		try
+		{
+			fileWriter = new FileWriter("new.csv");
+			fileWriter.append("Green,100");
+			
+			fileWriter.append("\n101,Thomas,0300");
+			for(int i = 0; i < 150; i++)
+			{
+				fileWriter.append(",0");
+			}
+			fileWriter.append("\n102,ThomasEvilTwin,0400");
+			for(int i = 0; i < 150; i++)
+			{
+				fileWriter.append(",0");
+			}
+			
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		finally {
+			try
+			{
+				fileWriter.flush();
+				fileWriter.close();
+			}
+			catch (Exception ex2)
+			{
+				ex2.printStackTrace();
+			}
+		}
+	}
+
 	private void createSchedule() {
 		if (scheduleValid())
 		{
-			buildSchedule();
+			checkForIssues();
 		}
 	}
 	
@@ -242,7 +283,8 @@ public class MBOCtrl implements Initializable {
 	private ArrayList<Issue> issues = new ArrayList<>();
 	Issue issue;
 	int currentTime;
-	private void buildSchedule() {
+	private void checkForIssues() {
+		
 		int trainsActive = 0;
 		int operatorsActive = 0;
 		int prevOverflow = 0;
@@ -269,13 +311,13 @@ public class MBOCtrl implements Initializable {
 			
 			currOverflow = trainsActive - operatorsActive;
 			System.out.println(currOverflow + " " + trainsActive + " " + operatorsActive);
-			if (currOverflow != prevOverflow && currOverflow > 0)
+			if (currOverflow != prevOverflow)
 			{
 				issue = new Issue(currOverflow, convertToMilTime(currentTime, startTime));
 				issues.add(issue);
 				prevOverflow = currOverflow;
 			}
-			else if (currOverflow == prevOverflow && currOverflow > 0)
+			else if (currOverflow == prevOverflow)
 			{
 				issue.increaseDuration();
 			}
@@ -287,21 +329,38 @@ public class MBOCtrl implements Initializable {
 		
 		//report any issues found when creating the schedule
 		reportIssues();
+		if (issueCount > 0)
+		{
+			Alert alert = new Alert(AlertType.INFORMATION, "Warning: There were " + issueCount + " issue(s) found and reported."  
+					+  " You must fix these issues before continuing schedule creation.", ButtonType.OK);
+			alert.showAndWait();
+		}
+		else
+		{
+			buildSchedule();
+		}
+	}
+
+	private void buildSchedule() {
+		new Alert(AlertType.INFORMATION, "made it", ButtonType.OK).showAndWait();
 		
 	}
 
-	
+	int issueCount = 0;
 	private void reportIssues() {
 		int excessTrains = 0;
 		int issueDuration = 0;
+		issueCount = 0;
 		for (Issue issue : issues)
 		{
-			new Alert(AlertType.INFORMATION, "made it ", ButtonType.OK).showAndWait();
-			excessTrains = issue.getAmtOfExcessOperators();
-			issueDuration = issue.getConflictDuration();
-			new Alert(AlertType.INFORMATION, "You are missing " + excessTrains + " operator(s)" + " between times " + String.valueOf(issue.getStartTime()) + " and " + String.valueOf(convertToMilTime(issue.getConflictDuration(), issue.getStartTime())), ButtonType.OK).showAndWait();
+			if (issue.getAmtOfExcessOperators() > 0)
+			{
+				excessTrains = issue.getAmtOfExcessOperators();
+				issueDuration = issue.getConflictDuration();
+				issueCount++;
+				new Alert(AlertType.INFORMATION, "You are missing " + excessTrains + " operator(s)" + " between times " + String.valueOf(issue.getStartTime()) + " and " + String.valueOf(convertToMilTime(issue.getConflictDuration(), issue.getStartTime())), ButtonType.OK).showAndWait();
+			}
 		}
-		
 		issues = new ArrayList<>();
 	}
 
@@ -334,9 +393,9 @@ public class MBOCtrl implements Initializable {
 		String endTimeStr = String.valueOf(endTime);
 		
 		endTimeHours = Integer.parseInt(endTimeStr.substring(0, endTimeStr.length() - 2));
-		startTimeHours = Integer.parseInt(startTimeStr.substring(0, endTimeStr.length() - 2));
+		startTimeHours = Integer.parseInt(startTimeStr.substring(0, startTimeStr.length() - 2));
 		endTimeMin = Integer.parseInt(endTimeStr.substring(endTimeStr.length() - 2, endTimeStr.length()));
-		startTimeMin = Integer.parseInt(endTimeStr.substring(endTimeStr.length() - 2, endTimeStr.length()));
+		startTimeMin = Integer.parseInt(startTimeStr.substring(startTimeStr.length() - 2, startTimeStr.length()));
 		totalTimeHours = endTimeHours - startTimeHours; 
 		totalTimeMin = endTimeMin - startTimeMin; 
 		totalTime = totalTimeHours * 60 + totalTimeMin;
@@ -348,24 +407,14 @@ public class MBOCtrl implements Initializable {
 
 	//Dummy values expected to change, planner should never want to make a schedule which 
 	//starts 11 years in the future, nor make a schedule which ends in the past
-	int startTime = 10000000; 
-	int endTime = -1;
+	int startTime; 
+	int endTime;
 	
 	private boolean scheduleValid() {
 		availableOperators.clear();
 		availableTrains.clear();
-		//check: are there more trains than operators?
-		if (trainsTV.getItems().size() > operatorsTV.getItems().size())
-		{
-			Alert alert = new Alert(AlertType.CONFIRMATION, "Warning: You have more trains than operators to operate them."
-														+  " Would you like to continue schedule creation anyway? ", ButtonType.YES, ButtonType.NO);
-			alert.showAndWait();
-			
-			if (alert.getResult() == ButtonType.NO)
-			{
-				return false;
-			}
-		}
+		startTime = 10000000;
+		endTime = -1;
 		
 		//check: are any operators working more than 8 1/2 hours?
 		//check: incorrect time formats for operators?
