@@ -42,6 +42,8 @@ public class CTCCtrl implements Initializable {
 	@FXML
 	private ChoiceBox<String> LineChoiceBox;
 	@FXML
+	private ChoiceBox<String> SwitchChoiceBox;
+	@FXML
 	private ChoiceBox<String> DestinationChoiceBox;
 	@FXML
 	private ChoiceBox<String> ImportScheduleChioceBox;
@@ -73,11 +75,11 @@ public class CTCCtrl implements Initializable {
     }
     public void JIASU() {
     	ClockSingleton aClock=ClockSingleton.getInstance();
-    	aClock.setRatio(aClock.getRatio()*2);
+    	aClock.setRatio(aClock.getRatio()*10);
     }
     public void JIANSU(){
     	ClockSingleton aClock=ClockSingleton.getInstance();
-    	aClock.setRatio(aClock.getRatio()/2);
+    	aClock.setRatio(aClock.getRatio()/10);
     }
     public void ButtonResumeClicked() {
     	ClockSingleton aClock=ClockSingleton.getInstance();
@@ -154,8 +156,8 @@ public class CTCCtrl implements Initializable {
 		Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
 		//int[] intArray = Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray();
 		int tmpauthority=mySin.viewtrains().get(Integer.parseInt(TrainIDTextField.getCharacters().toString())).getAuthority();
-		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,mytime,1+(int)(Integer.parseInt(SpeedTextField.getCharacters().toString())*0.448));//TODO convert time String (here is 0) into an Int
-		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),mySin.viewSchedule().get(Integer.valueOf(TrainIDTextField.getCharacters().toString())).getAuthority(),1+(int)(Integer.parseInt(SpeedTextField.getCharacters().toString())*0.448));
+		mySin.addSchedule(Integer.parseInt(TrainIDTextField.getCharacters().toString()),line,myRoute,myDistance,mytime,Integer.parseInt(SpeedTextField.getCharacters().toString()));//TODO convert time String (here is 0) into an Int
+		mySin.ModifyTrain(Integer.parseInt(TrainIDTextField.getCharacters().toString()),mySin.viewSchedule().get(Integer.valueOf(TrainIDTextField.getCharacters().toString())).getAuthority(),Integer.parseInt(SpeedTextField.getCharacters().toString()));
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
@@ -226,8 +228,8 @@ public class CTCCtrl implements Initializable {
 		Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
 		//int[] intArray = Arrays.stream(myBlocks).mapToInt(Integer::intValue).toArray();
 		int tmpauthority=mySin.viewtrains().get(Integer.parseInt(IDModify.getCharacters().toString())).getAuthority();
-		mySin.addSchedule(Integer.parseInt(IDModify.getCharacters().toString()),line,myRoute,myDistance,mytime,1+(int)(Integer.parseInt(SpeedModify.getCharacters().toString())*0.448));//TODO convert time String (here is 0) into an Int
-		mySin.ModifyTrain(Integer.parseInt(IDModify.getCharacters().toString()),mySin.viewSchedule().get(Integer.valueOf(IDModify.getCharacters().toString())).getAuthority(),1+(int)(Integer.parseInt(SpeedModify.getCharacters().toString())*0.448));
+		mySin.addSchedule(Integer.parseInt(IDModify.getCharacters().toString()),line,myRoute,myDistance,mytime,Integer.parseInt(SpeedModify.getCharacters().toString()));//TODO convert time String (here is 0) into an Int
+		mySin.ModifyTrain(Integer.parseInt(IDModify.getCharacters().toString()),mySin.viewSchedule().get(Integer.valueOf(IDModify.getCharacters().toString())).getAuthority(),Integer.parseInt(SpeedModify.getCharacters().toString()));
 		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
 		ScheduleListView.setItems(ScheduleString);
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
@@ -306,6 +308,12 @@ public class CTCCtrl implements Initializable {
 			String[] Schedulename={"schedule1", "FIXME","schedule3"};
 			ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
 			DepartureStationChoiceBox1.setItems(FXCollections.observableArrayList(sections));
+			String[] switches=mySin.switchstuff();
+			SwitchChoiceBox.setItems(FXCollections.observableArrayList(switches));
+			
+			
+			
+
 
 		}
 		String[] mapstring=new String[routine.length];
@@ -324,6 +332,7 @@ public class CTCCtrl implements Initializable {
 				mapstring[routine.length-1-i]=routine[routine.length-1-i]+" Not Occupied";
 		}
 		MapListView.setItems(FXCollections.observableArrayList(mapstring));
+		mySin.switchstuff();
 		if (realstations!=null)
 		ScheduleListView1.setItems(FXCollections.observableArrayList(realstations));
 		if (!routine[0].equals("")) stopupdate=true;

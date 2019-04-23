@@ -166,12 +166,27 @@ public class CTCSingleton implements CTCInterface {
 		while (iterator.hasNext()) {
 			Entry<Integer, Train> entry = iterator.next();
 			Train value = entry.getValue();
-			tmp.addAll(value.printTrain());
+			int ID=value.getID();
+			tmp.add(String.valueOf(ID));
+			if (myschedule.get(ID).getIfSpdLmt())
+				tmp.add("	Suggested Speed is the max speed: "+(int)(myschedule.get(ID).getSpdlmt()/0.5));
+			else
+				tmp.add("	Suggested Speed is the suggested speed: "+myschedule.get(ID).getspdprint());
+			//tmp.add("	Current Position:"+ CurrentPosition);
+			tmp.add("	Authority: "+myschedule.get(ID).getAuthority());
 		}
 		return tmp;
 	}
 	public void ModifyTrain(Integer ID, int Authority, int Speed){
 		Train tmp=trains.get(ID);
+		if(Speed*0.448>myschedule.get(ID).getSpdlmt()) {
+			myschedule.get(ID).setIfLspdlmt(true);
+		}
+		else {
+			myschedule.get(ID).setIfLspdlmt(false);
+			myschedule.get(ID).setSpeed((int)(Speed*0.448));
+			myschedule.get(ID).setspdprint(Speed);
+		}
 		tmp.set2(Speed, Authority);
 	}
 	public Map<Integer,Train> viewtrains(){
@@ -194,6 +209,74 @@ public class CTCSingleton implements CTCInterface {
 	}
 	public String viewLine(int ID) {
 		return myschedule.get(ID).getLine();
+	}
+	public String[] switchstuff() {
+		Set<Integer> switchIDs=new TreeSet<Integer>();
+		boolean ifYarde=false;
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			try {
+				TrackBlock myBlock=tmp.getEntrance();
+				boolean ifA=false;
+				TrackJunction possiblenext;
+				while(true) {
+					if (ifA) {
+						possiblenext=myBlock.getJunctionA();
+					}
+					else {
+						possiblenext=myBlock.getJunctionB();
+					}
+					while (true) {
+						if (possiblenext.getID()==-1) {
+							ifYarde=true;
+							break;
+						}
+						else if (possiblenext.isSwitch()) {
+							TrackSwitch theswitch=tmp.getSwitch(possiblenext.getID());
+							switchIDs.add(theswitch.getSwitchID());
+							if (possiblenext.getEntryPoint()==1||possiblenext.getEntryPoint()==2) {
+								possiblenext=theswitch.getMainJunction();
+								continue;
+							}
+							else {
+								possiblenext=theswitch.getStraightJunction();
+								if(possiblenext.getID()==-1) {
+									ifYarde=true;
+									break;
+								}
+								else if(possiblenext.getEntryPoint()==0||tmp.getBlock(possiblenext.getID()).isBidirectional()) {
+									continue;
+								}
+								else {
+									possiblenext=theswitch.getDivergingJunction();
+									continue;
+								}
+							}
+						}
+						else {
+							myBlock=tmp.getBlock(possiblenext.getID());
+							if (possiblenext.getEntryPoint()==0) {
+								ifA=false;
+								break;
+							}
+							else {
+								ifA=true;
+								break;
+							}
+						}
+					}
+				if(ifYarde) break;
+			}
+		}
+		catch (SwitchStateException e) {}
+		}
+		String[] result=new String[switchIDs.size()];
+		int a=0;
+		for (Integer i:switchIDs) {
+			result[a]="switch ID:"+i;
+			a++;
+		}
+		return result;
 	}
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
