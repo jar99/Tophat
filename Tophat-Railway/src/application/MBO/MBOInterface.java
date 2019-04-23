@@ -10,4 +10,6 @@ public interface MBOInterface {
 	 * @param trackLine - deep copy of the new line object with all it's data
 	 */
 	public void importLine(TrackLine trackLine);
+
+	void createTrain(TrackLine trackLine);
 }
