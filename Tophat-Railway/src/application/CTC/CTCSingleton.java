@@ -211,69 +211,15 @@ public class CTCSingleton implements CTCInterface {
 		return myschedule.get(ID).getLine();
 	}
 	public String[] switchstuff() {
-		Set<Integer> switchIDs=new TreeSet<Integer>();
-		boolean ifYarde=false;
+		Collection<TrackSwitch> switchIDs = new TreeSet<TrackSwitch>();
 		for(String key:track.keySet()) {
 			TrackLine tmp=track.get(key);
-			try {
-				TrackBlock myBlock=tmp.getEntrance();
-				boolean ifA=false;
-				TrackJunction possiblenext;
-				while(true) {
-					if (ifA) {
-						possiblenext=myBlock.getJunctionA();
-					}
-					else {
-						possiblenext=myBlock.getJunctionB();
-					}
-					while (true) {
-						if (possiblenext.getID()==-1) {
-							ifYarde=true;
-							break;
-						}
-						else if (possiblenext.isSwitch()) {
-							TrackSwitch theswitch=tmp.getSwitch(possiblenext.getID());
-							switchIDs.add(theswitch.getSwitchID());
-							if (possiblenext.getEntryPoint()==1||possiblenext.getEntryPoint()==2) {
-								possiblenext=theswitch.getMainJunction();
-								continue;
-							}
-							else {
-								possiblenext=theswitch.getStraightJunction();
-								if(possiblenext.getID()==-1) {
-									ifYarde=true;
-									break;
-								}
-								else if(possiblenext.getEntryPoint()==0||tmp.getBlock(possiblenext.getID()).isBidirectional()) {
-									continue;
-								}
-								else {
-									possiblenext=theswitch.getDivergingJunction();
-									continue;
-								}
-							}
-						}
-						else {
-							myBlock=tmp.getBlock(possiblenext.getID());
-							if (possiblenext.getEntryPoint()==0) {
-								ifA=false;
-								break;
-							}
-							else {
-								ifA=true;
-								break;
-							}
-						}
-					}
-				if(ifYarde) break;
-			}
-		}
-		catch (SwitchStateException e) {}
+			tmp.getSwitches();
 		}
 		String[] result=new String[switchIDs.size()];
 		int a=0;
-		for (Integer i:switchIDs) {
-			result[a]="switch ID:"+i;
+		for (TrackSwitch i:switchIDs) {
+			result[a]="switch ID:"+i.getSwitchID();
 			a++;
 		}
 		return result;
