@@ -35,6 +35,9 @@ public class Train{
 	public int getAuthority(){
 		return authority;
 	}
+	public void setAuthority(int a) {
+		authority=a;
+	}
 	public ArrayList<String> printTrain(){
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
@@ -44,3 +47,4 @@ public class Train{
 		return tmp;
 	}
 }
+
