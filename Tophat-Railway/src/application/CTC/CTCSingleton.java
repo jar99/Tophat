@@ -214,7 +214,7 @@ public class CTCSingleton implements CTCInterface {
 		Collection<TrackSwitch> switchIDs = new TreeSet<TrackSwitch>();
 		for(String key:track.keySet()) {
 			TrackLine tmp=track.get(key);
-			tmp.getSwitches();
+			switchIDs=tmp.getSwitches();
 		}
 		String[] result=new String[switchIDs.size()];
 		int a=0;
@@ -250,3 +250,4 @@ public class CTCSingleton implements CTCInterface {
 	}
 
 }
+
