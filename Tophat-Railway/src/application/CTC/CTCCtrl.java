@@ -70,9 +70,15 @@ public class CTCCtrl implements Initializable {
     private HashMap <String,String> Departurestorage=new HashMap <String,String>();
     private HashMap <String,Integer> Departureindex=new HashMap<String,Integer>();
     public void StraightClicked() {
+    	TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+    	String switchID=SwitchChoiceBox.getSelectionModel().getSelectedItem();
+    	TCInterface.manuallySetSwitch(Integer.parseInt(switchID.split(":")[1]),true);
     	return;
     }
     public void DivergeClicked() {
+    	TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
+    	String switchID=SwitchChoiceBox.getSelectionModel().getSelectedItem();
+    	TCInterface.manuallySetSwitch(Integer.parseInt(switchID.split(":")[1]),false);
     	return;
     }
     public void ButtonPauseClicked() {
@@ -370,4 +376,5 @@ public class CTCCtrl implements Initializable {
 
 	}
 }
+
 
