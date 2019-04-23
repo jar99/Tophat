@@ -35,12 +35,16 @@ public class Train{
 	public int getAuthority(){
 		return authority;
 	}
+	public void setAuthority(int a) {
+		authority=a;
+	}
 	public ArrayList<String> printTrain(){
 		ArrayList<String> tmp=new ArrayList<String>();
 		tmp.add(String.valueOf(ID));
-		//tmp.add("	Current Speed:"+CurrentSpeed);
+		tmp.add("	Suggested Speed:"+(int)((SuggestedSpeed)/0.448));
 		//tmp.add("	Current Position:"+ CurrentPosition);
 		tmp.add("	Authority:"+authority);
 		return tmp;
 	}
 }
+

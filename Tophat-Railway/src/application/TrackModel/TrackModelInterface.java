@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+ * <h1>Track Model Interface</h1> Defines methods to be used by other modules
+ * for interacting with the Track Model
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public interface TrackModelInterface {
 
 	// =========CTC Methods==========
@@ -20,6 +28,14 @@ public interface TrackModelInterface {
 	 * @return the number of scheduled alighters
 	 */
 	public int getScheduledAlighting(String lineName, String stationName);
+
+	/**
+	 * Get number of passengers who have boarded trains.
+	 * 
+	 * @param lineName - the name of the station's line
+	 * @return the total number of boarders
+	 */
+	public int getTotalBoarders(String lineName);
 
 	// =========Track Controller Methods==========
 	/**
@@ -96,8 +112,9 @@ public interface TrackModelInterface {
 	 * @param lineName - the name of the block's line
 	 * @param blockID  - the id for the block
 	 * @param green    - true for green; false for red
+	 * @throws TrackPowerFailureException 
 	 */
-	public void setLightStatus(String lineName, int blockID, boolean green);
+	public void setLightStatus(String lineName, int blockID, boolean green) throws TrackPowerFailureException;
 
 	/**
 	 * Get occupancy for a block
@@ -257,8 +274,9 @@ public interface TrackModelInterface {
 	 * 
 	 * @param trainID - the id for the train
 	 * @return true, if green; false, if red
+	 * @throws TrackPowerFailureException 
 	 */
-	public boolean trainBlockLightIsGreen(int trainID);
+	public boolean trainBlockLightIsGreen(int trainID) throws TrackPowerFailureException;
 
 	/**
 	 * Get block suggested speed (meters/second) for train

@@ -37,6 +37,14 @@ public interface TrackControllerInterface {
 	public int getAuthorityCTC(String lineName, int blockID);
 	
 	/**
+	 * 
+	 * @param lineName - line name
+	 * @param blockID - block number 
+	 * @return true if block has a failure if block is operational
+	 */
+	public boolean isBlockBroken(String lineName, int blockID);
+	
+	/**
 	 * Gives Track Controller a new line
 	 * 
 	 * @param trackLine - deep copy of the new line object with all it's data
@@ -50,6 +58,11 @@ public interface TrackControllerInterface {
 	 */
 	public void removeTrain(int trainID);
 	
-	
+	/**
+	 * Lets the CTC pick a switch and change its position.
+	 * @param switchID - pick the switch id that will be changed
+	 * @param switchStraight - true for straight or false for diverge
+	 */
+	public void manuallySetSwitch(int switchID, boolean switchStraight);
 	
 }

@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+ * <h1>Track Station</h1> A block of the track which also serves as a station.
+ * Models the boarding and alighting of passengers.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackStation extends TrackBlock {
 
 	// Ticket sale information
@@ -55,6 +63,13 @@ public class TrackStation extends TrackBlock {
 		this.scheduledAlighters += newAlighters;
 	}
 
+	/**
+	 * Simulates passengers boarding and alighting the train
+	 * 
+	 * @param currentPassengers - the current number of passengers on the train
+	 * @param capacity          - the passenger limit for the train
+	 * @return the new number of passengers
+	 */
 	public int arrival(int currentPassengers, int capacity) {
 		docked = true;
 
@@ -81,6 +96,9 @@ public class TrackStation extends TrackBlock {
 		return currentPassengers;
 	}
 
+	/**
+	 * Simulates the train leaving the station
+	 */
 	public void departure() {
 		this.docked = false;
 		this.alighting = 0;

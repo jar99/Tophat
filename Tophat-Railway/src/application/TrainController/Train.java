@@ -3,18 +3,16 @@ package application.TrainController;
 import application.ClockSingleton;
 import application.TrainModel.TrainInterface;
 
-public class Train implements TrainCtrlInterface {
-	
 
+public class Train implements TrainCtrlInterface {
 	//do power calculation in here
-	
+
 	private int trainID;
 	private double speed, power;
 	private boolean isManual = false;
-	
-	
+
 	private TrainInterface trainMod;
-	private double ki = 4, kp = 10;
+	private double ki = 0.01, kp = 0.01;
 
 	public Train(Integer trainID, TrainInterface trainMod) {
 		this.trainID = trainID;
@@ -23,12 +21,12 @@ public class Train implements TrainCtrlInterface {
 
 	public int getTrianID() {
 		return trainID;
-		
 	}
+
 	public void setSpeed(double speed) {
 		this.speed = speed;
 	}
-	
+
 	public double getSpeed() {
 		return speed;
 	}
@@ -36,35 +34,35 @@ public class Train implements TrainCtrlInterface {
 	public double getActualSpeed() {
 		return trainMod.getSpeed();
 	}
-	
+
 	public void setPower(double power) {
 		this.power = power;
 	}
-	
+
 	public double getPower() {
 		return power;
 	}
-	
+
 	public double getTemperature() {
 		return trainMod.getTemperature();
 	}
-	
+
 	public void setTemperature(double temp) {
 		trainMod.setTemperature(temp);
 	}
-	
+
 	public void toggleServiceBrake() {
 		trainMod.toggleServiceBrake();
 	}
-	
+
 	public boolean getServiceBrake() {
-		return trainMod.toggleServiceBrake();
+		return trainMod.getServiceBrake();
 	}
-	
+
 	public boolean getEmergencyBrake() {
 		return trainMod.getEmergencyBrake();
 	}
-	
+
 	public void toggleEmergencyBrake() {
 		if(!getEmergencyBrake()) {
 			trainMod.triggerEmergencyBrake();
@@ -72,7 +70,7 @@ public class Train implements TrainCtrlInterface {
 			trainMod.resetEmergencyBrake();
 		}
 	}
-	
+
 	/**
 	 * true = Manual
 	 * False = Automatic
@@ -81,28 +79,27 @@ public class Train implements TrainCtrlInterface {
 	public void setDriveMode(boolean drvieMode) {
 		isManual = drvieMode;
 	}
-	
+
 	public boolean getDriveMode() {
 		return isManual;
 	}
 	
-	
 	public boolean engineStatus() {
 		return trainMod.engineState();
 	}
-	
+
 	public boolean brakeStatus() {
 		return trainMod.brakeOperationState();
 	}
-	
+
 	public void toggleLeftDoor() {
 		trainMod.toggleLeftDoors();
 	}
-	
+
 	public void toggleRightDoor() {
 		trainMod.toggleRightDoors();
 	}
-	
+
 	public void toggleInteriorLights() {
 		trainMod.toggleInterierLight();
 	}
@@ -110,7 +107,7 @@ public class Train implements TrainCtrlInterface {
 	public boolean leftDoorState() {
 		return trainMod.getLeftDoorState();
 	}
-	
+
 	public boolean rightDoorState() {
 		return trainMod.getRightDoorState();
 	}
@@ -138,15 +135,15 @@ public class Train implements TrainCtrlInterface {
 	public int getCTCAuthority() {
 		return trainMod.getTrackAuthority();
 	}
-	
+
 	public void setKI(double ki) {
 		this.ki = ki;
 	}
-	
+
 	public void setKP(double kp) {
 		this.kp = kp;
 	}
-	
+
 	/**
 	 * 
 	 * @param deltaT = time difference (time between updates)
@@ -160,15 +157,13 @@ public class Train implements TrainCtrlInterface {
 	}
 
     double lastError;
-    
+   
 	public void update() {
 		ClockSingleton clkSin = ClockSingleton.getInstance();
 		double deltaT = clkSin.getRatio();
-		double newError = speed-trainMod.getSpeed();
-		double np = ki + kp*laplace(deltaT, lastError, newError, power);
-		
+		double newError = speed - trainMod.getSpeed();
+		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
 		trainMod.setPower(np);
-		
 		lastError = newError;
 		power = np;
 	}
@@ -188,35 +183,32 @@ public class Train implements TrainCtrlInterface {
 	public double getKI() {
 		return ki;
 	}
-	
+
 	public double getKP() {
 		return kp;
 	}
-	
+
 	public void setLights(boolean b) {
 		if(getLights() != b) {
 			toggleLights();
 		}
 	}
-	
-	
+
 	public void setRightDoor(boolean b) {
 		if(rightDoorState() != b) {
 			toggleRightDoor();
 		}
 	}
-	
+
 	public void setLeftDoor(boolean b) {
 		if(leftDoorState() != b) {
 			toggleLeftDoor();
 		}	
 	}
-	
+
 	public void setEmergencyBrake(boolean b) {
 		if(getEngineStatus() != b) {
 			toggleEmergencyBrake();
 		}
 	}
 }
-
-//new edits

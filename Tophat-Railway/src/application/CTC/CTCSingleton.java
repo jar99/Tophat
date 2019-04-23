@@ -82,17 +82,20 @@ public class CTCSingleton implements CTCInterface {
 		return Sections;
 	}
 	public String[] getOnlyStations() {
+		TrackModelInterface aTest = TrackModelSingleton.getInstance();
 		for(String key:track.keySet()) {
 			TrackLine tmp=track.get(key);
 			Collection<TrackStation> myStation=tmp.getStations();
 			int mySize=myStation.size();
-			RealStations=new String[mySize];
+			RealStations=new String[mySize+1];
 			int i=0;
 			for (TrackStation astation:myStation){
-				RealStations[i]=astation.getStationName()+" Alighting:"+astation.getAlighting()+" Boarding:"+astation.getBoarding();
+				RealStations[i+1]=astation.getStationName()+" Alighting:"+aTest.getScheduledAlighting("green",astation.getStationName())+" Boarding:"+aTest.getScheduledBoarding("green",astation.getStationName());
 				i++;
 			}
 		}
+		if (!track.isEmpty())
+			RealStations[0]="Total throughput: "+aTest.getTotalBoarders("green");
 		return RealStations;
 	}
 	public int[] getBlocks(){
@@ -163,12 +166,27 @@ public class CTCSingleton implements CTCInterface {
 		while (iterator.hasNext()) {
 			Entry<Integer, Train> entry = iterator.next();
 			Train value = entry.getValue();
-			tmp.addAll(value.printTrain());
+			int ID=value.getID();
+			tmp.add(String.valueOf(ID));
+			if (myschedule.get(ID).getIfSpdLmt())
+				tmp.add("	Suggested Speed is the max speed: "+(int)(myschedule.get(ID).getSpdlmt()/0.5));
+			else
+				tmp.add("	Suggested Speed is the suggested speed: "+myschedule.get(ID).getspdprint());
+			//tmp.add("	Current Position:"+ CurrentPosition);
+			tmp.add("	Authority: "+myschedule.get(ID).getAuthority());
 		}
 		return tmp;
 	}
 	public void ModifyTrain(Integer ID, int Authority, int Speed){
 		Train tmp=trains.get(ID);
+		if(Speed*0.448>myschedule.get(ID).getSpdlmt()) {
+			myschedule.get(ID).setIfLspdlmt(true);
+		}
+		else {
+			myschedule.get(ID).setIfLspdlmt(false);
+			myschedule.get(ID).setSpeed((int)(Speed*0.448));
+			myschedule.get(ID).setspdprint(Speed);
+		}
 		tmp.set2(Speed, Authority);
 	}
 	public Map<Integer,Train> viewtrains(){
@@ -185,6 +203,26 @@ public class CTCSingleton implements CTCInterface {
 	}
 	public void closeSection(int ID) {
 		isSectionClose[ID]=true;
+	}
+	public HashMap<String, TrackLine> viewTrack(){
+		return track;
+	}
+	public String viewLine(int ID) {
+		return myschedule.get(ID).getLine();
+	}
+	public String[] switchstuff() {
+		Collection<TrackSwitch> switchIDs = new TreeSet<TrackSwitch>();
+		for(String key:track.keySet()) {
+			TrackLine tmp=track.get(key);
+			switchIDs=tmp.getSwitches();
+		}
+		String[] result=new String[switchIDs.size()];
+		int a=0;
+		for (TrackSwitch i:switchIDs) {
+			result[a]="switch ID:"+i.getSwitchID();
+			a++;
+		}
+		return result;
 	}
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)
@@ -205,4 +243,11 @@ public class CTCSingleton implements CTCInterface {
 		track.put(trackLine.getLineName(), trackLine);
 	}
 
+	@Override
+	public boolean getSectionMaintenance(String lineName, int blockID) {
+		// TODO Implement function to tell Track Controller what blocks need maintenance
+		return isSectionClose[blockID-1];
+	}
+
 }
+

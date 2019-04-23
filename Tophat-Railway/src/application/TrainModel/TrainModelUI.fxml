@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -21,7 +22,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TrainModel.TrainModelCtrl">
    <right>
-      <VBox prefHeight="387.0" prefWidth="189.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="387.0" prefWidth="189.0" spacing="2.0" GridPane.rowIndex="1">
          <children>
             <ToggleButton fx:id="emergencyButton" mnemonicParsing="false" onAction="#clickEmergencyButton" prefHeight="50.0" prefWidth="175.0" style="-fx-background-color: #ed412a;" text="Emergency Brake" textAlignment="JUSTIFY" textFill="WHITE">
                <font>
@@ -29,19 +30,20 @@
                </font>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin></ToggleButton>
+               </VBox.margin>
+            </ToggleButton>
             <Label text="Faults" />
             <CheckBox fx:id="engineFailure" mnemonicParsing="false" onAction="#engineFailureToggle" text="Engine Failure" />
             <CheckBox fx:id="brakeFailure" mnemonicParsing="false" onAction="#brakeFailureToggle" text="Brake Failure" />
             <CheckBox fx:id="mboFailure" mnemonicParsing="false" onAction="#mboFailureToggle" text="MBO Connection Failure" />
             <CheckBox fx:id="railSignalFailure" mnemonicParsing="false" onAction="#railSignalFailureToggle" text="Rail Signal Pickup Failure" />
-            <ListView fx:id="train_log" prefHeight="200.0" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets top="5.0" />
-               </VBox.margin>
+            <ListView fx:id="train_log" prefHeight="190.0" prefWidth="189.0" VBox.vgrow="ALWAYS">
                <padding>
-                  <Insets left="2.0" right="2.0" />
+                  <Insets left="5.0" right="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </ListView>
          </children>
          <BorderPane.margin>
@@ -52,25 +54,46 @@
    <center>
       <TableView fx:id="train_info" prefHeight="348.0" prefWidth="326.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="information_item" editable="false" prefWidth="91.0" sortable="false" text="Item" />
+          <TableColumn fx:id="information_item" editable="false" minWidth="40.0" prefWidth="100.0" sortable="false" text="Item" />
           <TableColumn fx:id="information_value" editable="false" prefWidth="208.0" sortable="false" text="Value" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </center>
    <bottom>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
             <Separator layoutX="-2.0" layoutY="-1.0" prefHeight="7.0" prefWidth="366.0" />
-            <Pane prefHeight="111.0" prefWidth="520.0">
-               <children>
-                  <ImageView fitHeight="106.0" fitWidth="265.0" layoutX="189.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" smooth="false">
-                     <image>
-                        <Image url="@../../../../Code%20Structure%20Diagram.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </Pane>
+            <ImageView fx:id="adBanner" fitHeight="120.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+               <image>
+                  <Image url="@../../../../Code%20Structure%20Diagram.jpg" />
+               </image>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+            </ImageView>
          </children>
       </VBox>
    </bottom>
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="520.0" spacing="5.0" style="-fx-background-color: red;" BorderPane.alignment="TOP_LEFT">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Train Model:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Text fx:id="trainID" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="train-1">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+         </children>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </HBox>
+   </top>
 </BorderPane>
