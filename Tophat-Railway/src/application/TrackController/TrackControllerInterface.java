@@ -58,6 +58,11 @@ public interface TrackControllerInterface {
 	 */
 	public void removeTrain(int trainID);
 	
-	
+	/**
+	 * Lets the CTC pick a switch and change its position.
+	 * @param switchID - pick the switch id that will be changed
+	 * @param switchStraight - true for straight or false for diverge
+	 */
+	public void manuallySetSwitch(int switchID, boolean switchStraight);
 	
 }

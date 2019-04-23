@@ -1159,12 +1159,12 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		storedTrainID[storedTrainIDIndex] = trainID;
 		storedTrainIDIndex++;
 		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
-		if (!sent_train) { try {
+		try {
 			trackModSin.createTrain(lineName, trainID);
 		} catch (SwitchStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} sent_train = !sent_train; }
+		} 
 		
 	}
 
@@ -1247,5 +1247,11 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	public int getAuthorityCTC(String lineName, int blockID) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void manuallySetSwitch(int switchID, boolean switchStraight) {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		trackModInt.setSwitch("green", switchID, switchStraight);
 	}	
 }
