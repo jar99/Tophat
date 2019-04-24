@@ -84,10 +84,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 		trainModelHashTable.put(trainID, train);
 		TrainModelMainCtrl.addTrainS(trainID, train);
 
-		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-		trnCtrl.createTrain(trainID, train); // Create this method.
-
-		train.dispatch();
 		return train;
 
 	}

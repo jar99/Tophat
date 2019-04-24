@@ -421,7 +421,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		// TODO add the mbo connection
 		if (!isActive)
 			return -8;
-		if (mboSin == null)
+		if (!mboConnection)
 			return Integer.MIN_VALUE;
 		return mboAuthority;
 	}
@@ -441,7 +441,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		// TODO add the mbo connection
 		if (!isActive)
 			return -8.8;
-		if (mboSin == null)
+		if (!mboConnection)
 			return Double.NaN;
 		return mboSuggestedSpeed;
 	}

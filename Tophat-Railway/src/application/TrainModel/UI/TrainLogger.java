@@ -29,9 +29,9 @@ public class TrainLogger {
 	
 	public TrainLogger(boolean debug, String path, String format) {
 		this.debug = debug;
+		printDebug(debug);
 		this.time = new java.util.Date();
 		this.timeFormat = new SimpleDateFormat(format);
-		setLogFile(path);
 		info("-----{Running}-----");
 	}
 	
@@ -43,6 +43,11 @@ public class TrainLogger {
 		return logger;	
 	}
 	
+	
+	public static void printToConsoleS(boolean value) {
+		logger.printToConsole(value);
+	}
+	
 	public void printToConsole(boolean value) {
 		console = value;
 	}
@@ -52,8 +57,7 @@ public class TrainLogger {
 	}
 	
 	public void disable() {
-		printDebugS(false);
-		
+		printDebug(false);
 	}
 	
 	public static void setModeS(MODE mode) {
@@ -69,7 +73,7 @@ public class TrainLogger {
 	}
 	
 	public void enable() {
-		printDebugS(true);	
+		printDebug(true);
 	}
 
 	public static void printDebugS(boolean value) {
@@ -208,10 +212,10 @@ public class TrainLogger {
 	
 	public void print(MODE mode, String tag, String text) {
 		if(!debug) return;
-		if(mode.compareTo(this.mode) < 0) return;
+		if(mode.ordinal() < this.mode.ordinal()) return;
 		
-		String line = String.format("%s [%s] %5s: %s\n", timeFormat.format(time), mode.toString(), tag, text);
-		if(console) System.out.println(line); 
+		String line = String.format("%s [%-8s] %8s: %s\n", timeFormat.format(time), mode.toString(), tag, text);
+		if(console) System.out.print(line);
 		if(writer != null) {
 			try {
 				writer.write(line);
@@ -221,6 +225,10 @@ public class TrainLogger {
 				e.printStackTrace();
 			}
 		}	
+	}
+
+	public MODE getMode() {
+		return mode;
 	}
 
 }
