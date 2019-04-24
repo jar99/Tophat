@@ -210,7 +210,7 @@ public class TrainLogger {
 		if(!debug) return;
 		if(mode.compareTo(this.mode) < 0) return;
 		
-		String line = String.format("[%s] %5s: %s\n", timeFormat.format(time), tag, text);
+		String line = String.format("%s [%s] %5s: %s\n", timeFormat.format(time), mode.toString(), tag, text);
 		if(console) System.out.println(line); 
 		if(writer != null) {
 			try {
