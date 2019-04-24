@@ -33,9 +33,9 @@ public class TrainControllerSingleton {
 
 	public Train createTrain(int trainID, TrainInterface trainMod) {
 		TrainControllerCtrl.addTrainS(trainID);
-				Train train = new Train(trainID, trainMod);
-				trainCtrlHashTable.put(trainID, train);
-				return train;
+		Train train = new Train(trainID, trainMod);
+		trainCtrlHashTable.put(trainID, train);
+		return train;
 	}
 
 	public void removeTrain(int trianID) {
