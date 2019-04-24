@@ -133,7 +133,7 @@ public class TrainControllerHWCtrl implements Initializable{
 		}
 		
 		// doors and lights
-		if(mySin.lights) lightsValue.setText("On");
+		if(mySin.extLights) lightsValue.setText("On");
 		else lightsValue.setText("Off");
 		if(mySin.leftDoor) leftDoorValue.setText("Open");
 		else leftDoorValue.setText("Closed");

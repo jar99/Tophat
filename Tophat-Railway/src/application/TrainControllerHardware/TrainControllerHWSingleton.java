@@ -4,6 +4,9 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortIOException;
 import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainInterface;
+import application.ClockSingleton;
+
+import java.util.LinkedList;
 
 public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 
@@ -34,10 +37,11 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	
 	// these are all of the values that I actually change
 	int trainId;
+	LinkedList<Integer> trainIds = new LinkedList<>();
 	boolean drivingMode;
 	double speed, power, ki, kp;
 	boolean brake, eBrake;
-	boolean lights, leftDoor, rightDoor;
+	boolean intLights, extLights, leftDoor, rightDoor;
 	double temp;
 	
 	// values that I'm just displaying
@@ -48,6 +52,12 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	// getters and setters
 	public int getTrainId() {
 		return trainId;
+	}
+	
+	public boolean addTrain(int newTrainId) {
+		if(trainIds.contains(trainId)) return false;
+		trainIds.add(newTrainId);
+		return true;
 	}
 	
 	void setTrainId(int id) {
@@ -90,8 +100,12 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		eBrake = false;
 	}
 	
-	void toggleLights() {
-		lights = !lights;
+	void toggleIntLights() {
+		intLights = !intLights;
+	}
+	
+	void toggleExtLights() {
+		extLights = !extLights;
 	}
 	
 	void toggleLeftDoor() {
@@ -101,7 +115,21 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	void toggleRightDoor() {
 		rightDoor = !rightDoor;
 	}
-	
+	/**
+	 * 
+	 * @param deltaT = time difference (time between updates)
+	 * @param a = error last
+	 * @param an = error new
+	 * @param b = power last 
+	 * @return new power
+	 */
+    private double laplace(double deltaT, double a, double an, double b) {
+		return b+((deltaT)/2)*(an + a);
+	}
+
+    double lastError;
+   
+
 	/**
 	 * Controls Singleton connections, doesn't update UI
 	 */
@@ -125,12 +153,19 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		signalState = train.railSignalState();
 		brakeState = train.brakeOperationState();
 		
-		train.setPower(power);
+		// power
+		ClockSingleton clkSin = ClockSingleton.getInstance();
+		double deltaT = clkSin.getRatio();		
+		double newError = speed - train.getSpeed();
+		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
+		train.setPower(np);
+		lastError = newError;
+		power = np;
 		train.setTemperature(temp);
 		train.setServiceBrake();
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) eBrake = true;
-		if(train.getLightState() != lights) train.toggleLights();
+		if(train.getLightState() != extLights) train.toggleLights();
 		if(train.getLeftDoorState() != leftDoor) train.toggleLeftDoors();
 		if(train.getRightDoorState() != rightDoor) train.toggleRightDoors();
 	}

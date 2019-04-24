@@ -36,7 +36,7 @@ public class TrainControllerDataListener implements SerialPortDataListener{
 				mySin.toggleServiceBrake();
 				break;
 			case 0x05:
-				mySin.toggleLights();
+				mySin.toggleExtLights();
 				break;
 			case 0x06:
 				mySin.toggleLeftDoor();
