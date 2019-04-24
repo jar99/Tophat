@@ -173,7 +173,7 @@ public class CTCSingleton implements CTCInterface {
 			else
 				tmp.add("	Suggested Speed is the suggested speed: "+myschedule.get(ID).getspdprint());
 			//tmp.add("	Current Position:"+ CurrentPosition);
-			tmp.add("	Authority: "+myschedule.get(ID).getAuthority());
+			//tmp.add("	Authority: "+myschedule.get(ID).getAuthority());
 		}
 		return tmp;
 	}
