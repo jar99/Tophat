@@ -154,5 +154,7 @@ public interface TrainInterface {
 	double getMaxPower();
 
 	double getMaxAcceleration();
+	
+	void addTrainInformation(String message);
 
 }

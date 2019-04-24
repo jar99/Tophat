@@ -57,28 +57,27 @@ public class Converters<T> {
 	}
 
 	public static String TempratureConverter(double tempC) {
-		tempC = tempC * 9 / 5 + 32;
+		tempC = ctof(tempC);
 		return String.format("%.2f\u00B0F", tempC);
 	}
 
 	public static String SpeedConverter(double speedM) {
-		speedM = speedM * 0.621371;
+		speedM = kmhTomph(speedM);
 		return String.format("%.2f mph", speedM);
 	}
 
 	public static String AccelerationConverter(double acelM) {
-		acelM = acelM * 3.2808398950131;
+		acelM = msTofs(acelM);
 		return String.format("%.2f f/s^2", acelM);
 	}
 
 	public static String Waight(double waightKG) {
-		waightKG = waightKG * 2.20462;
+		waightKG = kgTolbs(waightKG);
 		return String.format("%.2f LBS", waightKG);
 	}
 
-	public static String KiloWatt(double watts) {
-		watts = watts / 1000;
-		return String.format("%.2f KW", watts);
+	public static String KiloWatt(double kiloWatts) {
+		return String.format("%.2f KW", kiloWatts);
 	}
 
 	public String concat(T item) {
@@ -90,5 +89,42 @@ public class Converters<T> {
 			return item;
 		return converter.apply(item);
 	}
+	
+	public static double kmhToms(double kmh) {
+		return 0.277778 * kmh;
+	}
 
+	public static double msTokmh(double ms) {
+		return 3.60000288 * ms;
+	}
+	
+	public static double ctof(double tempC) {
+		return tempC * 9 / 5 + 32;
+	}
+	
+	public static double ftoc(double tempF) {
+		return (tempF - 32) * 5 / 9 ;
+	}
+	
+	public static double kmhTomph(double speedM) {
+		return speedM * 0.621371;
+	}
+	
+	public static double msTofs(double acelM) {
+		return acelM * 3.2808398950131;
+	}
+	
+	public static double kgTolbs(double waightKG) {
+		return waightKG * 2.20462;
+	}
+	
+	public static double baseToKilo(double value) {
+		return value / 1000.0;
+	}
+	
+	public static double baseFromKilo(double value) {
+		return value * 1000.0;
+	}
+	
+	
 }
