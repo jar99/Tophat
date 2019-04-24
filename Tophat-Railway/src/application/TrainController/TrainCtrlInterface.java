@@ -43,5 +43,7 @@ public interface TrainCtrlInterface {
 	 void toggleInteriorLights();
 	 
 	 void setMode(boolean set);
+	 
+	 String getBeacon();
 
 }

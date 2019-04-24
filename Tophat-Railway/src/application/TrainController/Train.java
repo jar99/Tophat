@@ -52,7 +52,7 @@ public class Train implements TrainCtrlInterface {
 	}
 	
 	public boolean getMode() {
-		return set;
+		return TrainControllerSingleton.getMode();
 	}
 	
 	public double getTemperature() {
@@ -155,7 +155,11 @@ public class Train implements TrainCtrlInterface {
 	public void setKP(double kp) {
 		this.kp = kp;
 	}
-
+	
+	public String getBeacon() {
+		return trainMod.getBeaconData();
+	}
+	//public 
 	/**
 	 * 
 	 * @param deltaT = time difference (time between updates)
@@ -181,11 +185,11 @@ public class Train implements TrainCtrlInterface {
 		double np3 = (kp  * newError) + (ki * laplace(deltaT, lastError, newError, power));
 
 		  
-		if(np1 >= np2 && np1 >= np3){
+		if(np1 <= np2 && np1 <= np3){
 			np = np1;
-		}else if(np2 >= np1 && np2 >= np3){
+		}else if(np2 <= np1 && np2 <= np3){
 			np = np2;
-		}else if(np3 >= np2 && np3>= np1){
+		}else if(np3 <= np2 && np3 <= np1){
 			np = np3;
 		}
 		  trainMod.setPower(np);
