@@ -17,16 +17,17 @@ import application.MBO.MBOInterface;
 import application.TrackModel.TrackCircuitFailureException;
 import application.TrackModel.TrackModelInterface;
 import application.TrackModel.TrainCrashedException;
+import application.TrainModel.UI.Converters;
+import application.TrainModel.UI.TrainLogger;
 
 class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInterface {
 
 	// These are some constants that should change
 	private static final double AVERAGEPASSENGERMASS = 75; // Mass of a passenger
 	private static final int BEACONSIZE = 126;
-	private static final double POWERSCALE = 1000.0;
 	private final static double MINVELOCITY = 0.0;
 
-	protected static double MAXVELOCITY = kmhToms(70); // 70 kmh
+	protected static double MAXVELOCITY = Converters.kmhToms(70); // 70 kmh
 	protected static double MAXACCELERATION = 0.5; // 0.5 m/s^2
 	protected static double STDFRICTION = 0.002;
 
@@ -43,7 +44,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private static int CARCOUNT = 6;
 
 	static void setMaxVelocity(double maxvelocity) {
-		MAXVELOCITY = kmhToms(maxvelocity);
+		MAXVELOCITY = Converters.kmhToms(maxvelocity);
 	}
 
 	static void setMaxAcceleration(double maxacceleration) {
@@ -94,14 +95,6 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		CARCOUNT = carcount;
 	}
 
-	private static double kmhToms(double kmh) {
-		return 0.277778 * kmh;
-	}
-
-	private static double msTokmh(double ms) {
-		return 3.60000288 * ms;
-	}
-
 	// These are basic information on the train
 	private int trainID;
 	private boolean isActive = false;
@@ -142,7 +135,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private int passengerCap = PASSENGERCAP;
 
 	private static double trainWaight = TRAINWAIGHT;
-	private double length = LENGTH; // Need to load in from database
+	private double length = LENGTH; 
 	private double width = WIDTH;
 	private double height = HEIGHT;
 	private int carCount = CARCOUNT;
@@ -174,7 +167,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	TrainModel(int trainID, TrackModelInterface trModSin, MBOInterface mboSingleton, int passangers, double speed) {
 		this(trainID, trModSin, mboSingleton);
-		super.setVelocity(kmhToms(speed));
+		super.setVelocity(Converters.kmhToms(speed));
 
 		boardPassengers(passangers);
 
@@ -184,7 +177,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	 * This function is called when the train should be removed.
 	 */
 	void remove() {
-		System.out.println(this + " train was removed at " + System.nanoTime());
+		TrainLogger.infoS(this + " train was removed at " + System.nanoTime());
 		isActive = false;
 	}
 
@@ -206,7 +199,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 			return;
 		ClockSingleton clock = ClockSingleton.getInstance();
 
-//    	System.out.println(this + " train runs at " + System.nanoTime());
+    	TrainLogger.debugS(this + " train runs at " + System.nanoTime());
 
 		long dt = clock.getRatio(); // The amount of seconds between updates
 		if (dt == 0)
@@ -250,7 +243,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	}
 
 	private void trainCrashed() {
-		System.out.println(trainID + ": The train has crashed.");
+		TrainLogger.infoS(trainID + ": The train has crashed.");
 		this.addTrainInformation("The train has crashed.");
 		hasCrashed = true;
 	}
@@ -308,7 +301,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	 * Returns power in watts
 	 */
 	public double getPower() {
-		return power / POWERSCALE;
+		return Converters.baseToKilo(power);
 
 	}
 
@@ -322,7 +315,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		}
 
 		// Sets power to watts
-		power *= POWERSCALE;
+		power = Converters.baseFromKilo(power);
 		if (power > maxPower) {
 			power = maxPower;
 		}
@@ -340,7 +333,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	}
 
 	public double getSpeed() {
-		return msTokmh(velocity);
+		return Converters.msTokmh(velocity);
 	}
 
 	public double getTemperature() {
@@ -375,7 +368,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		}
 		passengerWeight += AVERAGEPASSENGERMASS * numPassengers;
 		passengers += numPassengers;
-		System.out.println("The train now waights " + passengerWeight + " after " + numPassengers
+		TrainLogger.infoS("The train now waights " + passengerWeight + " after " + numPassengers
 				+ " boarded. The train now has " + passengers + " people onboard. People were left behind "
 				+ remainingPassangers + " passangers.");
 		return remainingPassangers;
@@ -383,7 +376,6 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	@Override
 	public int alightPassengers(int numPassengers) {
-		// TODO check for edge cases
 		int exessPassangers = 0;
 		if (numPassengers > passengers) {
 			exessPassangers = passengers - numPassengers;
@@ -392,7 +384,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 		passengerWeight -= AVERAGEPASSENGERMASS * numPassengers;
 		passengers -= numPassengers;
-		System.out.println(
+		TrainLogger.infoS(
 				"The train now waights " + passengerWeight + " after " + numPassengers + " boarded. The train now has "
 						+ passengers + " people onboard. People were left behind " + exessPassangers + " passangers.");
 		return exessPassangers;
@@ -484,7 +476,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		if (!trModSin.trainBlockIsStation(trainID))
 			return;
 		int newPassengers = trModSin.stationPassengerExchange(trainID, passengers, passengerCap);
-		System.out.println("Number of passangers " + newPassengers);
+		TrainLogger.infoS("Number of passangers " + newPassengers);
 		int deltaPassengers = newPassengers - passengers;
 		if (deltaPassengers > 0) {
 			boardPassengers(deltaPassengers);
@@ -672,16 +664,32 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	@Override
 	public double getMaxSpeed() {
-		return msTokmh(maxVelocity);
+		return Converters.msTokmh(maxVelocity);
 	}
 
 	@Override
 	public double getMaxPower() {
-		return maxPower / POWERSCALE;
+		return Converters.baseToKilo(maxPower);
 	}
 
 	@Override
 	public double getMaxAcceleration() {
 		return maxAcceleration;
+	}
+	
+	double getLength() {
+		return length;
+	}
+
+	double getWidth() {
+		return width;
+	}
+
+	double getHeight() {
+		return height;
+	}
+
+	int getCarCount() {
+		return carCount;
 	}
 }

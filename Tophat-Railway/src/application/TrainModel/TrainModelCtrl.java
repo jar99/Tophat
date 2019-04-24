@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 
 import application.TrainModel.UI.Converters;
 import application.TrainModel.UI.TableRow;
+import application.TrainModel.UI.TrainLogger;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -150,7 +151,7 @@ public class TrainModelCtrl implements Initializable {
 	 * This method is called when the tab should be removed.
 	 */
 	void shutdown() {
-		System.out.println("Stoped " + trainModel + " model window.");
+		TrainLogger.infoS("Stoped " + trainModel + " model window.");
 		updateAnimation.stop();
 		pause();
 	}
