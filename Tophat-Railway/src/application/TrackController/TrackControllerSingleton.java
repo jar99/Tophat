@@ -1141,6 +1141,29 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		return CBIDG5;
 	}
 	
+	public void dualTrackVitalityG4() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		for(int i = 77; i < 86; i++) {
+			try {
+				if(trackModInt.getOccupancy("green", i)) {
+					try {
+						trackModInt.setLightStatus("green", 76, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 76, false);
+					}
+					try {
+						trackModInt.setLightStatus("green", 100, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 100, false);
+					}
+					trackModInt.setControlAuthority("green", 76, false);
+					trackModInt.setControlAuthority("green", 100, false);
+				}
+			} catch (TrackCircuitFailureException e) {
+			}
+		}
+	}
+	
 	@Override
 	public void removeTrain(int trainID) {
 		//TODO
