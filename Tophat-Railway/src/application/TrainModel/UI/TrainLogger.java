@@ -1,4 +1,12 @@
 package application.TrainModel.UI;
+/**
+ * This is a logger method that I created to remove cluster from the console.
+ * 
+ * 
+ * @author jar99
+ * @version 1.0
+ *
+ */
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

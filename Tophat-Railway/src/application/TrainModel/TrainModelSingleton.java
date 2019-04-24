@@ -23,6 +23,8 @@ import application.TrainModel.UI.TrainLogger;
 
 public class TrainModelSingleton implements TrainModelInterface {
 
+	private static final String TRAINMODFILE = "train.mod";
+
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainModelSingleton instance;
 
@@ -152,7 +154,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 	}
 
 	private void loadFromFile() {
-		File file = new File("train.mod");
+		File file = new File(TRAINMODFILE);
 		if (!file.exists()) {
 			TrainLogger.errorS("Could not find " + file.getName());
 			return;
