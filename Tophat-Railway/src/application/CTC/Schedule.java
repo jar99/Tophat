@@ -227,5 +227,12 @@ public class Schedule{
 	public int getspdprint() {
 		return spdprint;
 	}
+	public String toString() {
+		String a="";
+		for (int i=0;i<Station.length;i++) {
+			a+=Station[i]+" "+ArrivalTime[i]+" "+LeaveTime[i];
+		}
+		return a;
+	}
 }
 
