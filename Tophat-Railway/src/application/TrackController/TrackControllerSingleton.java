@@ -292,19 +292,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if (controllerID == 1) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 2) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 3) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 4) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 5) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		else
 			return null;
@@ -314,19 +314,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if(controllerID == 1) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 2) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 3) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 4) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 5) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		else
 			return null;
@@ -1276,6 +1276,40 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		}
 	}
 
+	public void manuallyCreateTrainSpeed() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		for(int i = 1; i < 151; i++) {
+			try {
+				trackModInt.setSuggestedSpeed("green", i, 20);
+			} catch (TrackCircuitFailureException e) {
+			}
+			blockListSpeed[i-1] = 20;
+		}
+	}
+	
+	public void manuallyCreateTrainAuthority() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		for(int i = 63; i < 151; i ++) {
+			try {
+				trackModInt.setAuthority("green", i, (150-i+63));
+				trackModInt.setControlAuthority("green", i, true);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			blockListAuthority[i-1] = (150-i+63);
+		}
+		for(int i = 1; i < 63; i++) {
+			try {
+				trackModInt.setAuthority("green", i, 63-i);
+				trackModInt.setControlAuthority("green", i, true);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			blockListAuthority[i-1] = 63-i;
+		}
+	} 
 	
 	@Override
 	public boolean getOccupancyCTC(String lineName, int blockID) {

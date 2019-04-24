@@ -320,7 +320,8 @@ public class TrackControllerCtrl implements Initializable {
 	@FXML
 	void createTrain() {
 		mySin.createTrain("green", 1);
-		mySin.sendTrainToBlock(1, 140, 10);
+		mySin.manuallyCreateTrainAuthority();
+		mySin.manuallyCreateTrainSpeed();
 	}
 	
 	
