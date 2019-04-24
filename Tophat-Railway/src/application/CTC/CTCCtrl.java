@@ -1,5 +1,6 @@
 package application.CTC;
 import java.util.stream.IntStream;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -252,36 +253,101 @@ public class CTCCtrl implements Initializable {
 	}
 	public void ImportClicked(){
 		//TODO import Schedule file
-		mySin.addTrain("1", "80");
-		mySin.addTrain("2", "80");
-		mySin.addTrain("3", "80");
-		mySin.ModifyTrain(1, 3, 80);
-		mySin.ModifyTrain(2, 3, 80);
-		mySin.ModifyTrain(3, 3, 80);
-		String[] tmp1={"Block 1 ","Block2 PIONEER","Block 3 "};
-		Integer[] tmp2=new Integer[2];
-		tmp2[0]=1000;
-		tmp2[1]=1000;
-		mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
-		mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
-		mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
-		tmp1[0]="Block 1 ";
-		tmp1[1]="Block2 PIONEER";
-		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
-		//mySin.addSchedule(2, "Green", tmp1,tmp2, 30*60, 80);
-		tmp1[0]="Block 1 ";
-		tmp1[1]="B3";
-		//mySin.addSchedule(3, "Green", tmp1,tmp2, 60*60, 80);
-		tmp1[0]="B2 StationA";
-		//mySin.addSchedule(1, "Green", tmp1,tmp2, 0, 80);
-		ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
-		ScheduleListView.setItems(ScheduleString);
+		String scheduleName=ImportScheduleChioceBox.getSelectionModel().getSelectedItem();
+		
+		try{
+		File scheduleFile = new File(scheduleName);
+		Scanner scan=new Scanner(scheduleFile);
+		scan.nextLine();
+		while (true) {
+		String[] forSchedule=scan.nextLine().split(",");
+		String[] tmp1=mySin.getStations();
+		int mytime=-1;
+		mySin.addTrain(forSchedule[0], "20");
+		for(int i=0;i<150;i++) {
+			String departure;
+			if (forSchedule[(i+63)%150+3].equals("1")) {
+				
+				if (Departurestorage.containsKey(forSchedule[0])) {
+					departure=Departurestorage.get(forSchedule[0]);
+				}
+			
+				else {
+					Departurestorage.put(forSchedule[0],"yard");
+					departure="yard";
+				}
+			String destination=tmp1[150-1-(i+63)%150];
+			if(mytime==-1) {
+				mytime=Integer.parseInt(forSchedule[2])/100*3600+(Integer.parseInt(forSchedule[2])-Integer.parseInt(forSchedule[2])/100*100)*60;
+			}
+			else {
+				int[] tmptime=mySin.viewSchedule().get(Integer.parseInt(forSchedule[0])).getLeaveTime();
+				mytime=tmptime[tmptime.length-1];
+			}
+			String[] routine=mySin.getStations();
+			Integer[] blocks = Arrays.stream(mySin.getBlocks()).boxed().toArray( Integer[]::new );
+			Integer[] distance = Arrays.stream(mySin.getDistance()).boxed().toArray( Integer[]::new );
+			int s=0;
+			if (Departureindex.containsKey(forSchedule[0])) {
+				s=Departureindex.get(forSchedule[0]);
+			}
+			else {
+				Departureindex.put(forSchedule[0], 150);
+				s=150;
+			}
+			int e=150-1-(i+63)%150;
+			ArrayList<String> list = new ArrayList<String>();
+			ArrayList<Integer> list2 = new ArrayList<Integer>();
+			ArrayList<Integer> list3 = new ArrayList<Integer>();
 
+			if (s<e){
+				list.addAll(Arrays.asList(Arrays.copyOfRange(routine,s,e+1)));
+				list2.addAll(Arrays.asList(Arrays.copyOfRange(blocks,s,e)));
+				list3.addAll(Arrays.asList(Arrays.copyOfRange(distance,s,e)));
 
+			}
+			else{
+				String[] reverseRoutine=new String[routine.length];
+				Integer[] reverseBlocks=new Integer[blocks.length];
+				Integer[] reverseDistance=new Integer[blocks.length];
+				for (int j=0;j<routine.length;j++){
+					reverseRoutine[j]=routine[routine.length-1-j];
+					reverseBlocks[j]=blocks[blocks.length-1-j];
+					reverseDistance[j]=distance[distance.length-1-j];
+				}
+				
+				s=routine.length-s-1;
+				e=routine.length-e-1;
+				list.addAll(Arrays.asList(Arrays.copyOfRange(reverseRoutine,s,e+1)));
+				list2.addAll(Arrays.asList(Arrays.copyOfRange(reverseBlocks,s,e)));
+				list3.addAll(Arrays.asList(Arrays.copyOfRange(reverseDistance,s,e)));
+			}
+			Object[] objectList = list.toArray();
+			Object[] objectList2 = list2.toArray();
+			Object[] objectList3 = list3.toArray();
+			String[] myRoute=Arrays.copyOf(objectList,objectList.length,String[].class);
+			Integer[] myBlocks=Arrays.copyOf(objectList2,objectList2.length,Integer[].class);
+			Integer[] myDistance=Arrays.copyOf(objectList3,objectList3.length,Integer[].class);
+			int tmpauthority=mySin.viewtrains().get(Integer.parseInt(forSchedule[0])).getAuthority();
+			mySin.addSchedule(Integer.parseInt(forSchedule[0]),"Green",myRoute,myDistance,mytime,20);
+			mySin.ModifyTrain(Integer.parseInt(forSchedule[0]),mySin.viewSchedule().get(Integer.valueOf(forSchedule[0])).getAuthority(),20);
+			ObservableList<String> ScheduleString = FXCollections.observableArrayList(mySin.tolist());
+			ScheduleListView.setItems(ScheduleString);
+			ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
+			ManagementListView.setItems(TrainString);
+			Departurestorage.put(forSchedule[0],destination);
+			Departureindex.put(forSchedule[0], e);
+			}	
+			}
+			if (!scan.hasNextLine()) {
+				break;
+			}
+		}
 
-
-		//TODO update the current schedule
-	}
+		
+		}catch(Exception e) {System.out.println("No such file");System.out.println(e);}
+		
+		}
 	// Starts the automatic update (NO TOUCHY!!)
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -300,6 +366,14 @@ public class CTCCtrl implements Initializable {
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
+		Set<String> filenames=new TreeSet<String>();
+		File folder = new File(".");
+		for (File fileEntry:folder.listFiles()) {
+			if (fileEntry.isDirectory()) continue;
+			if (fileEntry.getName().contains(".csv")) {
+				filenames.add(fileEntry.getName());
+			}
+		}
 		HashMap<String, TrackLine> track1 = mySin.viewTrack();
 		if (!track1.isEmpty()) {
 			TrackModelInterface aTest = TrackModelSingleton.getInstance();
@@ -317,8 +391,10 @@ public class CTCCtrl implements Initializable {
 			LineChoiceBox.setItems(FXCollections.observableArrayList("Green", "Red"));
 			DestinationChoiceBox.setItems(FXCollections.observableArrayList(routine));
 			//TODO load info from trackmodel
-			String[] Schedulename={"schedule1", "FIXME","schedule3"};
-			ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(Schedulename));
+			//String[] Schedulename={"schedule1", "FIXME","schedule3"};
+			ImportScheduleChioceBox.setItems(FXCollections.observableArrayList(filenames));
+			
+			
 			DepartureStationChoiceBox1.setItems(FXCollections.observableArrayList(sections));
 			String[] switches=mySin.switchstuff();
 			SwitchChoiceBox.setItems(FXCollections.observableArrayList(switches));
@@ -376,5 +452,6 @@ public class CTCCtrl implements Initializable {
 
 	}
 }
+
 
 
