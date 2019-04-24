@@ -435,18 +435,16 @@ public class CTCCtrl implements Initializable {
 		for (Integer key:tmp.keySet()){
 			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
 			Schedule tmp2=tmp.get(key);
+			//System.out.println(tmp2.toString());
 			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
 				if (tmp2.getLeaveTime()[i]==myTime){
-					
-					String Block=tmp2.getStation()[i];
-					
+					String Block=tmp2.getStation()[i+1];
 					int n=Integer.parseInt(Block.split(" ")[1]);
-					
-					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getSpeed());
+					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getspdprint());
 				}
 			}
 			if (myTime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
-				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getSpeed());
+				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getspdprint());
 			}
 		}
 
