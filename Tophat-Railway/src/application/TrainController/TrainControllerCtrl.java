@@ -187,6 +187,7 @@ public class TrainControllerCtrl implements Initializable {
 	boolean set;
 	@FXML 
 	public boolean click_CTC() { 
+		automatic.setVisible(true); 
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
 		return set = true;
@@ -194,6 +195,7 @@ public class TrainControllerCtrl implements Initializable {
 	  
 	@FXML 
 	public boolean click_MBO() { 
+		automatic.setVisible(true);
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
 		return set = false;
@@ -204,7 +206,6 @@ public class TrainControllerCtrl implements Initializable {
 		int authorityCTC = train.getCTCAuthority();
 		sugSpeed.setText(speedCTC + "mph");
 		sugAuthority.setText(authorityCTC + "");
-		automatic.setVisible(true);
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
 	}
@@ -214,7 +215,6 @@ public class TrainControllerCtrl implements Initializable {
 		int authorityMBO = train.getMBOAuthority();
 		sugSpeed.setText(speedMBO + "mph");
 		sugAuthority.setText(authorityMBO + "");
-		automatic.setVisible(true); 
 		setMBO.setVisible(false);
 		setCTC.setVisible(false);
 	}
