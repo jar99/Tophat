@@ -43,7 +43,7 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	private TextField speed, power, ki, kp, temp, enterPassword;
 	@FXML 
-	private Label actualSpeed, actualPower, currentTemp, driveStatus;
+	private Label actualSpeed, actualPower, currentTemp, driveStatus, beaconStop;
 	@FXML
 	private Button confirmSpeed, confirmPower, confirmKi, confirmKp, confirmTemp, confirmPassword, halfSpeed;
 	@FXML
@@ -56,12 +56,11 @@ public class TrainControllerCtrl implements Initializable {
 	private Circle engineStatus, brakeStatus, signalStatus;
 
 	Train train;
-	int confirm = 0;
 
 	// NOTE: This is where you build UI functionality
 	// functions can be linked through FX Builder or manually
 	// Control Functions
-	
+	Stage stage;
 	@FXML
 	public void setValues(ActionEvent e) {
 		try {
@@ -69,7 +68,7 @@ public class TrainControllerCtrl implements Initializable {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./SetPower.fxml"));
 			fxmlLoader.setController(this);
 			Parent root = fxmlLoader.load();
-			Stage stage = new Stage();
+			stage = new Stage();
 			
 			stage.setTitle("Setting Ki and Kp values.");
 			stage.setScene(new Scene(root, 450,350));
@@ -83,20 +82,21 @@ public class TrainControllerCtrl implements Initializable {
 	@FXML
 	public void Temperature() {
 		String inputTemp = temp.getText();
-		//String.format("%.2f", inputTemp);
 		if(!inputTemp.isEmpty()) {	
-			double temperature = Double.parseDouble(inputTemp);
-			if(temperature < 0) {
+			double ftemperature = Double.parseDouble(inputTemp);
+			if(ftemperature < 0) {
 				throw new IllegalArgumentException("Cannot have negative temperature.");
 			}
-			if(train != null) train.setTemperature(temperature);
+			double ctemp = (ftemperature - 32) * 5/9;
+			if(train != null) train.setTemperature(ctemp);
 		}
 	}
 	
 	void UpdateTemprature() {
-		Double temp = train.getTemperature();
-		String temperature = String.format("%.2f",temp);
-		currentTemp.setText(temperature + "°C");
+		double temp = train.getTemperature();
+		double ftemp = temp * 9/5 + 32;
+		String temperature = String.format("%.2f",ftemp);
+		currentTemp.setText(temperature + "°F");
 	}
 
 	@FXML
@@ -143,9 +143,9 @@ public class TrainControllerCtrl implements Initializable {
 	//need to calculate this 
 	void Power() {
 		Double inputPower = train.getPower();
-		if(inputPower >= 120000) {
+		if(inputPower >= 120) {
 			//String power = String.format("%.2f", inputPower);
-			actualPower.setText("120,000Kwatts");
+			actualPower.setText("120Kwatts");
 		}else if(inputPower < 0){
 			actualPower.setText("0.00Kwatts");
 		}else{
@@ -180,17 +180,22 @@ public class TrainControllerCtrl implements Initializable {
 		} else {
 			emergencyBrake.setStyle("-fx-background-color:red");
 			emergencyBrake.setText("EMERGENCY BRAKE");
+			/*
+			 * double speed = train.getActualSpeed(); String ctrlSpeed =
+			 * String.format("%.2f", speed); actualSpeed.setText(ctrlSpeed + "mph");
+			 */
 		}	
 		if(train != null) train.toggleEmergencyBrake();
 	}
 
-	boolean set;
+	boolean ctcMode, mboMode;
 	@FXML 
 	public boolean click_CTC() { 
 		automatic.setVisible(true); 
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
-		return set = true;
+		TrainControllerSingleton.setMode(true);
+		return ctcMode = true;
 	}
 	  
 	@FXML 
@@ -198,7 +203,8 @@ public class TrainControllerCtrl implements Initializable {
 		automatic.setVisible(true);
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
-		return set = false;
+		TrainControllerSingleton.setMode(false);
+		return mboMode = true;
 	}
 	
 	public void updateCTC() {
@@ -242,6 +248,8 @@ public class TrainControllerCtrl implements Initializable {
 		if(password.equals("Tophat")) {
 			setVisible();
 			valuesConfirm.setText("Ki and Kp values can now be updated.");
+			stage.close();
+			
 		}else {
 			valuesConfirm.setText("Password incorrect, please try again.");
 		}
@@ -377,6 +385,18 @@ public class TrainControllerCtrl implements Initializable {
 		sugAuthority.setText(Integer.toString(inputSugAuthority));
 	}
 	
+	public void beaconData(String beacon) {
+		if(train != null) {
+			String beaconData = train.getBeacon();
+			beaconStop.setText(beaconData);
+		}
+	}
+	
+	void updateBeacon() {
+		String beacon = train.getBeacon();
+		beaconStop.setText(beacon);
+	}
+	
 	public void setTrain(int trainID) {
 		 Train train = mySin.getTrain(trainID);
 		 if(train != null) {
@@ -412,6 +432,9 @@ public class TrainControllerCtrl implements Initializable {
 	private void update() {
 		if(train == null) return;
 		//currentTrainID = mySin.getTrainID();
+		
+		//is the train running in MBO automatic or CTC automatic??
+		//default to manual
 		double inputMBOSpeed = train.getMBOSpeed();
 		int inputMBOAuthority = train.getMBOAuthority();
 		double inputCTCSpeed = train.getCTCSpeed();
@@ -435,8 +458,11 @@ public class TrainControllerCtrl implements Initializable {
 		updateLights();
 		updateRDoor();
 		updateLDoor();
-		updateCTC();
-		updateMBO();
+		if(TrainControllerSingleton.getMode()) {
+				updateCTC();
+		}else
+			updateMBO();
+		updateBeacon();
 	}
 
 	static TrainControllerCtrl trainCtrl;
@@ -449,19 +475,12 @@ public class TrainControllerCtrl implements Initializable {
 		trainCtrl.removeTrain(trainID);
 	}
 
-	void setTrainS(boolean set) {
-		trainCtrl.setTrainS(set);
-	}
-	
-	void setTrain(boolean set) {
-		for(int i = 0; i <= mySin.getTrainSize(); i++) {
-			if(click_CTC() == true){
-				train.setMode(true);
-			}else if(click_MBO() == false){
-				train.setMode(false);
-			}
-		}
-	}
+	/*
+	 * void setTrainS(boolean set) { trainCtrl.setTrainS(set); }
+	 * 
+	 * void setTrain(boolean set) { if(ctcMode == true){ train.setMode(true); }else
+	 * if(mboMode == true){ train.setMode(false); } }
+	 */
 	
 	void addTrain(int trainID) {
 		ObservableList<Integer> list = listTrainID.getItems();

@@ -168,25 +168,25 @@
             </Label>
             <TextField fx:id="speed" layoutX="14.0" layoutY="69.0" onAction="#Speed" prefHeight="25.0" prefWidth="62.0" />
             <Button fx:id="confirmSpeed" layoutX="84.0" layoutY="69.0" mnemonicParsing="false" onAction="#Speed" prefHeight="25.0" prefWidth="66.0" text="Confirm" />
-            <Label layoutX="9.0" layoutY="134.0" text="Actual Power:">
+            <Label layoutX="3.0" layoutY="134.0" text="Actual Power:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="actualPower" layoutX="131.0" layoutY="135.0" prefHeight="17.0" prefWidth="105.0" text="0">
+            <Label fx:id="actualPower" layoutX="117.0" layoutY="135.0" prefHeight="27.0" prefWidth="134.0" text="0">
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Label layoutX="10.0" layoutY="104.0" text="Actual Speed:">
+            <Label layoutX="5.0" layoutY="104.0" text="Actual Speed:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="actualSpeed" layoutX="132.0" layoutY="104.0" prefHeight="17.0" prefWidth="96.0" text="0">
+            <Label fx:id="actualSpeed" layoutX="117.0" layoutY="104.0" prefHeight="27.0" prefWidth="111.0" text="0">
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Label layoutX="76.0" layoutY="228.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
+            <Label layoutX="76.0" layoutY="233.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
@@ -196,7 +196,7 @@
                   <Font size="15.0" />
                </font>
             </ToggleButton>
-            <ToggleButton fx:id="serviceBrake" layoutX="19.0" layoutY="252.0" mnemonicParsing="false" onAction="#serviceBrake" prefHeight="39.0" prefWidth="204.0" text="Off">
+            <ToggleButton fx:id="serviceBrake" layoutX="19.0" layoutY="256.0" mnemonicParsing="false" onAction="#serviceBrake" prefHeight="39.0" prefWidth="204.0" text="Off">
                <font>
                   <Font size="15.0" />
                </font>
@@ -207,6 +207,12 @@
                </font>
             </Label>
             <Label fx:id="reachedMax" layoutX="12.0" layoutY="162.0" prefHeight="17.0" prefWidth="228.0" />
+            <Label fx:id="beaconStop" layoutX="9.0" layoutY="203.0" prefHeight="17.0" prefWidth="240.0" />
+            <Label layoutX="6.0" layoutY="179.0" text="Beacon Data:" underline="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

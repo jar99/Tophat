@@ -31,6 +31,8 @@ public class TrainControllerSingleton {
 	// switch between software or hardware..hardware needs approved
 	// Check TrainID and remove HashTable
 
+	static boolean ctcMode;
+	
 	public Train createTrain(int trainID, TrainInterface trainMod) {
 		TrainControllerCtrl.addTrainS(trainID);
 		Train train = new Train(trainID, trainMod);
@@ -49,6 +51,14 @@ public class TrainControllerSingleton {
 
 	public int getTrainSize() {
 		return trainCtrlHashTable.size();
+	}
+	
+	public static boolean getMode() {
+		return ctcMode;
+	}
+	
+	public static void setMode(boolean set) {
+		ctcMode = set;
 	}
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
