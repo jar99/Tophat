@@ -1143,6 +1143,8 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	
 	public void dualTrackVitalityG4() {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		if(track.isEmpty())
+			return;
 		for(int i = 77; i < 86; i++) {
 			try {
 				if(trackModInt.getOccupancy("green", i)) {
@@ -1158,6 +1160,31 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 					}
 					trackModInt.setControlAuthority("green", 76, false);
 					trackModInt.setControlAuthority("green", 100, false);
+				}
+			} catch (TrackCircuitFailureException e) {
+			}
+		}
+	}
+	
+	public void dualTrackVitalityG1() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		if(track.isEmpty())
+			return;
+		for(int i = 13; i < 28; i++) {
+			try {
+				if(trackModInt.getOccupancy("green", i)) {
+					try {
+						trackModInt.setLightStatus("green", 150, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 150, false);
+					}
+					try {
+						trackModInt.setLightStatus("green", 1, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 1, false);
+					}
+					trackModInt.setControlAuthority("green", 1, false);
+					trackModInt.setControlAuthority("green", 150, false);
 				}
 			} catch (TrackCircuitFailureException e) {
 			}
@@ -1196,6 +1223,8 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		if(track.isEmpty())
 			return;
+		System.out.println(suggestedSpeed);
+		System.out.println(blockID);
 		int blockIDOccupied = 63;
 		for(TrackLine line : track.values()) {
 			for(TrackBlock block : line.getBlocks()) {

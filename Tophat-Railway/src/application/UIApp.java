@@ -119,7 +119,7 @@ public class UIApp extends Application {
 	private void launchTrackControllerUI() throws IOException {
 		Stage tckCtrlStage = new Stage();
 		Parent tckCtrlRoot = FXMLLoader.load(getClass().getResource("./TrackController/TrackController.fxml"));
-		tckCtrlStage.setTitle("Track Controller G1");
+		tckCtrlStage.setTitle("Track Controller");
 		Scene tckCtrlScene = new Scene(tckCtrlRoot, 810, 600); // NOTE: Change last two ints to make window
 																// bigger
 		tckCtrlStage.setScene(tckCtrlScene);

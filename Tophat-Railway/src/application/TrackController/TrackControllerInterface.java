@@ -14,9 +14,9 @@ public interface TrackControllerInterface {
 	public void createTrain(String lineName, int trainID);
 	
 	/**
-	 * @param trainID
-	 * @param blockID
-	 * @param suggestedSpeed
+	 * @param trainID - the ID that will be changed
+	 * @param blockID - pick what block to go to
+	 * @param suggestedSpeed - tell the train what the suggested speed should be
 	 */
 	public void sendTrainToBlock(int trainID, int blockID, double suggestedSpeed);
 	
