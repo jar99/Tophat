@@ -75,6 +75,13 @@ public class Converters<T> {
 		waightKG = kgTolbs(waightKG);
 		return String.format("%.2f LBS", waightKG);
 	}
+	
+	public static String LengthConverter(double lengthMeter) {
+		lengthMeter = mToi(lengthMeter);
+		int feet = (int) (lengthMeter / 12);
+		double inches = (lengthMeter % 12);
+		return String.format("%d\" %.1f'", feet, inches);
+	}
 
 	public static String KiloWatt(double kiloWatts) {
 		return String.format("%.2f KW", kiloWatts);
@@ -126,5 +133,11 @@ public class Converters<T> {
 		return value * 1000.0;
 	}
 	
-	
+	public static double mToi(double lengthMeter) {
+		return lengthMeter*39.37;
+	}
+
+	public static double mTof(double meter) {
+		return meter * 3.281;
+	}
 }

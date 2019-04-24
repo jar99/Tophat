@@ -183,11 +183,19 @@ public class TrainModelCtrl implements Initializable {
 		run();
 	}
 
+	void updateOnce() {
+		trainid.update(trainModel.toString());
+		speedLimit.update(trainModel.getMaxSpeed());
+		length.update(trainModel.getLength());
+		width.update(trainModel.getWidth());
+		height.update(trainModel.getHeight());
+		carCount.update(trainModel.getCarCount());	
+	}
+	
 	void updateAd() {
 		if (images == null || images.length == 0 || !adBanner.isVisible())
 			return;
 
-		// TODO handle empty folder.
 		slide++;
 		if (slide >= images.length) {
 			slide = 0;
@@ -196,7 +204,6 @@ public class TrainModelCtrl implements Initializable {
 	}
 
 	private long last;
-
 	// NOTE: This is where you get new information from your singleton
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
@@ -219,12 +226,12 @@ public class TrainModelCtrl implements Initializable {
 
 		if (train_info.isVisible()) {
 			updateEmergencyBrake(); // NOTE this could be better
-
+			
 			// Update table
 			trackAuthority.update(trainModel.getTrackAuthority());
 			trackSpeed.update(trainModel.getTrackSpeed());
 
-			speedLimit.update(trainModel.getSpeedLimit());
+			trackLimit.update(trainModel.getSpeedLimit());
 
 			mboAuthority.update(trainModel.getMBOAuthority());
 			mboSpeed.update(trainModel.getMBOSpeed());
@@ -251,25 +258,25 @@ public class TrainModelCtrl implements Initializable {
 	void setTrain(TrainModel trainModel) {
 		this.trainModel = trainModel;
 		trainID.setText(trainModel.toString());
-		trainid.update(trainModel.toString());
+		updateOnce();
 
 	}
 
-	private TableRow<Double> power, trackSpeed, mboSpeed, speed, accel, temprature, weight, speedLimit;
+	private TableRow<Double> power, trackSpeed, trackLimit, mboSpeed, speed, accel, temprature, weight, speedLimit, length, width, height;
 	private TableRow<String> trainid, cord;
 
 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor, light, intLight;
-	private TableRow<Integer> trackAuthority, mboAuthority, passangers;
+	private TableRow<Integer> trackAuthority, mboAuthority, passangers, carCount;
 
 	private void setupTable() {
-		// TODO add more unit formatting
+		
 		trainid = new TableRow<String>("Train ID", "N/A");
 
 		trackAuthority = new TableRow<Integer>("Track Authority", 0);
 		trackSpeed = new TableRow<Double>("Track Suggested Speed", 0.0, (a) -> Converters.SpeedConverter(a));
 
-		speedLimit = new TableRow<Double>("Speed Limit", 0.0, (a) -> Converters.SpeedConverter(a));
-
+		trackLimit = new TableRow<Double>("Track Limit", 0.0, (a) -> Converters.SpeedConverter(a));
+		
 		mboAuthority = new TableRow<Integer>("MBO Authority", 0);
 		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0, (a) -> Converters.SpeedConverter(a));
 
@@ -292,9 +299,17 @@ public class TrainModelCtrl implements Initializable {
 		serviceBrake = new TableRow<Boolean>("Service Brake", true, (a) -> Converters.OnOrOff(a));
 		emergancyBrake = new TableRow<Boolean>("Emergency Brake", true, (a) -> Converters.OnOrOff(a));
 
-		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, speedLimit, mboAuthority, mboSpeed, power,
-				accel, speed, serviceBrake, emergancyBrake, weight, cord, leftDoor, rightDoor, light, intLight,
-				passangers, temprature);
+		speedLimit = new TableRow<Double>("Train Speed Limit", 0.0, (a) -> Converters.SpeedConverter(a));
+		length = new TableRow<Double>("Length", 0.0, (a) -> Converters.LengthConverter(a));
+		width = new TableRow<Double>("Width", 0.0, (a) -> Converters.LengthConverter(a));
+		height = new TableRow<Double>("Height", 0.0, (a) -> Converters.LengthConverter(a));
+		
+		carCount = new TableRow<Integer>("Car Count", 0);
+		
+		
+		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, trackLimit, mboAuthority, mboSpeed, power,
+				accel, speed, speedLimit, cord, serviceBrake, emergancyBrake, length, width, height, carCount, weight,
+				leftDoor, rightDoor, light, intLight, passangers, temprature);
 	}
 
 	void run() {

@@ -38,9 +38,9 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	private static int PASSENGERCAP = 222;
 
-	private static double LENGTH = 100.05;
-	private static double WIDTH = 10.0;
-	private static double HEIGHT = 15.0;
+	private static double LENGTH = 32.2;
+	private static double WIDTH = 2.65;
+	private static double HEIGHT = 3.42;
 	private static int CARCOUNT = 6;
 
 	static void setMaxVelocity(double maxvelocity) {

@@ -19,6 +19,7 @@ import application.TrackModel.TrackModelInterface;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainControllerHardware.TrainControllerHWSingleton;
+import application.TrainModel.UI.TrainLogger;
 
 public class TrainModelSingleton implements TrainModelInterface {
 
@@ -152,8 +153,10 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 	private void loadFromFile() {
 		File file = new File("train.mod");
-		if (!file.exists())
+		if (!file.exists()) {
+			TrainLogger.errorS("Could not find " + file.getName());
 			return;
+		}
 		try {
 			TrainFileLoader.loadFile(file);
 		} catch (IOException e) {

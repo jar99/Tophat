@@ -14,7 +14,13 @@ public class TrainLogger {
 	
 	public static enum MODE {DEBUG, INFO, ERROR, CRITICAL, NONE };
 	
-	private static TrainLogger logger = new TrainLogger(true);
+	private static TrainLogger logger;
+	
+	
+	private static void setLogger(TrainLogger log) {
+		if(logger != null) logger.closeFile();
+		logger = log;
+	}
 	
 	private BufferedWriter writer;
 	
@@ -40,12 +46,15 @@ public class TrainLogger {
 	}
 
 	public static TrainLogger getInstance() {
+		if(logger == null) {
+			setLogger(new TrainLogger(true));
+		}
 		return logger;	
 	}
 	
 	
 	public static void printToConsoleS(boolean value) {
-		logger.printToConsole(value);
+		getInstance().printToConsole(value);
 	}
 	
 	public void printToConsole(boolean value) {
@@ -53,7 +62,7 @@ public class TrainLogger {
 	}
 	
 	public static void disableS() {
-		logger.disable();
+		getInstance().disable();
 	}
 	
 	public void disable() {
@@ -61,7 +70,7 @@ public class TrainLogger {
 	}
 	
 	public static void setModeS(MODE mode) {
-		logger.setMode(mode);
+		getInstance().setMode(mode);
 	}
 	
 	public void setMode(MODE mode) {
@@ -69,7 +78,7 @@ public class TrainLogger {
 	}
 	
 	public static void enableS() {
-		logger.disable();	
+		getInstance().disable();	
 	}
 	
 	public void enable() {
@@ -77,7 +86,7 @@ public class TrainLogger {
 	}
 
 	public static void printDebugS(boolean value) {
-		logger.printDebug(value);
+		getInstance().printDebug(value);
 	}
 	
 	public void printDebug(boolean value) {
@@ -98,7 +107,7 @@ public class TrainLogger {
 	
 	public static void setLogFileS(String path) {
 		LOGLOCATION = path;
-		logger.setLogFile(path);
+		getInstance().setLogFile(path);
 	}
 	
 	public void setLogFile(String path) {
@@ -199,7 +208,7 @@ public class TrainLogger {
 	}
 	
 	public static void printS(MODE mode, String tag, String text) {
-		logger.print(mode, tag, text);
+		getInstance().print(mode, tag, text);
 	}
 	
 	public void print(MODE mode, String text) {
@@ -227,6 +236,9 @@ public class TrainLogger {
 		}	
 	}
 
+	public static MODE getModeS() {
+		return getInstance().getMode();
+	}
 	public MODE getMode() {
 		return mode;
 	}
