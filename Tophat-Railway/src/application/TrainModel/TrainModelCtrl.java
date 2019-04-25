@@ -310,7 +310,7 @@ public class TrainModelCtrl implements Initializable {
 		
 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, trackLimit, mboAuthority, mboSpeed, power,
 				accel, speed, speedLimit, cord, serviceBrake, emergancyBrake, length, width, height, carCount, weight,
-				leftDoor, rightDoor, light, intLight, passengers, temperature);
+				leftDoor, rightDoor, light, intLight, temperature, passengers, crewCount);
 	}
 
 	void run() {
