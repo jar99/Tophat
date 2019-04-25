@@ -135,7 +135,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	private int passengerCap = PASSENGERCAP;
 
 	private static double trainWaight = TRAINWAIGHT;
-	private double length = LENGTH; 
+	private double length = LENGTH;
 	private double width = WIDTH;
 	private double height = HEIGHT;
 	private int carCount = CARCOUNT;
@@ -199,7 +199,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 			return;
 		ClockSingleton clock = ClockSingleton.getInstance();
 
-    	TrainLogger.debugS(this + " train runs at " + System.nanoTime());
+		TrainLogger.debugS(this + " train runs at " + System.nanoTime());
 
 		long dt = clock.getRatio(); // The amount of seconds between updates
 		if (dt == 0)
@@ -502,7 +502,12 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	}
 
 	@Override
-	public boolean toggleInterierLight() {
+	public boolean toggleInteriorLight() {
+		return getInteriorLightState();
+	}
+
+	@Override
+	public boolean getInteriorLightState() {
 		interiorLights = !interiorLights;
 		return true;
 	}
@@ -573,6 +578,11 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	@Override
 	public boolean brakeOperationState() {
 		return brakeOperationState;
+	}
+
+	@Override
+	public boolean signalState() {
+		return railSignalState() && brakeOperationState();
 	}
 
 	/**
@@ -676,7 +686,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	public double getMaxAcceleration() {
 		return maxAcceleration;
 	}
-	
+
 	double getLength() {
 		return length;
 	}
@@ -695,14 +705,14 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	@Override
 	public double getSuggestedSpeed() {
-		if(TrainModelSingleton.isCTCMode())
+		if (TrainModelSingleton.isCTCMode())
 			return getTrackSpeed();
 		return getMBOSpeed();
 	}
 
 	@Override
 	public int getAuthority() {
-		if(TrainModelSingleton.isCTCMode())
+		if (TrainModelSingleton.isCTCMode())
 			return getTrackAuthority();
 		return getMBOAuthority();
 	}
