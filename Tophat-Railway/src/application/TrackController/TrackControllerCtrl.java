@@ -691,7 +691,7 @@ public class TrackControllerCtrl implements Initializable {
 				iconLightsOffG2.setFill(javafx.scene.paint.Color.WHITE);
 		}
 		
-currentBlockG3.setText(mySin.getCBNameG3());
+		currentBlockG3.setText(mySin.getCBNameG3());
 		
 		blockSpeedG3.setText(mySin.getSpeed(3, CBIDG3));
 		blockAuthorityG3.setText(mySin.getAuthority(3, CBIDG3));
@@ -907,6 +907,36 @@ currentBlockG3.setText(mySin.getCBNameG3());
 		nextBlockG5.setText("--");
 		iconLightsOnG5.setFill(javafx.scene.paint.Color.WHITE);
 		iconLightsOffG5.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.getMaitenance(1, CBIDG1)) {
+			iconOperationalG1.setFill(javafx.scene.paint.Color.RED);
+		}
+		else
+			iconOperationalG1.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.getMaitenance(2, CBIDG2)) {
+			iconOperationalG2.setFill(javafx.scene.paint.Color.RED);
+		}
+		else
+			iconOperationalG2.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.getMaitenance(3, CBIDG3)) {
+			iconOperationalG3.setFill(javafx.scene.paint.Color.RED);
+		}
+		else
+			iconOperationalG3.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.getMaitenance(4, CBIDG4)) {
+			iconOperationalG4.setFill(javafx.scene.paint.Color.RED);
+		}
+		else
+			iconOperationalG4.setFill(javafx.scene.paint.Color.WHITE);
+		
+		if (mySin.getMaitenance(5, CBIDG5)) {
+			iconOperationalG5.setFill(javafx.scene.paint.Color.RED);
+		}
+		else
+			iconOperationalG5.setFill(javafx.scene.paint.Color.WHITE);
 	}
 	
 }
