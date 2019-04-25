@@ -30,7 +30,7 @@ public class TrainModelMainCtrl implements Initializable {
 	@FXML
 	private void trainSelectWindow(ActionEvent e) {
 		TrainModel train = trainSelector.getSelectionModel().getSelectedItem();
-		TrainWindowFactory.createTrainWindow(train);
+		TrainModelWindowFactory.createTrainWindow(train);
 	}
 
 	@Override
