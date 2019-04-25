@@ -28,8 +28,12 @@ public class TrainModelSingleton implements TrainModelInterface {
 	
 	private static boolean isCTCMode;
 	
-	public static boolean isCTCMode() {
+	public static boolean isCTCModeS() {
 		return isCTCMode;
+	}
+	
+	public boolean isCTCMode() {
+		return isCTCModeS();
 	}
 	
 	public static void setMode(boolean value) {
