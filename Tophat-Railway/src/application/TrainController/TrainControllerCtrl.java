@@ -101,8 +101,6 @@ public class TrainControllerCtrl implements Initializable {
 
 	@FXML
 	public void Speed() {
-		//set a cap on the speed the train can go 
-		//also track speed limit
 		String inputSpeed = speed.getText();
 		if(!inputSpeed.isEmpty()) {			
 			double ctrlSpeed = Double.parseDouble(inputSpeed);
@@ -110,15 +108,24 @@ public class TrainControllerCtrl implements Initializable {
 			ctrlSpeed = ctrlSpeed / 0.621371;
 			if(ctrlSpeed < maxSpeed && train != null) {
 				train.setSpeed(ctrlSpeed);
-				//reachedMax.setText("Speed set");
+				reachedMax.setText("");
 			}
 			if(ctrlSpeed < 0) {
 				throw new IllegalArgumentException("Cannot have negative speed.");
 			}else if(ctrlSpeed > maxSpeed) {
-				reachedMax.setText("Train cannot exceed 43.50mph.");
-				if(train != null) train.setSpeed(0);
+				reachedMax.setText("Train cannot exceed speeds over 43.50mph.");
 			}
 			speed.clear();
+		}
+	}
+	
+	public void setAutoSpeed() {
+		if(ctcMode == true) {
+			double autoSpeed = train.getCTCSpeed();
+			train.setSpeed(autoSpeed);
+		}else if(mboMode == true) {
+			double autoSpeed = train.getMBOSpeed();
+			train.setSpeed(autoSpeed);
 		}
 	}
 	
@@ -139,12 +146,10 @@ public class TrainControllerCtrl implements Initializable {
 	private void restartSpeed() {
 		if(train != null) train.setSpeed(0);
 	}
-
-	//need to calculate this 
+ 
 	void Power() {
 		Double inputPower = train.getPower();
 		if(inputPower >= 120) {
-			//String power = String.format("%.2f", inputPower);
 			actualPower.setText("120Kwatts");
 		}else if(inputPower < 0){
 			actualPower.setText("0.00Kwatts");
@@ -180,10 +185,6 @@ public class TrainControllerCtrl implements Initializable {
 		} else {
 			emergencyBrake.setStyle("-fx-background-color:red");
 			emergencyBrake.setText("EMERGENCY BRAKE");
-			/*
-			 * double speed = train.getActualSpeed(); String ctrlSpeed =
-			 * String.format("%.2f", speed); actualSpeed.setText(ctrlSpeed + "mph");
-			 */
 		}	
 		if(train != null) train.toggleEmergencyBrake();
 	}
@@ -372,18 +373,6 @@ public class TrainControllerCtrl implements Initializable {
 		}
 	}	
 
-	/**
-	 * this sets the speed/authority from MBO and CTC office 
-	 * uses the lower value of the two offices
-	 * @param inputSugSpeed
-	 * @param inputSugAuthority
-	 */
-	public void StationInput(double inputSugSpeed, int inputSugAuthority) {	
-		//MBOSpeed.setText(Double.toString(inputMBOSpeed));
-		//MBOAuthority.setText(Integer.toString(inputMBOAuthority));
-		sugSpeed.setText(Double.toString(inputSugSpeed));
-		sugAuthority.setText(Integer.toString(inputSugAuthority));
-	}
 	
 	public void beaconData(String beacon) {
 		if(train != null) {
@@ -411,6 +400,7 @@ public class TrainControllerCtrl implements Initializable {
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				setTrain(newValue);
 				setKvalues();
+				manual.setSelected(true);
 			}
 	    });
 
@@ -424,6 +414,7 @@ public class TrainControllerCtrl implements Initializable {
 		};
 		updateAnimation.start();
 		trainCtrl = this;
+		updateTrainTable();
 	}
 
 	// NOTE: This is where you get new information from your singleton
@@ -431,24 +422,7 @@ public class TrainControllerCtrl implements Initializable {
 	// WARNING: This assumes your singleton is updating its information
 	private void update() {
 		if(train == null) return;
-		//currentTrainID = mySin.getTrainID();
-		
-		//is the train running in MBO automatic or CTC automatic??
-		//default to manual
-		double inputMBOSpeed = train.getMBOSpeed();
-		int inputMBOAuthority = train.getMBOAuthority();
-		double inputCTCSpeed = train.getCTCSpeed();
-		int inputCTCAuthority = train.getCTCAuthority();
-		
-		//both suggeted speeds
-		//block mode or mbo mode
-		//must be set and not changed
-		//set all trains and not be able to changed it (automatic once)
-		//click on CTC or MBO then have automatic appear
-		/*
-		 * if(NULL) { StationInput(inputMBOSpeed, inputMBOAuthority); }else {
-		 * StationInput(inputCTCSpeed, inputCTCAuthority); }
-		 */		
+			
 		Power();
 		UpdateSpeed();
 		UpdateTemprature();
@@ -461,7 +435,7 @@ public class TrainControllerCtrl implements Initializable {
 		if(TrainControllerSingleton.getMode()) {
 				updateCTC();
 		}else
-			updateMBO();
+		updateMBO();
 		updateBeacon();
 	}
 
@@ -474,13 +448,6 @@ public class TrainControllerCtrl implements Initializable {
 	static void removeTrainS(int trainID) {
 		trainCtrl.removeTrain(trainID);
 	}
-
-	/*
-	 * void setTrainS(boolean set) { trainCtrl.setTrainS(set); }
-	 * 
-	 * void setTrain(boolean set) { if(ctcMode == true){ train.setMode(true); }else
-	 * if(mboMode == true){ train.setMode(false); } }
-	 */
 	
 	void addTrain(int trainID) {
 		ObservableList<Integer> list = listTrainID.getItems();
@@ -496,4 +463,11 @@ public class TrainControllerCtrl implements Initializable {
 		ObservableList<Integer> list = listTrainID.getItems();
 		if(list.contains(trainID)) list.remove(trainID);
 	}
+	
+	private void updateTrainTable() {
+        for(Integer trainID: mySin.getAllTrainIDs()) {
+            addTrain(trainID);
+        }
+        
+    }
 }

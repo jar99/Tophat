@@ -81,7 +81,7 @@ public class UIApp extends Application {
 				Stage trnCtrlStage = new Stage();
 				Parent trnCtrlRoot = FXMLLoader.load(getClass().getResource("./TrainController/TrainController.fxml"));
 				trnCtrlStage.setTitle("Train Controller");
-				Scene trnCtrlScene = new Scene(trnCtrlRoot, 650, 500); // NOTE: Change last two ints to make window
+				Scene trnCtrlScene = new Scene(trnCtrlRoot, 655, 510); // NOTE: Change last two ints to make window
 																		// bigger
 				trnCtrlStage.setScene(trnCtrlScene);
 				trnCtrlStage.show();
