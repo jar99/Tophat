@@ -71,7 +71,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 			return null;
 		TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
 		trainModelHashTable.put(trainID, train);
-//		TrainModelMainCtrl.addTrainS(trainID, train);
 
 //    	if (trainIDHW < 0) { // This is the check if no train belongs to train ctr hardware
 //    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
@@ -86,7 +85,8 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
 		trnCtrl.createTrain(trainID, train); // Create this method.
 
-		TopHatRailwayUI.addTrainS(trainID);
+		TrainModelMainCtrl.addTrainS(trainID, train); // Setting it into the debug UI
+		TopHatRailwayUI.addTrainS(trainID); //Setting it into the main UI
 		
 		train.dispatch();
 
@@ -100,7 +100,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 		TrainModel train = new TrainModel(trainID, track, mbo, passanger, speed);
 		trainModelHashTable.put(trainID, train);
-//		TrainModelMainCtrl.addTrainS(trainID, train);
+		TrainModelMainCtrl.addTrainS(trainID, train);
 
 		return train;
 
@@ -110,7 +110,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainModel train = trainModelHashTable.remove(trainID);
 		if (train != null) {
 			train.remove();
-//			TrainModelMainCtrl.removeTrainS(trainID, train);
+			TrainModelMainCtrl.removeTrainS(trainID, train);
 			TopHatRailwayUI.removeTrainS(trainID);
 		}
 
