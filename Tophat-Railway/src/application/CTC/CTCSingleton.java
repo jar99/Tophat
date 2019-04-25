@@ -151,7 +151,7 @@ public class CTCSingleton implements CTCInterface {
 			Schedule tmp=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed,track);
 			myschedule.put(ID,tmp);
 			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
-			TCInterface.createTrain("green",ID);
+			//TCInterface.createTrain("green",ID);
 			return true;
 		}
 		else{
@@ -159,7 +159,7 @@ public class CTCSingleton implements CTCInterface {
 			Schedule tmp2=new Schedule(ID, myLine, myStation,mydistance,myDeparturetime,suggestedSpeed,track);
 			tmp1.mergeSchedule(tmp2);
 			TrackControllerInterface TCInterface=TrackControllerSingleton.getInstance();
-			TCInterface.createTrain("green",ID);
+			//TCInterface.createTrain("green",ID);
 			return true;
 		}
 		
@@ -313,5 +313,6 @@ public class CTCSingleton implements CTCInterface {
 	}
 
 }
+
 
 
