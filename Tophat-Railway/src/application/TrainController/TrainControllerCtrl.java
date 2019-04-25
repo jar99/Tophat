@@ -96,7 +96,7 @@ public class TrainControllerCtrl implements Initializable {
 		double temp = train.getTemperature();
 		double ftemp = temp * 9/5 + 32;
 		String temperature = String.format("%.2f",ftemp);
-		currentTemp.setText(temperature + "°F");
+		currentTemp.setText(temperature + "ï¿½F");
 	}
 
 	@FXML
@@ -432,6 +432,7 @@ public class TrainControllerCtrl implements Initializable {
 			}
 		};
 		updateAnimation.start();
+		if (trainCtrl == null)
 		trainCtrl = this;
 		updateTrainTable();
 	}
@@ -461,11 +462,11 @@ public class TrainControllerCtrl implements Initializable {
 	static TrainControllerCtrl trainCtrl;
 
 	static void addTrainS(int trainID) {
-		trainCtrl.addTrain(trainID);
+		if (trainCtrl != null) trainCtrl.addTrain(trainID);
 	}
 
 	static void removeTrainS(int trainID) {
-		trainCtrl.removeTrain(trainID);
+		if (trainCtrl != null) trainCtrl.removeTrain(trainID);
 	}
 	
 	void addTrain(int trainID) {

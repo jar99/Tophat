@@ -77,6 +77,10 @@ public interface TrainInterface {
 	 */
 	double getMBOSpeed();
 
+	double getSuggestedSpeed();
+	
+	int getAuthority();
+	
 	String getBeaconData();
 
 	/**

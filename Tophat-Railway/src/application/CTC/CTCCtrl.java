@@ -176,7 +176,7 @@ public class CTCCtrl implements Initializable {
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 		ManagementListView.setItems(TrainString);
 		Departurestorage.put(TrainIDTextField.getCharacters().toString(), destination);
-		Departureindex.put(TrainIDTextField.getCharacters().toString(), e);
+		Departureindex.put(TrainIDTextField.getCharacters().toString(), 150-e);
 
 	}
 	public void ModifyClicked() {
@@ -194,7 +194,7 @@ public class CTCCtrl implements Initializable {
 		String line=mySin.viewLine(Integer.parseInt(IDModify.getCharacters().toString()));
 		String destination=ModifyChoiceBox.getSelectionModel().getSelectedItem();
 		ClockSingleton tmpClock=ClockSingleton.getInstance();		
-		int mytime=tmpClock.getCurrentTimeSeconds();
+		int mytime=tmpClock.getCurrentTimeSeconds()+tmpClock.getCurrentTimeMinutes()*60+tmpClock.getCurrentTimeHours()*3600;
 		String[] routine=mySin.getStations();
 		Integer[] blocks = Arrays.stream(mySin.getBlocks()).boxed().toArray( Integer[]::new );
 		Integer[] distance = Arrays.stream(mySin.getDistance()).boxed().toArray( Integer[]::new );
@@ -248,7 +248,7 @@ public class CTCCtrl implements Initializable {
 		ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 		ManagementListView.setItems(TrainString);
 		Departurestorage.put(IDModify.getCharacters().toString(),destination);
-		Departureindex.put(IDModify.getCharacters().toString(), e);
+		Departureindex.put(IDModify.getCharacters().toString(), 150-e);
 
 	}
 	public void ImportClicked(){
@@ -336,7 +336,7 @@ public class CTCCtrl implements Initializable {
 			ObservableList<String> TrainString = FXCollections.observableArrayList(mySin.tolistTrains());
 			ManagementListView.setItems(TrainString);
 			Departurestorage.put(forSchedule[0],destination);
-			Departureindex.put(forSchedule[0], e);
+			Departureindex.put(forSchedule[0], 150-e);
 			}	
 			}
 			if (!scan.hasNextLine()) {
@@ -439,6 +439,9 @@ public class CTCCtrl implements Initializable {
 			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
 				if (tmp2.getLeaveTime()[i]>=myTime&&tmp2.getLeaveTime()[i]<myTime+myClock.getRatio()){
 					String Block=tmp2.getStation()[i+1];
+					if (Block.equals("yard")) {
+						continue;
+					}
 					int n=Integer.parseInt(Block.split(" ")[1]);
 					System.out.println("CTC dispatch train "+tmp2.getID()+ " to block "+n);
 					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getspdprint());
