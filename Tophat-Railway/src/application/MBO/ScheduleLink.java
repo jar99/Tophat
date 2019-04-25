@@ -1,33 +1,50 @@
 package application.MBO;
 
 public class ScheduleLink {
-	private String trainID;
-	private String operatorName;
-	private String trainDepartTime;
+	private Train train;
+	private Operator operator;
+	private int duration;
+	private boolean linkActive;
 	
-	public ScheduleLink(String trainID, String operatorName, String trainDepartTime) {
-		this.trainID = trainID;
-		this.operatorName = operatorName;
-		this.trainDepartTime = trainDepartTime;
+	public ScheduleLink(Train train, Operator operator) {
+		this.train = train;
+		this.operator = operator;
+		duration = 0;
+		linkActive = true;
 	}
 	
-	public String getTrainID() {
-		return trainID;
+	public Train getTrain() {
+		return train;
 	}
-	public void setTrainID(String trainID) {
-		this.trainID = trainID;
+	public void setTrain(Train train) {
+		this.train = train;
 	}
-	public String getOperatorName() {
-		return operatorName;
+	public Operator getOperator() {
+		return operator;
 	}
-	public void setOperatorName(String operatorName) {
-		this.operatorName = operatorName;
+	public void setOperator(Operator operator) {
+		this.operator = operator;
 	}
-	public String getTrainDepartTime() {
-		return trainDepartTime;
+	
+	public void increaseDuration()
+	{
+		duration++;
 	}
-	public void setTrainDepartTime(String trainDepartTime) {
-		this.trainDepartTime = trainDepartTime;
+	
+	public int getDuration()
+	{
+		return duration;
 	}
+	
+	public boolean linkActive()
+	{
+		return linkActive;
+	}
+	
+	public void setLinkActive(boolean linkActive)
+	{
+		this.linkActive = linkActive;
+	}
+	
 	
 }

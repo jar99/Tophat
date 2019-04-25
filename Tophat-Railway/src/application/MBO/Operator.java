@@ -8,6 +8,7 @@ public class Operator {
 	private int breakDuration;
 	private boolean onBreak;
 	private boolean working;
+	private boolean operatingTrain;
 	
 	public Operator(String name, String startTime, String endTime) {
 		this.name = name;
@@ -17,6 +18,7 @@ public class Operator {
 		breakDuration = 0;
 		onBreak = false;
 		working = true;
+		operatingTrain = false;
 	}
 	
 	public String getName() {
@@ -62,6 +64,14 @@ public class Operator {
 		this.working = working;
 	}
 	
+	public boolean isOperatingTrain() {
+		return operatingTrain;
+	}
+
+	public void setOperatingTrain(boolean operatingTrain) {
+		this.operatingTrain = operatingTrain;
+	}
+	
 	public void workOneMin()
 	{
 		if (onBreak)
@@ -96,7 +106,7 @@ public class Operator {
 	}
 	
 	public boolean availableToWork(int currentTime) {
-		if (currentTime >= Integer.valueOf(startTime) && currentTime <= Integer.valueOf(endTime) && !onBreak)
+		if (currentTime >= Integer.valueOf(startTime) && currentTime <= Integer.valueOf(endTime) && !onBreak && !operatingTrain)
 		{
 			return true;
 		}
@@ -108,5 +118,6 @@ public class Operator {
 		breakDuration = 0;
 		onBreak = false;
 		working = true;
+		operatingTrain = false;
 	}
 }
