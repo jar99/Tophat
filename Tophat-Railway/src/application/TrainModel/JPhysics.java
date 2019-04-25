@@ -194,7 +194,7 @@ public class JPhysics {
 	 * Returns boolean value to direction of travel Returns true if it is traveling
 	 * in the positive direction returns false in the negative direction.
 	 * 
-	 * @return
+	 * @return true if we are moving in the positive direction
 	 */
 	private boolean directionOfTravel() {
 		return velocity > 0.0;
