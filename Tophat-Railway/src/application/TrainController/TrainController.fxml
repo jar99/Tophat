@@ -193,7 +193,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Label layoutX="76.0" layoutY="233.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
+            <Label layoutX="76.0" layoutY="234.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
@@ -213,7 +213,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="reachedMax" layoutX="12.0" layoutY="162.0" prefHeight="17.0" prefWidth="228.0" />
+            <Label fx:id="reachedMax" layoutX="4.0" layoutY="162.0" prefHeight="17.0" prefWidth="252.0" />
             <Label fx:id="beaconStop" layoutX="9.0" layoutY="203.0" prefHeight="17.0" prefWidth="240.0" />
             <Label layoutX="6.0" layoutY="179.0" text="Beacon Data:" underline="true">
                <font>
