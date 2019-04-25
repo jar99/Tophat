@@ -67,9 +67,6 @@
          <children>
             <Separator layoutX="-2.0" layoutY="-1.0" prefHeight="7.0" prefWidth="366.0" />
             <ImageView fx:id="adBanner" fitHeight="120.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true" smooth="false">
-               <image>
-                  <Image url="@../../../../Code%20Structure%20Diagram.jpg" />
-               </image>
                <viewport>
                   <Rectangle2D />
                </viewport>

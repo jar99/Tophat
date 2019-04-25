@@ -25,6 +25,18 @@ import application.TrainModel.UI.TrainLogger;
 public class TrainModelSingleton implements TrainModelInterface {
 
 	private static final String TRAINMODFILE = "train.mod";
+	
+	private static boolean isCTCMode;
+	
+	public static boolean isCTCMode() {
+		return isCTCMode;
+	}
+	
+	public static void setMode(boolean value) {
+		TrainLogger.debugS("Setting the mode to " + value);
+		isCTCMode = value;
+		
+	}
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainModelSingleton instance;
@@ -59,7 +71,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 			return null;
 		TrainModel train = new TrainModel(trainID, TrackModelSingleton.getInstance(), MBOSingleton.getInstance());
 		trainModelHashTable.put(trainID, train);
-		TrainModelMainCtrl.addTrainS(trainID, train);
+//		TrainModelMainCtrl.addTrainS(trainID, train);
 
 //    	if (trainIDHW < 0) { // This is the check if no train belongs to train ctr hardware
 //    		TrainControllerHWSingleton trnCtrlHW = TrainControllerHWSingleton.getInstance();
@@ -88,7 +100,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 
 		TrainModel train = new TrainModel(trainID, track, mbo, passanger, speed);
 		trainModelHashTable.put(trainID, train);
-		TrainModelMainCtrl.addTrainS(trainID, train);
+//		TrainModelMainCtrl.addTrainS(trainID, train);
 
 		return train;
 
@@ -98,7 +110,8 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainModel train = trainModelHashTable.remove(trainID);
 		if (train != null) {
 			train.remove();
-			TrainModelMainCtrl.removeTrainS(trainID, train);
+//			TrainModelMainCtrl.removeTrainS(trainID, train);
+			TopHatRailwayUI.removeTrainS(trainID);
 		}
 
 		if (!isolate) {
@@ -113,6 +126,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 			}
 
 		}
+		
 		return train;
 	}
 
@@ -225,5 +239,4 @@ public class TrainModelSingleton implements TrainModelInterface {
 			trainModel.update();
 		}
 	}
-
 }
