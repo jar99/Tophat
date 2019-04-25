@@ -1,6 +1,8 @@
 package application.TrainController;
 
 import java.util.Hashtable;
+import java.util.Set;
+
 import application.TrainModel.TrainInterface;
 
 public class TrainControllerSingleton {
@@ -60,6 +62,10 @@ public class TrainControllerSingleton {
 	public static void setMode(boolean set) {
 		ctcMode = set;
 	}
+	
+	public Set<Integer> getAllTrainIDs() {
+        return trainCtrlHashTable.keySet();
+    }
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)

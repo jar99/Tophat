@@ -7,6 +7,8 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.shape.Circle?>
@@ -22,6 +24,11 @@
                   <Font size="30.0" />
                </font>
             </Label>
+            <ImageView fitHeight="45.0" fitWidth="48.0" layoutX="606.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Documents/COE%201186/Tophat3.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </top>
