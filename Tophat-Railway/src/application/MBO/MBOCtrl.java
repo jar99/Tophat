@@ -269,6 +269,8 @@ public class MBOCtrl implements Initializable {
 				ex2.printStackTrace();
 			}
 		}
+		
+		new Alert(AlertType.INFORMATION, "Schedule Sent", ButtonType.OK).showAndWait();
 	}
 
 	private void createSchedule() {
@@ -283,6 +285,7 @@ public class MBOCtrl implements Initializable {
 	private ArrayList<Issue> issues = new ArrayList<>();
 	Issue issue;
 	int currentTime;
+	
 	private void checkForIssues() {
 		
 		int trainsActive = 0;
@@ -290,8 +293,13 @@ public class MBOCtrl implements Initializable {
 		int prevOverflow = 0;
 		int currOverflow = 0;
 		int runningDuration = getRunningDuration();
-		
 		//new Alert(AlertType.INFORMATION, "made it", ButtonType.OK).showAndWait();
+		
+		for (Operator operator : availableOperators)
+		{
+			operator.reset();
+		}
+		
 		
 		for (currentTime = 0; currentTime <= runningDuration; currentTime++) 
 		{
@@ -341,11 +349,77 @@ public class MBOCtrl implements Initializable {
 		}
 	}
 
+	private ArrayList<ScheduleLink> sLinks = new ArrayList<>();
+	ScheduleLink sLink;
+	
+	
 	private void buildSchedule() {
-		new Alert(AlertType.INFORMATION, "made it", ButtonType.OK).showAndWait();
+		new Alert(AlertType.INFORMATION, "Schedule Created", ButtonType.OK).showAndWait();
+		sLinks.clear();
+		int runningDuration = getRunningDuration();
+		for (Operator operator : availableOperators)
+		{
+			operator.reset();
+		}
 		
+		Operator freeOp = null;
+		Train emptyTrain = null;
+		for (currentTime = 0; currentTime <= runningDuration; currentTime++) 
+		{
+			freeOp = null;
+			emptyTrain = null;
+			for (Operator operator : availableOperators)
+			{
+				if (operator.availableToWork(convertToMilTime(currentTime, startTime)))
+				{
+					freeOp = operator;
+					break;
+				}
+			}
+		
+			for (Train train : availableTrains)
+			{
+				if (train.isOperational(convertToMilTime(currentTime, startTime)) && !train.hasDriver())
+				{
+					emptyTrain = train;
+					break;
+				}
+			}
+			
+			if (emptyTrain != null && freeOp != null)
+			{
+				sLink = new ScheduleLink(emptyTrain, freeOp);
+				sLinks.add(sLink);
+				emptyTrain.setHasDriver(true);
+				freeOp.setOperatingTrain(true);
+			}
+			
+			for (ScheduleLink link : sLinks)
+			{
+				if (link.getOperator().availableToWork(convertToMilTime(currentTime, startTime)) && link.getTrain().isOperational(convertToMilTime(currentTime, startTime)))
+				{
+					link.getOperator().workOneMin();
+					link.increaseDuration();
+				}
+				else
+				{
+					link.getOperator().setOperatingTrain(false);
+					link.getTrain().setHasDriver(false);
+				}
+			}
+			
+		}
+		
+		//new Alert(AlertType.INFORMATION, "made it 2 :)", ButtonType.OK).showAndWait();
+		/*
+		for (ScheduleLink link : sLinks)
+		{
+			new Alert(AlertType.INFORMATION, "" + link.getTrain().getID() + " " + link.getOperator().getName() + " " + link.getDuration(), ButtonType.OK).showAndWait();
+		}
+		*/
 	}
-
+	
+	
 	int issueCount = 0;
 	private void reportIssues() {
 		int excessTrains = 0;
@@ -419,6 +493,9 @@ public class MBOCtrl implements Initializable {
 		//check: are any operators working more than 8 1/2 hours?
 		//check: incorrect time formats for operators?
 		boolean validTimes;
+		
+		availableOperators.clear();
+		availableTrains.clear();
 		
 		for (Operator operator : operatorsTV.getItems())
 		{

@@ -58,6 +58,7 @@ public class MBOSingleton implements MBOInterface {
 	}
 	// WARNING: This Only changes the singleton, not your UI. UI updates occur in
 	// your UI controller
+	
 	public void update() {
 		// Example: get the count from a singleton and replace yours with the largest
 		//TrainControllerSingleton trnCtrlSin = TrainControllerSingleton.getInstance();
