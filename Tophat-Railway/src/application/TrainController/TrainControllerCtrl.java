@@ -90,6 +90,7 @@ public class TrainControllerCtrl implements Initializable {
 			double ctemp = (ftemperature - 32) * 5/9;
 			if(train != null) train.setTemperature(ctemp);
 		}
+		temp.clear();
 	}
 	
 	void UpdateTemprature() {
@@ -419,7 +420,7 @@ public class TrainControllerCtrl implements Initializable {
 			public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 				setTrain(newValue);
 				setKvalues();
-				manual.setSelected(true);
+				//manual.setSelected(true);
 				//lights.setSelected(true);
 			}
 	    });
