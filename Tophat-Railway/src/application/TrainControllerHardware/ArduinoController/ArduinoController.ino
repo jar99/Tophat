@@ -22,13 +22,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_RESET);
 #define EBRAKE 11
 
 // globals (I know they're bad, leave me alone)
-int state; // 0 for picking ID, 1 for picking value to change, 2 for changing value, 3 for confirming change
-int current_value; // 0 for speed, 1 for ki, 2 for kp, 3 for temperature, 4 for service brake, 5 for lights, 6 for left door, 7 for right door,
+byte state; // 0 for picking ID, 1 for picking value to change, 2 for changing value, 3 for confirming change
+byte parameter; // 0 for speed, 1 for ki, 2 for kp, 3 for temperature, 4 for service brake, 5 for lights, 6 for left door, 7 for right door,
 // 8 for emergency brake, 9 for id
-byte e_brake; // untriggered
-byte service_brake;
-int id;
-int new_value;
+double value;
+
 
 void setup() {
   // initialize globals
