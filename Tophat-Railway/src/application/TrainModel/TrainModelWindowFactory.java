@@ -19,7 +19,7 @@ import javafx.stage.WindowEvent;
  *
  */
 
-public class TrainWindowFactory {
+public class TrainModelWindowFactory {
 
 	private static final List<TrainModelCtrl> windowCtrls = new ArrayList<>();
 
@@ -31,7 +31,7 @@ public class TrainWindowFactory {
 	
 	static void createTrainWindow(TrainModel trainModel) {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(TrainWindowFactory.class.getResource("TrainModelUI.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(TrainModelWindowFactory.class.getResource("TrainModelUI.fxml"));
 			Parent root = fxmlLoader.load();
 
 			TrainModelCtrl controller = fxmlLoader.getController();

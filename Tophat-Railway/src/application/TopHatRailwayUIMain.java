@@ -13,7 +13,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * This is a secondary launcher that will run the program from a main window. 
+ * This is a secondary launcher that will run the program from a main window.
+ * This is the main launch function of the program.
+ * 
  * @author Jan Reihl
  * @version 1.0
  * @since 2019-04-24
