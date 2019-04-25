@@ -146,7 +146,7 @@ public class TrainControllerCtrl implements Initializable {
 	private void restartSpeed() {
 		if(train != null) train.setSpeed(0);
 	}
- 
+
 	void Power() {
 		Double inputPower = train.getPower();
 		if(inputPower >= 120) {
@@ -169,7 +169,8 @@ public class TrainControllerCtrl implements Initializable {
 			restartSpeed();
 			restartPower();
 		}else {
-			serviceBrake.setText("Brake is off.");
+			serviceBrake.setText("Off.");
+			UpdateSpeed();
 		}
 		if(train != null) train.toggleServiceBrake();
 	}
@@ -190,6 +191,10 @@ public class TrainControllerCtrl implements Initializable {
 	}
 
 	boolean ctcMode, mboMode;
+	/*
+	 * If .setMode is true = CTC mode
+	 * If .setMode is false = MBO mode
+	 */
 	@FXML 
 	public boolean click_CTC() { 
 		automatic.setVisible(true); 
@@ -231,7 +236,12 @@ public class TrainControllerCtrl implements Initializable {
 			manual.setSelected(true);
 			automatic.setSelected(false);
 			driveStatus.setText("Manual Mode");
-			if(train != null) train.setDriveMode(true);
+			speed.setVisible(true);
+			reachedMax.setText("");
+			if(train != null) {
+				UpdateSpeed();
+				train.setDriveMode(true);
+			}
 	}
 
 	@FXML
@@ -239,7 +249,12 @@ public class TrainControllerCtrl implements Initializable {
 			automatic.setSelected(true);
 			manual.setSelected(false);
 			driveStatus.setText("Automatic Mode");
-			if(train != null) train.setDriveMode(false);
+			if(train != null) {
+				train.setDriveMode(false);
+				setAutoSpeed();
+				reachedMax.setText("Speed was automatically set.");
+				speed.setVisible(false);
+			}
 	}
 	
 	@FXML
@@ -352,6 +367,7 @@ public class TrainControllerCtrl implements Initializable {
 			restartSpeed();
 		}else {
 			engineStatus.setFill(javafx.scene.paint.Color.GREEN);
+			UpdateSpeed();
 		}
 	}
 
@@ -361,6 +377,7 @@ public class TrainControllerCtrl implements Initializable {
 			restartSpeed();
 		}else {
 			brakeStatus.setFill(javafx.scene.paint.Color.GREEN);
+			UpdateSpeed();
 		}
 	}
 
@@ -370,6 +387,7 @@ public class TrainControllerCtrl implements Initializable {
 			restartSpeed();
 		} else {
 			signalStatus.setFill(javafx.scene.paint.Color.GREEN);
+			UpdateSpeed();
 		}
 	}	
 
@@ -401,6 +419,7 @@ public class TrainControllerCtrl implements Initializable {
 				setTrain(newValue);
 				setKvalues();
 				manual.setSelected(true);
+				lights.setSelected(true);
 			}
 	    });
 
