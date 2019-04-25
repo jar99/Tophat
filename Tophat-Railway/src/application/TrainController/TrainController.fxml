@@ -79,12 +79,12 @@
                </font>
             </Label>
             <ComboBox fx:id="listTrainID" layoutX="11.0" layoutY="36.0" prefWidth="150.0" />
-            <Label fx:id="sugSpeed" layoutX="113.0" layoutY="112.0" prefHeight="21.0" prefWidth="68.0" text="h">
+            <Label fx:id="sugSpeed" layoutX="113.0" layoutY="112.0" prefHeight="21.0" prefWidth="68.0">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="sugAuthority" layoutX="113.0" layoutY="147.0" prefHeight="21.0" prefWidth="63.0" text="h">
+            <Label fx:id="sugAuthority" layoutX="113.0" layoutY="147.0" prefHeight="21.0" prefWidth="63.0">
                <font>
                   <Font size="15.0" />
                </font>
