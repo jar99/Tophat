@@ -2,7 +2,6 @@ package application.TrackModel;
 
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -28,6 +27,14 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.fxml.Initializable;
 
+/**
+ * <h1>Track Model UI Controller</h1> Implements the controls and visual updates
+ * for the Track Model UI.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackModelCtrl implements Initializable {
 
 	// implement conversion ratio, xdisplacement, ydisplacement
@@ -95,6 +102,8 @@ public class TrackModelCtrl implements Initializable {
 	@FXML
 	private Circle iconPropStation;
 	@FXML
+	private Label propStationName;
+	@FXML
 	private Circle iconPropBeacon;
 	@FXML
 	private Circle iconPropHeated;
@@ -132,11 +141,17 @@ public class TrackModelCtrl implements Initializable {
 	// functions can be linked through FX Builder or manually
 	// Control Functions
 
+	/**
+	 * Sets the current block to the next ascending block
+	 */
 	@FXML
 	void getLeftBlock() {
 		mySin.shiftBlockLeft();
 	}
 
+	/**
+	 * Sets the current block to the previous descending block
+	 */
 	@FXML
 	void getRightBlock() {
 		mySin.shiftBlockRight();
@@ -144,6 +159,9 @@ public class TrackModelCtrl implements Initializable {
 
 	// TODO: Create a Line Selection Box Listener
 
+	/**
+	 * Imports line data from an excel file
+	 */
 	@FXML
 	void importLine() {
 		mySin.importLine("green.xlsx");
@@ -181,7 +199,7 @@ public class TrackModelCtrl implements Initializable {
 			}
 		}
 
-		// TODO: Implement CB Selection Box (See old code)
+		// Implement CB Selection Box (See old code)
 		ObservableList<String> list = FXCollections.observableArrayList();
 		Collection<TrackSection> sections = mySin.getLineSections("green");
 
@@ -190,11 +208,8 @@ public class TrackModelCtrl implements Initializable {
 		}
 
 		Collections.sort(list);
-
 		choiceBoxBlock.setItems(list);
-
 		choiceBoxBlock.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-
 			@Override
 			public void changed(ObservableValue<? extends String> selected, String oldCB, String newCB) {
 				if (newCB != null) {
@@ -206,6 +221,16 @@ public class TrackModelCtrl implements Initializable {
 
 	}
 
+	/**
+	 * Draws a line on the track map
+	 * 
+	 * @param startX - X coordinate for starting point (meters)
+	 * @param startY - Y coordinate for starting point (meters)
+	 * @param endX   - X coordinate for end point (meters)
+	 * @param endY   - Y coordinate for end point (meters)
+	 * @param color  - the color for line
+	 * @param width  - the width of the line
+	 */
 	private void drawLine(double startX, double startY, double endX, double endY, Color color, double width) {
 		startX = (startX + dispX) * ratioX + 10;
 		startY = (startY + dispY) * ratioY + 10;
@@ -223,6 +248,17 @@ public class TrackModelCtrl implements Initializable {
 		trackMap.getChildren().add(line);
 	}
 
+	/**
+	 * Draws an arc on the track map
+	 * 
+	 * @param centerX     - X coordinate for center point (meters)
+	 * @param centerY     - Y coordinate for center point (meters)
+	 * @param radius      - length of the radius (meters)
+	 * @param startAngle  - angle where the arc begins (radians)
+	 * @param lengthAngle - length of the arc angle (radians)
+	 * @param color       - the color for arc
+	 * @param width       - the width of the arc
+	 */
 	private void drawArc(double centerX, double centerY, double radius, double startAngle, double lengthAngle,
 			Color color, double width) {
 		centerX = (centerX + dispX) * ratioX + 10;
@@ -245,6 +281,9 @@ public class TrackModelCtrl implements Initializable {
 		trackMap.getChildren().add(arc);
 	}
 
+	/**
+	 * Sets the temperature for the track environment
+	 */
 	@FXML
 	void setTemperature(ActionEvent event) {
 		// : Evaluate temperature to change heaters. Check for bad input.
@@ -257,16 +296,21 @@ public class TrackModelCtrl implements Initializable {
 		}
 	}
 
+	/**
+	 * Toggles the selected failure on the currently displayed block
+	 */
 	@FXML
 	void toggleFailure() {
 		// : Activate Toggle Failure Method
 		String selFail = choiceBoxFail.getValue();
-		if (selFail.equals("Broken Rail"))
-			mySin.toggleCBFailRail();
-		else if (selFail.equals("Track Circuit"))
-			mySin.toggleCBFailCircuit();
-		else if (selFail.equals("Power"))
-			mySin.toggleCBFailPower();
+		if (selFail != null) {
+			if (selFail.equals("Broken Rail"))
+				mySin.toggleCBFailRail();
+			else if (selFail.equals("Track Circuit"))
+				mySin.toggleCBFailCircuit();
+			else if (selFail.equals("Power"))
+				mySin.toggleCBFailPower();
+		}
 	}
 
 	@Override
@@ -295,144 +339,220 @@ public class TrackModelCtrl implements Initializable {
 	// NOTE: This is where you get new information from your singleton
 	// You can read/change fx elements linked above
 	// WARNING: This assumes your singleton is updating its information
+	/**
+	 * Updates the Track Model UI based on Track Model Singleton contents
+	 */
 	private void update() {
-
-		DecimalFormat df1 = new DecimalFormat("#.##");
 
 		if (mySin.hasALine()) {
 
 			TrackBlock cBlock = mySin.getCurrentBlock();
-			int cBlockID = cBlock.getBlockID();
 
-			// Keep Track of current block on map by drawing a different colored line over
-			// it
-			char cSectionID = cBlock.getSectionID();
-			TrackSection cSection = mySin.getSection(cSectionID);
-
-			if (cSection instanceof TrackSectionStraight) {
-				TrackSectionStraight cSectionStraight = (TrackSectionStraight) cSection;
-				moveCurrentLine(cSectionStraight.getBlockStartX(cBlockID), cSectionStraight.getBlockStartY(cBlockID),
-						cSectionStraight.getBlockEndX(cBlockID), cSectionStraight.getBlockEndY(cBlockID));
-				hideCurrentArc();
-			} else if (cSection instanceof TrackSectionCurve) {
-				TrackSectionCurve cSectionCurve = (TrackSectionCurve) cSection;
-				moveCurrentArc(cSectionCurve.getCenterX(), cSectionCurve.getCenterY(), cSectionCurve.getRadius(),
-						cSectionCurve.getBlockStartAngle(cBlockID), cSectionCurve.getBlockLengthAngle(cBlockID));
-				hideCurrentLine();
-				// System.out.println("Section: " + cSectionCurve.getSectionID() + " Length: " +
-				// cSectionCurve.getLength() + " CX: " + cSectionCurve.getCenterX() + " CY: " +
-				// cSectionCurve.getCenterY() + " R: " + cSectionCurve.getRadius() + " SAng: " +
-				// Math.toDegrees(cSectionCurve.getStartAngle()) + " LAng: " +
-				// Math.toDegrees(cSectionCurve.getLengthAngle()));
-			}
+			highlightCurrentBlock(cBlock);
 
 			currentBlock.setText(cBlock.getName());
 
-			propLength.setText(df1.format(cBlock.getLength() * 0.000621371) + " miles");
-			propGrade.setText(df1.format(cBlock.getGrade()) + " %");
-			propSpeedLimit.setText(df1.format(cBlock.getSpdLmt() * 2.23694) + " mph");
-			propElevation.setText(df1.format(cBlock.getElev() * 3.28084) + " ft");
-			propTotalElevation.setText(df1.format(cBlock.getTotElev() * 3.28084) + " ft");
-			propDirection.setText(cBlock.getCardinalDirection());
+			showMeasurableCBAttributes(cBlock);
 
-			Color nonLightColor = Color.BLACK;
+			showBooleanCBAttributes(cBlock);
 
-			if (cBlock.isFailCircuit()) {
-				iconPropOccupied.setFill(Color.TRANSPARENT);
-				iconPropOccupied.setStroke(Color.RED);
-			} else if (cBlock.isOccupied() || cBlock.isFailRail()) {
-				iconPropOccupied.setFill(nonLightColor);
-				iconPropOccupied.setStroke(Color.BLACK);
-			} else {
-				iconPropOccupied.setFill(Color.WHITE);
-				iconPropOccupied.setStroke(Color.BLACK);
-			}
+			showFailureCBAttributes(cBlock);
 
-			if (cBlock.isUnderground())
-				iconPropUnderground.setFill(nonLightColor);
-			else
-				iconPropUnderground.setFill(Color.WHITE);
-
-			if (cBlock.isStation())
-				iconPropStation.setFill(nonLightColor);
-			else
-				iconPropStation.setFill(Color.WHITE);
-
-			if (cBlock.hasBeacon())
-				iconPropBeacon.setFill(nonLightColor);
-			else
-				iconPropBeacon.setFill(Color.WHITE);
-
-			if (cBlock.isHeated())
-				iconPropHeated.setFill(nonLightColor);
-			else
-				iconPropHeated.setFill(Color.WHITE);
-
-			if (cBlock.isCrossing())
-				if (cBlock.isCrossingOn())
-					iconPropCrossing.setFill(Color.RED);
-				else
-					iconPropCrossing.setFill(Color.GREEN);
-			else
-				iconPropCrossing.setFill(Color.WHITE);
-
-			if (cBlock.hasLight())
-				if (cBlock.isLightGreen())
-					iconPropLight.setFill(Color.GREEN);
-				else
-					iconPropLight.setFill(Color.RED);
-			else
-				iconPropLight.setFill(Color.WHITE);
-
-			if (cBlock.getJunctionA().isSwitch() || cBlock.getJunctionB().isSwitch())
-				iconPropSwitch.setFill(nonLightColor);
-			else
-				iconPropSwitch.setFill(Color.WHITE);
-
-			// : Get switch connection
-			if (cBlock.getJunctionA().isSwitch()) {
-				TrackJunction junctionA = cBlock.getJunctionA();
-				String switchConnection = mySin.getSwitchConnection(junctionA);
-				connectedSwitch.setText(switchConnection);
-			} else if (cBlock.getJunctionB().isSwitch()) {
-				TrackJunction junctionB = cBlock.getJunctionB();
-				String switchConnection = mySin.getSwitchConnection(junctionB);
-				connectedSwitch.setText(switchConnection);
-			} else {
-				connectedSwitch.setText("--");
-			}
-
-			// : Get Failure Status and display just like above
-			if (cBlock.isFailRail())
-				iconFailRail.setFill(Color.RED);
-			else
-				iconFailRail.setFill(Color.WHITE);
-
-			if (cBlock.isFailCircuit())
-				iconFailCircuit.setFill(Color.RED);
-			else
-				iconFailCircuit.setFill(Color.WHITE);
-
-			if (cBlock.isFailPower())
-				iconFailPower.setFill(Color.RED);
-			else
-				iconFailPower.setFill(Color.WHITE);
-
-			// : Get Station Properties if a Station, otherwise erase
-			if (cBlock.isStation()) {
-				TrackStation cStation = mySin.getCurrentStation();
-				propSchdBoarders.setText(Integer.toString(cStation.getScheduledBoarders()));
-				propSchdAlighters.setText(Integer.toString(cStation.getScheduledAlighters()));
-				propBoarding.setText(Integer.toString(cStation.getBoarding()));
-				propAlighting.setText(Integer.toString(cStation.getAlighting()));
-			} else {
-				propSchdBoarders.setText("--");
-				propSchdAlighters.setText("--");
-				propBoarding.setText("--");
-				propAlighting.setText("--");
-			}
+			showStationCBAttributes(cBlock);
+			
+			animateTrains();
 		}
 
+	}
+
+	/**
+	 * Displays the current block station attributes to the Track Model UI
+	 * 
+	 * @param cBlock - the currently displayed block
+	 */
+	private void showStationCBAttributes(TrackBlock cBlock) {
+		// : Get Station Properties if a Station, otherwise erase
+		if (cBlock.isStation()) {
+			TrackStation cStation = mySin.getCurrentStation();
+			propSchdBoarders.setText(Integer.toString(cStation.getScheduledBoarders()));
+			propSchdAlighters.setText(Integer.toString(cStation.getScheduledAlighters()));
+			propBoarding.setText(Integer.toString(cStation.getBoarding()));
+			propAlighting.setText(Integer.toString(cStation.getAlighting()));
+			String stationName = cStation.getStationName();
+			stationName = stationName.replace("NORTH", "N.");
+			stationName = stationName.replace("EAST", "E.");
+			stationName = stationName.replace("SOUTH", "S.");
+			stationName = stationName.replace("WEST", "W.");
+			propStationName.setText(stationName);
+		} else {
+			propSchdBoarders.setText("--");
+			propSchdAlighters.setText("--");
+			propBoarding.setText("--");
+			propAlighting.setText("--");
+			propStationName.setText("--");
+		}
+	}
+
+	/**
+	 * Displays the current block failure attributes to the Track Model UI
+	 * 
+	 * @param cBlock - the currently displayed block
+	 */
+	private void showFailureCBAttributes(TrackBlock cBlock) {
+		// : Get Failure Status and display just like above
+		if (cBlock.isFailRail())
+			iconFailRail.setFill(Color.RED);
+		else
+			iconFailRail.setFill(Color.WHITE);
+
+		if (cBlock.isFailCircuit())
+			iconFailCircuit.setFill(Color.RED);
+		else
+			iconFailCircuit.setFill(Color.WHITE);
+
+		if (cBlock.isFailPower())
+			iconFailPower.setFill(Color.RED);
+		else
+			iconFailPower.setFill(Color.WHITE);
+	}
+
+	/**
+	 * Displays the current block boolean attributes to the Track Model UI
+	 * 
+	 * @param cBlock - the currently displayed block
+	 */
+	private void showBooleanCBAttributes(TrackBlock cBlock) {
+		Color nonLightColor = Color.BLACK;
+
+		if (cBlock.isFailCircuit()) {
+			iconPropOccupied.setFill(Color.TRANSPARENT);
+			iconPropOccupied.setStroke(Color.RED);
+		} else if (cBlock.isOccupied() || cBlock.isFailRail()) {
+			iconPropOccupied.setFill(nonLightColor);
+			iconPropOccupied.setStroke(Color.BLACK);
+		} else {
+			iconPropOccupied.setFill(Color.WHITE);
+			iconPropOccupied.setStroke(Color.BLACK);
+		}
+
+		if (cBlock.isUnderground())
+			iconPropUnderground.setFill(nonLightColor);
+		else
+			iconPropUnderground.setFill(Color.WHITE);
+
+		if (cBlock.isStation())
+			iconPropStation.setFill(nonLightColor);
+		else
+			iconPropStation.setFill(Color.WHITE);
+
+		if (cBlock.hasBeacon())
+			iconPropBeacon.setFill(nonLightColor);
+		else
+			iconPropBeacon.setFill(Color.WHITE);
+
+		if (cBlock.isHeated() && !cBlock.isFailPower())
+			iconPropHeated.setFill(nonLightColor);
+		else
+			iconPropHeated.setFill(Color.WHITE);
+
+		if (cBlock.isCrossing())
+			if (cBlock.isCrossingOn())
+				iconPropCrossing.setFill(Color.RED);
+			else
+				iconPropCrossing.setFill(Color.GREEN);
+		else
+			iconPropCrossing.setFill(Color.WHITE);
+
+		if (cBlock.hasLight())
+			if (cBlock.isFailPower()) {
+				iconPropLight.setFill(Color.TRANSPARENT);
+				iconPropLight.setStroke(Color.RED);
+			}
+			else if (cBlock.isLightGreen()) {
+				iconPropLight.setFill(Color.GREEN);
+				iconPropLight.setStroke(Color.BLACK);
+			}
+				
+			else {
+				iconPropLight.setFill(Color.RED);
+				iconPropLight.setStroke(Color.BLACK);
+			}
+				
+		else {
+			iconPropLight.setFill(Color.WHITE);
+			iconPropLight.setStroke(Color.BLACK);
+		}
+			
+
+		if (cBlock.getJunctionA().isSwitch() || cBlock.getJunctionB().isSwitch())
+			iconPropSwitch.setFill(nonLightColor);
+		else
+			iconPropSwitch.setFill(Color.WHITE);
+
+		// : Get switch connection
+		if (cBlock.getJunctionA().isSwitch()) {
+			TrackJunction junctionA = cBlock.getJunctionA();
+			String switchConnection = mySin.getSwitchConnection(junctionA);
+			connectedSwitch.setText(switchConnection);
+		} else if (cBlock.getJunctionB().isSwitch()) {
+			TrackJunction junctionB = cBlock.getJunctionB();
+			String switchConnection = mySin.getSwitchConnection(junctionB);
+			connectedSwitch.setText(switchConnection);
+		} else {
+			connectedSwitch.setText("--");
+		}
+	}
+
+	/**
+	 * Displays the current block measurable attributes to the Track Model UI
+	 * 
+	 * @param cBlock - the currently displayed block
+	 */
+	private void showMeasurableCBAttributes(TrackBlock cBlock) {
+		DecimalFormat df1 = new DecimalFormat("#.##");
+
+		propLength.setText(df1.format(cBlock.getLength() * 0.000621371) + " miles");
+		propGrade.setText(df1.format(cBlock.getGrade()) + " %");
+		propSpeedLimit.setText(df1.format(cBlock.getSpdLmt() * 2.23694) + " mph");
+		propElevation.setText(df1.format(cBlock.getElev() * 3.28084) + " ft");
+		propTotalElevation.setText(df1.format(cBlock.getTotElev() * 3.28084) + " ft");
+		propDirection.setText(cBlock.getCardinalDirection());
+	}
+
+	/**
+	 * Highlights the current block on the map display
+	 * 
+	 * @param cBlock - the currently displayed block
+	 */
+	private void highlightCurrentBlock(TrackBlock cBlock) {
+		// Keep Track of current block on map by drawing a different colored line over
+		// it
+		int cBlockID = cBlock.getBlockID();
+		char cSectionID = cBlock.getSectionID();
+		TrackSection cSection = mySin.getSection(cSectionID);
+
+		if (cSection instanceof TrackSectionStraight) {
+			TrackSectionStraight cSectionStraight = (TrackSectionStraight) cSection;
+			moveCurrentLine(cSectionStraight.getBlockStartX(cBlockID), cSectionStraight.getBlockStartY(cBlockID),
+					cSectionStraight.getBlockEndX(cBlockID), cSectionStraight.getBlockEndY(cBlockID));
+			hideCurrentArc();
+		} else if (cSection instanceof TrackSectionCurve) {
+			TrackSectionCurve cSectionCurve = (TrackSectionCurve) cSection;
+			moveCurrentArc(cSectionCurve.getCenterX(), cSectionCurve.getCenterY(), cSectionCurve.getRadius(),
+					cSectionCurve.getBlockStartAngle(cBlockID), cSectionCurve.getBlockLengthAngle(cBlockID));
+			hideCurrentLine();
+			// System.out.println("Section: " + cSectionCurve.getSectionID() + " Length: " +
+			// cSectionCurve.getLength() + " CX: " + cSectionCurve.getCenterX() + " CY: " +
+			// cSectionCurve.getCenterY() + " R: " + cSectionCurve.getRadius() + " SAng: " +
+			// Math.toDegrees(cSectionCurve.getStartAngle()) + " LAng: " +
+			// Math.toDegrees(cSectionCurve.getLengthAngle()));
+		}
+	}
+
+	/**
+	 * Adds, moves, and removes trains on the map display
+	 */
+	private void animateTrains() {
 		// : Get list of trains and coords, add dots to map. Make sure train has fx:id
 		Map<Integer, TrainLocation> existingTrains = mySin.getTrainMap(); // getX, Y, ID
 		ObservableList<Node> visibleTrains = trackMap.getChildren();
@@ -481,6 +601,10 @@ public class TrackModelCtrl implements Initializable {
 
 				trainIcon.setCenterX(centerX);
 				trainIcon.setCenterY(centerY);
+				
+				if(eTrain.hasCrashed()) {
+					trainIcon.setFill(Color.RED);
+				}
 
 				visibleTrains.add(trainIcon);
 
@@ -490,10 +614,49 @@ public class TrackModelCtrl implements Initializable {
 
 	}
 
+	/**
+	 * Moves the current block arc highlight to the new location and displays it
+	 * 
+	 * @param blockStartX - X coordinate for current block starting point
+	 * @param blockStartY - Y coordinate for current block starting point
+	 * @param blockEndX   - X coordinate for current block ending point
+	 * @param blockEndY   - Y coordinate for current block ending point
+	 */
+	private void moveCurrentLine(double blockStartX, double blockStartY, double blockEndX, double blockEndY) {
+		blockStartX = (blockStartX + dispX) * ratioX + 10;
+		blockStartY = (blockStartY + dispY) * ratioY + 10;
+		blockEndX = (blockEndX + dispX) * ratioX + 10;
+		blockEndY = (blockEndY + dispY) * ratioY + 10; // System.out.println(startX + " " + startY + " " + endX + " " +
+														// endY);
+
+		currentLine.setStartX(blockStartX);
+		currentLine.setStartY(blockStartY);
+		currentLine.setEndX(blockEndX);
+		currentLine.setEndY(blockEndY);
+
+		currentLine.setStroke(Color.YELLOW);
+		currentLine.setStrokeWidth(4);
+		currentLine.toFront();
+
+		currentLine.setVisible(true);
+	}
+
+	/**
+	 * Hides the line which represents the current block when it is a line
+	 */
 	private void hideCurrentLine() {
 		currentLine.setVisible(false);
 	}
 
+	/**
+	 * Moves the current block arc highlight to the new location and displays it
+	 * 
+	 * @param centerX          - X coordinate for current block center point
+	 * @param centerY          - Y coordinate for current block center point
+	 * @param radius           - length of the current block radius in meters
+	 * @param blockStartAngle  - angle where the current block starts in radians
+	 * @param blockLengthAngle - angular length for the current block in radians
+	 */
 	private void moveCurrentArc(double centerX, double centerY, double radius, double blockStartAngle,
 			double blockLengthAngle) {
 		centerX = (centerX + dispX) * ratioX + 10;
@@ -517,27 +680,11 @@ public class TrackModelCtrl implements Initializable {
 		currentArc.setVisible(true);
 	}
 
+	/**
+	 * Hides the arc which represents the current block when it is an arc
+	 */
 	private void hideCurrentArc() {
 		currentArc.setVisible(false);
-	}
-
-	private void moveCurrentLine(double blockStartX, double blockStartY, double blockEndX, double blockEndY) {
-		blockStartX = (blockStartX + dispX) * ratioX + 10;
-		blockStartY = (blockStartY + dispY) * ratioY + 10;
-		blockEndX = (blockEndX + dispX) * ratioX + 10;
-		blockEndY = (blockEndY + dispY) * ratioY + 10; // System.out.println(startX + " " + startY + " " + endX + " " +
-														// endY);
-
-		currentLine.setStartX(blockStartX);
-		currentLine.setStartY(blockStartY);
-		currentLine.setEndX(blockEndX);
-		currentLine.setEndY(blockEndY);
-
-		currentLine.setStroke(Color.YELLOW);
-		currentLine.setStrokeWidth(4);
-		currentLine.toFront();
-
-		currentLine.setVisible(true);
 	}
 
 }

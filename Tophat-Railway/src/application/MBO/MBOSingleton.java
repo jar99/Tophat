@@ -66,6 +66,12 @@ public class MBOSingleton implements MBOInterface {
 	}
 
 	@Override
+	public void createTrain(TrackLine trackLine) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public void importLine(TrackLine trackLine) {
 		// TODO Auto-generated method stub
 		

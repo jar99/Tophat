@@ -1,6 +1,8 @@
 package application.TrainController;
 
 import java.util.Hashtable;
+import java.util.Set;
+
 import application.TrainModel.TrainInterface;
 
 public class TrainControllerSingleton {
@@ -31,11 +33,13 @@ public class TrainControllerSingleton {
 	// switch between software or hardware..hardware needs approved
 	// Check TrainID and remove HashTable
 
+	static boolean ctcMode;
+	
 	public Train createTrain(int trainID, TrainInterface trainMod) {
 		TrainControllerCtrl.addTrainS(trainID);
-				Train train = new Train(trainID, trainMod);
-				trainCtrlHashTable.put(trainID, train);
-				return train;
+		Train train = new Train(trainID, trainMod);
+		trainCtrlHashTable.put(trainID, train);
+		return train;
 	}
 
 	public void removeTrain(int trianID) {
@@ -50,6 +54,18 @@ public class TrainControllerSingleton {
 	public int getTrainSize() {
 		return trainCtrlHashTable.size();
 	}
+	
+	public static boolean getMode() {
+		return ctcMode;
+	}
+	
+	public static void setMode(boolean set) {
+		ctcMode = set;
+	}
+	
+	public Set<Integer> getAllTrainIDs() {
+        return trainCtrlHashTable.keySet();
+    }
 
 	// NOTE: Singleton Connections (Put changes reads, gets, sets that you want to
 	// occur here)

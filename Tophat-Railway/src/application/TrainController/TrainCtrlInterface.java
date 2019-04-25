@@ -9,6 +9,8 @@ public interface TrainCtrlInterface {
 	void setSpeed(double speed);
 
 	double getSpeed();
+	
+	double getMaxSpeed();
 
 	void setPower(double power);
 
@@ -39,5 +41,9 @@ public interface TrainCtrlInterface {
 	 void toggleRightDoor();
 
 	 void toggleInteriorLights();
+	 
+	 void setMode(boolean set);
+	 
+	 String getBeacon();
 
 }

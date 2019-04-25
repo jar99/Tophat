@@ -1,5 +1,13 @@
 package application.TrackModel;
 
+/**
+ * <h1>Train Location</h1> Records the current position for a train on the
+ * track.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrainLocation {
 
 	// Train Information
@@ -104,18 +112,36 @@ public class TrainLocation {
 	}
 
 	// ================UI SYNC FUNCTIONS===================
+
+	/**
+	 * Marks this train as having been added to the map
+	 */
 	void added() {
 		add = false;
 	}
 
+	/**
+	 * Mark this train as having left the track, and prepare it for deletion from
+	 * the map
+	 */
 	void delete() {
 		delete = true;
 	}
 
+	/**
+	 * Checks to see if this train should be deleted from the map
+	 * 
+	 * @return if the train is back at the yard
+	 */
 	boolean mustDelete() {
 		return delete;
 	}
 
+	/**
+	 * Checks to see if this train should be added to the map
+	 * 
+	 * @return if the train is new
+	 */
 	boolean mustAdd() {
 		return add;
 	}

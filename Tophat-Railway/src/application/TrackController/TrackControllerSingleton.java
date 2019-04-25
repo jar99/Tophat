@@ -292,19 +292,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if (controllerID == 1) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 2) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 3) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 4) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		if (controllerID == 5) {
-			return Double.toString(track.get("green").getBlock(blockID).getSuggestedSpeed());
+			return Double.toString(blockListSpeed[blockID-1]);
 		}
 		else
 			return null;
@@ -314,19 +314,19 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		if(track.isEmpty())
 			return null;
 		if(controllerID == 1) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 2) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 3) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 4) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		if(controllerID == 5) {
-			return Integer.toString(track.get("green").getBlock(blockID).getAuthority());
+			return Integer.toString(blockListAuthority[blockID-1]);
 		}
 		else
 			return null;
@@ -427,9 +427,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 12)) {
 				trackModInt.setSwitch("green", 5, true);
-				trackModInt.setLightStatus("green", 13, true);
+				try {
+					trackModInt.setLightStatus("green", 13, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 13, false);
+				}
 				trackModInt.setControlAuthority("green", 13, true);
-				trackModInt.setLightStatus("green", 1, false);
+				try {
+					trackModInt.setLightStatus("green", 1, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 1, false);
+				}
 				trackModInt.setControlAuthority("green", 1, false);
 				switchStraightG5 = true;
 			}
@@ -440,9 +448,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 2)) {
 				trackModInt.setSwitch("green", 5, false);
-				trackModInt.setLightStatus("green", 1, true);
+				try {
+					trackModInt.setLightStatus("green", 1, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 1, false);
+				}
 				trackModInt.setControlAuthority("green", 1, true);
-				trackModInt.setLightStatus("green", 13, false);
+				try {
+					trackModInt.setLightStatus("green", 13, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 13, false);
+				}
 				trackModInt.setControlAuthority("green", 13, false);
 				switchStraightG5 = false;
 			}
@@ -611,9 +627,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 27)) {
 				trackModInt.setSwitch("green", 4, true);
-				trackModInt.setLightStatus("green", 28, true);
+				try {
+					trackModInt.setLightStatus("green", 28, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 28, false);
+				}
 				trackModInt.setControlAuthority("green", 28, true);
-				trackModInt.setLightStatus("green", 150, false);
+				try {
+					trackModInt.setLightStatus("green", 150, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 150, false);
+				}
 				trackModInt.setControlAuthority("green", 150, false);
 				switchStraightG4 = true;
 			}
@@ -624,9 +648,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 149)) {
 				trackModInt.setSwitch("green", 4, false);
-				trackModInt.setLightStatus("green", 150, true);
+				try {
+					trackModInt.setLightStatus("green", 150, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 150, false);
+				}
 				trackModInt.setControlAuthority("green", 150, true);
-				trackModInt.setLightStatus("green", 28, false);
+				try {
+					trackModInt.setLightStatus("green", 28, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 28, false);
+				}
 				trackModInt.setControlAuthority("green", 28, false);
 				switchStraightG4 = false;
 			}
@@ -922,9 +954,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 75)) {
 				trackModInt.setSwitch("green", 2, true);
-				trackModInt.setLightStatus("green", 76, true);
+				try {
+					trackModInt.setLightStatus("green", 76, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 76, false);
+				}
 				trackModInt.setControlAuthority("green", 76, true);
-				trackModInt.setLightStatus("green", 77, false);
+				try {
+					trackModInt.setLightStatus("green", 77, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 77, false);
 				switchStraightG2 = true;
 			}
@@ -935,9 +975,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 78)) {
 				trackModInt.setSwitch("green", 2, false);
-				trackModInt.setLightStatus("green", 77, true);
+				try {
+					trackModInt.setLightStatus("green", 77, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 77, true);
-				trackModInt.setLightStatus("green", 76, false);
+				try {
+					trackModInt.setLightStatus("green", 76, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 77, false);
+				}
 				trackModInt.setControlAuthority("green", 76, false);
 				switchStraightG2 = false;
 			}
@@ -954,9 +1002,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 84)) {
 				trackModInt.setSwitch("green", 3, true);
-				trackModInt.setLightStatus("green", 85, true);
+				try {
+					trackModInt.setLightStatus("green", 85, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 85, false);
+				}
 				trackModInt.setControlAuthority("green", 85, true);
-				trackModInt.setLightStatus("green", 100, false);
+				try {
+					trackModInt.setLightStatus("green", 100, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 100, false);
+				}
 				trackModInt.setControlAuthority("green", 100, false);
 				switchStraightG3 = true;
 			}
@@ -967,9 +1023,17 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		try {
 			if (trackModInt.getOccupancy("green", 99)) {
 				trackModInt.setSwitch("green", 3, false);
-				trackModInt.setLightStatus("green", 100, true);
+				try {
+					trackModInt.setLightStatus("green", 100, true);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 100, false);
+				}
 				trackModInt.setControlAuthority("green", 100, true);
-				trackModInt.setLightStatus("green", 85, false);
+				try {
+					trackModInt.setLightStatus("green", 85, false);
+				} catch (TrackPowerFailureException e) {
+					trackModInt.setControlAuthority("green", 85, false);
+				}
 				trackModInt.setControlAuthority("green", 85, false);
 				switchStraightG5 = false;
 			}
@@ -1077,6 +1141,56 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		return CBIDG5;
 	}
 	
+	public void dualTrackVitalityG4() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		if(track.isEmpty())
+			return;
+		for(int i = 77; i < 86; i++) {
+			try {
+				if(trackModInt.getOccupancy("green", i)) {
+					try {
+						trackModInt.setLightStatus("green", 76, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 76, false);
+					}
+					try {
+						trackModInt.setLightStatus("green", 100, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 100, false);
+					}
+					trackModInt.setControlAuthority("green", 76, false);
+					trackModInt.setControlAuthority("green", 100, false);
+				}
+			} catch (TrackCircuitFailureException e) {
+			}
+		}
+	}
+	
+	public void dualTrackVitalityG1() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		if(track.isEmpty())
+			return;
+		for(int i = 13; i < 28; i++) {
+			try {
+				if(trackModInt.getOccupancy("green", i)) {
+					try {
+						trackModInt.setLightStatus("green", 150, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 150, false);
+					}
+					try {
+						trackModInt.setLightStatus("green", 1, false);
+					} catch (TrackPowerFailureException e) {
+						trackModInt.setControlAuthority("green", 1, false);
+					}
+					trackModInt.setControlAuthority("green", 1, false);
+					trackModInt.setControlAuthority("green", 150, false);
+				}
+			} catch (TrackCircuitFailureException e) {
+			}
+		}
+	}
+	
 	@Override
 	public void removeTrain(int trainID) {
 		//TODO
@@ -1095,12 +1209,12 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		storedTrainID[storedTrainIDIndex] = trainID;
 		storedTrainIDIndex++;
 		TrackModelSingleton trackModSin = TrackModelSingleton.getInstance();
-		if (!sent_train) { try {
+		try {
 			trackModSin.createTrain(lineName, trainID);
 		} catch (SwitchStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} sent_train = !sent_train; }
+		} 
 		
 	}
 
@@ -1109,12 +1223,15 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		if(track.isEmpty())
 			return;
+		System.out.println(suggestedSpeed);
+		System.out.println(blockID);
 		int blockIDOccupied = 63;
 		for(TrackLine line : track.values()) {
 			for(TrackBlock block : line.getBlocks()) {
 				try {
 					if(trackModInt.getOccupancy(line.getLineName(), block.getBlockID())) {
 						blockIDOccupied = block.getBlockID();
+						break;
 					}
 				} catch (TrackCircuitFailureException e) {
 					e.printStackTrace();
@@ -1159,15 +1276,68 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		}
 	}
 
+	public void manuallyCreateTrainSpeed() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		for(int i = 1; i < 151; i++) {
+			try {
+				trackModInt.setSuggestedSpeed("green", i, 20);
+			} catch (TrackCircuitFailureException e) {
+			}
+			blockListSpeed[i-1] = 20;
+		}
+	}
+	
+	public void manuallyCreateTrainAuthority() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		for(int i = 63; i < 151; i ++) {
+			try {
+				trackModInt.setAuthority("green", i, (150-i+63));
+				trackModInt.setControlAuthority("green", i, true);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			blockListAuthority[i-1] = (150-i+63);
+		}
+		for(int i = 1; i < 63; i++) {
+			try {
+				trackModInt.setAuthority("green", i, 63-i);
+				trackModInt.setControlAuthority("green", i, true);
+			} catch (TrackCircuitFailureException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			blockListAuthority[i-1] = 63-i;
+		}
+	} 
 	
 	@Override
 	public boolean getOccupancyCTC(String lineName, int blockID) {
-		return track.get(lineName).getBlock(blockID).isOccupied();
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		try {
+			return trackModInt.getOccupancy(lineName, blockID);
+		} catch (TrackCircuitFailureException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
+
+	@Override
+	public boolean isBlockBroken(String lineName, int blockID) {
+		// TODO Write method to return if a block is broken.
+		return false;
+	}
+
 	@Override
 	public int getAuthorityCTC(String lineName, int blockID) {
-		return track.get(lineName).getBlock(blockID).getAuthority();
+		// TODO Auto-generated method stub
+		return 0;
 	}
-	
+
+	@Override
+	public void manuallySetSwitch(int switchID, boolean switchStraight) {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		trackModInt.setSwitch("green", switchID, switchStraight);
+	}	
 }

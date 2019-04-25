@@ -12,8 +12,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-// WARNING: You MUST run this program from Main.java, 
-// 		otherwise the Singleton's won't talk to each other
+/**
+ * <h1>Main Launcher</h1> Starts the system, schedules Module to Module
+ * communications, and calls the UI launcher.
+ *
+ * WARNING: You MUST run this program from Main.java, otherwise the Singleton's
+ * won't talk to each other
+ * 
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class Main {
 
 	// NOTE: Set True to Debug Update Methods
@@ -41,7 +50,7 @@ public class Main {
 		TrainControllerHWSingleton 	trnHwSin = 		TrainControllerHWSingleton.getInstance();
 		MBOSingleton 				mboSin = 		MBOSingleton.getInstance();
 
-		ClockSingleton 				clock = 		ClockSingleton.getInstance();
+		ClockSingleton clock = ClockSingleton.getInstance();
 
 		// Calling Thread which starts the FX UI
 		new Thread() {
@@ -65,11 +74,20 @@ public class Main {
 
 	}
 
-	// calls each singleton's update() method
+	/**
+	 * Calls each singleton's update() method
+	 * 
+	 * @param ctcSin     - Reference to CTC Singleton
+	 * @param tckCtrlSin - Reference to Track Controller Singleton
+	 * @param tckModSin  - Reference to Track Model Singleton
+	 * @param trnModSin  - Reference to Train Model Singleton
+	 * @param trnCtrlSin - Reference to Train Controller Singleton
+	 * @param mboSin     - Reference to MBO Singleton
+	 * @param clock      - Reference to Clock Singleton
+	 */
 	private static void update(CTCSingleton ctcSin, TrackControllerSingleton tckCtrlSin, TrackModelSingleton tckModSin,
 			TrainModelSingleton trnModSin, TrainControllerSingleton trnCtrlSin, TrainControllerHWSingleton trnHwSin,
 			MBOSingleton mboSin, ClockSingleton clock) {
-		// call singleton update methods
 
 		if (DEBUG && !printedUpdateDebugs
 				&& !(ENABLE_1 && ENABLE_2 && ENABLE_3 && ENABLE_4 && ENABLE_5 && ENABLE_6 && ENABLE_7)) {

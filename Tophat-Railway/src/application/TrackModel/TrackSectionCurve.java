@@ -2,6 +2,14 @@ package application.TrackModel;
 
 import java.util.Map;
 
+/**
+ * <h1>Track Section</h1> Implements the Track Section abstract class for curved
+ * sections of track.
+ *
+ * @author Cory Cizauskas
+ * @version 1.0
+ * @since 2019-04-13
+ */
 public class TrackSectionCurve extends TrackSection {
 
 	final private double radius;
@@ -9,9 +17,9 @@ public class TrackSectionCurve extends TrackSection {
 	final private double centerY;
 	final private boolean isClockwise;
 
-	public TrackSectionCurve(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX, double startY,
-			double endX, double endY, Map<Integer, TrackBlock> blocks,
-			double radius, double centerX, double centerY, boolean isClockwise) {
+	public TrackSectionCurve(String lineName, char sectionID, int firstBlockID, int lastBlockID, double startX,
+			double startY, double endX, double endY, Map<Integer, TrackBlock> blocks, double radius, double centerX,
+			double centerY, boolean isClockwise) {
 		super(lineName, sectionID, firstBlockID, lastBlockID, startX, startY, endX, endY, blocks);
 		this.radius = radius;
 		this.centerX = centerX;
@@ -83,6 +91,12 @@ public class TrackSectionCurve extends TrackSection {
 			return getLength() / radius;
 	}
 
+	/**
+	 * Calculates the starting angle for a block
+	 * 
+	 * @param cBlockID - the block requested
+	 * @return the blocks starting angle (radians)
+	 */
 	public double getBlockStartAngle(int cBlockID) {
 		double sectionDisplacement = 0.0;
 		for (int blockID = firstBlockID; blockID < cBlockID; blockID++) {
@@ -90,7 +104,7 @@ public class TrackSectionCurve extends TrackSection {
 		}
 
 		double angle = Math.atan2((-1) * (startY - centerY), startX - centerX);
-		
+
 		if (isClockwise)
 			return angle - sectionDisplacement / radius;
 		else
@@ -98,7 +112,13 @@ public class TrackSectionCurve extends TrackSection {
 
 	}
 
-	public double getBlockLengthAngle(int cBlockID) {		
+	/**
+	 * Calculates the length of the angle for a block
+	 * 
+	 * @param cBlockID - the block requested
+	 * @return the blocks angle length (radians)
+	 */
+	public double getBlockLengthAngle(int cBlockID) {
 		if (isClockwise)
 			return (-1) * getBlock(cBlockID).getLength() / radius;
 		else

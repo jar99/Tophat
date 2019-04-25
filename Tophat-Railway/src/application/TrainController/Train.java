@@ -9,7 +9,7 @@ public class Train implements TrainCtrlInterface {
 
 	private int trainID;
 	private double speed, power;
-	private boolean isManual = false;
+	private boolean isManual = false, set;
 
 	private TrainInterface trainMod;
 	private double ki = 0.01, kp = 0.01;
@@ -34,6 +34,10 @@ public class Train implements TrainCtrlInterface {
 	public double getActualSpeed() {
 		return trainMod.getSpeed();
 	}
+	
+	public double getMaxSpeed() {
+		return trainMod.getMaxSpeed();
+	}
 
 	public void setPower(double power) {
 		this.power = power;
@@ -42,7 +46,15 @@ public class Train implements TrainCtrlInterface {
 	public double getPower() {
 		return power;
 	}
-
+	
+	public void setMode(boolean set) {
+		this.set = set;
+	}
+	
+	public boolean getMode() {
+		return TrainControllerSingleton.getMode();
+	}
+	
 	public double getTemperature() {
 		return trainMod.getTemperature();
 	}
@@ -101,7 +113,7 @@ public class Train implements TrainCtrlInterface {
 	}
 
 	public void toggleInteriorLights() {
-		trainMod.toggleInterierLight();
+		trainMod.toggleInteriorLight();
 	}
 
 	public boolean leftDoorState() {
@@ -143,7 +155,11 @@ public class Train implements TrainCtrlInterface {
 	public void setKP(double kp) {
 		this.kp = kp;
 	}
-
+	
+	public String getBeacon() {
+		return trainMod.getBeaconData();
+	}
+	//public 
 	/**
 	 * 
 	 * @param deltaT = time difference (time between updates)
@@ -156,16 +172,30 @@ public class Train implements TrainCtrlInterface {
 		return b+((deltaT)/2)*(an + a);
 	}
 
-    double lastError;
+
+	 double lastError;
    
 	public void update() {
+		double np = 0;
 		ClockSingleton clkSin = ClockSingleton.getInstance();
 		double deltaT = clkSin.getRatio();
 		double newError = speed - trainMod.getSpeed();
-		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
-		trainMod.setPower(np);
-		lastError = newError;
-		power = np;
+		double np1 = (kp  * newError) + (ki * laplace(deltaT, lastError, newError, power));
+		double np2 = (kp  * newError) + (ki * laplace(deltaT, lastError, newError, power));
+		double np3 = (kp  * newError) + (ki * laplace(deltaT, lastError, newError, power));
+
+		  
+		if(np1 <= np2 && np1 <= np3){
+			np = np1;
+		}else if(np2 <= np1 && np2 <= np3){
+			np = np2;
+		}else if(np3 <= np2 && np3 <= np1){
+			np = np3;
+		}
+		  trainMod.setPower(np);
+		  lastError = newError;
+		  power = np;
+		
 	}
 
 	public boolean getBrakeStatus() {
