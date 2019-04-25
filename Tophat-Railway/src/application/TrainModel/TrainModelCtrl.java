@@ -289,7 +289,7 @@ public class TrainModelCtrl implements Initializable {
 		weight = new TableRow<Double>("Weight", 0.0, (a) -> Converters.Waight(a));
 		cord = new TableRow<String>("Cord", "N/A");
 
-		passengers = new TableRow<Integer>("passengers", 0, (a) -> Converters.PassangerFormat(a));
+		passengers = new TableRow<Integer>("Passengers", 0, (a) -> Converters.PassangerFormat(a));
 
 		leftDoor = new TableRow<Boolean>("Left Door", true, (a) -> Converters.OpenOrClosed(a));
 		rightDoor = new TableRow<Boolean>("Right Door", true, (a) -> Converters.OpenOrClosed(a));
