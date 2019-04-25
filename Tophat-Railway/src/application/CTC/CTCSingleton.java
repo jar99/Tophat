@@ -82,6 +82,9 @@ public class CTCSingleton implements CTCInterface {
 			}
 		}
 		isSectionClose=new boolean[Sections.length];
+		for (boolean lala:isSectionClose){
+			lala=true;
+		}
 		return Sections;
 	}
 	public String[] getOnlyStations() {
