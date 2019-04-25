@@ -15,10 +15,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_RESET);
 #define NAV_B 3
 #define NAV_C 4
 #define NAV_D 5
-#define KP_1 7
-#define KP_2 8 // temp confirm button
-#define KP_3 9 // temp cancel butto
-#define KP_4 10
+#define NAV_SWITCH 6 
 #define EBRAKE 11
 
 // globals (I know they're bad, leave me alone)
