@@ -113,7 +113,7 @@ public class Train implements TrainCtrlInterface {
 	}
 
 	public void toggleInteriorLights() {
-		trainMod.toggleInterierLight();
+		trainMod.toggleInteriorLight();
 	}
 
 	public boolean leftDoorState() {
