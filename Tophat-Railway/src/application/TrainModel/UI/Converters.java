@@ -98,11 +98,11 @@ public class Converters<T> {
 	}
 	
 	public static double kmhToms(double kmh) {
-		return 0.277778 * kmh;
+		return kmh / 3.6;
 	}
 
 	public static double msTokmh(double ms) {
-		return 3.60000288 * ms;
+		return 3.6 * ms;
 	}
 	
 	public static double ctof(double tempC) {
@@ -114,11 +114,11 @@ public class Converters<T> {
 	}
 	
 	public static double kmhTomph(double speedM) {
-		return speedM * 0.621371;
+		return speedM / 1.609;
 	}
 	
 	public static double msTofs(double acelM) {
-		return acelM * 3.2808398950131;
+		return acelM * 3.281;
 	}
 	
 	public static double kgTolbs(double waightKG) {

@@ -410,7 +410,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		if (!isActive)
 			return -9.9;
 		try {
-			return trModSin.getTrainSuggestedSpeed(trainID);
+			return Converters.msTokmh(trModSin.getTrainSuggestedSpeed(trainID));
 		} catch (TrackCircuitFailureException e) {
 			return Double.NaN;
 		}
