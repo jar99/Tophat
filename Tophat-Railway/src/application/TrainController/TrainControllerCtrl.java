@@ -96,7 +96,8 @@ public class TrainControllerCtrl implements Initializable {
 		double temp = train.getTemperature();
 		double ftemp = temp * 9/5 + 32;
 		String temperature = String.format("%.2f",ftemp);
-		currentTemp.setText(temperature + "�F");
+		String degree = "\u00b0";
+		currentTemp.setText(temperature + degree + "F");
 	}
 
 	@FXML
@@ -419,7 +420,7 @@ public class TrainControllerCtrl implements Initializable {
 				setTrain(newValue);
 				setKvalues();
 				manual.setSelected(true);
-				lights.setSelected(true);
+				//lights.setSelected(true);
 			}
 	    });
 
