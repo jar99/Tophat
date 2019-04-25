@@ -217,7 +217,9 @@ public class TrainControllerCtrl implements Initializable {
 	public void updateCTC() {
 		Double speedCTC = train.getCTCSpeed();
 		int authorityCTC = train.getCTCAuthority();
-		sugSpeed.setText(speedCTC + "mph");
+		speedCTC = speedCTC * 0.621371;
+		String CTCSpeed = String.format("%.2f", speedCTC);
+		sugSpeed.setText(CTCSpeed + "mph");
 		sugAuthority.setText(authorityCTC + "");
 		setCTC.setVisible(false);
 		setMBO.setVisible(false);
@@ -226,7 +228,9 @@ public class TrainControllerCtrl implements Initializable {
 	public void updateMBO() {
 		Double speedMBO = train.getMBOSpeed();
 		int authorityMBO = train.getMBOAuthority();
-		sugSpeed.setText(speedMBO + "mph");
+		speedMBO = speedMBO * 0.621371;
+		String MBOSpeed = String.format("%.2f", speedMBO);
+		sugSpeed.setText(MBOSpeed + "mph");
 		sugAuthority.setText(authorityMBO + "");
 		setMBO.setVisible(false);
 		setCTC.setVisible(false);
