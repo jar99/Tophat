@@ -447,7 +447,7 @@ public class CTCCtrl implements Initializable {
 					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getspdprint());
 				}
 			}
-			if (myTime<=tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]&&tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]<myTime+myClock.getRatio()){
+			if (myTime<=tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]&&tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]<myTime+myClock.getRatio()&&tmp2.getStation()[tmp2.getStation().length-1].equals("yard")){
 				System.out.println("CTC dispatch train "+tmp2.getID()+ " to yard");
 				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getspdprint());
 			}
