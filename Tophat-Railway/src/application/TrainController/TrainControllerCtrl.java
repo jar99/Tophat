@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.sun.glass.events.WindowEvent;
-
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

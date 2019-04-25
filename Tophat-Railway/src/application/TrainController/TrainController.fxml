@@ -193,7 +193,7 @@
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Label layoutX="76.0" layoutY="233.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
+            <Label layoutX="76.0" layoutY="234.0" prefHeight="21.0" prefWidth="110.0" text="Service Brake" textAlignment="CENTER">
                <font>
                   <Font size="15.0" />
                </font>
