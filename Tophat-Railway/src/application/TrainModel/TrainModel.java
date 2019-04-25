@@ -498,18 +498,18 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	@Override
 	public boolean getInterierLightState() {
-		return interiorLights;
-	}
-
-	@Override
-	public boolean toggleInteriorLight() {
 		return getInteriorLightState();
 	}
 
 	@Override
+	public boolean toggleInteriorLight() {
+		 interiorLights = !interiorLights;
+		 return true;
+	}
+
+	@Override
 	public boolean getInteriorLightState() {
-		interiorLights = !interiorLights;
-		return true;
+		return interiorLights;
 	}
 
 	@Override
