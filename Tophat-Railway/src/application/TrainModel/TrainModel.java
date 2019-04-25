@@ -692,4 +692,18 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 	int getCarCount() {
 		return carCount;
 	}
+
+	@Override
+	public double getSuggestedSpeed() {
+		if(TrainModelSingleton.isCTCMode())
+			return getTrackSpeed();
+		return getMBOSpeed();
+	}
+
+	@Override
+	public int getAuthority() {
+		if(TrainModelSingleton.isCTCMode())
+			return getTrackAuthority();
+		return getMBOAuthority();
+	}
 }

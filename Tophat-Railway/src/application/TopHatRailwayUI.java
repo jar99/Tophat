@@ -4,16 +4,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.TrainModel.TrainModelSingleton;
 import application.TrainModel.TrainWindowFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -28,6 +31,12 @@ public class TopHatRailwayUI extends Application implements Initializable {
 	
 	@FXML
 	ChoiceBox<Integer> trainSelector;
+	
+	@FXML
+	Button mbo;
+	
+	@FXML
+	Button ctc;
 	
 	@FXML
 	void launch_ctc() {
@@ -60,12 +69,24 @@ public class TopHatRailwayUI extends Application implements Initializable {
 		makeWindow("Train Controller Hardware", "./TrainControllerHardware/TrainControllerHardware.fxml", 600, 400);
 	}
 	
-	
 	@FXML
 	void launch_train_model(){
 		Integer value = trainSelector.getSelectionModel().getSelectedItem();
 		if(value != null)
 		TrainWindowFactory.createTrain(value);
+	}
+	
+	@FXML
+	void set_mode(ActionEvent event){
+		TrainModelSingleton.setMode(event.getSource() == ctc);
+		ctc.setDisable(true);
+		mbo.setDisable(true);
+	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		if(app == null)
+			app = this;		
 	}
 	
 	static TopHatRailwayUI app;
@@ -79,11 +100,9 @@ public class TopHatRailwayUI extends Application implements Initializable {
 	}
 
 	private void addTrain(int trainID) {
-		if(trainSelector == null) System.exit(2);
 		ObservableList<Integer> list = trainSelector.getItems();
 		if (!list.contains(trainID))
 			list.add(trainID);
-
 	}
 
 	private void removeTrain(int trainID) {
@@ -93,15 +112,12 @@ public class TopHatRailwayUI extends Application implements Initializable {
 	}
 	
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		if(app == null) app = this;
-	}
-	
-	@Override
 	public void start(Stage primaryStage) throws IOException {
 		if(app != null) throw new IOException("Can not launch the same program twice.");
 		
-		Parent root = FXMLLoader.load(getClass().getResource("mainUI.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("mainUI.fxml"));
+		Parent root = fxmlLoader.load();
+
 		Scene scene = new Scene(root, 100, 300);
 
 //		Code to close all windows if one window closes

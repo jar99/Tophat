@@ -7,8 +7,21 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <BorderPane prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.TopHatRailwayUI">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TopHat">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+         </children>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+      </HBox>
+   </top>
    <center>
       <GridPane alignment="CENTER" hgap="5.0" prefHeight="500.0" prefWidth="200.0" vgap="5.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -20,6 +33,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -39,24 +53,12 @@
             <Label text="Train Model" GridPane.rowIndex="4" />
             <Label text="Train Controller" GridPane.rowIndex="5" />
             <Label text="Train HW" GridPane.rowIndex="6" />
+            <Button fx:id="mbo" maxWidth="150.0" mnemonicParsing="false" onAction="#set_mode" text="MBO Mode" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Button fx:id="ctc" mnemonicParsing="false" onAction="#set_mode" prefWidth="150.0" text="CTC Mode" GridPane.rowIndex="7" />
          </children>
          <padding>
             <Insets left="5.0" right="5.0" />
          </padding>
       </GridPane>
    </center>
-   <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" spacing="5.0" BorderPane.alignment="CENTER">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TopHat">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Text>
-         </children>
-         <padding>
-            <Insets left="5.0" />
-         </padding>
-      </HBox>
-   </top>
 </BorderPane>
