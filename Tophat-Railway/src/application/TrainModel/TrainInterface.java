@@ -302,6 +302,13 @@ public interface TrainInterface {
 	 * @return acceleration in m/s^2
 	 */
 	double getMaxAcceleration();
+	
+	/**
+	 * The speed limit of the track
+	 * 
+	 * @return speed in km/h
+	 */
+	double getSpeedLimit();
 
 	/**
 	 * Adds information to the train information Que

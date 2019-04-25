@@ -401,7 +401,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		}
 	}
 
-	double getSpeedLimit() {
+	public double getSpeedLimit() {
 		return trModSin.getTrainBlockSpeedLimit(trainID);
 	}
 
