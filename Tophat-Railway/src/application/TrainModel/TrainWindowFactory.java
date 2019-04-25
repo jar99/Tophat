@@ -19,10 +19,16 @@ import javafx.stage.WindowEvent;
  *
  */
 
-class TrainWindowFactory {
+public class TrainWindowFactory {
 
 	private static final List<TrainModelCtrl> windowCtrls = new ArrayList<>();
 
+	public static void createTrain(int trainID) {
+		TrainModelSingleton mysin = TrainModelSingleton.getInstance();
+		TrainModel train = mysin.getTrainModel(trainID);
+		if(train != null) createTrainWindow(train);
+	}
+	
 	static void createTrainWindow(TrainModel trainModel) {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(TrainWindowFactory.class.getResource("TrainModelUI.fxml"));

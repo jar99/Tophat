@@ -13,14 +13,18 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 
+import application.TopHatRailwayUI;
 import application.MBO.MBOInterface;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackModelInterface;
 import application.TrackModel.TrackModelSingleton;
 import application.TrainController.TrainControllerSingleton;
 import application.TrainControllerHardware.TrainControllerHWSingleton;
+import application.TrainModel.UI.TrainLogger;
 
 public class TrainModelSingleton implements TrainModelInterface {
+
+	private static final String TRAINMODFILE = "train.mod";
 
 	// Singleton Functions (NO TOUCHY!!)
 	private static TrainModelSingleton instance;
@@ -70,6 +74,8 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
 		trnCtrl.createTrain(trainID, train); // Create this method.
 
+		TopHatRailwayUI.addTrainS(trainID);
+		
 		train.dispatch();
 
 		return train;
@@ -84,10 +90,6 @@ public class TrainModelSingleton implements TrainModelInterface {
 		trainModelHashTable.put(trainID, train);
 		TrainModelMainCtrl.addTrainS(trainID, train);
 
-		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
-		trnCtrl.createTrain(trainID, train); // Create this method.
-
-		train.dispatch();
 		return train;
 
 	}
@@ -118,10 +120,14 @@ public class TrainModelSingleton implements TrainModelInterface {
 		return trainModelHashTable.containsKey(trainID);
 	}
 
-	public TrainInterface getTrain(int trainID) {
+	TrainModel getTrainModel(int trainID) {
 		return trainModelHashTable.get(trainID);
 	}
-
+	
+	public TrainInterface getTrain(int trainID) {
+		return getTrainModel(trainID);
+	}
+		
 	public TrainModelTrackInterface getTrainTrackInterface(int trainID) {
 		return trainModelHashTable.get(trainID);
 	}
@@ -155,9 +161,11 @@ public class TrainModelSingleton implements TrainModelInterface {
 	}
 
 	private void loadFromFile() {
-		File file = new File("train.mod");
-		if (!file.exists())
+		File file = new File(TRAINMODFILE);
+		if (!file.exists()) {
+			TrainLogger.errorS("Could not find " + file.getName());
 			return;
+		}
 		try {
 			TrainFileLoader.loadFile(file);
 		} catch (IOException e) {
@@ -217,4 +225,5 @@ public class TrainModelSingleton implements TrainModelInterface {
 			trainModel.update();
 		}
 	}
+
 }

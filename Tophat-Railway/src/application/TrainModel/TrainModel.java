@@ -38,9 +38,9 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 
 	private static int PASSENGERCAP = 222;
 
-	private static double LENGTH = 100.05;
-	private static double WIDTH = 10.0;
-	private static double HEIGHT = 15.0;
+	private static double LENGTH = 32.2;
+	private static double WIDTH = 2.65;
+	private static double HEIGHT = 3.42;
 	private static int CARCOUNT = 6;
 
 	static void setMaxVelocity(double maxvelocity) {
@@ -421,7 +421,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		// TODO add the mbo connection
 		if (!isActive)
 			return -8;
-		if (mboSin == null)
+		if (!mboConnection)
 			return Integer.MIN_VALUE;
 		return mboAuthority;
 	}
@@ -441,7 +441,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		// TODO add the mbo connection
 		if (!isActive)
 			return -8.8;
-		if (mboSin == null)
+		if (!mboConnection)
 			return Double.NaN;
 		return mboSuggestedSpeed;
 	}

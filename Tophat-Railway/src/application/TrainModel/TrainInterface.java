@@ -157,4 +157,6 @@ public interface TrainInterface {
 	
 	void addTrainInformation(String message);
 
+	boolean dispatch();
+
 }

@@ -12,7 +12,7 @@ trainwaight: 40900.0
 servicebrakeforce: 6307.724082
 emergencybrakeforce: 12089.80449
 
-length: 100.05
-width: 10.0
-height: 15.0
+length: 32.2
+width: 2.65
+height: 3.42
 carcount: 6

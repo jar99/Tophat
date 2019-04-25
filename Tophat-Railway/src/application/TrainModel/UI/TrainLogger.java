@@ -1,4 +1,12 @@
 package application.TrainModel.UI;
+/**
+ * This is a logger method that I created to remove cluster from the console.
+ * 
+ * 
+ * @author jar99
+ * @version 1.0
+ *
+ */
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -14,7 +22,13 @@ public class TrainLogger {
 	
 	public static enum MODE {DEBUG, INFO, ERROR, CRITICAL, NONE };
 	
-	private static TrainLogger logger = new TrainLogger(true);
+	private static TrainLogger logger;
+	
+	
+	private static void setLogger(TrainLogger log) {
+		if(logger != null) logger.closeFile();
+		logger = log;
+	}
 	
 	private BufferedWriter writer;
 	
@@ -29,9 +43,9 @@ public class TrainLogger {
 	
 	public TrainLogger(boolean debug, String path, String format) {
 		this.debug = debug;
+		printDebug(debug);
 		this.time = new java.util.Date();
 		this.timeFormat = new SimpleDateFormat(format);
-		setLogFile(path);
 		info("-----{Running}-----");
 	}
 	
@@ -40,7 +54,15 @@ public class TrainLogger {
 	}
 
 	public static TrainLogger getInstance() {
+		if(logger == null) {
+			setLogger(new TrainLogger(true));
+		}
 		return logger;	
+	}
+	
+	
+	public static void printToConsoleS(boolean value) {
+		getInstance().printToConsole(value);
 	}
 	
 	public void printToConsole(boolean value) {
@@ -48,16 +70,15 @@ public class TrainLogger {
 	}
 	
 	public static void disableS() {
-		logger.disable();
+		getInstance().disable();
 	}
 	
 	public void disable() {
-		printDebugS(false);
-		
+		printDebug(false);
 	}
 	
 	public static void setModeS(MODE mode) {
-		logger.setMode(mode);
+		getInstance().setMode(mode);
 	}
 	
 	public void setMode(MODE mode) {
@@ -65,15 +86,15 @@ public class TrainLogger {
 	}
 	
 	public static void enableS() {
-		logger.disable();	
+		getInstance().disable();	
 	}
 	
 	public void enable() {
-		printDebugS(true);	
+		printDebug(true);
 	}
 
 	public static void printDebugS(boolean value) {
-		logger.printDebug(value);
+		getInstance().printDebug(value);
 	}
 	
 	public void printDebug(boolean value) {
@@ -94,7 +115,7 @@ public class TrainLogger {
 	
 	public static void setLogFileS(String path) {
 		LOGLOCATION = path;
-		logger.setLogFile(path);
+		getInstance().setLogFile(path);
 	}
 	
 	public void setLogFile(String path) {
@@ -195,7 +216,7 @@ public class TrainLogger {
 	}
 	
 	public static void printS(MODE mode, String tag, String text) {
-		logger.print(mode, tag, text);
+		getInstance().print(mode, tag, text);
 	}
 	
 	public void print(MODE mode, String text) {
@@ -208,10 +229,10 @@ public class TrainLogger {
 	
 	public void print(MODE mode, String tag, String text) {
 		if(!debug) return;
-		if(mode.compareTo(this.mode) < 0) return;
+		if(mode.ordinal() < this.mode.ordinal()) return;
 		
-		String line = String.format("%s [%s] %5s: %s\n", timeFormat.format(time), mode.toString(), tag, text);
-		if(console) System.out.println(line); 
+		String line = String.format("%s [%-8s] %8s: %s\n", timeFormat.format(time), mode.toString(), tag, text);
+		if(console) System.out.print(line);
 		if(writer != null) {
 			try {
 				writer.write(line);
@@ -221,6 +242,13 @@ public class TrainLogger {
 				e.printStackTrace();
 			}
 		}	
+	}
+
+	public static MODE getModeS() {
+		return getInstance().getMode();
+	}
+	public MODE getMode() {
+		return mode;
 	}
 
 }
