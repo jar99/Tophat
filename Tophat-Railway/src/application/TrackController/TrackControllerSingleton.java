@@ -66,6 +66,8 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 	private int[] blockListAuthority = new int[200];
 	private int[] storedTrainID = new int [50];
 	private int storedTrainIDIndex = 0;
+	private boolean[] blockMaitenance = new boolean[200];
+	private boolean crossingOn = false;
 	
 	final private Hashtable<Integer, TrainAuthority> trainAuthority = new Hashtable<Integer, TrainAuthority>();
 	
@@ -213,7 +215,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		 if(track.isEmpty())
 			 throw new IllegalArgumentException("There is no line to set the crossings.");
 		 if (CBIDG1 == 19) {
-			 //TODO: manually toggle a crossing
+			 crossingOn = true;
 		 }
 		 else
 			 throw new IllegalArgumentException("There is no crossing on this block."); 
@@ -1223,8 +1225,6 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		if(track.isEmpty())
 			return;
-		System.out.println(suggestedSpeed);
-		System.out.println(blockID);
 		int blockIDOccupied = 63;
 		for(TrackLine line : track.values()) {
 			for(TrackBlock block : line.getBlocks()) {
@@ -1280,7 +1280,7 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		for(int i = 1; i < 151; i++) {
 			try {
-				trackModInt.setSuggestedSpeed("green", i, 20);
+				trackModInt.setSuggestedSpeed("green", i, (20/2.237));
 			} catch (TrackCircuitFailureException e) {
 			}
 			blockListSpeed[i-1] = 20;
@@ -1340,4 +1340,48 @@ public class TrackControllerSingleton implements TrackControllerInterface {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		trackModInt.setSwitch("green", switchID, switchStraight);
 	}	
+	
+	public void checkMaitenance() {
+		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
+		CTCInterface ctcInt = CTCSingleton.getInstance();
+		for(TrackLine line : track.values()) {
+			for(TrackBlock block : line.getBlocks()) {
+				if (ctcInt.getSectionMaintenance(line.getLineName(), block.getBlockID())) {
+					try {
+						trackModInt.setControlAuthority("green", block.getBlockID(), false);
+						trackModInt.setControlAuthority("green", block.getBlockID()+1, false);
+						trackModInt.setControlAuthority("green", block.getBlockID()-1, false);
+					} catch (TrackCircuitFailureException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					blockMaitenance[block.getBlockID()] = true;
+				}
+				else
+					blockMaitenance[block.getBlockID()] = false;
+			}
+		}
+	}
+	
+	public boolean getMaitenance(int controllerID, int blockID) {
+		if(track.isEmpty())
+			return false;
+		if (controllerID == 1) {
+			return blockMaitenance[blockID];
+		}
+		if (controllerID == 2) {
+			return blockMaitenance[blockID];
+		}
+		if (controllerID == 3) {
+			return blockMaitenance[blockID];
+		}
+		if (controllerID == 4) {
+			return blockMaitenance[blockID];
+		}
+		if (controllerID == 5) {
+			return blockMaitenance[blockID];
+		}
+		else
+			return false;
+	}
 }

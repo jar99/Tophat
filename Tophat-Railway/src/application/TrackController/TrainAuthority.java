@@ -79,7 +79,7 @@ public class TrainAuthority {
 			if(i+blockIDOccupied > 150) {
 				for(int j = 1; j <= authority; j++) {
 					try {
-						trackModInt.setSuggestedSpeed("green", j, suggestedSpeed);
+						trackModInt.setSuggestedSpeed("green", j, (suggestedSpeed/2.237));
 					} catch (TrackCircuitFailureException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
