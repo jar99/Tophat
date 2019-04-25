@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 
-import application.UIApp2;
+import application.TopHatRailwayUI;
 import application.MBO.MBOInterface;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackModelInterface;
@@ -74,7 +74,7 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
 		trnCtrl.createTrain(trainID, train); // Create this method.
 
-		UIApp2.addTrainS(trainID);
+		TopHatRailwayUI.addTrainS(trainID);
 		
 		train.dispatch();
 
