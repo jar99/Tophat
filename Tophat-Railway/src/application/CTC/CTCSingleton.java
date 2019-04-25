@@ -1,5 +1,6 @@
 package application.CTC;
 import application.TrackModel.*;
+import application.ClockSingleton;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -8,6 +9,8 @@ import com.sun.media.jfxmedia.track.Track;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Map.Entry;
+
+import application.ClockSingleton;
 import application.MBO.MBOSingleton;
 import application.TrackController.TrackControllerSingleton;
 import application.TrainController.TrainControllerSingleton;
@@ -94,8 +97,13 @@ public class CTCSingleton implements CTCInterface {
 				i++;
 			}
 		}
-		if (!track.isEmpty())
-			RealStations[0]="Total throughput: "+aTest.getTotalBoarders("green");
+		if (!track.isEmpty()) {
+			ClockSingleton myClock=ClockSingleton.getInstance();
+			int myTime=myClock.getCurrentTimeHours()*3600+myClock.getCurrentTimeMinutes()*60+myClock.getCurrentTimeSeconds();
+			double myHour=(double)myTime/3600.0;
+			RealStations[0]="Total throughput: "+aTest.getTotalBoarders("green")/myHour;
+		}
+			
 		return RealStations;
 	}
 	public int[] getBlocks(){
