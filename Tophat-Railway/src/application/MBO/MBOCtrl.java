@@ -239,18 +239,18 @@ public class MBOCtrl implements Initializable {
 		FileWriter fileWriter = null;
 		try
 		{
-			fileWriter = new FileWriter("new.csv");
+			fileWriter = new FileWriter("justCreated.csv");
 			fileWriter.append("Green,100");
 			
 			fileWriter.append("\n101,Thomas,0300");
 			for(int i = 0; i < 150; i++)
 			{
-				fileWriter.append(",0");
+				fileWriter.append(",1");
 			}
 			fileWriter.append("\n102,ThomasEvilTwin,0400");
 			for(int i = 0; i < 150; i++)
 			{
-				fileWriter.append(",0");
+				fileWriter.append(",1");
 			}
 			
 		}
