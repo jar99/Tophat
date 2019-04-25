@@ -189,7 +189,8 @@ public class TrainModelCtrl implements Initializable {
 		length.update(trainModel.getLength());
 		width.update(trainModel.getWidth());
 		height.update(trainModel.getHeight());
-		carCount.update(trainModel.getCarCount());	
+		carCount.update(trainModel.getCarCount());
+		crewCount.update(trainModel.getCrew());	
 	}
 	
 	void updateAd() {
@@ -266,7 +267,7 @@ public class TrainModelCtrl implements Initializable {
 	private TableRow<String> trainid, cord;
 
 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor, light, intLight;
-	private TableRow<Integer> trackAuthority, mboAuthority, passengers, carCount;
+	private TableRow<Integer> trackAuthority, mboAuthority, passengers, carCount, crewCount;
 
 	private void setupTable() {
 		
@@ -305,11 +306,11 @@ public class TrainModelCtrl implements Initializable {
 		height = new TableRow<Double>("Height", 0.0, (a) -> Converters.LengthConverter(a));
 		
 		carCount = new TableRow<Integer>("Car Count", 0);
-		
+		crewCount = new TableRow<Integer>("Crew Count", 0);
 		
 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, trackLimit, mboAuthority, mboSpeed, power,
 				accel, speed, speedLimit, cord, serviceBrake, emergancyBrake, length, width, height, carCount, weight,
-				leftDoor, rightDoor, light, intLight, passengers, temperature);
+				leftDoor, rightDoor, light, intLight, temperature, passengers, crewCount);
 	}
 
 	void run() {

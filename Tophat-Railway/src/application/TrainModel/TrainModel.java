@@ -291,7 +291,7 @@ class TrainModel extends JPhysics implements TrainInterface, TrainModelTrackInte
 		return acceleration;
 	}
 
-	double getCrew() {
+	int getCrew() {
 		return crewCount;
 	}
 
