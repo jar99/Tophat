@@ -139,6 +139,8 @@ public class Schedule{
 		LeaveTime[1]=ArrivalTime[1]+1*60;
 	}
 	public void mergeSchedule(Schedule tmp2){
+		System.out.println(this);
+		System.out.println(tmp2);
 		this.authority=tmp2.getAuthority();
 		int tmpsize=this.getStation().length+tmp2.getStation().length-1;
 		int[] distancetmp=new int[tmpsize];
