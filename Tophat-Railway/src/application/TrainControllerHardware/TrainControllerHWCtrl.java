@@ -54,7 +54,9 @@ public class TrainControllerHWCtrl implements Initializable{
 	@FXML
 	private Label driveModeValue;
 	@FXML
-	private Label lightsValue;
+	private Label intLightsValue;
+	@FXML
+	private Label extLightsValue;
 	@FXML
 	private Label leftDoorValue;
 	@FXML
@@ -85,13 +87,13 @@ public class TrainControllerHWCtrl implements Initializable{
 
 		// numeric values
 		trainIdValue.setText(mySin.trainId + "");
-		ctcSpeedValue.setText(mySin.trackSpeed + " mph");
+		ctcSpeedValue.setText(mySin.trackSpeed + " km/h");
 		ctcAuthorityValue.setText(mySin.trackAuthority + " blocks");
-		mboSpeedValue.setText(mySin.mboSpeed + " mph");
+		mboSpeedValue.setText(mySin.mboSpeed + " km/h");
 		mboAuthorityValue.setText(mySin.mboAuthority + " blocks");
-		speedValue.setText(mySin.speed + " mph");
-		actualSpeedValue.setText(mySin.actualSpeed + " mph");
-		powerValue.setText(mySin.power + " KW");
+		speedValue.setText(mySin.speed + " km/h");
+		actualSpeedValue.setText(mySin.actualSpeed + " km/h");
+		powerValue.setText(mySin.power + " kW");
 		kiValue.setText(mySin.ki + "");
 		kpValue.setText(mySin.kp + "");
 		temperatureValue.setText(mySin.temp + " F");
@@ -133,8 +135,10 @@ public class TrainControllerHWCtrl implements Initializable{
 		}
 		
 		// doors and lights
-		if(mySin.extLights) lightsValue.setText("On");
-		else lightsValue.setText("Off");
+		if(mySin.extLights) extLightsValue.setText("On");
+		else extLightsValue.setText("Off");
+		if(mySin.intLights) intLightsValue.setText("On");
+		else intLightsValue.setText("Off");
 		if(mySin.leftDoor) leftDoorValue.setText("Open");
 		else leftDoorValue.setText("Closed");
 		if(mySin.rightDoor) rightDoorValue.setText("Open");

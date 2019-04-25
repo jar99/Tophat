@@ -155,17 +155,54 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		
 		// power
 		ClockSingleton clkSin = ClockSingleton.getInstance();
-		double deltaT = clkSin.getRatio();		
-		double newError = speed - train.getSpeed();
-		double np = kp + (ki * laplace(deltaT, lastError, newError, power));
-		train.setPower(np);
+		double deltaT = clkSin.getRatio();
+		double newError;
+		if(drivingMode) {
+			newError = speed - train.getSpeed(); // manual mode
+		}
+		else{
+			newError = trackSpeed - train.getSpeed(); // automatic mode
+		}
+		double np1 = (kp * newError) + (ki * laplace(deltaT, lastError, newError, power));
+		double np2 = (kp * newError) + (ki * laplace(deltaT, lastError, newError, power));
+		double np3 = (kp * newError) + (ki * laplace(deltaT, lastError, newError, power));
+		if(np1 == np2 && np1 == np3 && np2 == np3) {
+			train.setPower(np1);
+			power = np1;
+		}
+		else if(np1 == np2) {
+			train.setPower(np1);
+			power = np1;
+		}
+		else if(np1 == np3) {
+			train.setPower(np1);
+			power = np1;
+		}
+		else if(np2 == np3) {
+			train.setPower(np2);
+			power = np2;
+		}
+		else {
+			train.setPower(0.0);
+			power = 0.0;
+		}
 		lastError = newError;
-		power = np;
+		
+		if(!engineState || !signalState || !brakeState) {
+			train.setPower(0.0);
+			power = 0.0;
+		}
+		if(!drivingMode && trackAuthority == 0) {
+			train.setPower(0.0);
+			power = 0.0;
+		}
+		
 		train.setTemperature(temp);
 		train.setServiceBrake();
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) eBrake = true;
 		if(train.getLightState() != extLights) train.toggleLights();
+		if(train.getInterierLightState() != intLights) train.toggleInterierLight();
 		if(train.getLeftDoorState() != leftDoor) train.toggleLeftDoors();
 		if(train.getRightDoorState() != rightDoor) train.toggleRightDoors();
 	}
