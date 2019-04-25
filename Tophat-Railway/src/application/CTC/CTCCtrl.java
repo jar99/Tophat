@@ -437,13 +437,15 @@ public class CTCCtrl implements Initializable {
 			Schedule tmp2=tmp.get(key);
 			//System.out.println(tmp2.toString());
 			for (int i=0;i<tmp2.getLeaveTime().length-1;i++){
-				if (tmp2.getLeaveTime()[i]==myTime){
+				if (tmp2.getLeaveTime()[i]>=myTime&&tmp2.getLeaveTime()[i]<myTime+myClock.getRatio()){
 					String Block=tmp2.getStation()[i+1];
 					int n=Integer.parseInt(Block.split(" ")[1]);
+					System.out.println("CTC dispatch train "+tmp2.getID()+ " to block "+n);
 					TCInterface.sendTrainToBlock(tmp2.getID(),n,tmp2.getspdprint());
 				}
 			}
-			if (myTime==tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]){
+			if (myTime<=tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]&&tmp2.getLeaveTime()[tmp2.getLeaveTime().length-1]<myTime+myClock.getRatio()){
+				System.out.println("CTC dispatch train "+tmp2.getID()+ " to yard");
 				TCInterface.sendTrainToBlock(tmp2.getID(),-1,tmp2.getspdprint());
 			}
 		}
