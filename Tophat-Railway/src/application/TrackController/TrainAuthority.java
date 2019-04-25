@@ -76,7 +76,7 @@ public class TrainAuthority {
 	public void setSuggestedSpeedEachBlock(double suggestedSpeed, int blockIDOccupied, int authorityDisplacement) {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
 		for(int i = 0; i <= authorityDisplacement; i++) {
-			if(i+blockIDOccupied > 150)
+			if(i+blockIDOccupied > 150) {
 				for(int j = 1; j <= authority; j++) {
 					try {
 						trackModInt.setSuggestedSpeed("green", j, suggestedSpeed);
@@ -93,6 +93,8 @@ public class TrainAuthority {
 					//track.get("green").getBlock(j).setSuggestedSpeed(suggestedSpeed);
 					//track.get("green").getBlock(j).setControlAuthority(true);
 				}
+			}
+			else {
 			try {
 				trackModInt.setSuggestedSpeed("green", i+blockIDOccupied, suggestedSpeed);
 			} catch (TrackCircuitFailureException e) {
@@ -108,21 +110,24 @@ public class TrainAuthority {
 			//track.get("green").getBlock(i+blockIDOccupied).setSuggestedSpeed(suggestedSpeed);
 			//track.get("green").getBlock(i+blockIDOccupied).setControlAuthority(true);
 		}
+		}
 	}
 	
 	public void setAuthorityEachBlock(int authority, int blockIDOccupied, int authorityDisplacement) {
 		TrackModelInterface trackModInt = TrackModelSingleton.getInstance();
-		for(int i = 0; i <= authorityDisplacement; i++) {
-			if(i+blockIDOccupied > 150)
-				for(int j = 1; j <= authority; j++) {
+		for(int i = 0; i < authorityDisplacement; i++) {
+			if(i+blockIDOccupied > 150) {
+				for(int j = 0; j < authority; j++) {
 					try {
-						trackModInt.setAuthority("green", j, authorityDisplacement-i-j);
+						trackModInt.setAuthority("green", j+1, authority-j);
 					} catch (TrackCircuitFailureException e) {
 						//TODO
 						e.printStackTrace();
 					}
 					//track.get("green").getBlock(j).setAuthority(authorityDisplacement-i-j);
 				}
+			}
+			else {
 			try {
 				trackModInt.setAuthority("green", i+blockIDOccupied, authorityDisplacement-i);
 			} catch (TrackCircuitFailureException e) {
@@ -130,6 +135,7 @@ public class TrainAuthority {
 				e.printStackTrace();
 			}
 			//track.get("green").getBlock(i+blockIDOccupied).setAuthority(authorityDisplacement-i);
+		}
 		}
 	}
 	
