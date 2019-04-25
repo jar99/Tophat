@@ -45,9 +45,10 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 	double temp;
 	
 	// values that I'm just displaying
-	int mboAuthority, trackAuthority;
-	double mboSpeed, trackSpeed, actualSpeed;
+	int trackAuthority;
+	double trackSpeed, actualSpeed;
 	boolean engineState, signalState, brakeState;
+	boolean mboOrCtc;
 	
 	// getters and setters
 	public int getTrainId() {
@@ -68,8 +69,8 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		return drivingMode;
 	}
 	
-	void setDrivingMode(boolean mode) {
-		drivingMode = mode;
+	void toggleDrivingMode() {
+		drivingMode = !drivingMode;
 	}
 	
 	void setKi(double newKi) {
@@ -138,20 +139,13 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		TrainInterface train = trnModelSin.getTrain(trainId);
 		if(train == null) return;
 		
-		if(primaryPort.isOpen()) {
-			byte[] vals = new byte[1];
-			if(eBrake) vals[0] = 0x01;
-			else vals[0] = 0x00;
-			primaryPort.writeBytes(vals, 1);
-		}
-		mboAuthority = train.getMBOAuthority();
-		trackAuthority = train.getTrackAuthority();
-		mboSpeed = train.getMBOSpeed();
-		trackSpeed = train.getTrackSpeed();
+		trackAuthority = train.getAuthority();
+		trackSpeed = train.getSuggestedSpeed();
 		actualSpeed = train.getSpeed();
 		engineState = train.engineState();
 		signalState = train.railSignalState();
 		brakeState = train.brakeOperationState();
+		mboOrCtc = trnModelSin.isCTCMode(); // true if CTC mode
 		
 		// power
 		ClockSingleton clkSin = ClockSingleton.getInstance();
@@ -202,7 +196,7 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) eBrake = true;
 		if(train.getLightState() != extLights) train.toggleLights();
-		if(train.getInterierLightState() != intLights) train.toggleInterierLight();
+		if(train.getInteriorLightState() != intLights) train.toggleInteriorLight();
 		if(train.getLeftDoorState() != leftDoor) train.toggleLeftDoors();
 		if(train.getRightDoorState() != rightDoor) train.toggleRightDoors();
 	}

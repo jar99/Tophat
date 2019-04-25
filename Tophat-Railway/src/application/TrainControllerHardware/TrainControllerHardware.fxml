@@ -28,32 +28,17 @@
                </font>
             </Label>
             <Separator layoutY="40.0" prefWidth="200.0" />
-            <Label fx:id="ctcLabel" layoutX="25.0" layoutY="55.0" text="CTC" underline="true" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedSourceLabel" layoutX="25.0" layoutY="55.0" text="Provider: " AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcSpeedLabel" layoutX="25.0" layoutY="75.0" text="Speed:" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedSpeedLabel" layoutX="25.0" layoutY="75.0" text="Speed:" AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcAuthorityLabel" layoutX="25.0" layoutY="90.0" text="Authority:" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboLabel" layoutX="25.0" layoutY="125.0" text="MBO" underline="true" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboSpeedLabel" layoutX="25.0" layoutY="145.0" text="Speed:" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboAuthorityLabel" layoutX="25.0" layoutY="160.0" text="Authority:" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedAuthorityLabel" layoutX="25.0" layoutY="95.0" text="Authority:" AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -84,22 +69,12 @@
                   <Font name="Consolas" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="ctcSpeedValue" layoutX="100.0" layoutY="75.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
+            <Label fx:id="suggestedSpeedValue" layoutX="100.0" layoutY="75.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcAuthorityValue" layoutX="100.0" layoutY="90.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboSpeedValue" layoutX="100.0" layoutY="145.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboAuthorityValue" layoutX="100.0" layoutY="160.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
+            <Label fx:id="suggestedAuthorityValue" layoutX="100.0" layoutY="95.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -115,6 +90,11 @@
                </font>
             </Label>
             <Label fx:id="signalStatusValue" layoutX="100.0" layoutY="255.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="suggestedSourceValue" layoutX="100.0" layoutY="55.0" style="-fx-background-color: #dae3db;" text="MBO">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>

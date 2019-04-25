@@ -24,13 +24,11 @@ public class TrainControllerHWCtrl implements Initializable{
 	@FXML
 	private Label trainIdValue;
 	@FXML
-	private Label ctcSpeedValue;
+	private Label suggestedSourceValue;
 	@FXML
-	private Label ctcAuthorityValue;
+	private Label suggestedSpeedValue;
 	@FXML
-	private Label mboSpeedValue;
-	@FXML
-	private Label mboAuthorityValue;
+	private Label suggestedAuthorityValue;
 	@FXML
 	private Label engineStatusValue;
 	@FXML
@@ -87,10 +85,10 @@ public class TrainControllerHWCtrl implements Initializable{
 
 		// numeric values
 		trainIdValue.setText(mySin.trainId + "");
-		ctcSpeedValue.setText(mySin.trackSpeed + " km/h");
-		ctcAuthorityValue.setText(mySin.trackAuthority + " blocks");
-		mboSpeedValue.setText(mySin.mboSpeed + " km/h");
-		mboAuthorityValue.setText(mySin.mboAuthority + " blocks");
+		suggestedSpeedValue.setText(mySin.trackSpeed + " km/h");
+		suggestedAuthorityValue.setText(mySin.trackAuthority + " blocks");
+		if(mySin.mboOrCtc) suggestedSourceValue.setText("CTC");
+		else suggestedSourceValue.setText("MBO");
 		speedValue.setText(mySin.speed + " km/h");
 		actualSpeedValue.setText(mySin.actualSpeed + " km/h");
 		powerValue.setText(mySin.power + " kW");

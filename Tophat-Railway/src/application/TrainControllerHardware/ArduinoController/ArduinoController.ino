@@ -10,47 +10,58 @@
 #define SCREEN_RESET -1
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_RESET);
 
+// define rotary encoder
+
+
 // input pin declarations
 #define NAV_A 2
 #define NAV_B 3
 #define NAV_C 4
 #define NAV_D 5
-#define NAV_SWITCH 6 
-#define EBRAKE 11
+#define NAV_CLICK 6
+#define EBRAKE 7
+#define CONFIRM 8
+#define CANCEL 9
 
 // globals (I know they're bad, leave me alone)
-byte state; // 0 for picking ID, 1 for picking value to change, 2 for changing value, 3 for confirming change
-byte parameter; // 0 for speed, 1 for ki, 2 for kp, 3 for temperature, 4 for service brake, 5 for lights, 6 for left door, 7 for right door,
-// 8 for emergency brake, 9 for id
-double value;
+byte state;     // 0 for picking ID, 1 for picking value to change, 2 for changing value, 3 for confirming change
+byte parameter; // 0 for speed, 1 for ki, 2 for kp, 3 for temperature, 4 for service brake, 5 for emergency brake, 6 for interior lights
+                // 7 for exterior lights, 8 for left door, 9 for right door, 10 for driving mode, 11 for id
+double value;   // new value of param
+char* paramStrings[] = {"Speed", "Ki", "Kp", "Temperature", "Service brake", "Emergency brake", "Interior lights",
+                       "Exterior lights", "Left door", "Right door", "Driving mode", "ID"};
+char* valueStrings[] = {"New speed:", "New ki", "New kp", "New temperature", "Toggle service brake?", "Reset emergency brake?",
+                       "Toggle interior lights?", "Toggle exterior lights?", "Toggle left door?", "Toggle right door?",
+                       "Toggle driving mode?", "New ID:"};
 
 
 void setup() {
   // initialize globals
   state = 0;
-  current_value = 0;
-  e_brake = 0;
-  id = -1; // test ID
-  new_value = 0;
+  parameter = 0;
+  value = 0;
   
   Serial.begin(9600);
-  Serial.println("DONT STOP THIS TRAIN");
 
   // set up initial interrupts
-  pinMode(NAV_A, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(NAV_A), idUp, FALLING);
-  pinMode(NAV_B, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(NAV_B), idDown, FALLING);
-  pinMode(NAV_C, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(NAV_C), idDown, FALLING);
-  pinMode(NAV_D, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(NAV_D), idUp, FALLING);
-
-  pinMode(KP_2, INPUT_PULLUP);
-  attachPCINT(digitalPinToPCINT(KP_2), idConfirm, FALLING);
-  pinMode(KP_3, INPUT_PULLUP);
+  pinMode(NAV_A, INPUT_PULLUP); // up
+  attachPCINT(digitalPinToPCINT(NAV_A), nav_a, FALLING);
+  pinMode(NAV_B, INPUT_PULLUP); // left
+  attachPCINT(digitalPinToPCINT(NAV_B), nav_b, FALLING);
+  pinMode(NAV_C, INPUT_PULLUP); // down
+  attachPCINT(digitalPinToPCINT(NAV_C), nav_c, FALLING);
+  pinMode(NAV_D, INPUT_PULLUP); // right
+  attachPCINT(digitalPinToPCINT(NAV_D), nav_d, FALLING);
+  pinMode(NAV_CLICK, INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(NAV_CLICK), nav_click, FALLING);
 
   pinMode(EBRAKE, INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(EBRAKE), emergency_brake, FALLING);
+
+  pinMode(CONFIRM, INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(CONFIRM), confirm, FALLING);
+  pinMode(CANCEL, INPUT_PULLUP);
+  attachPCINT(digitalPinToPCINT(CANCEL), cancel, FALLING);
 
   // initialize display
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -75,92 +86,202 @@ void loop() {
       displayValChanges();
       break;
     case 3:
-      if(current_value == 0 || current_value == 1 || current_value == 2 || current_value == 3){
-        if(new_value){
-        byte vals[] = {(byte) current_value, highByte(new_value), lowByte(new_value)};
-        Serial.write(vals, 3);
-        }
-      }
-      else if(current_value == 9){
-        byte vals[] = {(byte) 9, highByte(id), lowByte(id)};
-        Serial.write(vals, 3);
-      }
-      else if(current_value == 4 || current_value == 5 || current_value == 6 || current_value == 7 || current_value == 8){
-        byte vals[] = {(byte) current_value, (byte) new_value};
-        Serial.write(vals, 2);
-      }
-      state = 1;
-      attachPCINT(digitalPinToPCINT(NAV_A), paramLeft, FALLING);
-      attachPCINT(digitalPinToPCINT(NAV_B), paramLeft, FALLING);
-      attachPCINT(digitalPinToPCINT(NAV_C), paramRight, FALLING);
-      attachPCINT(digitalPinToPCINT(NAV_D), paramRight, FALLING);
-      attachPCINT(digitalPinToPCINT(KP_2), paramConfirm, FALLING); 
+      displayConfirm();
       break;     
     default:
       display.clearDisplay();
       display.setTextSize(1);
       display.setCursor(0, 0);
-      display.println(F("Congrats, you made it this far!"));
+      display.println(F("Something's not working"));
       display.display();
       break;
   }
 }
 
 // ISRs
-void idUp(){ // state = 0
-  id++;
-}
 
-void idDown(){
-  id--;
-}
 
-void idConfirm(){
-  detachPCINT(digitalPinToPCINT(NAV_A));
-  detachPCINT(digitalPinToPCINT(NAV_B));
-  detachPCINT(digitalPinToPCINT(NAV_C));
-  detachPCINT(digitalPinToPCINT(NAV_D));
-  detachPCINT(digitalPinToPCINT(KP_2));
-  state = 1;
-  attachPCINT(digitalPinToPCINT(NAV_A), paramLeft, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_B), paramLeft, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_C), paramRight, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_D), paramRight, FALLING);
-  attachPCINT(digitalPinToPCINT(KP_2), paramConfirm, FALLING);
-}
-
-void STOPTRAIN(){
-  if(!e_brake && state > 0){
-    byte vals[2] = {0x08, 0x01};
-    Serial.write(vals, 2);
-    e_brake = 1;
+// up
+void nav_a(){
+  switch(state){
+    case 0:
+      value += 10;
+      break;
+    case 1:
+      if(parameter == 0){
+        parameter = 11;
+      }
+      else{
+        parameter--;
+      }
+      break;
+    case 2:
+      if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+        if(value == 0) value = 1;
+        else value = 0;
+      }
+      else{
+        value += 10;
+      }
+      break;
+    case 3:
+      // do nothing
+      break;
+    default:
+      break;
   }
 }
 
-void paramLeft(){ // state = 1
-  current_value--;
+// left
+void nav_b(){
+  switch(state){
+    case 0:
+      value --;
+      break;
+    case 1:
+      if(parameter == 0){
+        parameter = 11;
+      }
+      else{
+        parameter--;
+      }
+      break;
+    case 2:
+      if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+        if(value == 0) value = 1;
+        else value = 0;
+      }
+      else{
+        value -= 1;
+      }
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
 }
 
-void paramRight(){ // state = 1
-  current_value++;
+// down
+void nav_c(){
+  switch(state){
+    case 0:
+      value -= 10;
+      break;
+    case 1:
+      parameter = (parameter + 1) % 12;
+      break;
+    case 2:
+      if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+        if(value == 0) value = 1;
+        else value = 0;
+      }
+      else{
+        value -= 10;
+      }
+      break;
+    case 3:
+    
+      break;
+    default:
+      break;
+  }
 }
 
-void paramConfirm(){
-  if(!e_brake && current_value == 8) return;
-  detachPCINT(digitalPinToPCINT(NAV_A));
-  detachPCINT(digitalPinToPCINT(NAV_B));
-  detachPCINT(digitalPinToPCINT(NAV_C));
-  detachPCINT(digitalPinToPCINT(NAV_D));
-  detachPCINT(digitalPinToPCINT(KP_2));
-  state = 2;
-  new_value = 0;
-  attachPCINT(digitalPinToPCINT(NAV_A), valueUp, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_B), valueDown, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_C), valueDown, FALLING);
-  attachPCINT(digitalPinToPCINT(NAV_D), valueUp, FALLING);
-  attachPCINT(digitalPinToPCINT(KP_2), valueConfirm, FALLING);
+// right
+void nav_d(){
+  switch(state){
+    case 0:
+      value++;
+      break;
+    case 1:
+      parameter = (parameter + 1) % 12;
+      break; 
+    case 2:
+      if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+        if(value == 0) value = 1;
+        else value = 0;
+      }
+      else{
+        value += 1;
+      }
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
 }
 
+void nav_click(){
+  byte* buf;
+  switch(state){
+    case 0:
+      // send ID
+      buf = (byte*) &value;
+      Serial.write((byte) 11);
+      Serial.write(buf, 4);
+      state = 1;
+      break;
+    case 1:
+      break;
+    case 2:
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
+}
+
+void emergency_brake(){
+  if(state > 0){
+    double temp = 10.0;
+    byte* buf = (byte*) &temp;
+    Serial.write((byte) 5);
+    Serial.write(buf, 4);
+  }
+}
+
+void confirm(){
+  byte* buf;
+  switch(state){
+    case 0:
+      // send ID
+      buf = (byte*) &value;
+      Serial.write((byte) 11);
+      Serial.write(buf, 4);
+      state = 1;
+      break;
+    case 1:
+      value = 0;
+      state = 2;
+      break;
+    case 2:
+      if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+        if(value == 0) state = 1;
+        else state = 3;
+      }
+      else state = 3;
+      break;
+    case 3:
+      // send value
+      buf = (byte*) &value;
+      Serial.write(parameter);
+      Serial.write(buf, 4);
+      state = 1;
+      break;
+    default:
+      break;
+  }
+}
+
+void cancel(){
+  if(state == 3) state = 2;
+}
+
+
+/*
 void valueUp(){
   // if value is numeric, display integers
   // if value is service brake, have enable or disable
@@ -200,6 +321,7 @@ void valueUp(){
     }
 }
 
+
 void valueDown(){
     switch(current_value){
       case 0: // speed
@@ -236,16 +358,8 @@ void valueDown(){
         break;
     }
 }
-
-void valueConfirm(){
-  detachPCINT(digitalPinToPCINT(NAV_A));
-  detachPCINT(digitalPinToPCINT(NAV_B));
-  detachPCINT(digitalPinToPCINT(NAV_C));
-  detachPCINT(digitalPinToPCINT(NAV_D));
-  detachPCINT(digitalPinToPCINT(KP_2));
-  state = 3;
-}
-
+*/
+// display functions
 void displayStartUp(){
   display.clearDisplay();
   display.setTextSize(3);
@@ -278,61 +392,9 @@ void displayParamChoices(){
     display.clearDisplay();
     display.setTextSize(1);
     display.setCursor(0, 0);
-    switch(current_value){
-      case 0: // speed
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Speed"));
-        break;
-      case 1: // ki
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Ki"));
-        break;
-      case 2: // kp
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Kp"));
-        break;
-      case 3: // temperature
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Temperature"));
-        break;
-      case 4: // service brake
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Service brake"));
-        break;
-      case 5: // lights
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Lights"));
-        break;
-      case 6: // left door
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Left door"));
-        break;
-      case 7: // right door
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Right door"));
-        break;
-      case 8: // emergency brake
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Emergency brake"));
-        break;
-      case 9: // id
-        display.println(F("Please select a value to change"));
-        display.println();
-        display.println(F("Train ID"));
-        break;
-      default:
-        current_value = 0;
-        break;
-    }
+    display.println(F("Please select a value to change"));
+    display.println();
+    display.println(paramStrings[(int) parameter]);
     display.display();
 }
 
@@ -342,7 +404,7 @@ void displayIdSelection(){
     display.setCursor(0, 0);
     display.println(F("Please enter the train ID"));
     display.println();
-    display.println(id);
+    display.println(value);
     display.display();
 }
 
@@ -350,71 +412,22 @@ void displayValChanges(){
     display.clearDisplay();
     display.setTextSize(1);
     display.setCursor(0, 0);
-    switch(current_value){
-      case 0: // speed
-        display.println(F("New speed:"));
-        display.println();
-        display.println(new_value);
-        break;
-      case 1: // ki
-        display.println(F("New ki:"));
-        display.println();
-        display.println(new_value);
-        break;
-      case 2: // kp
-        display.println(F("New kp:"));
-        display.println();
-        display.println(new_value);
-        break;
-      case 3: // temperature
-        display.println(F("New temperature:"));
-        display.println();
-        display.println(new_value);
-        break;
-      case 4: // service brake
-        display.println(F("Toggle service brake?"));
-        display.println();
-        if(new_value) display.println(F("Yes"));
-        else display.println(F("No"));
-        break;
-      case 5: // lights
-        display.println(F("Toggle lights?"));
-        display.println();
-        if(new_value) display.println(F("Yes"));
-        else display.println(F("No"));
-        break;
-      case 6: // left door
-        display.println(F("Toggle left door?"));
-        display.println();
-        if(new_value) display.println(F("Yes"));
-        else display.println(F("No"));
-        break;
-      case 7: // right door
-        display.println(F("Toggle right door?"));
-        display.println();
-        if(new_value) display.println(F("Yes"));
-        else display.println(F("No"));
-        break;
-      case 8: // emergency brake
-        display.println(F("Reset emergency brake?"));
-        display.println();
-        if(new_value) display.println(F("Yes"));
-        else display.println(F("No"));
-        break;
-      case 9: // id
-        display.println(F("Please enter new train ID"));
-        display.println();
-        display.println(id);
-        break;
-      default:
-        current_value = 0;
-        break;
+    display.println(valueStrings[(int) parameter]);
+    display.println();
+    if(parameter == 4 || parameter == 5 || parameter == 6 || parameter == 7 || parameter == 8 || parameter == 9 || parameter == 10){
+      if(value == 1) display.println(F("Yes"));
+      else display.println(F("No"));
     }
+    else display.println(value);
     display.display();
 }
 
-void serialEvent(){
-  if(Serial.available() > 0){
-    e_brake = Serial.read();
-  }
+void displayConfirm(){
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setCursor(0, 0);
+    display.println(F("Send value?"));
+    display.println(F("Confirm to send"));
+    display.println(F("Cancel to reenter value"));
+    display.display();
 }
