@@ -254,7 +254,59 @@ public class CTCSingleton implements CTCInterface {
 	@Override
 	public boolean getSectionMaintenance(String lineName, int blockID) {
 		// TODO Implement function to tell Track Controller what blocks need maintenance
-		return isSectionClose[blockID-1];
+		if (blockID==1||blockID==2||blockID==3)
+			return isSectionClose[0];
+		else if (blockID==4||blockID==5||blockID==6)
+			return isSectionClose[1];
+		else if (blockID>=7&&blockID<=12)
+			return isSectionClose[2];
+		else if (blockID>=13&&blockID<=16)
+			return isSectionClose[3];
+		else if (blockID>=17&&blockID<=20)
+			return isSectionClose[4];
+		else if (blockID>=21&&blockID<=28)
+			return isSectionClose[5];
+		else if (blockID>=29&&blockID<=32)
+			return isSectionClose[6];
+		else if (blockID>=33&&blockID<=35)
+			return isSectionClose[7];
+		else if (blockID>=36&&blockID<=57)
+			return isSectionClose[8];
+		else if (blockID>=58&&blockID<=62)
+			return isSectionClose[9];
+		else if (blockID>=63&&blockID<=68)
+			return isSectionClose[10];
+		else if (blockID>=69&&blockID<=73)
+			return isSectionClose[11];
+		else if (blockID>=74&&blockID<=76)
+			return isSectionClose[12];
+		else if (blockID>=77&&blockID<=85)
+			return isSectionClose[13];
+		else if (blockID>=86&&blockID<=88)
+			return isSectionClose[14];
+		else if (blockID>=89&&blockID<=97)
+			return isSectionClose[15];
+		else if (blockID>=98&&blockID<=100)
+			return isSectionClose[16];
+		else if (blockID>=101&&blockID<=101)
+			return isSectionClose[17];
+		else if (blockID>=102&&blockID<=104)
+			return isSectionClose[18];
+		else if (blockID>=105&&blockID<=109)
+			return isSectionClose[19];
+		else if (blockID>=110&&blockID<=116)
+			return isSectionClose[20];
+		else if (blockID>=117&&blockID<=121)
+			return isSectionClose[21];
+		else if (blockID>=122&&blockID<=143)
+			return isSectionClose[22];
+		else if (blockID>=144&&blockID<=146)
+			return isSectionClose[23];
+		else if (blockID>=147&&blockID<=149)
+			return isSectionClose[24];
+		else 
+			return isSectionClose[25];
+		
 	}
 
 }
