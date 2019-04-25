@@ -248,7 +248,7 @@ public class TrainModelCtrl implements Initializable {
 			rightDoor.update(trainModel.getRightDoorState());
 
 			light.update(trainModel.getLightState());
-			intLight.update(trainModel.getInterierLightState());
+			intLight.update(trainModel.getInteriorLightState());
 
 			passengers.update(trainModel.getPassengers());
 			temperature.update(trainModel.getTemperature());
