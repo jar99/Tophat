@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Set;
 
+import application.UIApp2;
 import application.MBO.MBOInterface;
 import application.MBO.MBOSingleton;
 import application.TrackModel.TrackModelInterface;
@@ -73,6 +74,8 @@ public class TrainModelSingleton implements TrainModelInterface {
 		TrainControllerSingleton trnCtrl = TrainControllerSingleton.getInstance();
 		trnCtrl.createTrain(trainID, train); // Create this method.
 
+		UIApp2.addTrainS(trainID);
+		
 		train.dispatch();
 
 		return train;
@@ -117,10 +120,14 @@ public class TrainModelSingleton implements TrainModelInterface {
 		return trainModelHashTable.containsKey(trainID);
 	}
 
-	public TrainInterface getTrain(int trainID) {
+	TrainModel getTrainModel(int trainID) {
 		return trainModelHashTable.get(trainID);
 	}
-
+	
+	public TrainInterface getTrain(int trainID) {
+		return getTrainModel(trainID);
+	}
+		
 	public TrainModelTrackInterface getTrainTrackInterface(int trainID) {
 		return trainModelHashTable.get(trainID);
 	}
@@ -218,4 +225,5 @@ public class TrainModelSingleton implements TrainModelInterface {
 			trainModel.update();
 		}
 	}
+
 }
