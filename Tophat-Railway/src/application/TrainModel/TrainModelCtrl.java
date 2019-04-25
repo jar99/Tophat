@@ -250,8 +250,8 @@ public class TrainModelCtrl implements Initializable {
 			light.update(trainModel.getLightState());
 			intLight.update(trainModel.getInterierLightState());
 
-			passangers.update(trainModel.getPassengers());
-			temprature.update(trainModel.getTemperature());
+			passengers.update(trainModel.getPassengers());
+			temperature.update(trainModel.getTemperature());
 		}
 	}
 
@@ -262,11 +262,11 @@ public class TrainModelCtrl implements Initializable {
 
 	}
 
-	private TableRow<Double> power, trackSpeed, trackLimit, mboSpeed, speed, accel, temprature, weight, speedLimit, length, width, height;
+	private TableRow<Double> power, trackSpeed, trackLimit, mboSpeed, speed, accel, temperature, weight, speedLimit, length, width, height;
 	private TableRow<String> trainid, cord;
 
 	private TableRow<Boolean> serviceBrake, emergancyBrake, leftDoor, rightDoor, light, intLight;
-	private TableRow<Integer> trackAuthority, mboAuthority, passangers, carCount;
+	private TableRow<Integer> trackAuthority, mboAuthority, passengers, carCount;
 
 	private void setupTable() {
 		
@@ -275,7 +275,7 @@ public class TrainModelCtrl implements Initializable {
 		trackAuthority = new TableRow<Integer>("Track Authority", 0);
 		trackSpeed = new TableRow<Double>("Track Suggested Speed", 0.0, (a) -> Converters.SpeedConverter(a));
 
-		trackLimit = new TableRow<Double>("Track Limit", 0.0, (a) -> Converters.SpeedConverter(a));
+		trackLimit = new TableRow<Double>("Track Speed Limit", 0.0, (a) -> Converters.SpeedConverter(a));
 		
 		mboAuthority = new TableRow<Integer>("MBO Authority", 0);
 		mboSpeed = new TableRow<Double>("MBO Suggested Speed", 0.0, (a) -> Converters.SpeedConverter(a));
@@ -284,11 +284,11 @@ public class TrainModelCtrl implements Initializable {
 		speed = new TableRow<Double>("Speed", 0.0, (a) -> Converters.SpeedConverter(a));
 		accel = new TableRow<Double>("Acceleration", 0.0, (a) -> Converters.AccelerationConverter(a));
 
-		temprature = new TableRow<Double>("Temprature", 68.0, (a) -> Converters.TempratureConverter(a));
+		temperature = new TableRow<Double>("Temperature", 68.0, (a) -> Converters.TemperatureConverter(a));
 		weight = new TableRow<Double>("Weight", 0.0, (a) -> Converters.Waight(a));
 		cord = new TableRow<String>("Cord", "N/A");
 
-		passangers = new TableRow<Integer>("Passangers", 0, (a) -> Converters.PassangerFormat(a));
+		passengers = new TableRow<Integer>("passengers", 0, (a) -> Converters.PassangerFormat(a));
 
 		leftDoor = new TableRow<Boolean>("Left Door", true, (a) -> Converters.OpenOrClosed(a));
 		rightDoor = new TableRow<Boolean>("Right Door", true, (a) -> Converters.OpenOrClosed(a));
@@ -309,7 +309,7 @@ public class TrainModelCtrl implements Initializable {
 		
 		train_info.getItems().addAll(trainid, trackAuthority, trackSpeed, trackLimit, mboAuthority, mboSpeed, power,
 				accel, speed, speedLimit, cord, serviceBrake, emergancyBrake, length, width, height, carCount, weight,
-				leftDoor, rightDoor, light, intLight, passangers, temprature);
+				leftDoor, rightDoor, light, intLight, passengers, temperature);
 	}
 
 	void run() {
