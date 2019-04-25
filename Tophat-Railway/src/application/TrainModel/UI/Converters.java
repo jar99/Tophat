@@ -56,7 +56,7 @@ public class Converters<T> {
 		return passangers + " passangers";
 	}
 
-	public static String TempratureConverter(double tempC) {
+	public static String TemperatureConverter(double tempC) {
 		tempC = ctof(tempC);
 		return String.format("%.2f\u00B0F", tempC);
 	}
