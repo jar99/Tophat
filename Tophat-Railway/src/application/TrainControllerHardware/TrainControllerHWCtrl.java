@@ -18,20 +18,17 @@ import javafx.fxml.Initializable;
 public class TrainControllerHWCtrl implements Initializable{
 
 	// link to singleton
-	private TrainControllerHWSingleton mySin = TrainControllerHWSingleton.getInstance();
 	
 	private AnimationTimer updateAnimation;
 	
 	@FXML
 	private Label trainIdValue;
 	@FXML
-	private Label ctcSpeedValue;
+	private Label suggestedSourceValue;
 	@FXML
-	private Label ctcAuthorityValue;
+	private Label suggestedSpeedValue;
 	@FXML
-	private Label mboSpeedValue;
-	@FXML
-	private Label mboAuthorityValue;
+	private Label suggestedAuthorityValue;
 	@FXML
 	private Label engineStatusValue;
 	@FXML
@@ -55,7 +52,9 @@ public class TrainControllerHWCtrl implements Initializable{
 	@FXML
 	private Label driveModeValue;
 	@FXML
-	private Label lightsValue;
+	private Label intLightsValue;
+	@FXML
+	private Label extLightsValue;
 	@FXML
 	private Label leftDoorValue;
 	@FXML
@@ -82,18 +81,20 @@ public class TrainControllerHWCtrl implements Initializable{
 	 * Function to get information from singleton.
 	 */
 	private void update() {
+		TrainControllerHWSingleton mySin = TrainControllerHWSingleton.getInstance();
+
 		// numeric values
 		trainIdValue.setText(mySin.trainId + "");
-		ctcSpeedValue.setText(mySin.trackSpeed + " mph");
-		ctcAuthorityValue.setText(mySin.trackAuthority + " blocks");
-		mboSpeedValue.setText(mySin.mboSpeed + " mph");
-		mboAuthorityValue.setText(mySin.mboAuthority + " blocks");
-		speedValue.setText(mySin.speed + " mph");
-		actualSpeedValue.setText(mySin.actualSpeed + " mph");
-		powerValue.setText(mySin.power + " KW");
-		kiValue.setText(mySin.ki + "");
-		kpValue.setText(mySin.kp + "");
-		temperatureValue.setText(mySin.temp + " F");
+		suggestedSpeedValue.setText(String.format("%.2f", mySin.trackSpeed) + " km/h");
+		suggestedAuthorityValue.setText(mySin.trackAuthority + " blocks");
+		if(mySin.mboOrCtc) suggestedSourceValue.setText("CTC");
+		else suggestedSourceValue.setText("MBO");
+		speedValue.setText(String.format("%.2f", mySin.speed) + " km/h");
+		actualSpeedValue.setText(String.format("%.2f", mySin.actualSpeed) + " km/h");
+		powerValue.setText(String.format("%.2f", mySin.power) + " kW");
+		kiValue.setText(String.format("%.2f", mySin.ki) + "");
+		kpValue.setText(String.format("%.2f", mySin.kp) + "");
+		temperatureValue.setText(String.format("%.2f", mySin.temp) + " F");
 		
 		// brakes
 		if(mySin.brake) serviceBrakeValue.setText("On");
@@ -132,8 +133,10 @@ public class TrainControllerHWCtrl implements Initializable{
 		}
 		
 		// doors and lights
-		if(mySin.lights) lightsValue.setText("On");
-		else lightsValue.setText("Off");
+		if(mySin.extLights) extLightsValue.setText("On");
+		else extLightsValue.setText("Off");
+		if(mySin.intLights) intLightsValue.setText("On");
+		else intLightsValue.setText("Off");
 		if(mySin.leftDoor) leftDoorValue.setText("Open");
 		else leftDoorValue.setText("Closed");
 		if(mySin.rightDoor) rightDoorValue.setText("Open");

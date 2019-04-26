@@ -28,32 +28,17 @@
                </font>
             </Label>
             <Separator layoutY="40.0" prefWidth="200.0" />
-            <Label fx:id="ctcLabel" layoutX="25.0" layoutY="55.0" text="CTC" underline="true" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedSourceLabel" layoutX="25.0" layoutY="55.0" text="Provider: " AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcSpeedLabel" layoutX="25.0" layoutY="75.0" text="Speed:" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedSpeedLabel" layoutX="25.0" layoutY="75.0" text="Speed:" AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcAuthorityLabel" layoutX="25.0" layoutY="90.0" text="Authority:" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboLabel" layoutX="25.0" layoutY="125.0" text="MBO" underline="true" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboSpeedLabel" layoutX="25.0" layoutY="145.0" text="Speed:" AnchorPane.leftAnchor="25.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboAuthorityLabel" layoutX="25.0" layoutY="160.0" text="Authority:" AnchorPane.leftAnchor="25.0">
+            <Label fx:id="suggestedAuthorityLabel" layoutX="25.0" layoutY="95.0" text="Authority:" AnchorPane.leftAnchor="25.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -84,22 +69,12 @@
                   <Font name="Consolas" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="ctcSpeedValue" layoutX="100.0" layoutY="75.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
+            <Label fx:id="suggestedSpeedValue" layoutX="100.0" layoutY="75.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="ctcAuthorityValue" layoutX="100.0" layoutY="90.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboSpeedValue" layoutX="100.0" layoutY="145.0" style="-fx-background-color: #dae3db;" text="km/h" AnchorPane.leftAnchor="100.0">
-               <font>
-                  <Font name="Consolas" size="12.0" />
-               </font>
-            </Label>
-            <Label fx:id="mboAuthorityValue" layoutX="100.0" layoutY="160.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
+            <Label fx:id="suggestedAuthorityValue" layoutX="100.0" layoutY="95.0" style="-fx-background-color: #dae3db;" text="blocks" AnchorPane.leftAnchor="100.0">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -115,6 +90,11 @@
                </font>
             </Label>
             <Label fx:id="signalStatusValue" layoutX="100.0" layoutY="255.0" style="-fx-background-color: #dae3db;" text="Operational" textFill="#13bb40" AnchorPane.leftAnchor="100.0">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="suggestedSourceValue" layoutX="100.0" layoutY="55.0" style="-fx-background-color: #dae3db;" text="MBO">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -214,22 +194,22 @@
                </font>
             </Label>
             <Separator layoutX="1.0" layoutY="71.0" prefWidth="200.0" />
-            <Label fx:id="lightsLabel" layoutX="20.0" layoutY="100.0" prefHeight="14.0" prefWidth="50.0" text="Lights:">
+            <Label fx:id="extLightsLabel" layoutX="20.0" layoutY="100.0" prefHeight="14.0" prefWidth="109.0" text="Exterior Lights:">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="leftDoorLabel" layoutX="20.0" layoutY="125.0" text="Left Door:">
+            <Label fx:id="leftDoorLabel" layoutX="20.0" layoutY="150.0" text="Left Door:">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="rightDoorLabel" layoutX="20.0" layoutY="150.0" text="Right Door:">
+            <Label fx:id="rightDoorLabel" layoutX="20.0" layoutY="175.0" text="Right Door:">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="temperatureLabel" layoutX="20.0" layoutY="175.0" text="Temperature:">
+            <Label fx:id="temperatureLabel" layoutX="20.0" layoutY="200.0" text="Temperature:">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
@@ -239,22 +219,32 @@
                   <Font name="Consolas" size="14.0" />
                </font>
             </Label>
-            <Label fx:id="temperatureValue" layoutX="110.0" layoutY="175.0" style="-fx-background-color: #dae3db;" text="On?">
+            <Label fx:id="temperatureValue" layoutX="130.0" layoutY="200.0" style="-fx-background-color: #dae3db;" text="On?">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="rightDoorValue" layoutX="110.0" layoutY="150.0" style="-fx-background-color: #dae3db;" text="On?">
+            <Label fx:id="rightDoorValue" layoutX="130.0" layoutY="175.0" style="-fx-background-color: #dae3db;" text="On?">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="leftDoorValue" layoutX="110.0" layoutY="125.0" style="-fx-background-color: #dae3db;" text="On?">
+            <Label fx:id="leftDoorValue" layoutX="130.0" layoutY="150.0" style="-fx-background-color: #dae3db;" text="On?">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
             </Label>
-            <Label fx:id="lightsValue" layoutX="110.0" layoutY="100.0" style="-fx-background-color: #dae3db;" text="On">
+            <Label fx:id="extLightsValue" layoutX="130.0" layoutY="100.0" style="-fx-background-color: #dae3db;" text="On">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="intLightsLabel" layoutX="20.0" layoutY="125.0" text="Interior Lights:">
+               <font>
+                  <Font name="Consolas" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="intLightsValue" layoutX="130.0" layoutY="125.0" style="-fx-background-color: #dae3db;" text="On">
                <font>
                   <Font name="Consolas" size="12.0" />
                </font>
