@@ -38,46 +38,60 @@ public class TrainControllerDataListener implements SerialPortDataListener{
 		
 		float convertedValue = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN).getFloat();
 		TrainControllerHWSingleton mySin = TrainControllerHWSingleton.getInstance();
-		switch(data[0]) {
-			case 0:
-				mySin.setSpeed(convertedValue);
-				break;
-			case 1:
-				mySin.setKi(convertedValue);
-				break;
-			case 2:
-				mySin.setKp(convertedValue);
-				break;
-			case 3:
-				mySin.setTemperature(convertedValue);
-				break;
-			case 4:
-				if(convertedValue == 1) mySin.toggleServiceBrake();
-				break;
-			case 5:
-				if(convertedValue == 1) mySin.resetEmergencyBrake();
-				else if(convertedValue == 10) mySin.triggerEmergencyBrake();
-				break;
-			case 6:
-				if(convertedValue == 1) mySin.toggleIntLights();
-				break;
-			case 7:
-				if(convertedValue == 1) mySin.toggleExtLights();
-				break;
-			case 8:
-				if(convertedValue == 1) mySin.toggleLeftDoor();
-				break;
-			case 9:
-				if(convertedValue == 1) mySin.toggleRightDoor();
-				break;
-			case 10:
+		if(data[0] == 11) {
+			mySin.setTrainId((int) convertedValue);
+		}
+		if(data[0] == 5) {
+			if(convertedValue == 1) mySin.resetEmergencyBrake();
+			if(convertedValue == 10) mySin.triggerEmergencyBrake();
+		}
+		if(!mySin.drivingMode) { // automatic mode
+			if(data[0] == 10) {
 				if(convertedValue == 1) mySin.toggleDrivingMode();
-				break;
-			case 11:
-				mySin.setTrainId((int) convertedValue);
-				break;
-			default:
-			
+			}
+		}
+		else {
+			switch(data[0]) {
+				case 0:
+					mySin.setSpeed(convertedValue);
+					break;
+				case 1:
+					mySin.setKi(convertedValue);
+					break;
+				case 2:
+					mySin.setKp(convertedValue);
+					break;
+				case 3:
+					mySin.setTemperature(convertedValue);
+					break;
+				case 4:
+					if(convertedValue == 1) mySin.toggleServiceBrake();
+					break;
+				case 5:
+					if(convertedValue == 1) mySin.resetEmergencyBrake();
+					else if(convertedValue == 10) mySin.triggerEmergencyBrake();
+					break;
+				case 6:
+					if(convertedValue == 1) mySin.toggleIntLights();
+					break;
+				case 7:
+					if(convertedValue == 1) mySin.toggleExtLights();
+					break;
+				case 8:
+					if(convertedValue == 1) mySin.toggleLeftDoor();
+					break;
+				case 9:
+					if(convertedValue == 1) mySin.toggleRightDoor();
+					break;
+				case 10:
+					if(convertedValue == 1) mySin.toggleDrivingMode();
+					break;
+				case 11:
+					mySin.setTrainId((int) convertedValue);
+					break;
+				default:
+				
+			}
 		}
 
 		

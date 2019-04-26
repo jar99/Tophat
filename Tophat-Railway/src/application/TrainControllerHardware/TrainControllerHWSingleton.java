@@ -180,6 +180,12 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 			train.setPower(0.0);
 			power = 0.0;
 		}
+		if(power > train.getMaxPower()) {
+			power = train.getMaxPower();
+		}
+		else if(power < 0) {
+			power = 0.0;
+		}
 		lastError = newError;
 		
 		if(!engineState || !signalState || !brakeState) {
@@ -190,10 +196,15 @@ public class TrainControllerHWSingleton implements TrainControllerHWInterface{
 			train.setPower(0.0);
 			power = 0.0;
 		}
+		if(brake || eBrake) {
+			power = 0;
+		}
 		
 		train.setTemperature(temp);
-		train.setServiceBrake();
-		if(!train.getEmergencyBrake() && eBrake) train.triggerEmergencyBrake();
+		if(brake) train.setServiceBrake();
+		else train.unsetServiceBrake();
+		if(eBrake) train.triggerEmergencyBrake();
+		else train.resetEmergencyBrake();
 		if(train.getEmergencyBrake() && !eBrake) eBrake = true;
 		if(train.getLightState() != extLights) train.toggleLights();
 		if(train.getInteriorLightState() != intLights) train.toggleInteriorLight();

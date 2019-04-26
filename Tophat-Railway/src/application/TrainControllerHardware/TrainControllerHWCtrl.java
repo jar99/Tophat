@@ -85,16 +85,16 @@ public class TrainControllerHWCtrl implements Initializable{
 
 		// numeric values
 		trainIdValue.setText(mySin.trainId + "");
-		suggestedSpeedValue.setText(mySin.trackSpeed + " km/h");
+		suggestedSpeedValue.setText(String.format("%.2f", mySin.trackSpeed) + " km/h");
 		suggestedAuthorityValue.setText(mySin.trackAuthority + " blocks");
 		if(mySin.mboOrCtc) suggestedSourceValue.setText("CTC");
 		else suggestedSourceValue.setText("MBO");
-		speedValue.setText(mySin.speed + " km/h");
-		actualSpeedValue.setText(mySin.actualSpeed + " km/h");
-		powerValue.setText(mySin.power + " kW");
-		kiValue.setText(mySin.ki + "");
-		kpValue.setText(mySin.kp + "");
-		temperatureValue.setText(mySin.temp + " F");
+		speedValue.setText(String.format("%.2f", mySin.speed) + " km/h");
+		actualSpeedValue.setText(String.format("%.2f", mySin.actualSpeed) + " km/h");
+		powerValue.setText(String.format("%.2f", mySin.power) + " kW");
+		kiValue.setText(String.format("%.2f", mySin.ki) + "");
+		kpValue.setText(String.format("%.2f", mySin.kp) + "");
+		temperatureValue.setText(String.format("%.2f", mySin.temp) + " F");
 		
 		// brakes
 		if(mySin.brake) serviceBrakeValue.setText("On");
